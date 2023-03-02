@@ -12,19 +12,29 @@ Group Members (in alphabetical order)
 
 Description
 
-Internship Management System is a web application for Bilkent University students and staff. Students can see open internships positions provided by companies that are hiring and their requirements. Students can upload their internship requirement reports where their instructors can grade them.
+Internship Management System is a web application for Bilkent University students and staff. Students can upload their summer internship reports where their instructors can grade them. Student can see the status of their reports as their instructors provide additional feedback. Admins can see the status of all students and the instructors while instructors can only see their students’ status.
 
-
+Actors
+*Admin
+*Instructor
+*Student
 
 
 Features 
-* Login for students and admins
-* Admins can approve companies and add them into the system
-* Students can look up companies by name and see their details such as: Field, location, internship duration, description and requirements. 
-* Keeping student information: Bilkent e-mail, department
-* Instructors can publish announcements 
-* Edit profile for users 
-
-
+* Login for students, instructors and admins
+* Users can receive notifications
+* Users can change their passwords
+* All users will have a profile
+* Instructors and admins can make announcements
+* Students can upload reports, see their previously uploaded reports and the feedbacks on their reports
+* Students and instructors can see uploaded reports and feedbacks
+* Students can see their report status
+* Instructors can give feedbacks to the students’ reports
+* Instructors can upload highlighted report with the feedbacks
+* Instructors and admins can see student lists (instructors can only see their own students’ list)
+* Instructors and admins can see student status (instructors can only see their own students’ status)
+* Admins can add and remove users
+* Admins can assign students to instructors
+* Admins can see instructor status
 
 
