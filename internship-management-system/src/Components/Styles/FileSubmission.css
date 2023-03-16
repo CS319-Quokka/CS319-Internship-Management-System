@@ -1,0 +1,37 @@
+.file-submission{
+    text-align: center;
+    position: relative;
+    height: 90%;
+  }
+
+  .file-menu{
+    background-color: #EEEEEE;
+    border-style: hidden;
+    position: relative;
+    padding:1%;
+    margin-top: 1%;
+    left: 17.5%;
+    width: 80%;
+    height: 95vh;
+    justify-content: center;
+  }
+
+  .button-layout{
+  }
+
+  .comment-submission{
+    border: 5px solid rgb(117, 112, 112);
+  }
+  .dropzone {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    width: 50%;
+    height: 70%;
+    position: relative;
+    top: 10%;
+    left: 25%;
+    border: 5px dashed rgb(117, 112, 112);
+    padding: 2rem;
+  }
