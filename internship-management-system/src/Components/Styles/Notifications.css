@@ -1,0 +1,66 @@
+.notifications{
+    background-color: white;
+    position: relative;
+    height: 90%;
+    width: 70%;
+    border-radius: 15px;
+    margin-top: 5vh;
+    margin-inline: 15%;
+    overflow-y: scroll;
+}
+.maincontainer{
+    width:85%;
+    margin-left: 15%;
+    height:100vh;
+    background-color: hwb(207 91% 0%);
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+}
+h1{
+    font-size: 2.35vh;
+    color:rgb(12, 0, 53);
+    position: relative;   
+}
+.announcements{
+
+    position: relative;
+}
+.showannouncement{
+    margin-bottom: 5vh;
+}
+textarea{
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 2%;
+    margin-bottom:2%;
+    margin-right: 10%;
+    color: rgb(10, 10, 10);
+    font-family: Arial, Helvetica, sans-serif;
+
+    padding: 20px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    font-size: 1.7vh;
+    border-color:hwb(207 91% 0%);
+    border-radius: 15px;
+    background-color:hwb(208 94% 0%);
+    font-size: 16px;
+    text-align: left;
+    resize: none;
+    align-items: center;
+}
+h2{
+    font-size: 2vh;
+    color:rgb(12, 0, 53);
+    position: relative;  
+    text-align: left;
+}
+hr {
+    width: 100%; /* Set the width of the horizontal lines */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-style: solid;
+    border-width: 0 0 1px 0; /* Draw only bottom border */
+    border-color: #CCC;
+}

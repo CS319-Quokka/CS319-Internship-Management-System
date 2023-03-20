@@ -1,5 +1,7 @@
 body{
     font-family: 'Indie Flower', cursive;
+  background-color:hwb(208 94% 0%) ;
+
   }
 
 
@@ -8,7 +10,7 @@ body{
   }
 
   .container{
-    background-color: #EEEEEE;
+    background-color:hwb(208 94% 0%);    
     border-style: hidden;
     position: relative;
     padding:1%;

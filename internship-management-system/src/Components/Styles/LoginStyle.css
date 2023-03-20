@@ -1,0 +1,140 @@
+
+.logincontainer {
+  background-color:white; 
+  box-shadow: 15px 15px 20px 15px rgba(0, 0, 0, 0.2); 
+  text-align: center;
+  height: 55vh;
+  border-radius: 15px;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 30%;
+  margin-right: 30%;
+}
+.loginentries {
+  background-color:pink;
+  width: 40%;
+  height: 75%;
+  text-align: left;
+  position: relative;
+  
+
+}
+.emailcontainer{
+  display: flex;
+  justify-content: space-between;
+
+}
+.passwordcontainer{
+  display: flex;
+  justify-content: space-between;
+  right:100%;
+  
+}
+body{
+    background-color:white;
+    
+}
+h1{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 38px;
+}
+
+h2{
+  color: white;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+
+}
+header {
+  background-color: #1e3798;
+  height: 10ph;
+  
+}
+img{
+  width: 125px;
+  height: 125px;
+
+}
+
+input[type=text] {
+  width: 60%;
+  padding: 12px 20px;  
+  box-sizing: border-box;
+  border-color:#3E54AC;
+  border-radius: 15px;
+  background-color:white;
+  color: rgb(10, 10, 10);
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+
+ 
+
+}
+
+input[type=password] {
+  width: 60%;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border-color: gray;
+  
+  border-radius: 15px;
+  background-color:white;
+  color: rgb(10, 10, 10);
+  font-family: Arial, Helvetica, sans-serif;
+  padding-right: 10%;
+  position: relative;
+ 
+  
+  
+}
+
+input[type=submit] {
+  background-color: #ddd;
+  border: none;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: 22px;
+}
+
+select {
+  width: 20%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 15px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(10, 10, 10);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+.container{
+  background-color: antiquewhite;
+  border-style: hidden;
+  border-radius: 15px;
+  padding:18px;
+  text-align: center;
+  box-shadow: 0 8px 6px -6px black;   
+}
+
+@media screen and (max-width:900px){
+
+  .main-container{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-evenly; 
+    
+  }  
+}
