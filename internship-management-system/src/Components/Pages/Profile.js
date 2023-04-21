@@ -101,7 +101,7 @@ class Profile extends Component {
                             
                             <div class="row">
                             <p class="label">Instructor Mail:</p>
-                            <p class="value"><em> <a href="mailto:e.tuzun@bilkent.cs.tr">e.tuzun@bilkent.cs.tr</a></em></p>
+                            <p class="value"><em> <a href="mailto:e.tuzun@cs.bilkent.edu.tr">e.tuzun@bilkent.cs.tr</a></em></p>
                             </div>     
                         </div>    
                     </div>    

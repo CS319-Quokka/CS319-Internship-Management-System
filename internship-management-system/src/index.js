@@ -12,6 +12,12 @@ import Home from "./Components/Pages/Profile";
 import Reports from "./Components/Pages/Reports";
 import Notifications from "./Components/Pages/Notifications";
 import FileSubmission from "./Components/Pages/FileSubmission";
+import ReportEvaluation from "./Components/Pages/ReportEvaluation";
+import Statistics from "./Components/Pages/Statistics";
+import StudentList from "./Components/Pages/StudentList";
+import GraderProgress from "./Components/Pages/GraderProgress";
+import CompanyForms from "./Components/Pages/CompanyForms";
+import ManageUsers from "./Components/Pages/ManageUsers";
 import Sidebar from "./Components/Sidebar";
 import "./App.css";
 
@@ -22,16 +28,6 @@ const AppLayout = () => (
     <Sidebar />
   </>
 );
-
-// const router = createBrowserRouter(
-//   createRoutesFromElements(
-//     <Route element={<AppLayout />}>
-//       <Route path="/" element={<Home />} />
-//       <Route path="/products" element={<Products />} />
-//       <Route path="/reports" element={<Reports />} />
-//     </Route>
-//   )
-// );
 
 const router = createBrowserRouter([
   {
@@ -53,6 +49,30 @@ const router = createBrowserRouter([
       {
         path: "submission",
         element: <FileSubmission />,
+      },
+      {
+        path: "evaluation",
+        element: <ReportEvaluation />,
+      },
+      {
+        path: "statistics",
+        element: <Statistics />,
+      },
+      {
+        path: "list",
+        element: <StudentList />,
+      },
+      {
+        path: "forms",
+        element: <CompanyForms />,
+      },
+      {
+        path: "graders",
+        element: <GraderProgress />,
+      },
+      {
+        path: "manage",
+        element: <ManageUsers />,
       },
     ],
   },

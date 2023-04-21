@@ -5,12 +5,22 @@
   padding: 0;
   font-family: 'Inter', sans-serif;
 }
-
 .reports{
   text-align: center;
 
 }
 
+.navbar .open{
+  background-color: rebeccapurple;
+  width: 180vh;
+  height: 4vh;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 15%;
+
+}
 
 .notifications{
   text-align: center;
@@ -59,6 +69,35 @@
   align-items: center;
   padding: 0 16px;
   border-radius: 4px;
+}
+.logout{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding:0px 0px 8px 16px;
+  list-style: none;
+  height: 60px;
+  position: relative;
+  top: 40%;
+  font-size: 2.5vh;
+  margin-left: 10px;
+
+}
+.logout a {
+  text-decoration: none;
+  color: #151414;
+  font-size: 18px;
+  width: 95%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 4px;
+}
+
+.logout a:hover {
+  background-color: #3f4967;
+  color: #151414;
 }
 .menu-item {
   display: flex;

@@ -1,0 +1,144 @@
+
+.value {
+    flex-basis: 30%; /* Set fixed width for label column */
+  }
+.body{
+    background-color:hwb(208 94% 0%);
+}
+.info-container {
+    line-height: 150%;
+    position: absolute;
+    left: 50%;
+    margin-top: 5%;
+    padding: 1%;
+    background-color: white;
+    border-radius: 15px;
+    width: 40%;
+    display: flex;
+    flex-direction: column; /* Change to column layout */
+    align-items: center; /* Center align items vertically */
+  }
+  
+  .row {
+    display: flex;
+    width: 100%;
+    line-height: 200%;
+  }
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    background-color: white;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
+    border-radius: 7px;
+    padding: 10px 20px; /* add padding to increase the space between the header and the items */
+  }
+  
+  .value {
+    flex: 0.92;
+  }
+  
+  .list-header .value:first-child {
+    flex: 0.05; /* increase the space before the first column */
+  }
+  
+  .list-header .value:last-child {
+    flex: 1.05; /* increase the space after the last column */
+  }
+  h2{
+    color: white;
+    margin-left: 3%;
+    margin-top: 1%;
+    margin-bottom: 1%;
+  }
+  .search{
+    display: flex;
+  }
+
+  .bar{
+    background-color: #363e58;
+    width: 60%;
+    height: 8%;
+    position: fixed;
+    top: 10%;
+    left: 30%;
+    margin-right: 10%;
+    border-radius: 7px;
+  }
+  .bar .search-bar{
+    border-radius: 7px;
+    width: 30%;
+    height: 20%;
+    margin-left: 5%;
+    margin-top: 1%;
+
+  }
+  .maincontainer{
+    width:85%;
+    margin-left: 15%;
+    height:100vh;
+    background-color: hwb(207 91% 0%);
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+}
+    
+.list{
+  padding-top: 2.5%;
+  background-color:white;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  width: 60%;
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  top: 10%;
+  left: 30%;
+  border-radius: 15px;
+  padding-bottom: 1%;
+
+  height: 80%;
+}
+
+.line{
+  width: 100%;
+  margin-top:0;
+  margin-bottom: 0;
+}
+.list-item {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  list-style: none;
+  
+}
+
+.list-item a {
+  text-decoration: none;
+  color: #151414;
+  font-size: 18px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  padding-top: 2%;
+  padding-left: 4%;
+  padding-bottom: 2%;
+  border-radius: 4px;
+}
+
+.list-item a:hover {
+  background-color: #dfdede;
+  color: #151414;
+}
+
+.list-items {
+  margin-top: 5%;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+span {
+  margin-left: 16px;
+}
