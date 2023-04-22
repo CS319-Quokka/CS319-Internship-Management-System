@@ -1,6 +1,6 @@
 import React from "react";
 
-export const ListData = [
+export const StudentData = [
   {
     name: " İdil Atmaca",
     type: "Student",

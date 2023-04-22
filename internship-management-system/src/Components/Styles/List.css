@@ -44,7 +44,7 @@
   }
   
   .list-header .value:last-child {
-    flex: 1.05; /* increase the space after the last column */
+    flex: 1.2; /* increase the space after the last column */
   }
   h2{
     color: white;
@@ -56,6 +56,11 @@
     display: flex;
   }
 
+  .add{
+    position: relative;
+    left: 83%;
+    top: 9.2%
+  }
   .bar{
     background-color: #363e58;
     width: 60%;
@@ -74,6 +79,24 @@
     margin-top: 1%;
 
   }
+  .button {
+    margin: 1%;
+    background-color: #4a5880;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    padding: 4px 8px; /* adjust padding to make button smaller */
+  }
+  
+  .button:hover {
+    background-color: rgb(77, 86, 113);
+  }
   .maincontainer{
     width:85%;
     margin-left: 15%;
@@ -83,7 +106,17 @@
     justify-content: center;
     align-items: center;
 }
-    
+.choices{
+  display: flex;
+} 
+.choices #reminder{
+  position: relative;
+  right: 10%;
+  visibility: hidden;
+}
+.choices #options{
+  visibility: visible;
+}
 .list{
   padding-top: 2.5%;
   background-color:white;

@@ -1,0 +1,12 @@
+.main .choices #reminder{
+    visibility:visible
+}
+.main{
+    width:85%;
+    margin-left: 15%;
+    height:100vh;
+    background-color: hwb(207 91% 0%);
+    overflow: auto;
+    justify-content: center;
+    align-items: center;
+}

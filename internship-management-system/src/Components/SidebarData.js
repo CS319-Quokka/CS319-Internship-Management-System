@@ -68,7 +68,7 @@ export const SidebarData = [
     },
     {
       title: "Student List",
-      path: "/list",
+      path: "/students",
       icon: <AiIcons.AiOutlineUser />,
       cName: "nav-text",
     },
@@ -149,7 +149,7 @@ export const SidebarData = [
 
     {
       title: "Student List",
-      path: "/list",
+      path: "/students",
       icon: <AiIcons.AiOutlineUser />,
       cName: "nav-text",
     },
