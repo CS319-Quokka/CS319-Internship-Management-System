@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { useState } from 'react'
-import './CSS/LoginStyle.css'
-import logo from './CSS/bilko.png'
+import '../Styles/LoginStyle.css'
+import logo from '../Images/bilko.png'
 
 
 class Login extends Component {
