@@ -1,0 +1,163 @@
+
+.logincontainer {
+  
+  position: absolute;
+  box-sizing: border-box;
+  background-color:white; 
+  height: 60%;
+  width: 25%;
+  border-radius: 15px;
+  left: 35%;
+  top: 20%; 
+
+}
+.loginentries {
+
+  width: 90%;
+  height: 70%;
+  text-align: center;
+  position: relative;
+  top: 15%;
+  left: 5%
+
+
+}
+.loginpage{
+  background-color: #e8f5ff;
+  height:100vh;
+}
+.emailcontainer{
+  display: flex;
+  justify-content: center;
+  margin-top: 10%;
+  width: 100%;
+ 
+
+}
+.passwordcontainer{
+  display: flex;
+  justify-content: center;
+  margin-top: 10%; 
+  width: 100%;
+
+
+}
+label{
+  width:30%;
+  margin-top: 1vh;
+  align-self: left;
+  float: left;
+  
+
+}
+.logo{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 2vh;
+}
+body{
+    background-color:white;
+    
+}
+.loginentries h1{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 32px;
+  color: #4c4c4c;
+}
+
+h4{
+  position: absolute;
+  color: #ffffff;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+  margin-top: 2%;
+  width: 100%;
+  height:fit-content;
+  background-color: #212B81;
+
+}
+
+img{
+  width: 150px;
+  height: 150px;
+}
+
+.emailcontainer input[type=text] {
+  width:50%;
+  padding: 12px 20px; 
+  border-radius: 15px;
+  color: rgb(10, 10, 10);
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+  background-color: #EEEE;
+  border:none;
+
+  
+
+
+}
+
+.passwordcontainer input[type=password] {
+  width: 50%;
+  padding: 12px 20px;
+  border-radius: 15px;
+  border:none;
+  color: rgb(10, 10, 10);
+  font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+  background-color: #EEEE;
+
+
+ 
+  
+}
+
+input[type=submit] {
+  background-color: #212B81;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  margin: 4px 2px;
+  width: 70%;
+  cursor: pointer;
+  border-radius: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 10%;
+}
+
+select {
+  width: 20%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-radius: 15px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(10, 10, 10);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+
+
+.container{
+  background-color: antiquewhite;
+  border-style: hidden;
+  border-radius: 15px;
+  padding:18px;
+  text-align: center;
+  box-shadow: 0 8px 6px -6px black;   
+}
+
+@media screen and (max-width:900px){
+
+  .main-container{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: space-evenly; 
+    
+  }  
+}
