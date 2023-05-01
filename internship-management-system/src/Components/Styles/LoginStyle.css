@@ -7,7 +7,7 @@
   height: 60%;
   width: 25%;
   border-radius: 15px;
-  left: 35%;
+  left: 37.5%;
   top: 20%; 
 
 }
@@ -28,9 +28,10 @@
 }
 .emailcontainer{
   display: flex;
-  justify-content: center;
+  justify-content: left;
   margin-top: 10%;
   width: 100%;
+
  
 
 }
@@ -42,8 +43,8 @@
 
 
 }
-label{
-  width:30%;
+.logincontainer label{
+  width:40%;
   margin-top: 1vh;
   align-self: left;
   float: left;
@@ -55,8 +56,9 @@ label{
   display: flex;
   justify-content: center;
   margin-top: 2vh;
+  margin-bottom: 5vh;
 }
-body{
+.logincontainer body{
     background-color:white;
     
 }
@@ -66,7 +68,7 @@ body{
   color: #4c4c4c;
 }
 
-h4{
+.loginpage h4{
   position: absolute;
   color: #ffffff;
   text-align: center;
@@ -79,9 +81,9 @@ h4{
 
 }
 
-img{
-  width: 150px;
-  height: 150px;
+.logo img{
+  width: 100px;
+  height: 100px;
 }
 
 .emailcontainer input[type=text] {
@@ -93,9 +95,6 @@ img{
   position: relative;
   background-color: #EEEE;
   border:none;
-
-  
-
 
 }
 
@@ -139,8 +138,29 @@ select {
   color: rgb(10, 10, 10);
   font-family: Arial, Helvetica, sans-serif;
 }
+.recoveryentries{
+  
+  width: 90%;
+  height: 70%;
+  text-align: center;
+  position: relative;
+  top: 15%;
+  left: 5%
+}
 
-
+.recoveryentries h1{
+  margin-top: 10%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 28px;
+  color: #2c2c2c;
+}
+.recoveryentries h2{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #2c2c2c;
+  text-align: center;
+  margin-top:5%;
+}
 
 .container{
   background-color: antiquewhite;
