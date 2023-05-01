@@ -1,12 +1,19 @@
 import React, {Component} from 'react'
-import '../Styles/ReportEvaluation.css'
+import '../Styles/Statistics.css'
 class Statistics extends Component{
     
     
       render(){
         return(
-            <div className='evaluation'>
-                <h1> Statistics</h1>
+            <div className='maincontainer'>
+                <div className='instructorstatus'>
+
+            hi
+                </div>
+                <div className='gradestatus'>
+hi
+                </div>
+
             </div>
          
               
