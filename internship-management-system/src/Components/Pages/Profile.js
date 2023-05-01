@@ -1,6 +1,3 @@
-
-
-
 import React, { Component } from 'react'
 import '../Styles/Profile.css'
 import pic from "../Images/quokka.png";
@@ -47,6 +44,7 @@ class Profile extends Component {
 
     render() {
         return (
+            <div className='profile-container'>
             <div className='container'>
 
                     
@@ -120,20 +118,9 @@ class Profile extends Component {
 
             </div>
 
-/* 
-                        <div className='instructor'>
-
-                        <label >Instructor :  {this.state.instructor}</label><br />
-
-                        <label >Instructor Mail : <em> <a href="mailto:e.tuzun@bilkent.cs.tr">e.tuzun@bilkent.cs.tr</a></em></label><br />
-
-
-                        </div> */
-
                     
 
-
-
+                        </div>
 
                     
 

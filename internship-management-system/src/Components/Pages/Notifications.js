@@ -26,7 +26,7 @@ class Notifications extends Component {
 
   render(){
     return(
-      <div class='maincontainer'>
+      <div class='maincontainer-notif'>
         <div className='notifications'>
           <h1> 🔔 📢</h1>
           <br></br>
