@@ -5,27 +5,7 @@
   padding: 0;
   font-family: 'Inter', sans-serif;
 }
-.reports{
-  text-align: center;
 
-}
-
-.navbar .open{
-  background-color: rebeccapurple;
-  width: 180vh;
-  height: 4vh;
-  display: flex;
-  justify-content: center;
-  position: fixed;
-  top: 0;
-  left: 15%;
-
-}
-
-.notifications{
-  text-align: center;
-}
-.home,
 
 
 .menu-bars {
@@ -71,6 +51,8 @@
   border-radius: 4px;
 }
 .logout{
+  background-color: #363e58;
+  color: #000;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -78,9 +60,9 @@
   list-style: none;
   height: 60px;
   position: relative;
-  top: 40%;
+  top: 50%;
   font-size: 2.5vh;
-  margin-left: 10px;
+  margin-left: 12px;
 
 }
 .logout a {

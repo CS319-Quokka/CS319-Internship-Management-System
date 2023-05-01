@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { useState } from 'react'
 import '../Styles/LoginStyle.css'
 import logo from '../Images/bilko.png'
+import { Link, Redirect } from 'react-router-dom';
 
 
 class Login extends Component {
@@ -25,13 +26,18 @@ class Login extends Component {
         })
     } 
     handleSubmit = (event) => {
-        alert(`${this.state.email}  Successful login`)
+        //alert(`${this.state.email}  Successful login`)
         console.log(this.state);
         this.setState({
             email: "",
             password: '',
+            activePage: "Profile"
            
         })
+        this.props.onLogin();
+        this.props.activePage = "Profile"
+        console.log("here", this.props.logged)
+
      event.preventDefault()
         
     }

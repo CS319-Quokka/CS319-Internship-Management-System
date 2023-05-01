@@ -40,6 +40,7 @@ class Sidebar extends Component{
               
             {data?.items.map((item, index) => {
                 const isActive = item.title === this.state.activePage;
+                console.log(this.state.activePage)
                 const className = isActive ? "menu-item-active" : "menu-item";
                 return (
                   <li key={index} className={className}>
@@ -56,7 +57,16 @@ class Sidebar extends Component{
                 );
 
               })}
+              <Link className="logout"
+                      onClick={() => {
+                        this.handleLogout();
+                      }}
+                    >
+                      {<FiIcons.FiLogOut/>}
+                      <span>{"Logout"}</span>
+               </Link>
 
+              
              
             </ul>
           </nav>

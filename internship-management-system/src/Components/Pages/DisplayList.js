@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { IconContext } from "react-icons";
 import * as SlIcons from "react-icons/sl";
 import * as IoIcons from "react-icons/io";
+import "../Styles/List.css";
 
 class DisplayList extends Component {
   constructor(props) {
@@ -43,7 +44,9 @@ class DisplayList extends Component {
 
     return (
         <IconContext.Provider value={{ color: "undefined" }}>
-          
+          <div className="list-container">
+
+         
           <nav className="list">
           
           <div className="bar">
@@ -73,7 +76,7 @@ class DisplayList extends Component {
           </div>
             <ul className="list-items">
               
-              {data.map((item, index) => {
+              {filteredItems.map((item, index) => {
                 const isLastItem = index === data.length - 1;
                 return (
                   <React.Fragment key={index}>
@@ -106,7 +109,9 @@ class DisplayList extends Component {
               })}
             </ul>
           </nav>
+          </div>
         </IconContext.Provider>
+        
     );
   }
 }

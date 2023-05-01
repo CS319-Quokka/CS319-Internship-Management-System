@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { StudentData } from "../StudentData";
 import DisplayList from "./DisplayList";
-import "../Styles/List.css";
 import "../Styles/StudentList.css";
 class StudentList extends Component {
   
