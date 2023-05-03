@@ -1,7 +1,15 @@
 package modals;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
+import javax.persistence.*;
+
+
+@Entity
+@Getter
+@Setter
 public class AdministrativeAssistant extends UserProfile {
     private List<Student> studentList;
 
