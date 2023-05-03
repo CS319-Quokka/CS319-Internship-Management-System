@@ -17,7 +17,7 @@
     justify-content: center;
     align-items: center;
 }
-h1{
+.notifications h1{
     font-size: 2.35vh;
     color:rgb(12, 0, 53);
     position: relative;   
@@ -29,7 +29,7 @@ h1{
 .showannouncement{
     margin-bottom: 5vh;
 }
-textarea{
+.notifications textarea{
     width: 80%;
     margin-left: 10%;
     margin-top: 2%;
@@ -50,13 +50,13 @@ textarea{
     resize: none;
     align-items: center;
 }
-h2{
+.notifications h2{
     font-size: 2vh;
     color:rgb(12, 0, 53);
     position: relative;  
     text-align: left;
 }
-hr {
+.notifications hr {
     width: 100%; /* Set the width of the horizontal lines */
     margin-top: 10px;
     margin-bottom: 10px;

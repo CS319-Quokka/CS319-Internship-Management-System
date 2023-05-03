@@ -1,0 +1,24 @@
+.FAQpage{
+    background-color: #e8f5ff;
+    height:100vh;
+}
+
+.questionsContainer{
+    height: 85%;
+    width: 85%;
+    background-color: white;
+    position: relative;
+    top: 7.5%;
+    left: 7.5%;
+    border-radius: 16px;
+}
+
+.questionsContainer h1{
+    font-size: 5vh;
+    position: absolute;
+
+}
+.questions{
+
+    
+}
