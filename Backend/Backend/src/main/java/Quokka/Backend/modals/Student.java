@@ -3,7 +3,7 @@ package modals;
 import java.io.File;
 import java.util.List;
 
-public class Student{
+public class Student extends UserProfile{
 
     private String courseCode;
     private String letterGrade;

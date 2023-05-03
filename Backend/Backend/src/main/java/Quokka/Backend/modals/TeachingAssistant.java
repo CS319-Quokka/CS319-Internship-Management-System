@@ -2,7 +2,9 @@ package modals;
 
 import java.util.List;
 
-public class TeachingAssistant{
+import modals.UserProfile;
+
+public class TeachingAssistant extends UserProfile{
 
     private List<Student> students;
 }
