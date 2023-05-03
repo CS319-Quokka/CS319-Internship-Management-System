@@ -1,3 +1,7 @@
+package modals;
+
+import java.util.List;
+
 public class GradeFormElement {
 
     private String type;

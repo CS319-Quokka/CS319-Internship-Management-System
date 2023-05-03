@@ -1,3 +1,8 @@
+package modals;
+
+import java.io.File;
+import java.util.List;
+
 public class Student{
 
     private String courseCode;

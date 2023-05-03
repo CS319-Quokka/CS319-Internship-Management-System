@@ -1,3 +1,7 @@
+package modals;
+
+import java.util.List;
+
 public class GradeForm {
 
     private Student student;
@@ -49,5 +53,4 @@ public class GradeForm {
         this.courseCode = courseCode;
     }
 
-    public
 }

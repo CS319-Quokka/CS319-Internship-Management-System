@@ -1,6 +1,8 @@
+package modals;
+
+import java.util.List;
+
 public class TeachingAssistant{
 
-
-
-    private List<Students> students;
+    private List<Student> students;
 }

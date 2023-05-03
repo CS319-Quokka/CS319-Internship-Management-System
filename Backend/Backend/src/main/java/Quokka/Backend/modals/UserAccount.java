@@ -1,7 +1,11 @@
+package modals;
+
+import java.util.List;
+
 public class UserAccount{
 
 
-    private List<UserProfile> profileList; 
+    private List<UserProfile> profileList;
     private String name;
     private String email;
     private int id;

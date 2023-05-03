@@ -1,4 +1,8 @@
+package modals;
+
+import java.util.List;
+
 public class SummerTrainingCoordinator{
 
-    private List<Announcements> madeAnnouncements;
+    private List<Announcement> madeAnnouncements;
 }
