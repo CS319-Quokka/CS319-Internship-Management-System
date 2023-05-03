@@ -1,1 +1,1 @@
-public class UserProfile
+public class UserProfile()
