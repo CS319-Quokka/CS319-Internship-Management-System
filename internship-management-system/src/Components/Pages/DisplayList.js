@@ -4,14 +4,19 @@ import { IconContext } from "react-icons";
 import * as SlIcons from "react-icons/sl";
 import * as IoIcons from "react-icons/io";
 import "../Styles/List.css";
-
+import Popup from "../Popop"
 class DisplayList extends Component {
   constructor(props) {
     super(props);
     this.state = {
       searchTerm: "",
+      showOptions:null,
+      showRemove:false
+      
     };
     this.handleOptions = this.handleOptions.bind(this);
+    
+    this.handleReminder = this.handleReminder.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
@@ -26,15 +31,23 @@ class DisplayList extends Component {
     } 
   }
 
-  handleOptions() {
-    console.log("bastı");
-    // this.setState(prevState => ({
-    //   isToggleOn: !prevState.isToggleOn
-    // }));
-  }
+
+  handleOptions = (index) => {
+    if (this.state.showOptions === index) {
+      this.setState({ showOptions: null });
+      this.props.setControllerState(false);
+    } else {
+      this.setState({ showOptions: index });
+      this.props.setControllerState(true);
+    }
+    
+  };
+  
+
 
   render() {
     const { searchTerm } = this.state;
+    const { showOptions } = this.state;
     
 
     const { data, displayFields } = this.props;
@@ -90,13 +103,19 @@ class DisplayList extends Component {
 
                           <div
                             className="options"
-                            onClick={this.handleOptions}
                           >
                             <div className="choices">
+                             
                             <div id="reminder"> <button onClick={this.handleReminder} className="button">{<IoIcons.IoMdAlert />}</button></div>
-                             <div id="options">{<SlIcons.SlOptionsVertical />}</div>
+                             <div id="options"><button onClick={() => this.handleOptions(index)} className="button">{<SlIcons.SlOptionsVertical />}</button>
+
+                             {showOptions === index  && (
+                               this.props.choice
+                             
+                            )}
+                            
                             </div>
-                           
+                            </div>
                             
                           </div>
                         </div>

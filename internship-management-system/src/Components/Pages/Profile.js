@@ -17,8 +17,6 @@ class Profile extends Component {
             progress: 50,
             notification: "5+",
             instructor: "Eray Tüzün"
-
-
         }
     }
 
