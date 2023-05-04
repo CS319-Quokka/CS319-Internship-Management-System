@@ -79,7 +79,7 @@ class ManageUsers extends Component {
       <div className="maincontainer">
         
         {console.log(showChoices)}
-        <DisplayList data={UserData} displayFields={['name', 'role', 'department'] } setControllerState={this.handleChoiceMenu} choice = 
+        <DisplayList data={UserData} displayFields={['name', 'role', 'department'] }isAdd = {true} setControllerState={this.handleChoiceMenu} choice = 
         
 
           {showChoices&& <div className="menu" id=  "choice-menu">
