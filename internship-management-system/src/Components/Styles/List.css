@@ -79,6 +79,15 @@
     margin-top: 1%;
 
   }
+  .icon-button {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+  }
   .button {
     margin: 1%;
     background-color: #4a5880;

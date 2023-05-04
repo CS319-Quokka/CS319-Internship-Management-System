@@ -4,7 +4,7 @@ import { IconContext } from "react-icons";
 import * as SlIcons from "react-icons/sl";
 import * as IoIcons from "react-icons/io";
 import "../Styles/List.css";
-import Popup from "../Popop"
+
 class DisplayList extends Component {
   constructor(props) {
     super(props);
@@ -58,7 +58,6 @@ class DisplayList extends Component {
     return (
         <IconContext.Provider value={{ color: "undefined" }}>
           <div className="list-container">
-
          
           <nav className="list">
           
@@ -107,7 +106,7 @@ class DisplayList extends Component {
                             <div className="choices">
                              
                             <div id="reminder"> <button onClick={this.handleReminder} className="button">{<IoIcons.IoMdAlert />}</button></div>
-                             <div id="options"><button onClick={() => this.handleOptions(index)} className="button">{<SlIcons.SlOptionsVertical />}</button>
+                             < div id="options"><button onClick={() => this.handleOptions(index)} className="icon-button">{<SlIcons.SlOptionsVertical />}</button>
 
                              {showOptions === index  && (
                                this.props.choice
