@@ -18,6 +18,9 @@ Actors
 *Admin
 *Instructor
 *Student
+*Teaching Assistant
+*Summer Training Coordinator
+*Administrative Assistant
 
 
 Features 
