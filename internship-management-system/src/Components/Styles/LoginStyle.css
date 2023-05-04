@@ -11,6 +11,21 @@
   top: 20%; 
 
 }
+.header h4{
+  color: #ffffff;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 30px;
+
+}
+.header{
+
+  position: absolute;
+  margin-top: 2%;
+  width: 100%;
+  background-color: #212B81;
+  height:fit-content;
+}
 .loginentries {
 
   width: 90%;
@@ -26,21 +41,22 @@
   background-color: #e8f5ff;
   height:100vh;
   width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 .emailcontainer{
   display: flex;
   justify-content: left;
   margin-top: 10%;
+  margin-left: 10%;
   width: 100%;
-
- 
-
 }
 .passwordcontainer{
   display: flex;
-  justify-content: center;
+  justify-content: left;
   margin-top: 10%; 
   width: 100%;
+  margin-left: 10%;
 
 
 }
@@ -69,18 +85,7 @@
   color: #4c4c4c;
 }
 
-.loginpage h4{
-  position: absolute;
-  color: #ffffff;
-  text-align: center;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 30px;
-  margin-top: 2%;
-  width: 100%;
-  height:fit-content;
-  background-color: #212B81;
 
-}
 
 .logo img{
   width: 100px;

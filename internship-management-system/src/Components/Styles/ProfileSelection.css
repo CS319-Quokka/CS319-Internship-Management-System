@@ -1,0 +1,65 @@
+.profile-selection-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #e8f5ff;
+  }
+  
+  .profile-selection-container h1{
+    color:black;
+    font-size: 4vh;
+  }
+  
+  .profile-selection-buttons-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-selection-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #afb7ff;
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 8rem;
+    height: 8rem;
+    text-align: center;
+    margin: 0 10vh;
+    font-size: 3vh;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .profile-selection-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .profile-selection-button.selected {
+    background-color: #212B81;
+  }
+  
+  .profile-selection-button.selected:hover {
+    transform: none;
+  }
+  
+  .profile-selection-submit-button {
+    background-color: #afb7ff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    width: 15%;
+    height: 5%;
+    margin-top: 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .profile-selection-submit-button:hover {
+    transform: scale(1.1);
+  }
+  
