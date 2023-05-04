@@ -17,6 +17,7 @@
 
 .sidebar{
   padding-top: 1%;
+  color: white;
   background-color: #363e58;
   width: 15%;
   height: 100vh;
@@ -40,7 +41,7 @@
 
 .menu-item-active a {
   text-decoration: none;
-  color: #151414;
+  color: #c6c6c6;
   background-color: #2c3348;
   font-size: 18px;
   width: 95%;
@@ -92,7 +93,7 @@
 
 .menu-item a {
   text-decoration: none;
-  color: #151414;
+  color: white;
   font-size: 18px;
   width: 95%;
   height: 100%;
@@ -104,7 +105,7 @@
 
 .menu-item a:hover {
   background-color: #3f4967;
-  color: #151414;
+  color: white;
 }
 
 .menu-items {
