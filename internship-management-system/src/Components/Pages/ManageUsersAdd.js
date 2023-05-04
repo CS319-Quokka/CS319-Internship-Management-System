@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import Popup from "../Popop"
+import Popup from "../Popup"
 import "../Styles/Popup.css"
 
 function ManageUsersAdd() {
