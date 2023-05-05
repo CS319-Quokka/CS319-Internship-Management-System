@@ -20,48 +20,29 @@ class Profile extends Component {
         }
     }
 
-
-
     statushandler = (event) => {
-       
         console.log("BASTI");
-       
      event.preventDefault()
-        
     }
 
 
     mailhandler = (event) =>{
-
-        
-
         event.preventDefault()
-
     }
-
 
     render() {
         return (
-            <div className='profile-container'>
-            <div className='container'>
+            <div className='page'>
+                <div className='container'>
 
-                    
-                    
+              
                     <div className='user-container'>
-                        
-
                         <h1 > <strong>{this.state.firstName} {this.state.lastName}</strong> </h1> 
                         <br></br>
 
                         <img className='profilePic' src={pic} alt="Profile" />
-                        <p><em>{this.state.userType}</em></p><br />
-                        
-                     
-
-                        
-                      <button className='button'>Change Password</button> <br></br>
-                        
-
+                        <p><em>{this.state.userType}</em></p><br />    
+                        <button className='button'>Change Password</button> <br></br>
                     </div>
 
 
@@ -89,44 +70,32 @@ class Profile extends Component {
                             <hr></hr>
 
                             <div class="row">
-                            <p class="label">Instructor:</p>
-                            <p class="value">{this.state.instructor}</p>
+                                <p class="label">Instructor:</p>
+                                <p class="value">{this.state.instructor}</p>
                             </div>    
 
                             <hr></hr>
                             
                             <div class="row">
-                            <p class="label">Instructor Mail:</p>
-                            <p class="value"><em> <a href="mailto:e.tuzun@cs.bilkent.edu.tr">e.tuzun@bilkent.cs.tr</a></em></p>
+                                <p class="label">Instructor Mail:</p>
+                                <p class="value"><em> <a href="mailto:e.tuzun@cs.bilkent.edu.tr">e.tuzun@bilkent.cs.tr</a></em></p>
                             </div>     
                         </div>    
                     </div>    
 
                     <div className='progress'>
                         <div class="row">
-                                <p class="label">Report Progress:</p>
-                                <p class="value">%{this.state.progress}</p>
+                            <p class="label">Report Progress:</p>
+                            <p class="value">%{this.state.progress}</p>
                         </div>  
 
                          <div class="row">
-                                <p class="label">Report Status:</p>
-                                <p class="value">Pending Approval</p>
+                            <p class="label">Report Status:</p>
+                            <p class="value">Pending Approval</p>
                         </div>   
                     </div>
-
+                 </div>
             </div>
-
-                    
-
-                        </div>
-
-                    
-
-
-
-                    
-           
-            
         )
     }
 }
