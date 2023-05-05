@@ -2,11 +2,10 @@ package com.quokka.backend.models;
 
 import java.io.File;
 import java.util.List;
+
+import jakarta.persistence.Entity;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
-
 
 @Entity
 @Getter

@@ -1,18 +1,25 @@
 package com.quokka.backend.models;
 
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
-public class UserProfile{
+public class UserProfile {
 
+   private String firstName;
+   private String lastName;
+   @Id
+   private Long id;
 
+   public void setId(Long id) {
+      this.id = id;
+   }
 
-   private List<Notification> notifications;
-   private List<Announcement> announcements;
+   public Long getId() {
+      return id;
+   }
 }
