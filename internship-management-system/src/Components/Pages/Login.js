@@ -44,8 +44,11 @@ class Login extends Component {
     render() {
    
         return (         
-            <div className="loginpage">                                                          
-                <h4>Bilkent University Internship Management System </h4>
+            <div className="loginpage">
+                <div className="header">
+                    <h4>Bilkent University Internship Management System </h4>
+                </div>                                                          
+                
                 <div class="logincontainer">
                     <div className="logo">
                         <img src={logo}/>

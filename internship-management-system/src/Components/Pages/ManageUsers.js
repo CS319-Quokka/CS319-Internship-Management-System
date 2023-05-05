@@ -3,7 +3,7 @@ import { UserData } from "../UserData";
 import DisplayList from "./DisplayList";
 import "../Styles/ManageUsers.css"
 import ManageUsersAdd from "./ManageUsersAdd";
-import Popup from "../Popop"
+import Popup from "../Popup"
 
 class ManageUsers extends Component {
   constructor(props) {
