@@ -1,4 +1,4 @@
-package modals;
+package quokka.backend.models;
 
 import java.io.File;
 import java.util.List;

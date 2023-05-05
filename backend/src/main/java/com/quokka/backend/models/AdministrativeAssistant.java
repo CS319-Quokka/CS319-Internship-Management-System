@@ -1,5 +1,5 @@
 package quokka.backend.models;
-
+import quokka.backend.models.*;
 
 import java.util.List;
 import lombok.Getter;
