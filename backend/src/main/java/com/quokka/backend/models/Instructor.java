@@ -1,4 +1,4 @@
-package quokka.backend.models;
+package com.quokka.backend.models;
 
 import java.io.File;
 import java.util.List;

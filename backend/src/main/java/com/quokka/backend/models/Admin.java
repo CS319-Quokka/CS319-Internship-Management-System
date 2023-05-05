@@ -1,4 +1,4 @@
-package quokka.backend.models;
+package com.quokka.backend.models;
 
 import lombok.Getter;
 import lombok.Setter;
