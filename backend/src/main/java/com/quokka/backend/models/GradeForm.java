@@ -15,9 +15,6 @@ public class GradeForm {
     private Long id;
 
     @OneToOne
-    private Student student;
-
-    @OneToOne
     private Instructor instructor;
 
     private String courseCode;
