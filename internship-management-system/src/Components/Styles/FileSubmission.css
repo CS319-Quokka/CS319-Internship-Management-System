@@ -2,10 +2,11 @@
     text-align: center;
     position: relative;
     height: 90%;
+  
   }
 
   .file-menu{
-    background-color: #EEEEEE;
+   
     border-style: hidden;
     position: relative;
     padding:1%;
@@ -14,6 +15,7 @@
     width: 80%;
     height: 95vh;
     justify-content: center;
+    background-color: hwb(207 91% 0%);
   }
 
   .button-layout{

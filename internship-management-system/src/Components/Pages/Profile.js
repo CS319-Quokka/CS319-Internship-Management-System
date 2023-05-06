@@ -12,7 +12,7 @@ class Profile extends Component {
             userType: "Student",
             university: "Bilkent University",
             mail: "idil.atmaca@ug.bilkent.edu.tr",
-            status: "pending application",
+            status: "Pending Approval",
             course: "CS299",
             progress: 50,
             notification: "5+",
@@ -90,8 +90,8 @@ class Profile extends Component {
                         </div>  
 
                          <div class="row">
-                            <p class="label">Report Status:</p>
-                            <p class="value">Pending Approval</p>
+                                <p class="label">Report Status:</p>
+                                <p class="value">Pending Approval</p>
                         </div>   
                     </div>
                  </div>
