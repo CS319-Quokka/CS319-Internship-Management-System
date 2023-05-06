@@ -1,3 +1,6 @@
+
+
+
 import React, { Component } from 'react'
 import '../Styles/Profile.css'
 import pic from "../Images/quokka.png";
@@ -17,6 +20,8 @@ class Profile extends Component {
             progress: 50,
             notification: "5+",
             instructor: "Eray Tüzün"
+
+
         }
     }
 
@@ -42,7 +47,6 @@ class Profile extends Component {
 
     render() {
         return (
-            <div className='profile-container'>
             <div className='container'>
 
                     
@@ -97,7 +101,7 @@ class Profile extends Component {
                             
                             <div class="row">
                             <p class="label">Instructor Mail:</p>
-                            <p class="value"><em> <a href="mailto:e.tuzun@cs.bilkent.edu.tr">e.tuzun@bilkent.cs.tr</a></em></p>
+                            <p class="value"><em> <a href="mailto:e.tuzun@bilkent.cs.tr">e.tuzun@bilkent.cs.tr</a></em></p>
                             </div>     
                         </div>    
                     </div>    
@@ -116,9 +120,20 @@ class Profile extends Component {
 
             </div>
 
+/* 
+                        <div className='instructor'>
+
+                        <label >Instructor :  {this.state.instructor}</label><br />
+
+                        <label >Instructor Mail : <em> <a href="mailto:e.tuzun@bilkent.cs.tr">e.tuzun@bilkent.cs.tr</a></em></label><br />
+
+
+                        </div> */
+
                     
 
-                        </div>
+
+
 
                     
 
