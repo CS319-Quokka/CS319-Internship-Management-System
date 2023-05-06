@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Admin extends UserProfile{
+public class Admin extends User{
 
 
 }

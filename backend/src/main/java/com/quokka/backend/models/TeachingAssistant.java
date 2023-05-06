@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class TeachingAssistant extends UserProfile{
+public class TeachingAssistant extends User{
 
     @OneToMany
     private List<Student> students;

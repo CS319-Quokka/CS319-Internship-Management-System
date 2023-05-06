@@ -2,10 +2,7 @@ package com.quokka.backend.models;
 
 import java.util.List;
 
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +20,7 @@ public class GradeFormElement {
     @ElementCollection
     private List<String> answers;
     @Id
+    @GeneratedValue
     private Long id;
 
     public void setId(Long id) {

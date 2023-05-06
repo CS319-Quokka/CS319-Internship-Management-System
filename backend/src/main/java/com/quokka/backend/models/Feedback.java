@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class Feedback {
 
     private Date date;
     @Id
+    @GeneratedValue
     private Long id;
 
     public void setId(Long id) {

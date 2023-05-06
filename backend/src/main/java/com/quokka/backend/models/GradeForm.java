@@ -12,6 +12,7 @@ import lombok.Setter;
 public class GradeForm {
 
     @Id
+    @GeneratedValue
     private Long id;
 
     @OneToOne

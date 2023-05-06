@@ -3,10 +3,7 @@ package com.quokka.backend.models;
 import java.io.File;
 import java.util.Date;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,6 +23,7 @@ public class Report {
     private Date uploadDate;
     private String status;
     @Id
+    @GeneratedValue
     private Long id;
 
     public void setId(Long id) {
