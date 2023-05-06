@@ -20,6 +20,8 @@ import Login from "./Components/Pages/Login";
 import CompanyForms from "./Components/Pages/CompanyForms";
 import ManageUsers from "./Components/Pages/ManageUsers";
 import Sidebar from "./Components/Sidebar";
+import FAQ from "./Components/Pages/FAQ"
+
 import "./App.css";
 
 const App = () => {
@@ -78,6 +80,10 @@ const App = () => {
           path: "manage",
           element: <ManageUsers />,
         },
+        {
+          path: 'faq',
+          element: <FAQ />
+        }
       ],
     },
   ]);

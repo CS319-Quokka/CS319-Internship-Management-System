@@ -35,7 +35,15 @@
   top: 15%;
   left: 5%
 
-
+}
+.faqcontainer{
+  
+  width: 90%;
+  height: 70%;
+  text-align: center;
+  position: relative;
+  left: 5%;
+  top: 2%;
 }
 .loginpage{
   background-color: #e8f5ff;
@@ -83,6 +91,7 @@
   font-family: Arial, Helvetica, sans-serif;
   font-size: 32px;
   color: #4c4c4c;
+
 }
 
 
@@ -114,25 +123,20 @@
   position: relative;
   background-color: #EEEE;
 
-
- 
-  
 }
 
-input[type=submit] {
+.loginentries input[type=submit] {
   background-color: #212B81;
   border: none;
   color: white;
   padding: 10px 20px;
   text-align: center;
-  margin: 4px 2px;
   width: 70%;
   cursor: pointer;
   border-radius: 16px;
   font-family: Arial, Helvetica, sans-serif;
   margin-top: 10%;
 }
-
 select {
   width: 20%;
   padding: 12px 20px;
