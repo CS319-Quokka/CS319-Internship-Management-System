@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Student extends UserProfile{
+public class Student extends User{
 
     private String courseCode;
     private String letterGrade;

@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class SummerTrainingCoordinator extends UserProfile{
+public class SummerTrainingCoordinator extends User{
 
     @OneToMany
     private List<Announcement> madeAnnouncements;

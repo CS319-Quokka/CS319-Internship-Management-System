@@ -1,30 +1,28 @@
 package com.quokka.backend.models;
 
-import java.util.List;
-
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.Setter;
 
-
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class UserAccount{
+public class User {
 
-
-    @OneToMany
-    private List<User> users;
-
-    private String name;
-    private String email;
     @Id
-    private long id;
-    private String department;
-    private String password;
+    @GeneratedValue
+    private Long id;
+
+    private String firstName;
+    private String lastName;
+
+    @OneToOne
+    private UserProfile profileList;
 
     public void setId(Long id) {
         this.id = id;

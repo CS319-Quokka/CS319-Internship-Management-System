@@ -10,8 +10,11 @@ import lombok.Setter;
 @Setter
 public class UserProfile {
 
-   private String firstName;
-   private String lastName;
+   private String courseTaken;
+   private String email;
+   private String department;
+   private String name;
+
    @Id
    private Long id;
 

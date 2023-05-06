@@ -13,7 +13,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Instructor extends UserProfile {
+public class Instructor extends User {
 
     @OneToMany
     private List<Student> students;
