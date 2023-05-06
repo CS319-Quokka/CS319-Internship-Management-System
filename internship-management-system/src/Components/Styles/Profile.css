@@ -15,8 +15,6 @@ h1{
   
 }
 .page .container{
-  width:85%;
-  margin-left: 15%;
   height:100vh;
   background-color: hwb(207 91% 0%);
   border-style: hidden;

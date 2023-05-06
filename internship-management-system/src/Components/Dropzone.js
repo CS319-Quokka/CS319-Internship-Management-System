@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-
+import "./Styles/FileSubmission.css"
 const DragDropFiles = () => {
   const [files, setFiles] = useState(null);
   const inputRef = useRef();
@@ -27,29 +27,22 @@ const DragDropFiles = () => {
   };
 
   if (files) return (
-    <div className="uploads">
-
-      <br></br>
+    <div className="upload-confirm">
+      <h2>Uploading the following file(s):</h2>
         <ul className="file-name">
             {Array.from(files).map((file, idx) => <li key={idx}>{file.name}</li> )}
         </ul>
-        
-        <br></br>
+
 
         <div className="actions">
-
-               <label className="s-text"> Please enter your message here</label> <br></br>
-               <br></br>
-                <textarea  className = "comment-submission" name = "message" rows="20" cols="70"></textarea>
-
-
-            <div className="button-layout">
+          <label className="s-text"> 🗨 Please enter your message here</label> 
+    
+          <textarea  className = "comment-submission" name = "message" rows="20" cols="70"></textarea>
+          <div className="button-layout">
             <button  className = "button" onClick={() => setFiles(null)}>Cancel</button>
-            
-  
             <button  className = "button" onClick={handleUpload}>Upload</button>
-            </div>
-           
+          </div>
+          
         </div>
     </div>
   )
@@ -68,7 +61,7 @@ const DragDropFiles = () => {
             multiple
             onChange={(event) => setFiles(event.target.files)}
             hidden
-            accept="image/png, image/jpeg"
+            accept="application/pdf, .doc, .docx"
             ref={inputRef}
           />
           <button className = "button" onClick={() => inputRef.current.click()}>Select Files</button>

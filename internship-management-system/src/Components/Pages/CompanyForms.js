@@ -1,12 +1,23 @@
 import React, {Component} from 'react'
-import '../Styles/ReportEvaluation.css'
+import Dropzone from "../Dropzone";
+import "../Styles/FileSubmission.css"
 class CompanyForms extends Component{
     
     
       render(){
         return(
-            <div className='evaluation'>
-                <h1> Company Forms</h1>
+            <div className='page'>
+                
+                <div className='uploads'>
+                    <div className='uploadmessage'>
+                            <h1> ❗ CONFIDENTIAL ❗</h1>
+                            <br></br>
+                        
+                    </div>
+              
+                <Dropzone/>
+                </div>
+                
             </div>
          
               

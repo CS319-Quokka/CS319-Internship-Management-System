@@ -1,4 +1,4 @@
-.maincontainer{
+.page{
     width:85%;
     margin-left: 15%;
     height:100vh;
@@ -9,21 +9,60 @@
 }
 .instructorstatus{
     position: relative;
-    background-color: lightcoral;
+    background-color: white;
     border-radius: 16px;
     width: 35%;
-    height: 20%;
+    height: 40%;
     left: 10%;
-    top: 10%
+    top: 5%;
+    overflow-y:auto;
+    box-sizing: border-box;
+    
+}
+.studentstatus{
+    position: relative;
+    background-color: white;
+    border-radius: 16px;
+    width: 35%;
+    height: 40%;
+    left: 10%;
+    top: 15%;
+    overflow-y:auto;
+}
+.gradestatus{
+    position:absolute;
+    background-color: white;
+    border-radius: 16px;
+    width: 25%;
+    height: 50%;
+    top:25%;
+    left: 65%;
 
 }
+.statlist{
+    width:90%;
+    left: 10%;
+    height: fit-content;
+    position: relative;
+}
+.statlist ul{
+    position: relative;
+    width: 90%;
+}
+.gradingprogress{
+    height: 90%;
+    position: relative;
+    width: 90%;
+    left: 5%;
+}
 
-.gradestatus{
-    position: absolute;
-    background-color: lightsalmon;
-    border-radius: 16px;
-    width: 35%;
-    height: 60%;
-    left: 55%;
+.cef{
+    position: relative;
+    top: 10%;
 
+}
+.overall{
+    position: relative;
+    top:10%;
+    
 }

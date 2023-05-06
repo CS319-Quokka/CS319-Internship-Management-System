@@ -4,10 +4,11 @@ import "../Styles/FileSubmission.css"
 function FileSubmission() {
   // const [images, setImages] = useState([]);
   return (
-    <div className="file-menu">
-      <div className="file-submission">
-        <div className="text">
-             <h1 className="text">Upload your internship report here</h1>
+    <div className="page">
+      <div className="uploads">
+        <div className= "uploadmessage">
+          <h2>📁Upload your summer training report here.</h2>
+          <br></br>
         </div>
        
         <Dropzone />

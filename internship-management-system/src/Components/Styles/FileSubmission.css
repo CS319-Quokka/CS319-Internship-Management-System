@@ -1,39 +1,100 @@
-.file-submission{
-    text-align: center;
-    position: relative;
-    height: 90%;
+
+.button-layout{
+  left: 40%;
+  width: 30%;
+  height: 10%;
+  position: relative;
+}
+
+.comment-submission{
+  border: 5px solid rgb(117, 112, 112);
+  position: relative;
+  height: 70%;
+}
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; 
+  width: 50%;
+  height: 70%;
+  position: relative;
+  top: 10%;
+  left: 25%;
+  border: 5px dashed rgb(117, 112, 112);
+  padding: 2rem;
+}
+.page h2{
+  font-size: 3vh;
+  color: black;
+  position: relative;
+  text-align: center;
+}
+.dropzone h3{
+  color:#363e58;
+}
+.uploads{
+  background-color: white;
+  position: relative;
+  overflow-y: auto;
+  border-radius: 16px;
+  height: 80%;
+  top:10%;
+  width: 80%;
+  left: 10%;
+}
+.file-name{
+  position: relative;
+  left: 10%;
+}
+.actions .s-text{
+  position: relative;
+  left: 10%;
+  font-size: 2.3vh;
   
-  }
+}
+.uploads .actions{
+  top: 2%;
+  position:relative;
+  height: 90%;
+}
+h1{
+  font-size: 3vh;
+  color:rgb(12, 0, 53);
+  position: relative;  
+  text-align: center;
+}
+.page{
+  background-color: hwb(207 91% 0%);
+  width:85%;
+  margin-left: 15%;
+  height:100vh;
+  justify-content: center;
+  align-items: center;
+}
+.file-name li{
+  font-size:2vh;
+  color:#122f8f;
+}
+.uploadmessage{
+  position: relative;
+  align-items: center;
+  width: 80%;
+  height: 5vh;
+  top: 5%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  left:10%;
 
-  .file-menu{
-   
-    border-style: hidden;
-    position: relative;
-    padding:1%;
-    margin-top: 1%;
-    left: 17.5%;
-    width: 80%;
-    height: 95vh;
-    justify-content: center;
-    background-color: hwb(207 91% 0%);
-  }
+}
 
-  .button-layout{
-  }
-
-  .comment-submission{
-    border: 5px solid rgb(117, 112, 112);
-  }
-  .dropzone {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center; 
-    width: 50%;
-    height: 70%;
-    position: relative;
-    top: 10%;
-    left: 25%;
-    border: 5px dashed rgb(117, 112, 112);
-    padding: 2rem;
-  }
+.upload-confirm{
+  background-color: white;
+  position: absolute;
+  border-radius: 16px;
+  height: 80%;
+  top:10%;
+  width: 80%;
+  left: 10%;
+}
