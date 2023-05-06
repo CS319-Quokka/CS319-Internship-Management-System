@@ -22,7 +22,7 @@ public class User {
     private String lastName;
 
     @OneToOne
-    private UserProfile profileList;
+    private UserProfile profile;
 
     public void setId(Long id) {
         this.id = id;

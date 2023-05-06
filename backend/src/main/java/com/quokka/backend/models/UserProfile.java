@@ -1,6 +1,7 @@
 package com.quokka.backend.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,12 +11,12 @@ import lombok.Setter;
 @Setter
 public class UserProfile {
 
-   private String courseTaken;
    private String email;
    private String department;
    private String name;
 
    @Id
+   @GeneratedValue
    private Long id;
 
    public void setId(Long id) {

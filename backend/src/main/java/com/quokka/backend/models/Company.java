@@ -3,6 +3,7 @@ package com.quokka.backend.models;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class Company {
     @OneToMany
     private List<Student> studentList;
     @Id
+    @GeneratedValue
     private Long id;
 
     public void setId(Long id) {

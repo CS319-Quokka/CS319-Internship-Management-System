@@ -3,6 +3,7 @@ package com.quokka.backend.models;
 import java.util.Date;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class Announcement {
     private Date date;
     private boolean isSeen;
     @Id
+    @GeneratedValue
     private Long id;
 
     public void setId(Long id) {
