@@ -19,7 +19,7 @@ const statusOptions = ["Submitted",
     */
 
 
-class ReportsStudents extends Component {
+class Reports extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -56,13 +56,19 @@ class ReportsStudents extends Component {
                 <div class="leftside">
                     <div class="history">
                         <h1><strong>{this.state.firstName} {this.state.lastName}   ( {this.state.userType} ) </strong> </h1>    
-                        <h2>Uploaded Reports History</h2>
+                        <br></br>
+                        <h1>Uploaded Reports History</h1>
+                        <br></br>
                         <div class="pastuploads">                           
                             <div className="docpic">
+                                <br></br>
                                 <img src={docpic}/>
                                 <h3>{this.state.prevfilename}</h3>
                             </div>
                             <div className="prevreport">
+                                <br></br>
+                                <br></br>
+                                <br></br>
                                 <h1>The grade distribution of your previous submission:</h1>
                                 <br></br>
                                 <h4>Grade for Part A: {this.state.prevgradeA}/10</h4>
@@ -120,4 +126,4 @@ class ReportsStudents extends Component {
     );
    }       
 }
-export default ReportsStudents;
+export default Reports;

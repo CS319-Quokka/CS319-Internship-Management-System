@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
@@ -8,102 +8,57 @@ import {
   Outlet,
   createRoutesFromElements,
 } from "react-router-dom";
-import Profile from "./Components/Pages/Profile";
+import Home from "./Components/Pages/Profile";
 import Reports from "./Components/Pages/Reports";
 import Notifications from "./Components/Pages/Notifications";
 import FileSubmission from "./Components/Pages/FileSubmission";
-import ReportEvaluation from "./Components/Pages/ReportEvaluation";
-import Statistics from "./Components/Pages/Statistics";
-import StudentList from "./Components/Pages/StudentList";
-import GraderProgress from "./Components/Pages/GraderProgress";
-import Login from "./Components/Pages/Login";
-import CompanyForms from "./Components/Pages/CompanyForms";
-import ManageUsers from "./Components/Pages/ManageUsers";
 import Sidebar from "./Components/Sidebar";
-import FAQ from "./Components/Pages/FAQ"
-
 import "./App.css";
 
-const App = () => {
-  const [logged, setIsLoggedIn] = useState(false);
-
-  const handleSubmit = () => {
-    setIsLoggedIn(true);
-  };
-
-  const router = createBrowserRouter([
-    {
-      element: <AppLayout logged={logged} />,
-      children: [
-        {
-          path: "login",
-          element: <Login onLogin={handleSubmit} />,
-        },
-        {
-          path: "/",
-          element: <Profile />,
-        },
-        {
-          path: "notifications",
-          element: <Notifications />,
-        },
-        {
-          path: "reports",
-          element: <Reports />,
-        },
-
-        {
-          path: "submission",
-          element: <FileSubmission />,
-        },
-        {
-          path: "evaluation",
-          element: <ReportEvaluation />,
-        },
-        {
-          path: "statistics",
-          element: <Statistics />,
-        },
-        {
-          path: "students",
-          element: <StudentList />,
-        },
-        {
-          path: "forms",
-          element: <CompanyForms />,
-        },
-        {
-          path: "graders",
-          element: <GraderProgress />,
-        },
-        {
-          path: "manage",
-          element: <ManageUsers />,
-        },
-        {
-          path: 'faq',
-          element: <FAQ />
-        }
-      ],
-    },
-  ]);
-
-  return (
-    <>
-      {logged ? (
-        <RouterProvider router={router} />
-      ) : (
-        <Login onLogin={handleSubmit} />
-      )}
-    </>
-  );
-};
-
-const AppLayout = ({ logged }) => (
+const AppLayout = () => (
   <>
-    {logged && <Sidebar />}
+    
     <Outlet />
+    <Sidebar />
   </>
 );
 
-createRoot(document.getElementById("root")).render(<App />);
+// const router = createBrowserRouter(
+//   createRoutesFromElements(
+//     <Route element={<AppLayout />}>
+//       <Route path="/" element={<Home />} />
+//       <Route path="/products" element={<Products />} />
+//       <Route path="/reports" element={<Reports />} />
+//     </Route>
+//   )
+// );
+
+const router = createBrowserRouter([
+  {
+    element: <AppLayout />,
+    children: [
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "notifications",
+        element: <Notifications />,
+      },
+      {
+        path: "reports",
+        element: <Reports />,
+      },
+
+      {
+        path: "submission",
+        element: <FileSubmission />,
+      },
+
+    ],
+  },
+]);
+
+createRoot(document.getElementById("root")).render(
+  <RouterProvider router={router} />
+);

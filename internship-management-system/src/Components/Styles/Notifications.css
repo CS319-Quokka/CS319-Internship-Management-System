@@ -1,44 +1,35 @@
-.maincontainer-notif{
-    width:100%;
+.notifications{
+    background-color: white;
+    position: relative;
+    height: 90%;
+    width: 70%;
+    border-radius: 15px;
+    margin-top: 5vh;
+    margin-inline: 15%;
+    overflow-y: scroll;
+}
+.maincontainer{
+    width:85%;
+    margin-left: 15%;
     height:100vh;
     background-color: hwb(207 91% 0%);
+    overflow: auto;
     justify-content: center;
     align-items: center;
 }
-.announcements{
-    background-color: white;
-    position: absolute;
-    box-sizing: border-box;
-    height: 90%;
-    width: 40%;
-    border-radius: 15px;
-    margin-top: 5vh;
-    left: 20%;
-    overflow-y: scroll;
-}
-.notifications{
-    background-color: white;
-    position: absolute;
-    box-sizing: border-box;
-    height: 90%;
-    width: 30%;
-    border-radius: 15px;
-    margin-top: 5vh;
-    left: 65%;
-    overflow-y: scroll;
-}
-.maincontainer-notif h1{
+h1{
     font-size: 2.35vh;
     color:rgb(12, 0, 53);
     position: relative;   
 }
-.announcementList{
+.announcements{
+
     position: relative;
 }
 .showannouncement{
     margin-bottom: 5vh;
 }
-.maincontainer-notif textarea{
+textarea{
     width: 80%;
     margin-left: 10%;
     margin-top: 2%;
@@ -51,20 +42,21 @@
     box-sizing: border-box;
     border: 2px solid #ccc;
     font-size: 1.7vh;
+    border-color:hwb(207 91% 0%);
     border-radius: 15px;
-    background-color:hwb(207 91% 0%);
+    background-color:hwb(208 94% 0%);
     font-size: 16px;
     text-align: left;
     resize: none;
     align-items: center;
 }
-.maincontainer-notif h2{
+h2{
     font-size: 2vh;
     color:rgb(12, 0, 53);
     position: relative;  
     text-align: left;
 }
-.maincontainer-notif hr {
+hr {
     width: 100%; /* Set the width of the horizontal lines */
     margin-top: 10px;
     margin-bottom: 10px;
