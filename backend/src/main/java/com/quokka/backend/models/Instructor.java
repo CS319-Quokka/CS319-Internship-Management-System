@@ -15,6 +15,7 @@ import lombok.Setter;
 @Setter
 public class Instructor extends UserProfile {
 
+    @OneToMany
     private List<Student> students;
     private File signature;
 }

@@ -3,6 +3,7 @@ package com.quokka.backend.models;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,5 +15,6 @@ import lombok.Setter;
 
 public class TeachingAssistant extends UserProfile{
 
+    @OneToMany
     private List<Student> students;
 }

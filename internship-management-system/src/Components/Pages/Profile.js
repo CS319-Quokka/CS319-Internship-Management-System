@@ -91,7 +91,7 @@ class Profile extends Component {
 
                          <div class="row">
                                 <p class="label">Report Status:</p>
-                                <p class="value">Pending Approval</p>
+                                <p class="value">{this.state.status}</p>
                         </div>   
                     </div>
                  </div>
