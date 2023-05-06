@@ -1,110 +1,142 @@
 
 .logincontainer {
+  
+  position: absolute;
+  box-sizing: border-box;
   background-color:white; 
-  box-shadow: 15px 15px 20px 15px rgba(0, 0, 0, 0.2); 
-  text-align: center;
-  height: 55vh;
+  height: 60%;
+  width: 25%;
   border-radius: 15px;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 30%;
-  margin-right: 30%;
-}
-.loginentries {
-  background-color:pink;
-  width: 40%;
-  height: 75%;
-  text-align: left;
-  position: relative;
-  
+  left: 37.5%;
+  top: 20%; 
 
 }
-.emailcontainer{
-  display: flex;
-  justify-content: space-between;
-
-}
-.passwordcontainer{
-  display: flex;
-  justify-content: space-between;
-  right:100%;
-  
-}
-body{
-    background-color:white;
-    
-}
-h1{
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 38px;
-}
-
-h2{
-  color: white;
+.header h4{
+  color: #ffffff;
   text-align: center;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 30px;
 
 }
-header {
-  background-color: #1e3798;
-  height: 10ph;
+.header{
+
+  position: absolute;
+  margin-top: 2%;
+  width: 100%;
+  background-color: #212B81;
+  height:fit-content;
+}
+.loginentries {
+
+  width: 90%;
+  height: 70%;
+  text-align: center;
+  position: relative;
+  top: 15%;
+  left: 5%
+
+}
+.faqcontainer{
   
+  width: 90%;
+  height: 70%;
+  text-align: center;
+  position: relative;
+  left: 5%;
+  top: 2%;
 }
-img{
-  width: 125px;
-  height: 125px;
+.loginpage{
+  background-color: #e8f5ff;
+  height:100vh;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.emailcontainer{
+  display: flex;
+  justify-content: left;
+  margin-top: 10%;
+  margin-left: 10%;
+  width: 100%;
+}
+.passwordcontainer{
+  display: flex;
+  justify-content: left;
+  margin-top: 10%; 
+  width: 100%;
+  margin-left: 10%;
+
+
+}
+.logincontainer label{
+  width:40%;
+  margin-top: 1vh;
+  align-self: left;
+  float: left;
+  
+
+}
+.logo{
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 2vh;
+  margin-bottom: 5vh;
+}
+.logincontainer body{
+    background-color:white;
+    
+}
+.loginentries h1{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 32px;
+  color: #4c4c4c;
 
 }
 
-input[type=text] {
-  width: 60%;
-  padding: 12px 20px;  
-  box-sizing: border-box;
-  border-color:#3E54AC;
+
+
+.logo img{
+  width: 100px;
+  height: 100px;
+}
+
+.emailcontainer input[type=text] {
+  width:50%;
+  padding: 12px 20px; 
   border-radius: 15px;
-  background-color:white;
   color: rgb(10, 10, 10);
   font-family: Arial, Helvetica, sans-serif;
   position: relative;
-
- 
+  background-color: #EEEE;
+  border:none;
 
 }
 
-input[type=password] {
-  width: 60%;
+.passwordcontainer input[type=password] {
+  width: 50%;
   padding: 12px 20px;
-  box-sizing: border-box;
-  border-color: gray;
-  
   border-radius: 15px;
-  background-color:white;
+  border:none;
   color: rgb(10, 10, 10);
   font-family: Arial, Helvetica, sans-serif;
-  padding-right: 10%;
   position: relative;
- 
-  
-  
+  background-color: #EEEE;
+
 }
 
-input[type=submit] {
-  background-color: #ddd;
+.loginentries input[type=submit] {
+  background-color: #212B81;
   border: none;
-  color: black;
+  color: white;
   padding: 10px 20px;
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  margin: 4px 2px;
+  width: 70%;
   cursor: pointer;
   border-radius: 16px;
   font-family: Arial, Helvetica, sans-serif;
-  margin-left: 22px;
+  margin-top: 10%;
 }
-
 select {
   width: 20%;
   padding: 12px 20px;
@@ -116,8 +148,29 @@ select {
   color: rgb(10, 10, 10);
   font-family: Arial, Helvetica, sans-serif;
 }
+.recoveryentries{
+  
+  width: 90%;
+  height: 70%;
+  text-align: center;
+  position: relative;
+  top: 15%;
+  left: 5%
+}
 
-
+.recoveryentries h1{
+  margin-top: 10%;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 28px;
+  color: #2c2c2c;
+}
+.recoveryentries h2{
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #2c2c2c;
+  text-align: center;
+  margin-top:5%;
+}
 
 .container{
   background-color: antiquewhite;

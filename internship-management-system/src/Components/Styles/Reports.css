@@ -59,9 +59,9 @@ h2{
 h3{
     color: rgb(64, 64, 64);
     text-align: right;
-    font-size: 2.2vh;
+    font-size: 2.8vh;
+    margin-top: 2;
     position: relative;
-    margin-top: 1vh;
 }
 h4{
     color:rgb(12, 0, 53);
@@ -100,13 +100,14 @@ h4{
 .docpic{
     margin-top: 10px;
     position:relative;
-    width:90%
+    width:100%
 
 }
 img {
-    width:7vh;
-    height:7vh;
+    width:70px;
+    height:70px;
     position: absolute;
+    margin-left:5px;
 }
 .reportstatus{
     background-color: white;

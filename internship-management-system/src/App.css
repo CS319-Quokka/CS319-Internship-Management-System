@@ -7,16 +7,6 @@
   
 }
 
-.reports{
-  text-align: center;
-
-}
-
-
-.notifications{
-  text-align: center;
-}
-.home,
 
 
 .menu-bars {
@@ -28,6 +18,7 @@
 
 .sidebar{
   padding-top: 1%;
+  color: white;
   background-color: #363e58;
   width: 15%;
   height: 100vh;
@@ -51,7 +42,7 @@
 
 .menu-item-active a {
   text-decoration: none;
-  color: whitesmoke;
+  color: #c6c6c6;
   background-color: #2c3348;
   font-size: 18px;
   width: 95%;
@@ -60,6 +51,37 @@
   align-items: center;
   padding: 0 16px;
   border-radius: 4px;
+}
+.logout{
+  background-color: #363e58;
+  color: #000;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding:0px 0px 8px 16px;
+  list-style: none;
+  height: 60px;
+  position: fixed;
+  top: 90%;
+  font-size: 2.5vh;
+  margin-left: 12px;
+
+}
+.logout a {
+  text-decoration: none;
+  color: #151414;
+  font-size: 18px;
+  width: 95%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  border-radius: 4px;
+}
+
+.logout a:hover {
+  background-color: #3f4967;
+  color: #151414;
 }
 .menu-item {
   display: flex;
@@ -72,7 +94,7 @@
 
 .menu-item a {
   text-decoration: none;
-  color: whitesmoke;
+  color: white;
   font-size: 18px;
   width: 95%;
   height: 100%;
@@ -84,7 +106,7 @@
 
 .menu-item a:hover {
   background-color: #3f4967;
-  color: #151414;
+  color: white;
 }
 
 .menu-items {

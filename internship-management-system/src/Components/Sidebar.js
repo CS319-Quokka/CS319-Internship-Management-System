@@ -4,6 +4,7 @@ import * as AiIcons from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { SidebarData } from "./SidebarData";
 import "../App.css";
+import * as FiIcons from "react-icons/fi";
 import { IconContext } from "react-icons";
 
 class Sidebar extends Component{
@@ -11,12 +12,25 @@ class Sidebar extends Component{
   constructor(props) {
       super(props)
       this.state = "Profile"
+      this.userType = "administrative-assistant"
   }    
 
 
+  
 
   render(){
 
+    const handleLogout = (title) => {
+      console.log("LOGOUT");
+    };
+    console.log(this.userType);
+    // Find the sidebar data for the current user type
+    const data = SidebarData.find(
+      (item) => item.userType === this.userType
+    );
+
+    if(data){
+      
     return (
       <>
         <IconContext.Provider value={{ color: "undefined" }}>
@@ -24,8 +38,9 @@ class Sidebar extends Component{
           <nav className={"sidebar"}>
             <ul className="menu-items" >
               
-            {SidebarData.map((item, index) => {
+            {data?.items.map((item, index) => {
                 const isActive = item.title === this.state.activePage;
+                console.log(this.state.activePage)
                 const className = isActive ? "menu-item-active" : "menu-item";
                 return (
                   <li key={index} className={className}>
@@ -40,12 +55,26 @@ class Sidebar extends Component{
                     </Link>
                   </li>
                 );
+
               })}
+              <Link className="logout"
+                      onClick={() => {
+                        this.handleLogout();
+                      }}
+                    >
+                      {<FiIcons.FiLogOut/>}
+                      <span>{"Logout"}</span>
+               </Link>
+
+              
+             
             </ul>
           </nav>
         </IconContext.Provider>
       </>
     );
+
+    }
 
   }
  
