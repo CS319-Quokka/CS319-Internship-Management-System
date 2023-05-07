@@ -23,7 +23,17 @@ public class EvaluationService {
         this.evaluationRepository = evaluationRepository;
     }
 
-    //public File getCompanyEvaluationForm(long ID){}
+    public File getCompanyEvaluationForm(long studentID){
+        Optional<Student> student = studentRepository.findById(studentID);
+
+        if(!student.isPresent()){
+            throw new IllegalStateException("No student is found!");
+        }
+
+        Student studentToGetCompanyEvaluationForm = student.get();
+
+        return studentToGetCompanyEvaluationForm.getCompanyEvaluationForm();
+    }
 
     //public List<File> getAllCompanyEvaluationForms(){}
 
@@ -56,7 +66,18 @@ public class EvaluationService {
         return true;
     }
 
-    //public boolean removeCompanyEvaluationForm(long ID){}
+    public boolean removeCompanyEvaluationForm(long studentID){
+        Optional<Student> student = studentRepository.findById(studentID);
+
+        if (!student.isPresent()) {
+            throw new IllegalArgumentException("Student with ID " + studentID + " not found");
+        }
+
+        Student studentToRemoveCompanyEvaluationForm = student.get();
+        studentToRemoveCompanyEvaluationForm.setCompanyEvaluationForm(null);
+
+        return true;
+    }
 
     public boolean addGradeForm(long studentID, GradeForm gradeForm){
         Optional<Student> student = studentRepository.findById(studentID);
