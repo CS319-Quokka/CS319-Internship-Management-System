@@ -49,20 +49,20 @@ class Login extends Component {
                     <h4>Bilkent University Internship Management System </h4>
                 </div>                                                          
                 
-                <div class="logincontainer">
+                <div className="logincontainer">
                     <div className="logo">
                         <img src={logo}/>
                     </div>   
-                    <div class="loginentries">   
+                    <div className="loginentries">   
     
                         <form onSubmit={this.handleSubmit}>
                         
                             <h1>User Login</h1>
-                            <div class="emailcontainer">   
+                            <div className="emailcontainer">   
                                 <label>E-mail:</label> 
                                 <input type="text" value={this.state.email} onChange={this.emailhandler} placeholder="E-mail" />
                             </div> 
-                            <div class="passwordcontainer">   
+                            <div className="passwordcontainer">   
                                 <label>Password:</label> 
                                 <input type="password" value={this.state.password} onChange={this.passwordhandler} placeholder="Password" />
                             </div>

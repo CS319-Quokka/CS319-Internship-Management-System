@@ -14,7 +14,7 @@
     border-radius: 15px;
     margin-top: 5vh;
     left: 20%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .notifications{
     background-color: white;
@@ -25,7 +25,7 @@
     border-radius: 15px;
     margin-top: 5vh;
     left: 65%;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .maincontainer-notif h1{
     font-size: 2.35vh;
