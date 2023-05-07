@@ -21,6 +21,7 @@ public class Report {
     private Feedback feedback;
 
     private Date uploadDate;
+    private Date deadline;
     private String status;
     @Id
     @GeneratedValue
