@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ReportController {
+
     @Autowired
     private ReportRepository reportRepository;
 
     @PostMapping("/report")
     Report internshipReport(@RequestBody Report internshipReport){
-        return reportRepository.save(internshipReport);
 
+        return reportRepository.save(internshipReport);
     }
 }

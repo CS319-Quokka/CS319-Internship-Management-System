@@ -15,11 +15,18 @@ public class Student extends User{
     private String courseCode;
     private String letterGrade;
     private String companyName;
+
+    @ManyToOne
+    private Instructor instructor;
+
+    @ManyToOne
+    private TeachingAssistant teachingAssistant;
+
     private File companyEvaluationForm;
 
     @OneToMany
     private List<Report> reports;
 
-    @OneToMany
-    private List<GradeForm> gradeFormList;
+    @OneToOne
+    private GradeForm gradeForm;
 }
