@@ -79,7 +79,7 @@ class ManageUsers extends Component {
       <div className="maincontainer">
         
         {console.log(showChoices)}
-        <DisplayList data={UserData} displayFields={['name', 'role', 'department'] }isAdd = {true} setControllerState={this.handleChoiceMenu} choice = 
+        <DisplayList data={UserData} displayFields={['name', 'role', 'department'] }isAdd = {true} tag = "Manage Users:" setControllerState={this.handleChoiceMenu} choice = 
         
 
           {showChoices&& <div className="menu" id=  "choice-menu">
@@ -103,16 +103,16 @@ class ManageUsers extends Component {
         )}
 
         
-        {showPopup &&<Popup name = "Add" className="popup" handleClose={this.handleClose} isAdd = {true} contents = {<ManageUsersAdd/>}>
+        {showPopup &&<Popup name = "Add" className="popup" handleClose={this.handleClose} isAdd = {true} tag = "Manage Users:" contents = {<ManageUsersAdd/>}>
           </Popup>}
         </div>
         <div className="remove">
-        {showRemove&&<Popup name = "Remove" className="popup" handleClose={this.handleClose} contents = "remove">
+        {showRemove&&<Popup name = "Remove" className="popup" handleClose={this.handleClose} tag = "Manage Users:" contents = "remove">
          </Popup>}
         </div>
 
         <div className="edit">
-        {showEdit&&<Popup name = "Edit" className="popup" handleClose={this.handleClose} contents = "edit">
+        {showEdit&&<Popup name = "Edit" className="popup" handleClose={this.handleClose} tag = "Manage Users:" contents = "edit">
          </Popup>}
         </div>
       </div>

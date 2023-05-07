@@ -69,7 +69,7 @@ class CompanyForms extends Component{
           
 
           <div className='company-forms'>
-          {showCompanyForm &&<Popup name = "Upload Company Form" className="popup" handleClose={this.handleClose} contents = 
+          {showCompanyForm &&<Popup name = "Upload Company Form" className="popup" tag = "Student Operations:" handleClose={this.handleClose} contents = 
           {<div className='uploads'>
           <div className='uploadmessage'>
                   <h1> ❗ CONFIDENTIAL ❗</h1>
