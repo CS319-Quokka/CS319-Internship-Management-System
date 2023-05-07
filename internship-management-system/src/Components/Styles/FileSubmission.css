@@ -1,9 +1,10 @@
 
 .button-layout{
-  left: 40%;
+  left: 53%;
+  top:80%;
   width: 30%;
   height: 10%;
-  position: relative;
+  position: fixed;
 }
 
 .comment-submission{

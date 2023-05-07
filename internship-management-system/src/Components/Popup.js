@@ -56,7 +56,7 @@ const Popup = (props) => {
             </select>
             </div> 
       }
-      
+      <button className="button" id= "exit" onClick={props.handleClose}>x</button>
       </h1>
       
       </div>
@@ -95,7 +95,7 @@ const Popup = (props) => {
         <span className="buttons">
         {props.button}
        
-        <button className="button" onClick={props.handleClose}>Cancel</button>
+       
         </span>
         
       </div>

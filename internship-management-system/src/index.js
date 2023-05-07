@@ -18,7 +18,7 @@ import Statistics from "./Components/Pages/Statistics";
 import StudentList from "./Components/Pages/StudentList";
 import GraderProgress from "./Components/Pages/GraderProgress";
 import Login from "./Components/Pages/Login";
-import CompanyForms from "./Components/Pages/CompanyForms";
+import StudentOperations from "./Components/Pages/StudentOperations";
 import ManageUsers from "./Components/Pages/ManageUsers";
 import Sidebar from "./Components/Sidebar";
 import FAQ from "./Components/Pages/FAQ"
@@ -75,7 +75,7 @@ const App = () => {
         },
         {
           path: "forms",
-          element: <CompanyForms />,
+          element: <StudentOperations />,
         },
         {
           path: "graders",

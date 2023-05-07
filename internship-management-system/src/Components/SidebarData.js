@@ -119,7 +119,7 @@ export const SidebarData = [
       cName: "nav-text",
     },
     {
-      title: "Company Forms",
+      title: "Student Operations",
       path: "/forms",
       icon: <AiIcons.AiOutlineMail />,
       cName: "nav-text",

@@ -72,6 +72,11 @@
     display: flex;
   }
 
+  #exit{
+    position: fixed;
+    left: 80%;
+    top:6%
+  }
   .select-menu{
     border: solid black;
     

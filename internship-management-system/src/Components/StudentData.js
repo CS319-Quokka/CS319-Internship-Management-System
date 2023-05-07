@@ -9,7 +9,7 @@ export const StudentData = [
     department: "CS",
     part: "A",
     status: "Waiting Company Form",
-    uploaded: "Uploaded"
+    form: "Uploaded"
   },
   {
     name: " Deniz Sun",
@@ -20,7 +20,7 @@ export const StudentData = [
     part: "B",
     status: "Feedback is requested"
     ,
-    uploaded: "Not Uploaded"
+    form: "Not Uploaded"
   },
 
   {
@@ -31,7 +31,7 @@ export const StudentData = [
     grader: "Not Assigned",
     part: "B",
     status: "Pending feedback",
-    uploaded: "Not Uploaded"
+    form: "Not Uploaded"
   },
   {
     name: " Melih Güven",
@@ -41,7 +41,7 @@ export const StudentData = [
     grader: "Selim Aksoy",
     part: "C",
     status: "Pending evaluation form",
-    uploaded: "Uploaded"
+    form: "Uploaded"
   },
   // {
   //   name: " Yahya Elnouby",
@@ -68,7 +68,7 @@ export const StudentData = [
     grader: "Eray Tüzün",
     part: "A",
     status: "Waiting Company Form",
-    uploaded: "Not Uploaded"
+    form: "Not Uploaded"
   },
 
   {
@@ -79,7 +79,7 @@ export const StudentData = [
     grader: "Not Assigned",
     part: "A",
     status: "Waiting Company Form",
-    uploaded: "Uploaded"
+    form: "Uploaded"
   },
 
   {
@@ -90,7 +90,7 @@ export const StudentData = [
     grader: "Can Alkan",
     part: "A",
     status: "Waiting Company Form",
-    uploaded: "Uploaded"
+    form: "Uploaded"
   },
 
   {
@@ -101,7 +101,7 @@ export const StudentData = [
     grader: "Selim Aksoy",
     part: "A",
     status: "Waiting Company Form",
-    uploaded: "Not Uploaded"
+    form: "Not Uploaded"
  },
 
  

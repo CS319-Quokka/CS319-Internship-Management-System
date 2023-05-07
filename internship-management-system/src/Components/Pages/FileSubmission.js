@@ -11,7 +11,15 @@ function FileSubmission() {
           <br></br>
         </div>
        
-        <Dropzone />
+        <Dropzone afterUpload = {
+             <div className="actions">
+             <label className="s-text"> 🗨 Please enter your message here</label> 
+       
+             <textarea  className = "comment-submission" name = "message" rows="20" cols="70"></textarea>
+             
+             
+           </div>
+        } />
       </div>
      
             
