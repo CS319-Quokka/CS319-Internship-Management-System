@@ -10,7 +10,8 @@ import {
 } from "react-router-dom";
 import Profile from "./Components/Pages/Profile";
 import Reports from "./Components/Pages/Reports";
-import Notifications from "./Components/Pages/Notifications";
+import StudentNotifications from "./Components/Pages/StudentNotifications";
+import InstructorNotifications from "./Components/Pages/InstructorNotifications"
 import FileSubmission from "./Components/Pages/FileSubmission";
 import ReportEvaluation from "./Components/Pages/ReportEvaluation";
 import Statistics from "./Components/Pages/Statistics";
@@ -44,8 +45,12 @@ const App = () => {
           element: <Profile />,
         },
         {
-          path: "notifications",
-          element: <Notifications />,
+          path: "studentnotifications",
+          element: <StudentNotifications />,
+        },
+        {
+          path: "instructornotifications",
+          element: <InstructorNotifications />,
         },
         {
           path: "reports",

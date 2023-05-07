@@ -9,7 +9,10 @@
 .comment-submission{
   border: 5px solid rgb(117, 112, 112);
   position: relative;
+  align-items: center;
   height: 70%;
+  width: 70%;
+  left: 15%;
 }
 .dropzone {
   display: flex;

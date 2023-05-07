@@ -1,17 +1,17 @@
 import React from 'react'
 export const AnnouncementData = [
     {   poster: "Begüm Çınar",
-        message: "The deadline for submitting your summer training reports has been moved to 15/05/2023",
+        message: "The deadline for submitting the summer training reports has been extended to 15/05/2023",
         date: "18 April 2023"
     },
     
     {   poster: "Begüm Çınar",
-        message: "All company evaluation forms are received and your standings are added to the system. You can check your Part A results now.",
+        message: "All company evaluation forms are received and the standings are added to the system. Students can check your Part A results now.",
         date: "5 April 2023"
     },
 
     {   poster: "Eray Tüzün",
-        message: "I have started grading your reports. You can check your progress on your reports page.",
+        message: "I have started grading the reports. Students can check their progress on the reports page.",
         date: "27 March 2023"
     },
    
@@ -21,7 +21,7 @@ export const AnnouncementData = [
     }
 ];
 
-export const NotifData = [
+export const StudentNotifData = [
     {   sender: "Can Alkan",
         message: "Your company evaluation grade is unsatisfactory. Contact your supervisor at the company to see if they will reevaluate your summer training.",
         date: "7 April 2023"
@@ -35,7 +35,14 @@ export const NotifData = [
     }
 ];
  
+export const InstructorNotifData = [
+    {
+        sender: "Begüm Çınar",
+        message: "Your students are waiting for their grades and other instructors have posted them already. Please start grading them ASAP.",
+        date: "7 May 2023"
+    }
 
+]
 
    
   

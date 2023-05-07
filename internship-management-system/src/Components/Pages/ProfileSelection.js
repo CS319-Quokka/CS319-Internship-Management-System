@@ -34,10 +34,10 @@ function ProfileSelection() {
       <div className="profile-selection-buttons-container">
         <button className={`profile-selection-button ${selectedUserType === 'coordinator' ? 'selected' : ''}`} onClick={() => handleUserTypeSelect('coordinator')}>
 
-          <div>coordinator</div>
+          <div>{userTypes[4]}</div>
         </button>
         <button className={`profile-selection-button ${selectedUserType === 'instructor' ? 'selected' : ''}`} onClick={() => handleUserTypeSelect('instructor')}>
-          <div>instructor</div>
+          <div>{userTypes[1]}</div>
         </button>
       </div>
       <button className="profile-selection-submit-button" disabled={!selectedUserType} onClick={handleUserTypeSubmit}>Go to profile</button>

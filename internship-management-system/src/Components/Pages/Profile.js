@@ -48,50 +48,50 @@ class Profile extends Component {
 
                     <div className='right-containers'>
 
-                        <div class="info-container">
+                        <div className="info-container">
 
-                            <div class="row">
-                                <p class="label">Mail:</p>
-                                <p class="value">{this.state.mail}</p>
+                            <div className="row">
+                                <p className="label">Mail:</p>
+                                <p className="value">{this.state.mail}</p>
+                            </div>
+                            <hr></hr>
+
+                            <div className="row">
+                                <p className="label">Institute:</p>
+                                <p className="value">{this.state.university}</p>
                             </div>
                             <hr></hr>
 
                             <div class="row">
-                                <p class="label">Institute:</p>
-                                <p class="value">{this.state.university}</p>
-                            </div>
-                            <hr></hr>
-
-                            <div class="row">
-                                <p class="label">Course Taken:</p>
-                                <p class="value">{this.state.course}</p>
+                                <p className="label">Course Taken:</p>
+                                <p className="value">{this.state.course}</p>
                                 </div>
 
                             <hr></hr>
 
-                            <div class="row">
-                                <p class="label">Instructor:</p>
-                                <p class="value">{this.state.instructor}</p>
+                            <div className="row">
+                                <p className="label">Instructor:</p>
+                                <p className="value">{this.state.instructor}</p>
                             </div>    
 
                             <hr></hr>
                             
-                            <div class="row">
-                                <p class="label">Instructor Mail:</p>
-                                <p class="value"><em> <a href="mailto:e.tuzun@cs.bilkent.edu.tr">e.tuzun@bilkent.cs.tr</a></em></p>
+                            <div className="row">
+                                <p className="label">Instructor Mail:</p>
+                                <p className="value"><em> <a href="mailto:e.tuzun@cs.bilkent.edu.tr">e.tuzun@bilkent.cs.tr</a></em></p>
                             </div>     
                         </div>    
                     </div>    
 
                     <div className='progress'>
-                        <div class="row">
-                            <p class="label">Report Progress:</p>
-                            <p class="value">%{this.state.progress}</p>
+                        <div className="row">
+                            <p className="label">Report Progress:</p>
+                            <p className="value">%{this.state.progress}</p>
                         </div>  
 
-                         <div class="row">
-                                <p class="label">Report Status:</p>
-                                <p class="value">{this.state.status}</p>
+                         <div className="row">
+                                <p className="label">Report Status:</p>
+                                <p className="value">{this.state.status}</p>
                         </div>   
                     </div>
                  </div>
