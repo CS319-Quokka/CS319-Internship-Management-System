@@ -25,10 +25,10 @@ public class UserManagementController {
     @Autowired
     private AdministrativeAssistantRepository administrativeAssistantRepository;
 
-    @PostMapping("/user_profile")
-    UserProfile newUserProfile(@RequestBody UserProfile newUserProfile){
+    @PostMapping("/user")
+    User newUser(@RequestBody User newUser){
 
-        return userRepository.save(newUserProfile);
+        return userRepository.save(newUser);
     }
 
     @PostMapping("/student")

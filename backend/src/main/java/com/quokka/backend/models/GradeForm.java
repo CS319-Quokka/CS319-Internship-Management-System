@@ -26,5 +26,4 @@ public class GradeForm {
     private String evaluationPhase;
     private String creationTime;
     private String overallEvaluation;
-
 }
