@@ -5,7 +5,7 @@ class ReportEvaluation extends Component{
     
       render(){
         return(
-            <div className='evaluation'>
+            <div className='reportevaluation'>
                 <h1> Report Evaluation</h1>
             </div>
          

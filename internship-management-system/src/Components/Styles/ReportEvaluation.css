@@ -1,10 +1,10 @@
-h1{
+.reportevaluation  h1{
     font-size: 3vh;
     color:rgb(12, 0, 53);
     position: relative;  
     text-align: center;
 }
-.evaluation{
+.reportevaluation{
     width:85%;
     margin-left: 15%;
     height:100vh;
