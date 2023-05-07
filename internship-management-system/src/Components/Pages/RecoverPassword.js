@@ -34,7 +34,7 @@ class RecoverPassword extends Component {
                 <form onSubmit={this.handleSubmit}>
                   <h1>Forgot Your Password?</h1>
                   <h2>We will send you a link to recover your account via email.</h2>
-                  <div class="emailcontainer">   
+                  <div className="emailcontainer">   
                     <label>E-mail:</label> 
                     <input type="text" value={this.state.email} onChange={this.emailhandler} placeholder="E-mail" />               
                   </div> 

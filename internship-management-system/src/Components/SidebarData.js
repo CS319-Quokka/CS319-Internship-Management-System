@@ -33,7 +33,7 @@ export const SidebarData = [
       },
       {
         title: "Notifications",
-        path: "/notifications",
+        path: "/studentnotifications",
         icon: <IoIcons.IoIosNotificationsOutline />,
         cName: "nav-text",
       },
@@ -62,7 +62,7 @@ export const SidebarData = [
     },
     {
       title: "Notifications",
-      path: "/notifications",
+      path: "/instructornotifications",
       icon: <IoIcons.IoIosNotificationsOutline />,
       cName: "nav-text",
     },
@@ -95,7 +95,7 @@ export const SidebarData = [
     
     {
       title: "Notifications",
-      path: "/notifications",
+      path: "/instructornotifications",
       icon: <IoIcons.IoIosNotificationsOutline />,
       cName: "nav-text",
     },
@@ -142,7 +142,7 @@ export const SidebarData = [
     
     {
       title: "Notifications",
-      path: "/notifications",
+      path: "/instructornotifications",
       icon: <IoIcons.IoIosNotificationsOutline />,
       cName: "nav-text",
     },
@@ -172,7 +172,7 @@ export const SidebarData = [
     
     {
       title: "Notifications",
-      path: "/notifications",
+      path: "/instructornotifications",
       icon: <IoIcons.IoIosNotificationsOutline />,
       cName: "nav-text",
     },
