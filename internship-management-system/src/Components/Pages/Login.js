@@ -3,6 +3,8 @@ import { useState } from 'react'
 import '../Styles/LoginStyle.css'
 import logo from '../Images/bilko.png'
 import { Link, Redirect } from 'react-router-dom';
+import Popup from "../Popup";
+import FAQ from "./FAQ";
 
 
 class Login extends Component {
@@ -12,8 +14,11 @@ class Login extends Component {
         this.state = {
             email: "",
             password: "",
+            showFAQ:false
         }
-        this.handleSubmit=this.handleSubmit.bind(this)
+        this.handleSubmit=this.handleSubmit.bind(this);
+        this.handleClose = this.handleClose.bind(this);
+        this.handleFAQ = this.handleFAQ.bind(this);
     }
     emailhandler = (event) => {
         this.setState({
@@ -41,8 +46,16 @@ class Login extends Component {
      event.preventDefault()
         
     }
+
+    handleClose(){
+        this.setState({showFAQ:false});
+      }
+    handleFAQ(){
+        this.setState({showFAQ:true});
+    }
     render() {
    
+        const { showFAQ } = this.state;
         return (         
             <div className="loginpage">
                 <div className="header">
@@ -69,11 +82,17 @@ class Login extends Component {
                             {/*recover password link*/}
                             
                             <input type="submit" value="Login" />
-                            <p>For questions and information:  </p>
+
+                            
+                        </form>
+
+                        {/* not a good implementation but it works, I will look at the router imp. later */}
+                        <button  id='link-button' onClick={this.handleFAQ}><ins>For questions and information: </ins> </button>
                             {/*faq link*/}
                           
+                            {showFAQ &&<Popup name = "FAQ" className="popup" handleClose={this.handleClose} isFAQ = {true} contents = {<FAQ/>}>
+          </Popup>}
                          
-                        </form>
                     </div>                  
                 </div>
             </div>

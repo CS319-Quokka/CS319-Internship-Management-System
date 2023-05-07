@@ -43,7 +43,7 @@ const Popup = (props) => {
     
     <div className="popup-window">
       
-      <div className="popup-header"><h1 className="popup-tag"><span className="tag">Manage Users:</span>{props.name}
+      <div className="popup-header"><h1 className="popup-tag"><span className="tag">{props.tag}</span>{props.name}
       {props.isAdd &&
             <div className="role">
             <select className = "select-menu" id = "type" value={selectedValue} onChange={handleSelectChange}>
