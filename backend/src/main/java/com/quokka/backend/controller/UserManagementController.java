@@ -20,7 +20,7 @@ public class UserManagementController {
     }
 
     @PostMapping("/student/add")
-    public boolean addStudent(Student student){
+    public boolean addStudent(@RequestBody Student student){
 
         try{
 
@@ -33,7 +33,7 @@ public class UserManagementController {
     }
 
     @PostMapping("/teaching_assistant/add")
-    public boolean addTeachingAssistant(TeachingAssistant teachingAssistant){
+    public boolean addTeachingAssistant(@RequestBody TeachingAssistant teachingAssistant){
 
         try{
 
@@ -46,7 +46,7 @@ public class UserManagementController {
     }
 
     @PostMapping("/instructor/add")
-    public boolean addInstructor(Instructor instructor){
+    public boolean addInstructor(@RequestBody Instructor instructor){
 
         try{
 
@@ -59,7 +59,7 @@ public class UserManagementController {
     }
 
     @PostMapping("/summer_training_coordinator/add")
-    public boolean addSummerTrainingCoordinator(SummerTrainingCoordinator summerTrainingCoordinator){
+    public boolean addSummerTrainingCoordinator(@RequestBody SummerTrainingCoordinator summerTrainingCoordinator){
 
         try{
 
@@ -72,7 +72,7 @@ public class UserManagementController {
     }
 
     @PostMapping("/administrative_assistant/add")
-    public boolean addAdministrativeAssistant(AdministrativeAssistant administrativeAssistant){
+    public boolean addAdministrativeAssistant(@RequestBody AdministrativeAssistant administrativeAssistant){
 
         try{
 
@@ -84,8 +84,8 @@ public class UserManagementController {
         }
     }
 
-    @DeleteMapping("/student/delete")
-    public boolean removeStudentByID(Long id){
+    @DeleteMapping("/student/delete/{id}")
+    public boolean removeStudentByID(@PathVariable Long id){
 
         try{
 
@@ -97,8 +97,8 @@ public class UserManagementController {
         }
     }
 
-    @DeleteMapping("/teaching_assistant/delete")
-    public boolean removeTeachingAssistantByID(Long id){
+    @DeleteMapping("/teaching_assistant/delete/{id}")
+    public boolean removeTeachingAssistantByID(@PathVariable Long id){
 
         try{
 
@@ -110,8 +110,8 @@ public class UserManagementController {
         }
     }
 
-    @DeleteMapping("/instructor/delete")
-    public boolean removeInstructorByID(Long id){
+    @DeleteMapping("/instructor/delete/{id}")
+    public boolean removeInstructorByID(@PathVariable Long id){
 
         try{
 
@@ -123,8 +123,8 @@ public class UserManagementController {
         }
     }
 
-    @DeleteMapping("/summer_training_coordinator/delete")
-    public boolean removeSummerTrainingCoordinatorByID(Long id){
+    @DeleteMapping("/summer_training_coordinator/delete/{id}")
+    public boolean removeSummerTrainingCoordinatorByID(@PathVariable Long id){
 
         try{
 
@@ -136,8 +136,8 @@ public class UserManagementController {
         }
     }
 
-    @DeleteMapping("/administrative_assistant/delete")
-    public boolean removeAdministrativeAssistantByID(Long id){
+    @DeleteMapping("/administrative_assistant/delete/{id}")
+    public boolean removeAdministrativeAssistantByID(@PathVariable Long id){
 
         try{
 
@@ -179,8 +179,8 @@ public class UserManagementController {
         return userManagementService.getAllAdministrativeAssistants();
     }
 
-    @GetMapping("/student/get")
-    public Student getStudentByID(Long id){
+    @GetMapping("/student/get/{id}")
+    public Student getStudentByID(@PathVariable Long id){
 
         try{
 
@@ -192,8 +192,8 @@ public class UserManagementController {
         }
     }
 
-    @GetMapping("/teaching_assistant/get")
-    public TeachingAssistant getTeachingAssistantByID(Long id){
+    @GetMapping("/teaching_assistant/get/{id}")
+    public TeachingAssistant getTeachingAssistantByID(@PathVariable Long id){
 
         try{
 
@@ -205,8 +205,8 @@ public class UserManagementController {
         }
     }
 
-    @GetMapping("/instructor/get")
-    public Instructor getInstructorByID(Long id){
+    @GetMapping("/instructor/get/{id}")
+    public Instructor getInstructorByID(@PathVariable Long id){
 
         try{
 
@@ -218,8 +218,8 @@ public class UserManagementController {
         }
     }
 
-    @GetMapping("/summer_training_coordinator/get")
-    public SummerTrainingCoordinator getSummerTrainingCoordinatorByID(Long id){
+    @GetMapping("/summer_training_coordinator/get/{id}")
+    public SummerTrainingCoordinator getSummerTrainingCoordinatorByID(@PathVariable Long id){
 
         try{
 
@@ -231,8 +231,8 @@ public class UserManagementController {
         }
     }
 
-    @GetMapping("/administrative_assistant/get")
-    public AdministrativeAssistant getAdministrativeAssistant(Long id){
+    @GetMapping("/administrative_assistant/get/{id}")
+    public AdministrativeAssistant getAdministrativeAssistant(@PathVariable Long id){
 
         try{
 
@@ -244,8 +244,8 @@ public class UserManagementController {
         }
     }
 
-    @PatchMapping("/student/edit")
-    public boolean editStudentByID(Long id, Student editedStudent){
+    @PatchMapping("/student/edit/{id}")
+    public boolean editStudentByID(@PathVariable Long id, @RequestBody Student editedStudent){
 
         try{
 
@@ -257,8 +257,8 @@ public class UserManagementController {
         }
     }
 
-    @PatchMapping("/teaching_assistant/edit")
-    public boolean editTeachingAssistantByID(Long id, TeachingAssistant editedTeachingAssistant){
+    @PatchMapping("/teaching_assistant/edit/{id}")
+    public boolean editTeachingAssistantByID(@PathVariable Long id, @RequestBody TeachingAssistant editedTeachingAssistant){
 
         try{
 
@@ -270,8 +270,8 @@ public class UserManagementController {
         }
     }
 
-    @PatchMapping("/instructor/edit")
-    public boolean editInstructorByID(Long id, Instructor editedInstructor){
+    @PatchMapping("/instructor/edit/{id}")
+    public boolean editInstructorByID(@PathVariable Long id, @RequestBody Instructor editedInstructor){
 
         try{
 
@@ -283,8 +283,8 @@ public class UserManagementController {
         }
     }
 
-    @PatchMapping("/summer_training_coordinator/edit")
-    public boolean editSummerTrainingCoordinatorByID(Long id, SummerTrainingCoordinator editedSummerTrainingCoordinator){
+    @PatchMapping("/summer_training_coordinator/edit/{id}")
+    public boolean editSummerTrainingCoordinatorByID(@PathVariable Long id, @RequestBody SummerTrainingCoordinator editedSummerTrainingCoordinator){
 
         try{
 
@@ -296,8 +296,8 @@ public class UserManagementController {
         }
     }
 
-    @PatchMapping("/administrative_assistant/edit")
-    public boolean editAdministrativeAssistantByID(Long id, AdministrativeAssistant editedAdministrativeAssistant){
+    @PatchMapping("/administrative_assistant/edit/{id}")
+    public boolean editAdministrativeAssistantByID(@PathVariable Long id, @RequestBody AdministrativeAssistant editedAdministrativeAssistant){
 
         try{
 
