@@ -47,8 +47,7 @@ const DragDropFiles = (props) => {
 
   return (
     <>
-        <div 
-            className="dropzone"
+        <div id = "dropzone"
             onDragOver={handleDragOver}
             onDrop={handleDrop}
         >

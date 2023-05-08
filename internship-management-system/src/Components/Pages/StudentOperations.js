@@ -5,7 +5,7 @@ import DisplayList from './DisplayList';
 import { StudentData } from "../StudentData";
 import "../Styles/CompanyForms.css"
 import Popup from "../Popup"
-class CompanyForms extends Component{
+class StudentOperations extends Component{
 
     constructor(props) {
         super(props);
@@ -77,7 +77,7 @@ class CompanyForms extends Component{
               
           </div>
     
-          <Dropzone 
+          <Dropzone className = "dropzone"
           />
       </div>}
           
@@ -110,4 +110,4 @@ class CompanyForms extends Component{
 
 }
 
-export default CompanyForms
+export default StudentOperations
