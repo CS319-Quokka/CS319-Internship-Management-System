@@ -1,5 +1,8 @@
 package com.quokka.backend.service;
 
+import com.quokka.backend.controller.GradeFormStrategy;
+import com.quokka.backend.controller.StrategyEnum;
+import com.quokka.backend.controller.StrategyFactory;
 import com.quokka.backend.models.GradeForm;
 import com.quokka.backend.models.Student;
 import com.quokka.backend.repository.EvaluationRepository;
@@ -17,10 +20,27 @@ public class EvaluationService {
 
     private EvaluationRepository evaluationRepository;
     private StudentRepository studentRepository;
+    //private GradeFormStrategy gradeFormStrategy;
 
     @Autowired
-    public EvaluationService(EvaluationRepository evaluationRepository){
+    private StrategyFactory strategyFactory;
+
+    public GradeFormStrategy chooseStrategy(long studentID){
+        Optional<Student> studentOptional = studentRepository.findById(studentID);
+        Student student = studentOptional.get();
+        if(student.isCompanyEvaluationFormArrived()){
+            return strategyFactory.findStrategy(StrategyEnum.LateStrategy);
+        }
+        else{
+            return strategyFactory.findStrategy(StrategyEnum.OnTimeStrategy);
+        }
+
+    }
+
+    @Autowired
+    public EvaluationService(EvaluationRepository evaluationRepository, StudentRepository studentRepository){
         this.evaluationRepository = evaluationRepository;
+        this.studentRepository = studentRepository;
     }
 
     public File getCompanyEvaluationForm(long studentID){

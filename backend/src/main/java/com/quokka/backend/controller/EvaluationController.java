@@ -16,13 +16,12 @@ import java.util.List;
 @RequestMapping("/gradeForm")
 public class EvaluationController {
 
-    @Autowired
     //private GradeFormStrategy gradeFormStrategy;
     private EvaluationService evaluationService;
 
 
     public EvaluationController(EvaluationService evaluationService
-                                //, GradeFormStrategy gradeFormStrategy
+                                //GradeFormStrategy gradeFormStrategy
                                 ){
         this.evaluationService = evaluationService;
         //this.gradeFormStrategy = gradeFormStrategy;
