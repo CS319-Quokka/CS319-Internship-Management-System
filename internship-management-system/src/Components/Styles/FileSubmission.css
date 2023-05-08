@@ -15,16 +15,16 @@
   width: 70%;
   left: 15%;
 }
-.dropzone {
+#dropzone {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center; 
-  width: 50%;
-  height: 70%;
-  position: relative;
-  top: 10%;
-  left: 25%;
+  width: 40%;
+  height: 50%;
+  position: fixed;
+  top: 25%;
+  left: 38%;
   border: 5px dashed rgb(117, 112, 112);
   padding: 2rem;
 }
