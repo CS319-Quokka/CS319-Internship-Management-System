@@ -28,7 +28,7 @@ function StudentList() {
           <p>Student: {student.name}</p>
           <p>Grader: {student.grader}</p>
           <p>Status: {student.status}</p>
-          <p>Report: {student.uploaded}</p>
+          <p>Report: {student.form}</p>
           <hr></hr>
         </li>
       ))}
