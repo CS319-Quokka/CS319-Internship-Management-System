@@ -20,7 +20,7 @@ public class EvaluationService {
 
     private EvaluationRepository evaluationRepository;
     private StudentRepository studentRepository;
-    //private GradeFormStrategy gradeFormStrategy;
+    private GradeFormStrategy gradeFormStrategy;
 
     @Autowired
     private StrategyFactory strategyFactory;
@@ -29,12 +29,22 @@ public class EvaluationService {
         Optional<Student> studentOptional = studentRepository.findById(studentID);
         Student student = studentOptional.get();
         if(student.isCompanyEvaluationFormArrived()){
-            return strategyFactory.findStrategy(StrategyEnum.LateStrategy);
+            gradeFormStrategy = strategyFactory.findStrategy(StrategyEnum.LateStrategy);
         }
         else{
-            return strategyFactory.findStrategy(StrategyEnum.OnTimeStrategy);
+            gradeFormStrategy = strategyFactory.findStrategy(StrategyEnum.OnTimeStrategy);
         }
+        return gradeFormStrategy;
+    }
 
+    public boolean evaluateGradeForm(long gradeFormID, long studentID){
+        GradeFormStrategy gradeFormStrategy = chooseStrategy(studentID);
+        Optional<GradeForm> gradeFormOptional = evaluationRepository.findById(gradeFormID);
+        GradeForm gradeForm = gradeFormOptional.get();
+
+        boolean isEvaluated = gradeFormStrategy.evaluateGradeForm(gradeForm);
+
+        return isEvaluated;
     }
 
     @Autowired

@@ -16,15 +16,12 @@ import java.util.List;
 @RequestMapping("/gradeForm")
 public class EvaluationController {
 
-    //private GradeFormStrategy gradeFormStrategy;
     private EvaluationService evaluationService;
 
 
     public EvaluationController(EvaluationService evaluationService
-                                //GradeFormStrategy gradeFormStrategy
                                 ){
         this.evaluationService = evaluationService;
-        //this.gradeFormStrategy = gradeFormStrategy;
     }
 
     //public File getCompanyEvaluonForm(long ID){}
