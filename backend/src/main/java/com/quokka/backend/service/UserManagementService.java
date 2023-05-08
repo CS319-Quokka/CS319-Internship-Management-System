@@ -3,12 +3,16 @@ package com.quokka.backend.service;
 import com.quokka.backend.exception.*;
 import com.quokka.backend.models.*;
 import com.quokka.backend.repository.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Getter
+@Setter
 @Service
 public class UserManagementService {
 
@@ -277,7 +281,39 @@ public class UserManagementService {
             throw new NullEntityException("Student cannot be modified with a null entity!");
         }
 
-        //ToDo
+        if(!studentRepository.findById(id).get().getCourseCode().equals(editedStudent.getCourseCode())){
+
+            studentRepository.findById(id).get().setCourseCode(editedStudent.getCourseCode());
+        }
+        if(!studentRepository.findById(id).get().getLetterGrade().equals(editedStudent.getLetterGrade())){
+
+            studentRepository.findById(id).get().setLetterGrade(editedStudent.getLetterGrade());
+        }
+        if(!studentRepository.findById(id).get().getCompanyName().equals(editedStudent.getCompanyName())){
+
+            studentRepository.findById(id).get().setCompanyName(editedStudent.getCompanyName());
+        }
+        if(!studentRepository.findById(id).get().getInstructor().equals(editedStudent.getInstructor())){
+
+            studentRepository.findById(id).get().setInstructor(editedStudent.getInstructor());
+        }
+        if(!studentRepository.findById(id).get().getTeachingAssistant().equals(editedStudent.getTeachingAssistant())){
+
+            studentRepository.findById(id).get().setTeachingAssistant(editedStudent.getTeachingAssistant());
+        }
+        if(!studentRepository.findById(id).get().getCompanyEvaluationForm().equals(editedStudent.getCompanyEvaluationForm())){
+
+            studentRepository.findById(id).get().setCompanyEvaluationForm(editedStudent.getCompanyEvaluationForm());
+        }
+        if(!studentRepository.findById(id).get().getReports().equals(editedStudent.getReports())){
+
+            studentRepository.findById(id).get().setReports(editedStudent.getReports());
+        }
+        if(!studentRepository.findById(id).get().getGradeForm().equals(editedStudent.getGradeForm())){
+
+            studentRepository.findById(id).get().setGradeForm(editedStudent.getGradeForm());
+        }
+
         return true;
     }
 
@@ -296,7 +332,10 @@ public class UserManagementService {
             throw new NullEntityException("Teaching Assistant cannot be modified with a null entity!");
         }
 
-        //ToDo
+        if(!teachingAssistantRepository.findById(id).get().getStudents().equals(editedTeachingAssistant.getStudents())){
+
+            teachingAssistantRepository.findById(id).get().setStudents(editedTeachingAssistant.getStudents());
+        }
         return true;
     }
     public boolean editInstructorByID(Long id, Instructor editedInstructor)
@@ -314,7 +353,14 @@ public class UserManagementService {
             throw new NullEntityException("Instructor cannot be modified with a null entity!");
         }
 
-        //ToDo
+        if(!instructorRepository.findById(id).get().getStudents().equals(editedInstructor.getStudents())){
+
+            instructorRepository.findById(id).get().setStudents(editedInstructor.getStudents());
+        }
+        if(!instructorRepository.findById(id).get().getSignature().equals(editedInstructor.getSignature())){
+
+            instructorRepository.findById(id).get().setSignature(editedInstructor.getSignature());
+        }
         return true;
     }
     public boolean editSummerTrainingCoordinatorByID(Long id, SummerTrainingCoordinator editedSummerTrainingCoordinator)
@@ -333,7 +379,12 @@ public class UserManagementService {
             throw new NullEntityException("Summer Training Coordinator cannot be modified with a null entity!");
         }
 
-        //ToDo
+        if(!summerTrainingCoordinatorRepository.findById(id).get().getMadeAnnouncements()
+                .equals(editedSummerTrainingCoordinator.getMadeAnnouncements())){
+
+            summerTrainingCoordinatorRepository.findById(id).get()
+                    .setMadeAnnouncements(editedSummerTrainingCoordinator.getMadeAnnouncements());
+        }
         return true;
     }
     public boolean editAdministrativeAssistantByID(Long id, AdministrativeAssistant editedAdministrativeAssistant)
@@ -352,7 +403,36 @@ public class UserManagementService {
             throw new NullEntityException("Administrative Assistant cannot be modified with a null entity!");
         }
 
-        //ToDo
+        if(!administrativeAssistantRepository.findById(id).get().getStudentList()
+                .equals(editedAdministrativeAssistant.getStudentList())){
+
+            administrativeAssistantRepository.findById(id).get()
+                    .setStudentList(editedAdministrativeAssistant.getStudentList());
+        }
+        if(!administrativeAssistantRepository.findById(id).get().getTeachingAssistantList()
+                .equals(editedAdministrativeAssistant.getTeachingAssistantList())){
+
+            administrativeAssistantRepository.findById(id).get()
+                    .setTeachingAssistantList(editedAdministrativeAssistant.getTeachingAssistantList());
+        }
+        if(!administrativeAssistantRepository.findById(id).get().getInstructorList()
+                .equals(editedAdministrativeAssistant.getInstructorList())){
+
+            administrativeAssistantRepository.findById(id).get()
+                    .setInstructorList(editedAdministrativeAssistant.getInstructorList());
+        }
+        if(!administrativeAssistantRepository.findById(id).get().getCompanyList()
+                .equals(editedAdministrativeAssistant.getCompanyList())){
+
+            administrativeAssistantRepository.findById(id).get()
+                    .setCompanyList(editedAdministrativeAssistant.getCompanyList());
+        }
+        if(!administrativeAssistantRepository.findById(id).get().getMadeAnnouncementList()
+                .equals(editedAdministrativeAssistant.getMadeAnnouncementList())){
+
+            administrativeAssistantRepository.findById(id).get()
+                    .setMadeAnnouncementList(editedAdministrativeAssistant.getMadeAnnouncementList());
+        }
         return true;
     }
 }

@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import '../Styles/Notifications.css'
 import { AnnouncementData } from '../NotificationData'
-import {NotifData} from '../NotificationData'
+import {StudentNotifData} from '../NotificationData'
 
 function AnnouncementList() {
   return (
@@ -20,7 +20,7 @@ function AnnouncementList() {
 function NotificationList(){
   return (
     <ul>
-      {NotifData.map(notification => (
+      {StudentNotifData.map(notification => (
         <li key={notification.date}>
           <h2>From: {notification.sender}</h2>
           <textarea>{notification.message}</textarea>
@@ -31,7 +31,7 @@ function NotificationList(){
     </ul>
   );
 }
-class Notifications extends Component {
+class StudentNotifications extends Component {
   constructor(props) {
     super(props)
     this.state ={}   
@@ -68,4 +68,4 @@ class Notifications extends Component {
     
 }
 
-export default Notifications
+export default StudentNotifications

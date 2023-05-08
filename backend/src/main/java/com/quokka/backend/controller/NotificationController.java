@@ -1,50 +1,49 @@
 package com.quokka.backend.controller;
 
 import com.quokka.backend.models.Notification;
-import com.quokka.backend.exception.NotificationNotFoundException;
-import com.quokka.backend.repository.NotificationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.quokka.backend.service.NotificationService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+//@CrossOrigin
+//@RequestMapping("/notification")
 public class NotificationController {
-    @Autowired
-    private NotificationRepository notificationRepository;
 
-    @PostMapping("/notification")
-    Notification newNotification(@RequestBody Notification newNotification){
-        return notificationRepository.save(newNotification);
+    private NotificationService notificationService;
+
+    public NotificationController(NotificationService notificationService){
+        this.notificationService = notificationService;
     }
 
-    @GetMapping("/notificationS")
-    List<Notification> getAllNotifications() {
-        return notificationRepository.findAll();
+    @PostMapping("/notification")
+    Notification addNotification(@RequestBody Notification newNotification){
+        return notificationService.addNotification(newNotification);
     }
 
     @GetMapping ("/notification/{id}")
     Notification getNotificationById(@PathVariable Long id) {
-        return notificationRepository.findById(id).orElseThrow(() -> new NotificationNotFoundException(id));
+        return notificationService.getNotificationById(id);
+    }
+
+    @GetMapping("/notification")
+    List<Notification> getAllNotifications() {
+        return notificationService.getAllNotifications();
     }
 
     @PutMapping("/notification/{id}")
     Notification updateNotification(@RequestBody Notification newNotification, @PathVariable Long id) {
-        return notificationRepository.findById(id).map(notification -> {
-            notification.setTitle(newNotification.getTitle());
-            notification.setContent(newNotification.getContent());
-            notification.setDate(newNotification.getDate());
-            notification.setSeen(newNotification.isSeen());
-            return notificationRepository.save(notification);
-        }).orElseThrow(() -> new NotificationNotFoundException(id));
+        return notificationService.updateNotification(newNotification, id);
     }
 
     @DeleteMapping("/notification/{id}")
     String deleteNotification(@PathVariable Long id) {
-        if(!notificationRepository.existsById(id)){
-            throw new NotificationNotFoundException(id);
-        }
-        notificationRepository.deleteById(id);
-        return "User with id: " + id + " is deleted successfully!";
+        return notificationService.deleteNotification(id);
+    }
+
+    @DeleteMapping("/notification")
+    String deleteAllNotifications() {
+        return notificationService.deleteAllNotifications();
     }
 }

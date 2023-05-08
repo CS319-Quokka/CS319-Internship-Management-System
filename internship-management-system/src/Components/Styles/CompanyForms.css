@@ -1,0 +1,13 @@
+.company-forms .upload-confirm{
+  position: relative;
+}
+
+.company-forms .button-layout{
+  left:45%;
+  top:65%;
+}
+
+.company-forms #dropzone{
+  top:30%;
+  left:30%;
+}

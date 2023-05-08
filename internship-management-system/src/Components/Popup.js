@@ -27,7 +27,7 @@ const Popup = (props) => {
 
     <label className="input-label">
           <h3 className="input-tag" id="course-tag">Course:</h3>
-          <select class="select-menu" id = "course">
+          <select className="select-menu" id = "course">
         <option value="0">Select course:</option>
         <option value="1">CS299</option>
         <option value="2">CS399</option>
@@ -43,9 +43,9 @@ const Popup = (props) => {
     
     <div className="popup-window">
       
-      <div className="popup-header"><h1 className="popup-tag"><span className="tag">Manage Users:</span>{props.name}
+      <div className="popup-header"><h1 className="popup-tag"><span className="tag">{props.tag}</span>{props.name}
       {props.isAdd &&
-            <div class="role">
+            <div className="role">
             <select className = "select-menu" id = "type" value={selectedValue} onChange={handleSelectChange}>
               <option value="0">Select role:</option>
               <option value="1">Student</option>
@@ -56,7 +56,7 @@ const Popup = (props) => {
             </select>
             </div> 
       }
-      
+      <button className="button" id= "exit" onClick={props.handleClose}>x</button>
       </h1>
       
       </div>
@@ -95,7 +95,7 @@ const Popup = (props) => {
         <span className="buttons">
         {props.button}
        
-        <button className="button" onClick={props.handleClose}>Cancel</button>
+       
         </span>
         
       </div>

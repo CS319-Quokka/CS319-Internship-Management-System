@@ -1,13 +1,196 @@
-.reportevaluation  h1{
-    font-size: 3vh;
-    color:rgb(12, 0, 53);
-    position: relative;  
-    text-align: center;
-}
 .reportevaluation{
-    width:85%;
-    margin-left: 15%;
-    height:100vh;
+    position: absolute;
+    background-color: hwb(207 91% 0%);
     justify-content: center;
     align-items: center;
+    overflow: auto;
+    height: 100vh;
+    width: 85%;
+    left: 15%;
+}
+.reportstatus{
+    width:50%;
+    left: 45%;
+    height:90vh;
+    background-color: white;
+    position: relative;
+    padding:1%;
+    top: 5%;
+    border-radius: 16px;    
+    
+
+}
+
+.history{
+    background-color: white;
+    position: absolute;
+    left:5%;
+    top: 5%;
+    height: 65vh;
+    width: 35%;
+    border-radius: 16px;
+    
+}
+.reportevaluation h1{
+    top:1vh;
+    font-size: 2.35vh;
+    color:rgb(12, 0, 53);
+    position: relative;
+    margin-left: 2vh;
+}
+  
+.reportevaluation h2{
+    color:rgb(12, 0, 53);
+    margin-left: 2vh;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2vh;
+    position: relative;
+ 
+   
+}
+.reportevaluation h3{
+    color: rgb(64, 64, 64);
+    text-align: right;
+    font-size: 2.4vh;
+    margin-top: 2;
+    position: relative;
+    text-decoration: underline;
+}
+.reportevaluation h4{
+    color:rgb(12, 0, 53);
+    margin-left: 2vh;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2vh;
+    position: relative;
+
+}
+
+.pastuploads{
+    background-color:rgb(255, 255, 255);
+    width: 90%;
+    height: 35vh;
+    text-align: left;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.reportevaluation .evaluation{
+    width: 100%;
+    height: 30%;
+    position: relative;
+    overflow-y:auto;
+
+
+
+}
+.docpic{
+    margin-top: 10px;
+    position:relative;
+    width:90%
+
+}
+.docpic img {
+    width:7vh;
+    height:7vh;
+    position: absolute;
+    margin-left:5vh;
+}
+
+.reportevaluation.information{
+    background-color:rgb(255, 255, 255);
+    width: 100%;
+    height: 7%;
+    text-align: left;
+    position: relative;
+    border-radius: 16px;
+}
+.parts{
+    background-color:white;
+    width: 100%;
+    height: 28%;
+    text-align: left;
+    position: relative;
+    border-radius: 15px;    
+   
+}
+
+
+.reportevaluation textarea{
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 2%;
+    margin-right: 10%;
+    color: rgb(10, 10, 10);
+    font-family: Arial, Helvetica, sans-serif;
+    height: 40%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    font-size: 1.7vh;
+    border-color:hwb(207 91% 0%);
+    border-radius: 15px;
+    background-color:hwb(208 94% 0%);
+    font-size: 16px;
+    text-align: left;
+    resize: none;
+    align-items: center;
+}
+
+.reportevaluation hr {
+    width: 100%; /* Set the width of the horizontal lines */
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-style: solid;
+    border-width: 0 0 1px 0; /* Draw only bottom border */
+    border-color: #CCC;
+}
+.prevreport{
+    background-color:rgb(255, 255, 255);
+    position: relative;
+    align-self: center;
+    height: 25vh;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 15%;
+
+}  
+.evaluation textarea{
+    position: relative;
+    width: 80%;
+    height: 50%;
+
+}
+.statuslist{
+    position: relative;
+    width: 90%;
+    left: 5%;
+}
+.statuslist textarea{
+    position:relative;
+    height:11vh;
+}
+.annotatedupload{
+    background-color: white;
+    position: absolute;
+    left:5%;
+    top: 75%;
+    height: 20vh;
+    border-radius: 16px;
+    width: 35%;
+    padding: 4vh;
+}
+.gradeentry{
+    position: relative;
+    left: 50%;
+    width: 40%;
+}
+.gradeentry input{
+    left: 2vh;
+    width: 7vh;
+    height:4vh;
+    border-color:rgb(194, 209, 237);
+    border-radius: 5px;
+   
 }

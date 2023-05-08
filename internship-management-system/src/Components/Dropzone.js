@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import "./Styles/FileSubmission.css"
-const DragDropFiles = () => {
+const DragDropFiles = (props) => {
   const [files, setFiles] = useState(null);
   const inputRef = useRef();
 
@@ -34,23 +34,20 @@ const DragDropFiles = () => {
         </ul>
 
 
-        <div className="actions">
-          <label className="s-text"> 🗨 Please enter your message here</label> 
-    
-          <textarea  className = "comment-submission" name = "message" rows="20" cols="70"></textarea>
-          <div className="button-layout">
-            <button  className = "button" onClick={() => setFiles(null)}>Cancel</button>
-            <button  className = "button" onClick={handleUpload}>Upload</button>
-          </div>
-          
-        </div>
+        {props.afterUpload}
+
+        <div className="button-layout">
+               <button  className = "button" onClick={() => setFiles(null)}>Cancel</button>
+               <button  className = "button" onClick={handleUpload}>Upload</button>
+             </div>
+
+     
     </div>
   )
 
   return (
     <>
-        <div 
-            className="dropzone"
+        <div id = "dropzone"
             onDragOver={handleDragOver}
             onDrop={handleDrop}
         >
