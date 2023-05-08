@@ -149,31 +149,31 @@ public class UserManagementController {
         }
     }
 
-    @GetMapping("/students")
+    @GetMapping("/student/get_all")
     public List<Student> getAllStudents(){
 
         return userManagementService.getAllStudents();
     }
 
-    @GetMapping("/teaching_assistants")
+    @GetMapping("/teaching_assistant/get_all")
     public List<TeachingAssistant> getAllTeachingAssistants(){
 
         return userManagementService.getAllTeachingAssistants();
     }
 
-    @GetMapping("/instructors")
+    @GetMapping("/instructor/get_all")
     public List<Instructor> getAllInstructors(){
 
         return userManagementService.getAllInstructors();
     }
 
-    @GetMapping("/summer_training_coordinators")
+    @GetMapping("/summer_training_coordinator/get_all")
     public List<SummerTrainingCoordinator> getAllSummerTrainingCoordinators(){
 
         return userManagementService.getAllSummerTrainingCoordinators();
     }
 
-    @GetMapping("/administrative_assistants")
+    @GetMapping("/administrative_assistant/get_all")
     public List<AdministrativeAssistant> getAllAdministrativeAssistants(){
 
         return userManagementService.getAllAdministrativeAssistants();
