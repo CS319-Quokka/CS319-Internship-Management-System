@@ -50,4 +50,9 @@ public class NotificationService {
         notificationRepository.deleteById(id);
         return "User with id: " + id + " is deleted successfully!";
     }
+
+    public String deleteAllNotifications() {
+        notificationRepository.deleteAll();
+        return "All notifications are deleted successfully!";
+    }
 }
