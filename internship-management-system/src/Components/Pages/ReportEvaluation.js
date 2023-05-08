@@ -137,7 +137,7 @@ class ReportEvaluation extends Component {
         
             <div className="reportstatus">
                 <div className="information">
-                    <h1>Progress and feedback of your last submitted report for {this.state.course} </h1>                        
+                    <h1>The student's current submisison for {this.state.course} </h1>                        
                 </div>
 
                 <div className= "statuslist"> 
