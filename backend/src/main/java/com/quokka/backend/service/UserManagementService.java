@@ -3,12 +3,16 @@ package com.quokka.backend.service;
 import com.quokka.backend.exception.*;
 import com.quokka.backend.models.*;
 import com.quokka.backend.repository.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Getter
+@Setter
 @Service
 public class UserManagementService {
 
