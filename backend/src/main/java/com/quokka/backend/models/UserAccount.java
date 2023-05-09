@@ -20,6 +20,9 @@ public class UserAccount{
     @OneToMany
     private List<User> users;
 
+    @OneToMany
+    private List<UserProfile> profiles;
+
     private String name;
     private String email;
     @Id

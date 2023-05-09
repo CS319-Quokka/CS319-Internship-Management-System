@@ -21,7 +21,7 @@
 
 }
 
-.history{
+.reportevaluation .history{
     background-color: white;
     position: absolute;
     left:5%;
@@ -65,7 +65,7 @@
 
 }
 
-.pastuploads{
+.reportevaluation .pastuploads{
     background-color:rgb(255, 255, 255);
     width: 90%;
     height: 35vh;
@@ -85,13 +85,13 @@
 
 
 }
-.docpic{
+.reportevaluation .docpic{
     margin-top: 10px;
     position:relative;
     width:90%
 
 }
-.docpic img {
+.reportevaluation .docpic img {
     width:7vh;
     height:7vh;
     position: absolute;
@@ -106,7 +106,7 @@
     position: relative;
     border-radius: 16px;
 }
-.parts{
+.reportevaluation .parts{
     background-color:white;
     width: 100%;
     height: 28%;
@@ -146,7 +146,7 @@
     border-width: 0 0 1px 0; /* Draw only bottom border */
     border-color: #CCC;
 }
-.prevreport{
+.reportevaluation .prevreport{
     background-color:rgb(255, 255, 255);
     position: relative;
     align-self: center;
@@ -156,22 +156,22 @@
     margin-top: 15%;
 
 }  
-.evaluation textarea{
+.reportevaluation .evaluation textarea{
     position: relative;
     width: 80%;
     height: 50%;
 
 }
-.statuslist{
+.reportevaluation .statuslist{
     position: relative;
     width: 90%;
     left: 5%;
 }
-.statuslist textarea{
+.reportevaluation .statuslist textarea{
     position:relative;
     height:11vh;
 }
-.annotatedupload{
+.reportevaluation .annotatedupload{
     background-color: white;
     position: absolute;
     left:5%;
@@ -181,12 +181,12 @@
     width: 35%;
     padding: 4vh;
 }
-.gradeentry{
+.reportevaluation .gradeentry{
     position: relative;
     left: 50%;
     width: 40%;
 }
-.gradeentry input{
+.reportevaluation .gradeentry input{
     left: 2vh;
     width: 7vh;
     height:4vh;
