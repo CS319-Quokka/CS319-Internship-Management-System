@@ -23,6 +23,7 @@ public class Student extends User{
     private TeachingAssistant teachingAssistant;
 
     private File companyEvaluationForm;
+    private boolean isCompanyEvaluationFormArrived;
 
     @OneToMany
     private List<Report> reports;
