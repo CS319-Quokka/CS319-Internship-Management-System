@@ -1,15 +1,14 @@
 package com.quokka.backend.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Table
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Getter
 @Setter
 public class User {
@@ -22,6 +21,7 @@ public class User {
     private String lastName;
 
     @OneToOne
+    @JoinColumn(name = "user_profile_id")
     private UserProfile profile;
 
     public void setId(Long id) {

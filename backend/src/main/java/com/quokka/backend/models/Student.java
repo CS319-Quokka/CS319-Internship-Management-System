@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Table
 @Getter
 @Setter
 public class Student extends User{
@@ -17,17 +18,21 @@ public class Student extends User{
     private String companyName;
 
     @ManyToOne
+    @JoinColumn(name = "instructor")
     private Instructor instructor;
 
     @ManyToOne
+    @JoinColumn(name = "teaching_assistant")
     private TeachingAssistant teachingAssistant;
 
     private File companyEvaluationForm;
     private boolean isCompanyEvaluationFormArrived;
 
     @OneToMany
+    @JoinColumn(name = "student_id")
     private List<Report> reports;
 
     @OneToOne
+    @JoinColumn(name = "grade_form")
     private GradeForm gradeForm;
 }

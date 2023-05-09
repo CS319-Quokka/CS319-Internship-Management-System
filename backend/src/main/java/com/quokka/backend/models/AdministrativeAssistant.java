@@ -2,32 +2,34 @@ package com.quokka.backend.models;
 
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 
 @Entity
-
+@Table
 @Getter
 @Setter
 public class AdministrativeAssistant extends Admin {
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "administrative_assistant_id")
     private List<Student> studentList;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "administrative_assistant_id")
     private List<Instructor> instructorList;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "administrative_assistant_id")
     private List<TeachingAssistant> teachingAssistantList;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "administrative_assistant_id")
     private List<Company> companyList;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "administrative_assistant_id")
     private List<Announcement> madeAnnouncementList;
-
 }

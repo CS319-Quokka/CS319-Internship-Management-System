@@ -7,6 +7,7 @@ import lombok.Setter;
 
 
 @Entity
+@Table
 @Getter
 @Setter
 public class GradeForm {
@@ -16,11 +17,13 @@ public class GradeForm {
     private Long id;
 
     @OneToOne
+    @JoinColumn(name = "instructor_id")
     private Instructor instructor;
 
     private String courseCode;
 
     @OneToMany
+    @JoinColumn(name = "grade_form_id")
     private List<GradeFormElement> elements;
 
     private String evaluationPhase;

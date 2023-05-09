@@ -10,6 +10,7 @@ import lombok.Setter;
 
 
 @Entity
+@Table
 @Getter
 @Setter
 public class Report {
@@ -18,11 +19,13 @@ public class Report {
     private String revisionDescription;
 
     @OneToOne
+    @JoinColumn(name = "feedback_id")
     private Feedback feedback;
 
     private Date uploadDate;
     private Date deadline;
     private String status;
+
     @Id
     @GeneratedValue
     private Long id;

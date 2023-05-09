@@ -15,10 +15,15 @@ public class GradeFormElement {
 
     private String type;
     private String status;
+
     @ElementCollection
+    @JoinColumn(name = "questions_id")
     private List<String> questions;
+
     @ElementCollection
+    @JoinColumn(name = "answers_id")
     private List<String> answers;
+
     @Id
     @GeneratedValue
     private Long id;
