@@ -5,6 +5,7 @@ import logo from '../Images/bilko.png'
 import { Link, Redirect } from 'react-router-dom';
 import Popup from "../Popup";
 import FAQ from "./FAQ";
+import axios from "axios";
 
 
 class Login extends Component {
@@ -43,17 +44,33 @@ class Login extends Component {
         event.preventDefault();
 
         //CONNECTING THE BACKEND
-        const response = await fetch('http://localhost:8080/login', {
-        method: 'POST',
+         const response = await fetch("http://localhost:8080/"
+        , {
+        method: "POST",
+        mode: "cors",
         headers: {
-        'Content-Type': 'application/json',
+            "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password,
-        }),
-       });
+        body: JSON.stringify({email:this.state.email, password:this.state.password}),
+        });
+
+        console.log(response.json());
+        // const response = await axios.post('http://localhost:8080/login', {
+        // headers: {
+        //     'Content-Type': 'application/json',
+        //     'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+        //     'Access-Control-Allow-Origin': '*',
+        //     'Access-Control-Allow-Methods': 'POST, PUT, PATCH, GET, DELETE, OPTIONS',
+        //     'Access-Control-Allow-Credentials': true,
+        //     'X-Atlassian-Token': 'nocheck',
+        // },
+        // auth:{
+        // email: this.state.email,
+        // password: this.state.password,
+        // }});
+       console.log("mail:" , this.state.email, "password:", this.state.password)
         const data = await response.json();
+        console.log("here")
         if (response.status === 200) {
             localStorage.setItem('token', data.token);
             // redirect to another page
