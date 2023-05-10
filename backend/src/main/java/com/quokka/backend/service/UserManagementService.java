@@ -180,6 +180,36 @@ public class UserManagementService {
         return true;
     }
 
+    public boolean removeAllStudents(){
+
+        studentRepository.deleteAll();
+        return true;
+    }
+
+    public boolean removeAllTeachingAssistants(){
+
+        teachingAssistantRepository.deleteAll();
+        return true;
+    }
+
+    public boolean removeAllInstructors(){
+
+        instructorRepository.deleteAll();
+        return true;
+    }
+
+    public boolean removeAllSummerTrainingCoordinators(){
+
+        summerTrainingCoordinatorRepository.deleteAll();
+        return true;
+    }
+
+    public boolean removeAllAdministrativeAssistants(){
+
+        administrativeAssistantRepository.deleteAll();
+        return true;
+    }
+
     public List<Student> getAllStudents(){
 
         return studentRepository.findAll();

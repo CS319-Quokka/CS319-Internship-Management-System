@@ -149,6 +149,36 @@ public class UserManagementController {
         }
     }
 
+    @DeleteMapping("/student/delete_all")
+    public boolean removeAllStudents(){
+
+        return userManagementService.removeAllStudents();
+    }
+
+    @DeleteMapping("/teaching_assistant/delete_all")
+    public boolean removeAllTeachingAssistants(){
+
+        return userManagementService.removeAllTeachingAssistants();
+    }
+
+    @DeleteMapping("/instructor/delete_all")
+    public boolean removeAllInstructors(){
+
+        return userManagementService.removeAllInstructors();
+    }
+
+    @DeleteMapping("/summer_training_coordinator/delete_all")
+    public boolean removeAllSummerTrainingCoordinators(){
+
+        return userManagementService.removeAllSummerTrainingCoordinators();
+    }
+
+    @DeleteMapping("/administrative_assistant/delete_all")
+    public boolean removeAllAdministrativeAssistants(){
+
+        return userManagementService.removeAllAdministrativeAssistants();
+    }
+
     @GetMapping("/student/get_all")
     public List<Student> getAllStudents(){
 
