@@ -23,7 +23,6 @@ public class FeedbackService {
         this.feedbackRepository = feedbackRepository;
         this.reportRepository = reportRepository;
 
-
     }
 
     //get the feedback with this ID if it exists. If not throw an exception.

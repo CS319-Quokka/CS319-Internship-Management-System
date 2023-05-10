@@ -72,7 +72,7 @@ public class ReportService {
 
     //this is a method to not duplicate the code. It will check if we can make changes
     // about the report(remove or delete), it returns true when changes are available
-    public boolean reportChangeHandler(long reportID, Date date){
+    public boolean reportExceptionCheck(long reportID, Date date){
         if(!reportRepository.existsById(reportID)){
             throw new IllegalStateException("No report is found!");
         }
@@ -92,26 +92,20 @@ public class ReportService {
 
     public boolean removeReport(long reportID, Date date){
 
-        if(reportChangeHandler(reportID,date)){
+        if(reportExceptionCheck(reportID,date)){
             reportRepository.deleteById(reportID);
             return true;
-
-
         }
-
         return false;
-
     }
     public boolean editReport(long reportID, Date date, Report newReport){
-        if(reportChangeHandler(reportID,date)) {
+        if(reportExceptionCheck(reportID,date)) {
             Optional<Report> currentReport = reportRepository.findById(reportID);
             currentReport.get().setReportFile(newReport.getReportFile());
             currentReport.get().setRevisionDescription(newReport.getRevisionDescription());
             currentReport.get().setUploadDate(date);
             reportRepository.save(currentReport.get());
             return true;
-
-
         }
         return false;
 

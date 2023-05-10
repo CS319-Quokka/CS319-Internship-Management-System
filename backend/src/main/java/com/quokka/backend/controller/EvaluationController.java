@@ -13,14 +13,13 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
-@RequestMapping("/gradeForm")
+@RequestMapping("/grade_form")
 public class EvaluationController {
 
     private EvaluationService evaluationService;
 
 
-    public EvaluationController(EvaluationService evaluationService
-                                ){
+    public EvaluationController(EvaluationService evaluationService){
         this.evaluationService = evaluationService;
     }
 
@@ -28,23 +27,23 @@ public class EvaluationController {
 
     //public List<File> getAllCompanyEvaluationForms(){}
 
-    @GetMapping("gradeForm/{id}")
-    public GradeForm getGradeForm(long ID){
-        return evaluationService.getGradeForm(ID);
+    @GetMapping("/grade_form/get/{id}")
+    public GradeForm getGradeForm(@PathVariable long id){
+        return evaluationService.getGradeForm(id);
     }
-    @GetMapping
+    @GetMapping("/grade_form/get_all")
     public List<GradeForm> getAllGradeForms(){
         return evaluationService.getAllGradeForms();
     }
 
-    @PostMapping("/gradeForm")
-    public boolean addGradeForm(@RequestParam("studentID") long studentID,
-                                @RequestParam("gradeForm") GradeForm gradeForm) {
+    @PostMapping("/gradeForm/add/{studentID}")
+    public boolean addGradeForm(@PathVariable @RequestParam("studentID") long studentID,
+                                @RequestBody GradeForm gradeForm) {
         return evaluationService.addGradeForm(studentID, gradeForm);
     }
 
-    @DeleteMapping("/gradeForm/{id}")
-    public boolean removeGradeForm(@PathVariable("id") long ID){
-        return evaluationService.removeGradeForm(ID);
+    @DeleteMapping("/gradeForm/delete/{id}")
+    public boolean removeGradeForm(@PathVariable long id){
+        return evaluationService.removeGradeForm(id);
     }
 }
