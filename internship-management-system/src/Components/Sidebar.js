@@ -12,8 +12,9 @@ class Sidebar extends Component{
   constructor(props) {
       super(props)
       this.state = "Profile"
-      this.userType = "student"
+      this.userType = null
   }    
+
 
 
   

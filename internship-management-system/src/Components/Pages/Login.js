@@ -30,7 +30,7 @@ class Login extends Component {
             password: event.target.value
         })
     } 
-    handleSubmit = (event) => {
+    handleSubmit = async (event) => {
         //alert(`${this.state.email}  Successful login`)
         console.log(this.state);
         this.setState({
@@ -39,9 +39,32 @@ class Login extends Component {
             activePage: "Profile"
            
         })
-        this.props.onLogin();
-        this.props.activePage = "Profile"
-        console.log("here", this.props.logged)
+
+        event.preventDefault();
+
+        //CONNECTING THE BACKEND
+        const response = await fetch('http://localhost:8080/login', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+        email: this.state.email,
+        password: this.state.password,
+        }),
+       });
+        const data = await response.json();
+        if (response.status === 200) {
+            localStorage.setItem('token', data.token);
+            // redirect to another page
+            this.props.onLogin();
+            this.props.activePage = "Profile"
+            console.log("here", this.props.logged)
+        } 
+        else {
+            alert(`INVALID CREDENTIALS`)
+        }
+        
 
      event.preventDefault()
         
