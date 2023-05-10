@@ -17,32 +17,32 @@ public class NotificationController {
         this.notificationService = notificationService;
     }
 
-    @PostMapping("/notification")
+    @PostMapping("/notification/add")
     public Notification addNotification(@RequestBody Notification newNotification){
         return notificationService.addNotification(newNotification);
     }
 
-    @GetMapping ("/notification/{id}")
+    @GetMapping ("/notification/get/{id}")
     public Notification getNotificationById(@PathVariable Long id) {
         return notificationService.getNotificationById(id);
     }
 
-    @GetMapping("/notification")
+    @GetMapping("/notification/get_all")
     public List<Notification> getAllNotifications() {
         return notificationService.getAllNotifications();
     }
 
-    @PutMapping("/notification/{id}")
+    @PutMapping("/notification/update/{id}")
     public Notification updateNotification(@RequestBody Notification newNotification, @PathVariable Long id) {
         return notificationService.updateNotification(newNotification, id);
     }
 
-    @DeleteMapping("/notification/{id}")
+    @DeleteMapping("/notification/delete/{id}")
     public String deleteNotification(@PathVariable Long id) {
         return notificationService.deleteNotification(id);
     }
 
-    @DeleteMapping("/notification")
+    @DeleteMapping("/notification/delete_all")
     public String deleteAllNotifications() {
         return notificationService.deleteAllNotifications();
     }

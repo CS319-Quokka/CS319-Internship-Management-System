@@ -23,18 +23,18 @@ public class FeedbackController {
         this.feedbackService = feedbackService;
     }
 
-    @GetMapping("feedback/{id}")
+    @GetMapping("/feedback/get/{id}")
     public Feedback getFeedback(long ID){
         return feedbackService.getFeedback(ID);
     }
 
-    @GetMapping
+    @GetMapping("/feedback/get_all")
     public List<Feedback> getAllFeedback(){
         return feedbackService.getAllFeedback();
     }
 
 
-    @PostMapping("/feedback")
+    @PostMapping("/feedback/add")
     public boolean addFeedback(@RequestParam("reportID") long reportID, @RequestBody UserProfile sender,
                                @RequestParam("date") Date date,
                                @RequestParam("feedbackFile") File feedbackFile,
@@ -42,13 +42,13 @@ public class FeedbackController {
         return feedbackService.addFeedback(reportID, sender, date, feedbackFile, feedbackDescription);
     }
 
-    @DeleteMapping("/feedback/{id}")
+    @DeleteMapping("/feedback/delete/{id}")
     public boolean removeFeedback(@PathVariable("id") long feedbackID){
         return feedbackService.removeFeedback(feedbackID);
 
     }
 
-    @PutMapping("/feedback/{id}")
+    @PutMapping("/feedback/edit/{id}")
     public boolean editFeedback(@PathVariable("id") long feedbackID, @RequestBody Feedback newFeedback){
         return feedbackService.editFeedback(feedbackID,newFeedback);
     }
