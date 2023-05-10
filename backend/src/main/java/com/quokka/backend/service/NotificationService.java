@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NotificationService {
@@ -18,10 +19,11 @@ public class NotificationService {
         this.notificationRepository = notificationRepository;
     }
 
-    public NotificationService(){
-    }
-
     public Notification addNotification(Notification newNotification) {
+        Optional<Notification> notificationOptional = notificationRepository.findNotificationByContent(newNotification.getContent());
+        if(notificationOptional.isPresent()) {
+            throw new IllegalStateException("Notification with the same CONTENT already exists!");
+        }
         return notificationRepository.save(newNotification);
     }
 
@@ -33,6 +35,7 @@ public class NotificationService {
         return notificationRepository.findAll();
     }
 
+    // @Transactional // This annotation is used to update the database (Amigoscode - Spring Boot Tutorial - 1.21.00)
     public Notification updateNotification(Notification newNotification, Long id) {
         return notificationRepository.findById(id).map(notification -> {
             notification.setTitle(newNotification.getTitle());
@@ -48,7 +51,7 @@ public class NotificationService {
             throw new NotificationNotFoundException(id);
         }
         notificationRepository.deleteById(id);
-        return "User with id: " + id + " is deleted successfully!";
+        return "Notification with id: " + id + " is deleted successfully!";
     }
 
     public String deleteAllNotifications() {

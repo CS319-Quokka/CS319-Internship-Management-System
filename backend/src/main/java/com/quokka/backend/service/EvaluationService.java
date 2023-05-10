@@ -1,8 +1,5 @@
 package com.quokka.backend.service;
 
-import com.quokka.backend.controller.GradeFormStrategy;
-import com.quokka.backend.controller.StrategyEnum;
-import com.quokka.backend.controller.StrategyFactory;
 import com.quokka.backend.models.GradeForm;
 import com.quokka.backend.models.Student;
 import com.quokka.backend.repository.EvaluationRepository;

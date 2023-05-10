@@ -1,11 +1,10 @@
-package com.quokka.backend.controller;
+package com.quokka.backend.service;
 
 import com.quokka.backend.models.GradeForm;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
-public class OnTimeStrategy implements GradeFormStrategy{
+public class OnTimeStrategy implements GradeFormStrategy {
     @Override
     public boolean evaluateGradeForm(GradeForm gradeForm) {
         System.out.println("OnTimeStrategy");

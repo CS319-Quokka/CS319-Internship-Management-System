@@ -1,4 +1,4 @@
-package com.quokka.backend.controller;
+package com.quokka.backend.service;
 
 public enum StrategyEnum {
     OnTimeStrategy,
