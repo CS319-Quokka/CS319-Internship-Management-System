@@ -5,6 +5,7 @@ import com.quokka.backend.exception.UserProfileAlreadyExistsException;
 import com.quokka.backend.exception.UserProfileDoesNotExistException;
 import com.quokka.backend.models.TeachingAssistant;
 import com.quokka.backend.models.User;
+import com.quokka.backend.models.UserAccount;
 import com.quokka.backend.models.UserProfile;
 import com.quokka.backend.repository.AccountRepository;
 import lombok.Getter;
@@ -61,5 +62,18 @@ public class AccountService {
         accountRepository.findById(accountId).get().getUsers().
                 get(accountRepository.findById(accountId).get().getUsers().indexOf(user)).setProfile(userProfile);
         return true;
+    }
+
+    public boolean checkCredentials(String email, String password){
+
+        boolean isValid = false;
+        for(UserAccount x : accountRepository.findAll()){
+
+            if(x.getEmail() == email && x.getPassword() == password){
+
+                isValid = true;
+            }
+        }
+        return isValid;
     }
 }
