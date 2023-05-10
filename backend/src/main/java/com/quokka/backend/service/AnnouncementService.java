@@ -1,5 +1,6 @@
 package com.quokka.backend.service;
 
+import com.quokka.backend.exception.AnnouncementNotFoundException;
 import com.quokka.backend.models.Announcement;
 import com.quokka.backend.repository.AnnouncementRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class AnnouncementService {
     }
 
     public Announcement getAnnouncementById(Long id) {
-        return announcementRepository.findById(id).orElseThrow(() -> new IllegalStateException("Announcement with id: " + id + " does not exist!")); // TODO: Create a new exception class
+        return announcementRepository.findById(id).orElseThrow(() -> new AnnouncementNotFoundException(id));
     }
 
     public List<Announcement> getAllAnnouncements() {
@@ -35,13 +36,13 @@ public class AnnouncementService {
             announcement.setContent(newAnnouncement.getContent());
             announcement.setDate(newAnnouncement.getDate());
             return announcementRepository.save(announcement);
-        }).orElseThrow(() -> new IllegalStateException("Announcement with id: " + id + " does not exist!")); // TODO: Create a new exception class
+        }).orElseThrow(() -> new AnnouncementNotFoundException(id));
     }
 
     public String deleteAnnouncement(Long id) {
         boolean exists = announcementRepository.existsById(id);
         if(!exists){
-            throw new IllegalStateException("Announcement with id: " + id + " does not exist!");
+            throw new AnnouncementNotFoundException(id);
         }
         else{
             announcementRepository.deleteById(id);

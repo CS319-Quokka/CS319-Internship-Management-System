@@ -20,10 +20,14 @@ public class NotificationService {
     }
 
     public Notification addNotification(Notification newNotification) {
-        Optional<Notification> notificationOptional = notificationRepository.findNotificationByContent(newNotification.getContent());
-        if(notificationOptional.isPresent()) {
-            throw new IllegalStateException("Notification with the same CONTENT already exists!");
-        }
+
+        // this part can be used in other part of the program if needed
+        // check if the notification with the same content already exists
+
+//        Optional<Notification> notificationOptional = notificationRepository.findNotificationByContent(newNotification.getContent());
+//        if(notificationOptional.isPresent()) {
+//            throw new IllegalStateException("Notification with the same CONTENT already exists!");
+//        }
         return notificationRepository.save(newNotification);
     }
 
