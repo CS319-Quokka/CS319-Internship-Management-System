@@ -3,7 +3,6 @@ package com.quokka.backend.controller;
 import com.quokka.backend.models.Report;
 import com.quokka.backend.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
