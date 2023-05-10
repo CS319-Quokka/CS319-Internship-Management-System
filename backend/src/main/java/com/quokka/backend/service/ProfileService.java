@@ -5,10 +5,12 @@ import com.quokka.backend.models.Student;
 import com.quokka.backend.models.TeachingAssistant;
 import com.quokka.backend.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.util.Optional;
 
+@Service
 public class ProfileService {
     private final ProfileRepository profileRepository;
 
