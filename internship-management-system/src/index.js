@@ -3,10 +3,7 @@ import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
-  Link,
   Outlet,
-  createRoutesFromElements,
 } from "react-router-dom";
 import Profile from "./Components/Pages/Profile";
 import Reports from "./Components/Pages/Reports";
@@ -94,21 +91,21 @@ const App = () => {
   ]);
 
   return (
-    <>
-      {logged ? (
-        <RouterProvider router={router} />
-      ) : (
-        <Login onLogin={handleSubmit} />
-      )}
-    </>
+      <>
+        {logged ? (
+            <RouterProvider router={router} />
+        ) : (
+            <Login onLogin={handleSubmit} />
+        )}
+      </>
   );
 };
 
 const AppLayout = ({ logged }) => (
-  <>
-    {logged && <Sidebar />}
-    <Outlet />
-  </>
+    <>
+      {logged && <Sidebar />}
+      <Outlet />
+    </>
 );
 
 createRoot(document.getElementById("root")).render(<App />);
