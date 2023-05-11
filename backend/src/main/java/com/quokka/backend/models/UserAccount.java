@@ -23,6 +23,7 @@ public class UserAccount{
     @JoinColumn(name = "account_id")
     private List<UserProfile> profiles;
 
+
     private String name;
     private String email;
 
@@ -33,6 +34,20 @@ public class UserAccount{
     private String department;
     private String password;
 
+    private String role;
+
+
+
+
+    //private int activeProfileIndex = 0; //set the active profile here
+
+
+    /* THIS IS FOR GETTING THE ROLE FROM THE ACTIVE PROFILE PAGE, COULD NOT FIGURE OUT HOW TO DO IT
+    public String getRole(){
+        return profiles.get(activeProfileIndex).getRole();
+    }
+
+     */
     public void setId(Long id) {
         this.id = id;
     }

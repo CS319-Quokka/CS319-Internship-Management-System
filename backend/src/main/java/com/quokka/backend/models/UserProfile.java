@@ -19,6 +19,7 @@ public class UserProfile {
    private String department;
    private String name;
    private File profilePic;
+   //private String role;
 
    @Id
    @GeneratedValue

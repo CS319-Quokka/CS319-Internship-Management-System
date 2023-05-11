@@ -5,8 +5,10 @@ import com.quokka.backend.exception.UserProfileAlreadyExistsException;
 import com.quokka.backend.exception.UserProfileDoesNotExistException;
 import com.quokka.backend.models.TeachingAssistant;
 import com.quokka.backend.models.User;
+import com.quokka.backend.models.UserAccount;
 import com.quokka.backend.models.UserProfile;
 import com.quokka.backend.repository.AccountRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,11 @@ public class AccountService {
 
     public List<UserProfile> getProfiles(Long id){
         return accountRepository.findById(id).get().getProfiles();
+    }
+
+    public UserAccount getUserByEmail(String email) {
+        return accountRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found"));
     }
 
     public boolean addUserProfile(UserProfile userProfile, Long accountId) throws UserProfileAlreadyExistsException {
@@ -61,5 +68,21 @@ public class AccountService {
         accountRepository.findById(accountId).get().getUsers().
                 get(accountRepository.findById(accountId).get().getUsers().indexOf(user)).setProfile(userProfile);
         return true;
+    }
+
+    public boolean checkCredentials(String email, String password){
+
+        boolean isValid = false;
+        for(UserAccount x : accountRepository.findAll()){
+
+            if(x.getEmail().equals(email) && x.getPassword().equals(password)){
+
+                isValid = true;
+            }
+        }
+        return isValid;
+    }
+    public String getRole(Long ID){
+        return accountRepository.getReferenceById(ID).getRole();
     }
 }

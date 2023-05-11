@@ -3,10 +3,7 @@ import { createRoot } from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
-  Link,
   Outlet,
-  createRoutesFromElements,
 } from "react-router-dom";
 import Profile from "./Components/Pages/Profile";
 import Reports from "./Components/Pages/Reports";
@@ -27,18 +24,21 @@ import "./App.css";
 
 const App = () => {
   const [logged, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = (type) => {
     setIsLoggedIn(true);
+    setUserType(type);
+    console.log("type:" ,type);
   };
 
   const router = createBrowserRouter([
     {
-      element: <AppLayout logged={logged} />,
+      element: <AppLayout logged={logged} userType={userType} onLogin={setUserType}/>,
       children: [
         {
           path: "login",
-          element: <Login onLogin={handleSubmit} />,
+          element: <Login onLogin={handleSubmit} userType={userType}/>,
         },
         {
           path: "/",
@@ -94,21 +94,23 @@ const App = () => {
   ]);
 
   return (
-    <>
-      {logged ? (
-        <RouterProvider router={router} />
-      ) : (
-        <Login onLogin={handleSubmit} />
-      )}
-    </>
+      <>
+        {logged ? (
+            <RouterProvider router={router} />
+        ) : (
+
+            <Login onLogin={handleSubmit} userType={userType} />
+        )}
+      </>
   );
 };
 
-const AppLayout = ({ logged }) => (
-  <>
-    {logged && <Sidebar />}
-    <Outlet />
-  </>
+const AppLayout = ({ logged, userType }) => (
+    <>
+    {console.log("oluo:",userType)}
+      {logged && <Sidebar userType={userType} />}
+      <Outlet />
+    </>
 );
 
 createRoot(document.getElementById("root")).render(<App />);
