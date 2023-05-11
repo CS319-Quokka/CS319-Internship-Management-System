@@ -5,6 +5,8 @@ import { Link, Redirect } from 'react-router-dom';
 import Popup from "../Popup";
 import FAQ from "./FAQ";
 import axios from "axios";
+import { useEffect,useState } from 'react';
+import { get } from 'react-hook-form';
 
 class Login extends Component {
 
@@ -16,6 +18,7 @@ class Login extends Component {
             showFAQ: false,
             redirectToProfile: false,
             errorMessage: "",
+            userType: ""
         };
         this.handleClose = this.handleClose.bind(this);
         this.handleFAQ = this.handleFAQ.bind(this);
@@ -56,13 +59,19 @@ class Login extends Component {
 
             localStorage.setItem('token', response.data.token);
 
-            this.setState({
-                email: "",
-                password: "",
-                redirectToProfile: true,
+            
+            const userInfo = await axios.get(`http://localhost:8080/account/get_all`,{
+                role:this.state.userType
             });
+           
+            const role = userInfo.data[0].role
+           console.log("info:", userInfo.data[0].role);
+        //    this.setState({userType:role})
 
-            this.props.onLogin(); // call onLogin prop
+        //   console.log("giriyo",this.state.userType)
+
+
+            this.props.onLogin(role); // call onLogin prop
         } catch (error) {
             if (error?.response?.status === 401) {
                 this.setState({
@@ -74,14 +83,14 @@ class Login extends Component {
                 });
             }
         }
-    }
+    } 
 
     render() {
         const { showFAQ, redirectToProfile, errorMessage } = this.state;
 
-        if (redirectToProfile) {
-            return <Redirect to="/profile" />;
-        }
+        // if (redirectToProfile) {
+        //     return <Redirect to="/profile" />;
+        // }
 
         return (
             <div className="loginpage">

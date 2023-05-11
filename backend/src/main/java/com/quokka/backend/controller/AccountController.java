@@ -50,4 +50,10 @@ public class AccountController {
 
         return accountService.getAccountRepository().findAll();
     }
+
+    @GetMapping("/account/role/{id}")
+    public String getRole(@PathVariable("id") long ID){
+        return accountService.getRole(ID);
+    }
+
 }

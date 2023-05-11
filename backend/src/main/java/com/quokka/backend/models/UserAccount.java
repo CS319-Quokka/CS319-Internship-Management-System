@@ -23,6 +23,9 @@ public class UserAccount{
     @JoinColumn(name = "account_id")
     private List<UserProfile> profiles;
 
+
+    private String role;
+
     private String name;
     private String email;
 

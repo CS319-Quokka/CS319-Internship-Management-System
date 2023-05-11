@@ -24,18 +24,21 @@ import "./App.css";
 
 const App = () => {
   const [logged, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState(null);
 
-  const handleSubmit = () => {
+  const handleSubmit = (type) => {
     setIsLoggedIn(true);
+    setUserType(type);
+    console.log("type:" ,type);
   };
 
   const router = createBrowserRouter([
     {
-      element: <AppLayout logged={logged} />,
+      element: <AppLayout logged={logged} userType={userType} onLogin={setUserType}/>,
       children: [
         {
           path: "login",
-          element: <Login onLogin={handleSubmit} />,
+          element: <Login onLogin={handleSubmit} userType={userType}/>,
         },
         {
           path: "/",
@@ -95,15 +98,17 @@ const App = () => {
         {logged ? (
             <RouterProvider router={router} />
         ) : (
-            <Login onLogin={handleSubmit} />
+
+            <Login onLogin={handleSubmit} userType={userType} />
         )}
       </>
   );
 };
 
-const AppLayout = ({ logged }) => (
+const AppLayout = ({ logged, userType }) => (
     <>
-      {logged && <Sidebar />}
+    {console.log("oluo:",userType)}
+      {logged && <Sidebar userType={userType} />}
       <Outlet />
     </>
 );

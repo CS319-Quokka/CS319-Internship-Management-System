@@ -6,28 +6,29 @@ import { SidebarData } from "./SidebarData";
 import "./Styles/Sidebar.css";
 import * as FiIcons from "react-icons/fi";
 import { IconContext } from "react-icons";
+import axios from "axios";
+import { useEffect } from "react";
 
 class Sidebar extends Component{
+
   
   constructor(props) {
-      super(props)
-      this.state = "Profile"
-      this.userType = null
-  }    
+    super(props)
+    this.state = "Profile"
+}    
 
-
-
-  
 
   render(){
 
     const handleLogout = (title) => {
       console.log("LOGOUT");
     };
-    console.log(this.userType);
+
+    const { userType } = this.props;
+    console.log("USER TYPE",userType);
     // Find the sidebar data for the current user type
     const data = SidebarData.find(
-      (item) => item.userType === this.userType
+      (item) => item.userType ===  userType
     );
 
     if(data){

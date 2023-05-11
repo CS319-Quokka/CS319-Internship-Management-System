@@ -9,7 +9,7 @@ import * as GiIcons from "react-icons/gi";
 export const SidebarData = [
 
   {
-    userType : "student",
+    userType : "Student",
     items:[
       {
         title: "Profile",

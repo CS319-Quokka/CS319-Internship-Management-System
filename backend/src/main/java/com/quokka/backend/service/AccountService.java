@@ -76,4 +76,7 @@ public class AccountService {
         }
         return isValid;
     }
+    public String getRole(Long ID){
+        return accountRepository.getReferenceById(ID).getRole();
+    }
 }
