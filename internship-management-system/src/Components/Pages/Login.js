@@ -64,7 +64,7 @@ class Login extends Component {
 
             this.props.onLogin(); // call onLogin prop
         } catch (error) {
-            if (error.response.status === 401) {
+            if (error?.response?.status === 401) {
                 this.setState({
                     errorMessage: "Invalid credentials.",
                 });
