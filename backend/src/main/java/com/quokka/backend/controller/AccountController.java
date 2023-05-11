@@ -11,6 +11,7 @@ import java.util.List;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class AccountController {
 
     @Autowired
@@ -24,7 +25,7 @@ public class AccountController {
             boolean isLoginSuccessful = accountService.checkCredentials(userAccount.getEmail(), userAccount.getPassword());
             if (isLoginSuccessful) {
 
-                return ResponseEntity.ok("success");
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body("success");
             }
             else {
 

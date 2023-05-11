@@ -69,7 +69,7 @@ public class AccountService {
         boolean isValid = false;
         for(UserAccount x : accountRepository.findAll()){
 
-            if(x.getEmail() == email && x.getPassword() == password){
+            if(x.getEmail().equals(email) && x.getPassword().equals(password)){
 
                 isValid = true;
             }
