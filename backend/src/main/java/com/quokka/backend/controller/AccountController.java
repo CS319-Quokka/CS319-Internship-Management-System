@@ -18,23 +18,17 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping("/api/login")
-    public ResponseEntity<String> login(@RequestBody UserAccount userAccount) {
-
+    public ResponseEntity<UserAccount> login(@RequestBody UserAccount userAccount) {
         try {
-
             boolean isLoginSuccessful = accountService.checkCredentials(userAccount.getEmail(), userAccount.getPassword());
             if (isLoginSuccessful) {
-
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body("success");
+                UserAccount loggedUser = accountService.getUserByEmail(userAccount.getEmail());
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body(loggedUser);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             }
-            else {
-
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("fail");
-            }
-        }
-        catch (Exception e) {
-
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
@@ -52,7 +46,7 @@ public class AccountController {
     }
 
     @GetMapping("/account/role/{id}")
-    public String getRole(@PathVariable("id") long ID){
+    public String getRole(@PathVariable("id") Long ID){
         return accountService.getRole(ID);
     }
 

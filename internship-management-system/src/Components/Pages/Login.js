@@ -59,16 +59,10 @@ class Login extends Component {
 
             localStorage.setItem('token', response.data.token);
 
-            
-            const userInfo = await axios.get(`http://localhost:8080/account/get_all`,{
-                role:this.state.userType
-            });
-           
-            const role = userInfo.data[0].role
-           console.log("info:", userInfo.data[0].role);
-        //    this.setState({userType:role})
 
-        //   console.log("giriyo",this.state.userType)
+            //get the role of the body, we will assign a sidebar according to this role
+            const role = response.data.role;
+            console.log("ROLE",role);
 
 
             this.props.onLogin(role); // call onLogin prop
@@ -86,11 +80,9 @@ class Login extends Component {
     } 
 
     render() {
-        const { showFAQ, redirectToProfile, errorMessage } = this.state;
+        const { showFAQ, errorMessage } = this.state;
 
-        // if (redirectToProfile) {
-        //     return <Redirect to="/profile" />;
-        // }
+
 
         return (
             <div className="loginpage">

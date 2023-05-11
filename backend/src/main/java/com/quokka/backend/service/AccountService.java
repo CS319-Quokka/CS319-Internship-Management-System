@@ -8,6 +8,7 @@ import com.quokka.backend.models.User;
 import com.quokka.backend.models.UserAccount;
 import com.quokka.backend.models.UserProfile;
 import com.quokka.backend.repository.AccountRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,11 @@ public class AccountService {
 
     public List<UserProfile> getProfiles(Long id){
         return accountRepository.findById(id).get().getProfiles();
+    }
+
+    public UserAccount getUserByEmail(String email) {
+        return accountRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found"));
     }
 
     public boolean addUserProfile(UserProfile userProfile, Long accountId) throws UserProfileAlreadyExistsException {
