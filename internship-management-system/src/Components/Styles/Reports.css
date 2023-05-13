@@ -42,11 +42,10 @@
     color:rgb(12, 0, 53);
     margin-left: 2vh;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 2.5vh;
+    font-size: 2.35vh;
     position: relative;
- 
-   
 }
+
 .reportspage h3{
     color: rgb(64, 64, 64);
     text-align: right;
@@ -125,11 +124,11 @@
     height: 40%;
     padding: 12px 20px;
     box-sizing: border-box;
-    border: 2px solid #ccc;
+    border: 2px solid #6c6c6c;
     font-size: 1.7vh;
-    border-color:hwb(207 91% 0%);
+    border-color:hwb(0 79% 21%);
     border-radius: 15px;
-    background-color:hwb(208 94% 0%);
+    background-color:hwb(0 100% 0%);
     font-size: 16px;
     text-align: left;
     resize: none;
@@ -166,7 +165,8 @@
     width: 90%;
     left: 5%;
 }
-.reportspage .statuslist textarea{
+.reportspage .reportstatus textarea{
     position:relative;
-    height:12vh;
+    height:20vh;
+    
 }

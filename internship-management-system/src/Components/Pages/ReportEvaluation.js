@@ -1,6 +1,10 @@
 import React, {Component, useState, handleChange} from 'react'
 import '../Styles/ReportEvaluation.css'
-import docpic from '../Images/docdownload.png'
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import DownloadIcon from '@mui/icons-material/Download'
 
 const statusOptions = ["Submitted", 
                        "Assigned to Grader",
@@ -27,20 +31,29 @@ const currentSubmission = [
         part: "A",
         partstatus: statusOptions[6],
         feedback:"Company has approved the student's training with a grade of 8.",
-        compform: "Check student's grade here:" + "DenizSunCompanyEvaluationForm.pdf"
+        compform: "Check student's grade here:" + "DenizSunCompanyEvaluationForm.pdf",
+        gradeOutOf: 10
     },
     {
         part: "B",
         partstatus: statusOptions[3],
-        feedback:"The report is insufficient in these parts:\n(...) \nPlease revise and resubmit it."
+        feedback:"The report is insufficient in these parts:\n(...) \nPlease revise and resubmit it.", 
+        gradeOutOf: 60
     },
     {
         part: "C",
         partstatus: statusOptions[2],
-        feedback:"Waiting for revision."
+        feedback:"Waiting for revision.",
+        gradeOutOf: 60
     }
 ]
-
+const downloadAnnotated = () => {
+    const link = document.createElement("a");
+    //the "download.txt" will be replaced by the link name. (this.state = {annotatedfeedback}) is the file needed. 
+    link.download = `annotatedfeed.txt`;
+    link.href = "./annotated.txt";
+    link.click();
+};
 function StatusList(){
     const [grades, setGrades] = useState({});
 
@@ -48,17 +61,20 @@ function StatusList(){
     const newGrades = { ...grades, [part]: parseInt(event.target.value) };
     setGrades(newGrades);
   }
+  var gradeOutOf;
     return (
       <ul>
-        {currentSubmission.map(status => (
+        {currentSubmission.map(status => ( 
           <li key={status.part}>
             <h2>Part {status.part}</h2>
             <h2>Status: {status.partstatus}</h2>
             <p>{status.compform}</p>
             <div className="gradeentry">
+                
+                
                 <h2>Enter Grade:  <input type="number" value={grades[status.part] || ''}
                 onChange={event => handleGradeChange(event, status.part)}
-                /> /10</h2>
+                /> / {status.gradeOutOf}      </h2>
                
             </div>
            
@@ -85,7 +101,7 @@ class ReportEvaluation extends Component {
             prevfilename:"DenizSunReportRevision1.docx",
             prevstatus: "Unsatisfactory. Waiting for revision.",
             prevfeedback: "Your report is insufficient. Try to emphasize your experiences and (...) \n\nUpload a revised version.",
-            annotatedfeedback: "DenizSunFeedback1.pdf"
+        
 
         }    
      
@@ -100,11 +116,12 @@ class ReportEvaluation extends Component {
                 <div className="information">
                     <h1>Viewing the submission history of: {this.state.studentFirstName} {this.state.studentLastName} </h1>    
                 </div>
-                <div className="pastuploads">                           
-                    <div className="docpic">
-                        <img src={docpic}/>
-                        <h3>{this.state.prevfilename}</h3>
-                    </div>
+                <div className="pastuploads">   
+                    <IconButton onClick={downloadAnnotated} aria-label="download">
+                            <DownloadIcon />
+                    </IconButton>
+                    <Button onClick={downloadAnnotated} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.prevfilename}</Button>
+                                                  
                     <div className="prevreport">
                         <h1>The grade distribution of the previous submission:</h1>
                         <br></br>
@@ -127,11 +144,13 @@ class ReportEvaluation extends Component {
             
             <div className="annotatedupload">
                 <h2>Upload your annotated feedback here: </h2>
-                <div className="docpic">
-                    <img src={docpic}/>
-                    <h3>{this.state.annotatedfeedback}</h3>
-                </div>
-                       
+                <FileUploadIcon/>
+                <Button variant="contained" component="label" >
+                    Upload File
+                    <input type="file" hidden />
+                </Button>
+         
+      
             </div>
 
         
