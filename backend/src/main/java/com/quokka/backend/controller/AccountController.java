@@ -1,5 +1,7 @@
 package com.quokka.backend.controller;
 
+import com.quokka.backend.exception.TeachingAssistantAlreadyExistsException;
+import com.quokka.backend.models.User;
 import com.quokka.backend.models.UserAccount;
 import com.quokka.backend.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,43 +13,46 @@ import java.util.List;
 
 
 @RestController
-@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/account")
+//@CrossOrigin(origins = "http://localhost:3000")
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
 
-    @PostMapping("/api/login")
-    public ResponseEntity<UserAccount> login(@RequestBody UserAccount userAccount) {
-        try {
-            boolean isLoginSuccessful = accountService.checkCredentials(userAccount.getEmail(), userAccount.getPassword());
-            if (isLoginSuccessful) {
-                UserAccount loggedUser = accountService.getUserByEmail(userAccount.getEmail());
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body(loggedUser);
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+    @PostMapping
+    public UserAccount addAccount(@RequestBody UserAccount userAccount){
+
+        return accountService.addUserAccount(userAccount);
+
     }
 
-    @PostMapping("/account/add")
-    public boolean addAccount(@RequestBody UserAccount userAccount){
-
-        accountService.getAccountRepository().save(userAccount);
-        return true;
-    }
-
-    @GetMapping("account/get_all")
+    @GetMapping
     public List<UserAccount> getAllAccounts(){
 
-        return accountService.getAccountRepository().findAll();
+        return accountService.getAllAccounts();
     }
 
-    @GetMapping("/account/role/{id}")
-    public String getRole(@PathVariable("id") Long ID){
-        return accountService.getRole(ID);
+    @GetMapping("/{id}")
+    public UserAccount getAccountById(@PathVariable Long id){
+
+        return accountService.getAccountById(id);
     }
 
+    @PutMapping("/{id}")
+    public UserAccount editAccount(@PathVariable Long id, @RequestBody UserAccount newAccount){
+
+        return accountService.editAccount(id, newAccount);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteAccount(@PathVariable Long id){
+        accountService.deleteAccount(id);
+        return new ResponseEntity<>("Account deleted successfully", HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public void deleteAllAccounts(){
+        accountService.deleteAllAccounts();
+    }
 }

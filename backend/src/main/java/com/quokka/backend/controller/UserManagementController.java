@@ -2,16 +2,18 @@ package com.quokka.backend.controller;
 
 import com.quokka.backend.exception.*;
 import com.quokka.backend.models.*;
+import com.quokka.backend.request.*;
 import com.quokka.backend.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class UserManagementController {
 
-    private final UserManagementService userManagementService;
+    private UserManagementService userManagementService;
 
     @Autowired
     public UserManagementController(UserManagementService userManagementService){
@@ -19,323 +21,182 @@ public class UserManagementController {
         this.userManagementService = userManagementService;
     }
 
-    @PostMapping("/student/add")
-    public boolean addStudent(@RequestBody Student student){
+    @PostMapping("/student")
+    public Student addStudent(@RequestBody StudentAddRequest request){
 
-        try{
-
-            return userManagementService.addStudent(student);
-        }
-        catch (StudentAlreadyExistsException e){
-
-            return false;
-        }
+        return userManagementService.addStudent(request);
     }
 
-    @PostMapping("/teaching_assistant/add")
-    public boolean addTeachingAssistant(@RequestBody TeachingAssistant teachingAssistant){
+    @PostMapping("/teaching_assistant")
+    public TeachingAssistant addTeachingAssistant(@RequestBody TeachingAssistantAddRequest request){
 
-        try{
-
-            return userManagementService.addTeachingAssistant(teachingAssistant);
-        }
-        catch (TeachingAssistantAlreadyExistsException e){
-
-            return false;
-        }
+        return userManagementService.addTeachingAssistant(request);
     }
 
-    @PostMapping("/instructor/add")
-    public boolean addInstructor(@RequestBody Instructor instructor){
+    @PostMapping("/instructor")
+    public Instructor addInstructor(@RequestBody InstructorAddRequest request){
 
-        try{
-
-            return userManagementService.addInstructor(instructor);
-        }
-        catch (InstructorAlreadyExistsException e){
-
-            return false;
-        }
+            return userManagementService.addInstructor(request);
     }
 
-    @PostMapping("/summer_training_coordinator/add")
-    public boolean addSummerTrainingCoordinator(@RequestBody SummerTrainingCoordinator summerTrainingCoordinator){
+    @PostMapping("/summer_training_coordinator")
+    public SummerTrainingCoordinator addSummerTrainingCoordinator(@RequestBody SummerTrainingCoordinatorAddRequest request){
 
-        try{
-
-            return userManagementService.addSummerTrainingCoordinator(summerTrainingCoordinator);
-        }
-        catch (SummerTrainingCoordinatorAlreadyExistsException e){
-
-            return false;
-        }
+        return userManagementService.addSummerTrainingCoordinator(request);
     }
 
-    @PostMapping("/administrative_assistant/add")
-    public boolean addAdministrativeAssistant(@RequestBody AdministrativeAssistant administrativeAssistant){
+    @PostMapping("/administrative_assistant")
+    public AdministrativeAssistant addAdministrativeAssistant(@RequestBody AdministrativeAssistantAddRequest request){
 
-        try{
-
-            return userManagementService.addAdministrativeAssistant(administrativeAssistant);
-        }
-        catch (AdministrativeAssistantAlreadyExistsException e){
-
-            return false;
-        }
+            return userManagementService.addAdministrativeAssistant(request);
     }
 
-    @DeleteMapping("/student/delete/{id}")
-    public boolean removeStudentByID(@PathVariable Long id){
+    @DeleteMapping("/student/{id}")
+    public void removeStudentByID(@PathVariable Long id){
 
-        try{
-
-            return userManagementService.removeStudentByID(id);
-        }
-        catch (StudentDoesNotExistException e){
-
-            return false;
-        }
+        userManagementService.removeStudentByID(id);
     }
 
-    @DeleteMapping("/teaching_assistant/delete/{id}")
-    public boolean removeTeachingAssistantByID(@PathVariable Long id){
+    @DeleteMapping("/teaching_assistant/{id}")
+    public void removeTeachingAssistantByID(@PathVariable Long id){
 
-        try{
-
-            return userManagementService.removeTeachingAssistantByID(id);
-        }
-        catch (TeachingAssistantDoesNotExistException e){
-
-            return false;
-        }
+        userManagementService.removeTeachingAssistantByID(id);
     }
 
-    @DeleteMapping("/instructor/delete/{id}")
-    public boolean removeInstructorByID(@PathVariable Long id){
+    @DeleteMapping("/instructor/{id}")
+    public void removeInstructorByID(@PathVariable Long id){
 
-        try{
-
-            return userManagementService.removeInstructorByID(id);
-        }
-        catch (InstructorDoesNotExistException e){
-
-            return false;
-        }
+        userManagementService.removeInstructorByID(id);
     }
 
-    @DeleteMapping("/summer_training_coordinator/delete/{id}")
-    public boolean removeSummerTrainingCoordinatorByID(@PathVariable Long id){
+    @DeleteMapping("/summer_training_coordinator/{id}")
+    public void removeSummerTrainingCoordinatorByID(@PathVariable Long id){
 
-        try{
-
-            return userManagementService.removeSummerTrainingCoordinatorByID(id);
-        }
-        catch (SummerTrainingCoordinatorDoesNotExistException e){
-
-            return false;
-        }
+        userManagementService.removeSummerTrainingCoordinatorByID(id);
     }
 
-    @DeleteMapping("/administrative_assistant/delete/{id}")
-    public boolean removeAdministrativeAssistantByID(@PathVariable Long id){
+    @DeleteMapping("/administrative_assistant/{id}")
+    public void removeAdministrativeAssistantByID(@PathVariable Long id){
 
-        try{
-
-            return userManagementService.removeAdministrativeAssistantByID(id);
-        }
-        catch (AdministrativeAssistantDoesNotExistException e){
-
-            return false;
-        }
+        userManagementService.removeAdministrativeAssistantByID(id);
     }
 
-    @DeleteMapping("/student/delete_all")
+    @DeleteMapping("/student")
     public boolean removeAllStudents(){
 
         return userManagementService.removeAllStudents();
     }
 
-    @DeleteMapping("/teaching_assistant/delete_all")
+    @DeleteMapping("/teaching_assistant")
     public boolean removeAllTeachingAssistants(){
 
         return userManagementService.removeAllTeachingAssistants();
     }
 
-    @DeleteMapping("/instructor/delete_all")
+    @DeleteMapping("/instructor")
     public boolean removeAllInstructors(){
 
         return userManagementService.removeAllInstructors();
     }
 
-    @DeleteMapping("/summer_training_coordinator/delete_all")
+    @DeleteMapping("/summer_training_coordinator")
     public boolean removeAllSummerTrainingCoordinators(){
 
         return userManagementService.removeAllSummerTrainingCoordinators();
     }
 
-    @DeleteMapping("/administrative_assistant/delete_all")
+    @DeleteMapping("/administrative_assistant")
     public boolean removeAllAdministrativeAssistants(){
 
         return userManagementService.removeAllAdministrativeAssistants();
     }
 
-    @GetMapping("/student/get_all")
-    public List<Student> getAllStudents(){
+    @GetMapping("/student")
+    public List<Student> getAllStudents(@RequestParam Optional<Long> accountId, @RequestParam Optional<Long> instructorId, @RequestParam Optional<Long> teachingAssistantId){
 
-        return userManagementService.getAllStudents();
+        return userManagementService.getAllStudents(accountId, instructorId, teachingAssistantId);
     }
 
-    @GetMapping("/teaching_assistant/get_all")
-    public List<TeachingAssistant> getAllTeachingAssistants(){
+    @GetMapping("/teaching_assistant")
+    public List<TeachingAssistant> getAllTeachingAssistants(@RequestParam Optional<Long> accountId){
 
-        return userManagementService.getAllTeachingAssistants();
+        return userManagementService.getAllTeachingAssistants(accountId);
     }
 
-    @GetMapping("/instructor/get_all")
-    public List<Instructor> getAllInstructors(){
+    @GetMapping("/instructor")
+    public List<Instructor> getAllInstructors(@RequestParam Optional<Long> accountId){
 
-        return userManagementService.getAllInstructors();
+        return userManagementService.getAllInstructors(accountId);
     }
 
-    @GetMapping("/summer_training_coordinator/get_all")
-    public List<SummerTrainingCoordinator> getAllSummerTrainingCoordinators(){
+    @GetMapping("/summer_training_coordinator")
+    public List<SummerTrainingCoordinator> getAllSummerTrainingCoordinators(@RequestParam Optional<Long> accountId){
 
-        return userManagementService.getAllSummerTrainingCoordinators();
+        return userManagementService.getAllSummerTrainingCoordinators(accountId);
     }
 
-    @GetMapping("/administrative_assistant/get_all")
-    public List<AdministrativeAssistant> getAllAdministrativeAssistants(){
+    @GetMapping("/administrative_assistant")
+    public List<AdministrativeAssistant> getAllAdministrativeAssistants(@RequestParam Optional<Long> accountId){
 
-        return userManagementService.getAllAdministrativeAssistants();
+        return userManagementService.getAllAdministrativeAssistants(accountId);
     }
 
-    @GetMapping("/student/get/{id}")
+    @GetMapping("/student/{id}")
     public Student getStudentByID(@PathVariable Long id){
 
-        try{
-
-            return userManagementService.getStudentByID(id);
-        }
-        catch (StudentDoesNotExistException e){
-
-            return null;
-        }
+        return userManagementService.getStudentByID(id);
     }
 
-    @GetMapping("/teaching_assistant/get/{id}")
+    @GetMapping("/teaching_assistant/{id}")
     public TeachingAssistant getTeachingAssistantByID(@PathVariable Long id){
 
-        try{
-
-            return userManagementService.getTeachingAssistantByID(id);
-        }
-        catch (TeachingAssistantDoesNotExistException e){
-
-            return null;
-        }
+        return userManagementService.getTeachingAssistantByID(id);
     }
 
-    @GetMapping("/instructor/get/{id}")
+    @GetMapping("/instructor/{id}")
     public Instructor getInstructorByID(@PathVariable Long id){
 
-        try{
-
             return userManagementService.getInstructorByID(id);
-        }
-        catch (InstructorDoesNotExistException e){
-
-            return null;
-        }
     }
 
-    @GetMapping("/summer_training_coordinator/get/{id}")
+    @GetMapping("/summer_training_coordinator/{id}")
     public SummerTrainingCoordinator getSummerTrainingCoordinatorByID(@PathVariable Long id){
 
-        try{
-
             return userManagementService.getSummerTrainingCoordinatorByID(id);
-        }
-        catch (SummerTrainingCoordinatorDoesNotExistException e){
-
-            return null;
-        }
     }
 
-    @GetMapping("/administrative_assistant/get/{id}")
+    @GetMapping("/administrative_assistant/{id}")
     public AdministrativeAssistant getAdministrativeAssistant(@PathVariable Long id){
 
-        try{
-
             return userManagementService.getAdministrativeAssistantByID(id);
-        }
-        catch (AdministrativeAssistantDoesNotExistException e){
-
-            return null;
-        }
     }
 
-    @PatchMapping("/student/edit/{id}")
-    public boolean editStudentByID(@PathVariable Long id, @RequestBody Student editedStudent){
-
-        try{
-
-            return userManagementService.editStudentByID(id, editedStudent);
-        }
-        catch(StudentDoesNotExistException | NullEntityException e){
-
-            return false;
-        }
+    @PutMapping("/student/{id}")
+    public Student editStudentByID(@PathVariable Long id, @RequestBody StudentEditRequest request){
+        return userManagementService.editStudentByID(id, request);
     }
 
-    @PatchMapping("/teaching_assistant/edit/{id}")
-    public boolean editTeachingAssistantByID(@PathVariable Long id, @RequestBody TeachingAssistant editedTeachingAssistant){
+    @PatchMapping("/teaching_assistant/{id}")
+    public TeachingAssistant editTeachingAssistantByID(@PathVariable Long id, @RequestBody TeachingAssistantEditRequest request){
 
-        try{
-
-            return userManagementService.editTeachingAssistantByID(id, editedTeachingAssistant);
-        }
-        catch(TeachingAssistantDoesNotExistException | NullEntityException e){
-
-            return false;
-        }
+        return userManagementService.editTeachingAssistantByID(id, request);
     }
 
-    @PatchMapping("/instructor/edit/{id}")
-    public boolean editInstructorByID(@PathVariable Long id, @RequestBody Instructor editedInstructor){
+    @PatchMapping("/instructor/{id}")
+    public Instructor editInstructorByID(@PathVariable Long id, @RequestBody InstructorEditRequest request){
 
-        try{
-
-            return userManagementService.editInstructorByID(id, editedInstructor);
-        }
-        catch(InstructorDoesNotExistException | NullEntityException e){
-
-            return false;
-        }
+        return userManagementService.editInstructorByID(id, request);
     }
 
-    @PatchMapping("/summer_training_coordinator/edit/{id}")
-    public boolean editSummerTrainingCoordinatorByID(@PathVariable Long id, @RequestBody SummerTrainingCoordinator editedSummerTrainingCoordinator){
+    @PatchMapping("/summer_training_coordinator/{id}")
+    public SummerTrainingCoordinator editSummerTrainingCoordinatorByID(@PathVariable Long id, @RequestBody SummerTrainingCoordinatorEditRequest request){
 
-        try{
-
-            return userManagementService.editSummerTrainingCoordinatorByID(id, editedSummerTrainingCoordinator);
-        }
-        catch(SummerTrainingCoordinatorDoesNotExistException | NullEntityException e){
-
-            return false;
-        }
+        return userManagementService.editSummerTrainingCoordinatorByID(id, request);
     }
 
-    @PatchMapping("/administrative_assistant/edit/{id}")
-    public boolean editAdministrativeAssistantByID(@PathVariable Long id, @RequestBody AdministrativeAssistant editedAdministrativeAssistant){
+    @PatchMapping("/administrative_assistant/{id}")
+    public AdministrativeAssistant editAdministrativeAssistantByID(@PathVariable Long id, @RequestBody AdministrativeAssistantEditRequest request){
 
-        try{
-
-            return userManagementService.editAdministrativeAssistantByID(id, editedAdministrativeAssistant);
-        }
-        catch(AdministrativeAssistantDoesNotExistException | NullEntityException e){
-
-            return false;
-        }
+        return userManagementService.editAdministrativeAssistantByID(id, request);
     }
 }

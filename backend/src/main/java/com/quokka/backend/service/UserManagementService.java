@@ -3,34 +3,37 @@ package com.quokka.backend.service;
 import com.quokka.backend.exception.*;
 import com.quokka.backend.models.*;
 import com.quokka.backend.repository.*;
+import com.quokka.backend.request.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
-@Getter
-@Setter
+
 @Service
 public class UserManagementService {
 
-    private final UserRepository userRepository;
-    private final StudentRepository studentRepository;
-    private final TeachingAssistantRepository teachingAssistantRepository;
-    private final InstructorRepository instructorRepository;
-    private final SummerTrainingCoordinatorRepository summerTrainingCoordinatorRepository;
-    private final AdministrativeAssistantRepository administrativeAssistantRepository;
+    private AccountService accountService;
+
+    private  StudentRepository studentRepository;
+    private  TeachingAssistantRepository teachingAssistantRepository;
+    private  InstructorRepository instructorRepository;
+    private  SummerTrainingCoordinatorRepository summerTrainingCoordinatorRepository;
+    private  AdministrativeAssistantRepository administrativeAssistantRepository;
 
     @Autowired
-    public UserManagementService(UserRepository userRepository, StudentRepository studentRepository,
+    public UserManagementService(AccountService accountService, StudentRepository studentRepository,
                                  TeachingAssistantRepository teachingAssistantRepository,
                                  InstructorRepository instructorRepository,
                                  SummerTrainingCoordinatorRepository summerTrainingCoordinatorRepository,
                                  AdministrativeAssistantRepository administrativeAssistantRepository){
 
-        this.userRepository = userRepository;
+        this.accountService = accountService;
+
         this.studentRepository = studentRepository;
         this.teachingAssistantRepository = teachingAssistantRepository;
         this.instructorRepository = instructorRepository;
@@ -38,146 +41,121 @@ public class UserManagementService {
         this.administrativeAssistantRepository = administrativeAssistantRepository;
     }
 
-    public boolean addStudent(Student student) throws StudentAlreadyExistsException {
-
-        Optional<Student> studentOpt = studentRepository.findById(student.getId());
-        if(studentOpt.isPresent()){
-
-            throw new StudentAlreadyExistsException("Student with id " + student.getId() + " already exists!");
+    public Student addStudent(StudentAddRequest request){
+        UserAccount account = accountService.getAccountById(request.getAccountId());
+        if (account == null) {
+            return null;
         }
 
-        studentRepository.save(student);
-        return true;
+        Instructor instructor = this.getInstructorByID(request.getInstructorId());
+        if (instructor == null) {
+            return null;
+        }
+
+        TeachingAssistant teachingAssistant = this.getTeachingAssistantByID(request.getTeachingAssistantId());
+        if (teachingAssistant == null) {
+            return null;
+        }
+
+        Student student = new Student();
+        student.setId(request.getId());
+        student.setFirstName(request.getFirstName());
+        student.setLastName(request.getLastName());
+        student.setCourseCode(request.getCourseCode());
+        student.setLetterGrade(request.getLetterGrade());
+        student.setCompanyName(request.getCompanyName());
+
+
+        student.setUserAccount(account);
+        student.setInstructor(instructor);
+        student.setTeachingAssistant(teachingAssistant);
+
+        return studentRepository.save(student);
     }
 
-    public boolean addTeachingAssistant(TeachingAssistant teachingAssistant) throws TeachingAssistantAlreadyExistsException {
+    public TeachingAssistant addTeachingAssistant(TeachingAssistantAddRequest request){
 
-        Optional<TeachingAssistant> teachingAssistantOpt = teachingAssistantRepository.findById(teachingAssistant.getId());
-        if(teachingAssistantOpt.isPresent()){
-
-            throw new TeachingAssistantAlreadyExistsException("Teaching Assistant with id " + teachingAssistant.getId() +
-                    " already exists!");
+        UserAccount account = accountService.getAccountById(request.getAccountId());
+        if (account == null) {
+            return null;
         }
 
-        teachingAssistantRepository.save(teachingAssistant);
-        return true;
+        TeachingAssistant teachingAssistant = new TeachingAssistant();
+        teachingAssistant.setLastName(request.getLastName());
+        teachingAssistant.setFirstName(request.getFirstName());
+        teachingAssistant.setUserAccount(account);
+
+        return teachingAssistantRepository.save(teachingAssistant);
     }
 
-    public boolean addInstructor(Instructor instructor) throws InstructorAlreadyExistsException {
+    public Instructor addInstructor(InstructorAddRequest request) {
 
-        Optional<Instructor> instructorOpt = instructorRepository.findById(instructor.getId());
-        if(instructorOpt.isPresent()){
-
-            throw new InstructorAlreadyExistsException("Instructor with id: " + instructor.getId() + " already exists!");
+        UserAccount account = accountService.getAccountById(request.getAccountId());
+        if (account == null) {
+            return null;
         }
 
-        instructorRepository.save(instructor);
-        return true;
+        Instructor instructor = new Instructor();
+        instructor.setLastName(request.getLastName());
+        instructor.setFirstName(request.getFirstName());
+        instructor.setUserAccount(account);
+
+        return instructorRepository.save(instructor);
     }
 
-    public boolean addSummerTrainingCoordinator(SummerTrainingCoordinator summerTrainingCoordinator)
-        throws SummerTrainingCoordinatorAlreadyExistsException {
+    public SummerTrainingCoordinator addSummerTrainingCoordinator(SummerTrainingCoordinatorAddRequest request){
 
-        Optional<SummerTrainingCoordinator> summerTrainingCoordinatorOpt =
-                summerTrainingCoordinatorRepository.findById(summerTrainingCoordinator.getId());
-        if(summerTrainingCoordinatorOpt.isPresent()){
-
-            throw new SummerTrainingCoordinatorAlreadyExistsException("Summer Training Coordinator with id " +
-                    summerTrainingCoordinator.getId() + " already exists!");
+        UserAccount account = accountService.getAccountById(request.getAccountId());
+        if (account == null) {
+            return null;
         }
 
-        summerTrainingCoordinatorRepository.save(summerTrainingCoordinator);
-        return true;
+        SummerTrainingCoordinator summerTrainingCoordinator = new SummerTrainingCoordinator();
+        summerTrainingCoordinator.setLastName(request.getLastName());
+        summerTrainingCoordinator.setFirstName(request.getFirstName());
+        summerTrainingCoordinator.setUserAccount(account);
+
+        return summerTrainingCoordinatorRepository.save(summerTrainingCoordinator);
     }
 
-    public boolean addAdministrativeAssistant(AdministrativeAssistant administrativeAssistant)
-        throws AdministrativeAssistantAlreadyExistsException {
+    public AdministrativeAssistant addAdministrativeAssistant(AdministrativeAssistantAddRequest request){
 
-        Optional<AdministrativeAssistant> administrativeAssistantOpt =
-                administrativeAssistantRepository.findById(administrativeAssistant.getId());
-        if(administrativeAssistantOpt.isPresent()){
-
-            throw new AdministrativeAssistantAlreadyExistsException("Administrative Assistant with id " +
-                    administrativeAssistant.getId() + " already exists!");
+        UserAccount account = accountService.getAccountById(request.getAccountId());
+        if (account == null) {
+            return null;
         }
 
-        administrativeAssistantRepository.save(administrativeAssistant);
-        return true;
+        AdministrativeAssistant administrativeAssistant = new AdministrativeAssistant();
+        administrativeAssistant.setLastName(request.getLastName());
+        administrativeAssistant.setFirstName(request.getFirstName());
+        administrativeAssistant.setUserAccount(account);
+
+        return administrativeAssistantRepository.save(administrativeAssistant);
     }
 
-    public boolean removeStudentByID(Long id) throws StudentDoesNotExistException {
-
-        Optional<Student> studentOpt = studentRepository.findById(id);
-        if(!studentOpt.isPresent()){
-
-            throw new StudentDoesNotExistException("Student with id " + id + " does not exist. It cannot be removed!");
-        }
+    public void removeStudentByID(Long id) {
 
         studentRepository.deleteById(id);
-        return true;
     }
 
-    public boolean removeTeachingAssistantByID(Long id) throws TeachingAssistantDoesNotExistException {
-
-        Optional<TeachingAssistant> teachingAssistantOpt = teachingAssistantRepository.findById(id);
-        if(!teachingAssistantOpt.isPresent()){
-
-            throw new TeachingAssistantDoesNotExistException("Teaching Assistant with id " + id +
-                    " does not exist. It cannot be removed!");
-        }
-
-        for(int i = 0; i < teachingAssistantRepository.findById(id).get().getStudents().size(); i++){
-
-            teachingAssistantRepository.findById(id).get().getStudents().get(i).setTeachingAssistant(null);
-        }
+    public void removeTeachingAssistantByID(Long id)  {
 
         teachingAssistantRepository.deleteById(id);
-        return true;
     }
 
-    public boolean removeInstructorByID(Long id) throws InstructorDoesNotExistException {
-
-        Optional<Instructor> instructorOpt = instructorRepository.findById(id);
-        if(!instructorOpt.isPresent()){
-
-            throw new InstructorDoesNotExistException("Instructor with id " + id +
-                    " does not exist. It cannot be removed!");
-        }
-
-        for(int i = 0; i < instructorRepository.findById(id).get().getStudents().size(); i++){
-
-            instructorRepository.findById(id).get().getStudents().get(i).setInstructor(null);
-        }
+    public void removeInstructorByID(Long id) {
 
         instructorRepository.deleteById(id);
-        return true;
     }
 
-    public boolean removeSummerTrainingCoordinatorByID(Long id) throws SummerTrainingCoordinatorDoesNotExistException {
-
-        Optional<SummerTrainingCoordinator> summerTrainingCoordinatorOpt =
-                summerTrainingCoordinatorRepository.findById(id);
-        if(!summerTrainingCoordinatorOpt.isPresent()){
-
-            throw new SummerTrainingCoordinatorDoesNotExistException("Summer Training Coordinator with id " + id +
-                    " does not exist. It cannot be removed!");
-        }
+    public void removeSummerTrainingCoordinatorByID(Long id) {
 
         summerTrainingCoordinatorRepository.deleteById(id);
-        return true;
     }
 
-    public boolean removeAdministrativeAssistantByID(Long id) throws AdministrativeAssistantDoesNotExistException {
-
-        Optional<AdministrativeAssistant> administrativeAssistantOpt = administrativeAssistantRepository.findById(id);
-        if(!administrativeAssistantOpt.isPresent()){
-
-            throw new AdministrativeAssistantDoesNotExistException("Administrative Assistant with id " + id +
-                    " does not exist. It cannot be removed!");
-        }
+    public void removeAdministrativeAssistantByID(Long id) {
 
         administrativeAssistantRepository.deleteById(id);
-        return true;
     }
 
     public boolean removeAllStudents(){
@@ -210,259 +188,156 @@ public class UserManagementService {
         return true;
     }
 
-    public List<Student> getAllStudents(){
+        public List<Student> getAllStudents(Optional<Long> userAccountId, Optional <Long> instructorId, Optional <Long> teachingAssistantId){
+        if(userAccountId.isPresent()){
+
+            return studentRepository.findByUserAccountId(userAccountId.get());
+        }
+
+        if(instructorId.isPresent()){
+
+            return studentRepository.findByInstructorId(instructorId.get());
+        }
+
+        if(teachingAssistantId.isPresent()){
+
+            return studentRepository.findByTeachingAssistantId(teachingAssistantId.get());
+        }
 
         return studentRepository.findAll();
     }
 
-    public List<TeachingAssistant> getAllTeachingAssistants(){
+    public List<TeachingAssistant> getAllTeachingAssistants(Optional<Long> userAccountId){
+        if(userAccountId.isPresent()){
+
+            return teachingAssistantRepository.findByUserAccountId(userAccountId.get());
+        }
 
         return teachingAssistantRepository.findAll();
+
     }
 
-    public List<Instructor> getAllInstructors(){
+    public List<Instructor> getAllInstructors(Optional<Long> userAccountId){
+        if(userAccountId.isPresent()){
+
+            return instructorRepository.findByUserAccountId(userAccountId.get());
+        }
 
         return instructorRepository.findAll();
+
     }
 
-    public List<SummerTrainingCoordinator> getAllSummerTrainingCoordinators(){
+    public List<SummerTrainingCoordinator> getAllSummerTrainingCoordinators(Optional<Long> userAccountId){
+        if (userAccountId.isPresent()){
+
+            return summerTrainingCoordinatorRepository.findByUserAccountId(userAccountId.get());
+        }
 
         return summerTrainingCoordinatorRepository.findAll();
+
+
     }
 
-    public List<AdministrativeAssistant> getAllAdministrativeAssistants(){
+    public List<AdministrativeAssistant> getAllAdministrativeAssistants(Optional<Long> userAccountId){
+        if (userAccountId.isPresent()){
+
+            return administrativeAssistantRepository.findByUserAccountId(userAccountId.get());
+        }
 
         return administrativeAssistantRepository.findAll();
     }
 
-    public Student getStudentByID(Long id) throws StudentDoesNotExistException {
+    public Student getStudentByID(Long id) {
 
-        Optional<Student> studentOpt = studentRepository.findById(id);
-        if(!studentOpt.isPresent()){
-
-            throw new StudentDoesNotExistException("Student with id " + id +
-                    " does not exist. It cannot be returned!");
-        }
-
-        return studentRepository.findById(id).get();
+        return studentRepository.findById(id).orElse(null);
     }
 
-    public TeachingAssistant getTeachingAssistantByID(Long id) throws TeachingAssistantDoesNotExistException {
+    public TeachingAssistant getTeachingAssistantByID(Long id) {
 
-        Optional<TeachingAssistant> teachingAssistantOpt = teachingAssistantRepository.findById(id);
-        if(!teachingAssistantOpt.isPresent()){
-
-            throw new TeachingAssistantDoesNotExistException("Teaching Assistant with id " + id +
-                    " does not exist. It cannot be returned!");
-        }
-
-        return teachingAssistantRepository.findById(id).get();
+        return teachingAssistantRepository.findById(id).orElse(null);
     }
 
-    public Instructor getInstructorByID(Long id) throws InstructorDoesNotExistException {
+    public Instructor getInstructorByID(Long id) {
 
-        Optional<Instructor> instructorOpt = instructorRepository.findById(id);
-        if(!instructorOpt.isPresent()){
-
-            throw new InstructorDoesNotExistException("Instructor with id " + id +
-                    " does not exist. It cannot be returned!");
-        }
-
-        return instructorRepository.findById(id).get();
+        return instructorRepository.findById(id).orElse(null);
     }
 
-    public SummerTrainingCoordinator getSummerTrainingCoordinatorByID(Long id)
-            throws SummerTrainingCoordinatorDoesNotExistException {
+    public SummerTrainingCoordinator getSummerTrainingCoordinatorByID(Long id) {
 
-        Optional<SummerTrainingCoordinator> summerTrainingCoordinatorOpt =
+        return summerTrainingCoordinatorRepository.findById(id).orElse(null);
+    }
+
+    public AdministrativeAssistant getAdministrativeAssistantByID(Long id) {
+
+        return administrativeAssistantRepository.findById(id).orElse(null);
+    }
+
+    public Student editStudentByID(Long id, StudentEditRequest request) {
+        Optional<Student> student = studentRepository.findById(id);
+        if ( student.isPresent() ){
+            Student newStudent = student.get();
+            newStudent.setFirstName(request.getFirstName());
+            newStudent.setLastName(request.getLastName());
+            newStudent.setLetterGrade(request.getLetterGrade());
+            newStudent.setCompanyName(request.getCompanyName());
+            newStudent.setCourseCode(request.getCourseCode());
+            newStudent.setInstructor(this.getInstructorByID(request.getInstructorId()));
+            newStudent.setTeachingAssistant(this.getTeachingAssistantByID(request.getTeachingAssistantId()));
+            studentRepository.save(newStudent);
+            return newStudent;
+        }
+        return null;
+    }
+
+    public TeachingAssistant editTeachingAssistantByID(Long id, TeachingAssistantEditRequest request) {
+
+        Optional<TeachingAssistant> teachingAssistant = teachingAssistantRepository.findById(id);
+        if (teachingAssistant.isPresent()){
+            TeachingAssistant newTeachingAssistant = teachingAssistant.get();
+            newTeachingAssistant.setFirstName(request.getFirstName());
+            newTeachingAssistant.setLastName(request.getLastName());
+            teachingAssistantRepository.save(newTeachingAssistant);
+            return newTeachingAssistant;
+        }
+        return null;
+
+    }
+    public Instructor editInstructorByID(Long id, InstructorEditRequest request) {
+
+            Optional<Instructor> instructor = instructorRepository.findById(id);
+            if (instructor.isPresent()){
+                Instructor newInstructor = instructor.get();
+                newInstructor.setFirstName(request.getFirstName());
+                newInstructor.setLastName(request.getLastName());
+                instructorRepository.save(newInstructor);
+                return newInstructor;
+            }
+            return null;
+    }
+    public SummerTrainingCoordinator editSummerTrainingCoordinatorByID(Long id, SummerTrainingCoordinatorEditRequest request) {
+
+        Optional<SummerTrainingCoordinator> summerTrainingCoordinator =
                 summerTrainingCoordinatorRepository.findById(id);
-        if(!summerTrainingCoordinatorOpt.isPresent()){
-
-            throw new SummerTrainingCoordinatorDoesNotExistException("Summer Training Coordinator with id " + id +
-                    " does not exist. It cannot be returned!");
+        if(!summerTrainingCoordinator.isPresent()){
+            SummerTrainingCoordinator newSummerTrainingCoordinator = summerTrainingCoordinator.get();
+            newSummerTrainingCoordinator.setFirstName(request.getFirstName());
+            newSummerTrainingCoordinator.setLastName(request.getLastName());
+            summerTrainingCoordinatorRepository.save(newSummerTrainingCoordinator);
+            return newSummerTrainingCoordinator;
         }
-
-        return summerTrainingCoordinatorRepository.findById(id).get();
+        return null;
     }
+    public AdministrativeAssistant editAdministrativeAssistantByID(Long id, AdministrativeAssistantEditRequest request){
 
-    public AdministrativeAssistant getAdministrativeAssistantByID(Long id) throws AdministrativeAssistantDoesNotExistException {
-
-        Optional<AdministrativeAssistant> administrativeAssistantOpt = administrativeAssistantRepository.findById(id);
-        if(!administrativeAssistantOpt.isPresent()){
-
-            throw new AdministrativeAssistantDoesNotExistException("Administrative Assistant with id " + id +
-                    " does not exist. It cannot be returned!");
-        }
-
-        return administrativeAssistantRepository.findById(id).get();
-    }
-
-    public boolean editStudentByID(Long id, Student editedStudent) throws StudentDoesNotExistException, NullEntityException {
-
-        Optional<Student> studentOpt = studentRepository.findById(id);
-        if(!studentOpt.isPresent()){
-
-            throw new StudentDoesNotExistException("Student with id " + id +
-                    " does not exist. It cannot be edited!");
-        }
-
-        if(editedStudent == null){
-
-            throw new NullEntityException("Student cannot be modified with a null entity!");
-        }
-
-        if(!studentRepository.findById(id).get().getCourseCode().equals(editedStudent.getCourseCode())){
-
-            studentRepository.findById(id).get().setCourseCode(editedStudent.getCourseCode());
-        }
-        if(!studentRepository.findById(id).get().getLetterGrade().equals(editedStudent.getLetterGrade())){
-
-            studentRepository.findById(id).get().setLetterGrade(editedStudent.getLetterGrade());
-        }
-        if(!studentRepository.findById(id).get().getCompanyName().equals(editedStudent.getCompanyName())){
-
-            studentRepository.findById(id).get().setCompanyName(editedStudent.getCompanyName());
-        }
-        if(!studentRepository.findById(id).get().getInstructor().equals(editedStudent.getInstructor())){
-
-            studentRepository.findById(id).get().setInstructor(editedStudent.getInstructor());
-        }
-        if(!studentRepository.findById(id).get().getTeachingAssistant().equals(editedStudent.getTeachingAssistant())){
-
-            studentRepository.findById(id).get().setTeachingAssistant(editedStudent.getTeachingAssistant());
-        }
-        if(!studentRepository.findById(id).get().getCompanyEvaluationForm().equals(editedStudent.getCompanyEvaluationForm())){
-
-            studentRepository.findById(id).get().setCompanyEvaluationForm(editedStudent.getCompanyEvaluationForm());
-        }
-        if(!studentRepository.findById(id).get().getReports().equals(editedStudent.getReports())){
-
-            studentRepository.findById(id).get().setReports(editedStudent.getReports());
-        }
-        if(!studentRepository.findById(id).get().getGradeForm().equals(editedStudent.getGradeForm())){
-
-            studentRepository.findById(id).get().setGradeForm(editedStudent.getGradeForm());
-        }
-
-        return true;
-    }
-
-    public boolean editTeachingAssistantByID(Long id, TeachingAssistant editedTeachingAssistant)
-            throws TeachingAssistantDoesNotExistException, NullEntityException {
-
-        Optional<TeachingAssistant> teachingAssistantOpt = teachingAssistantRepository.findById(id);
-        if(!teachingAssistantOpt.isPresent()){
-
-            throw new TeachingAssistantDoesNotExistException("Teaching Assistant with id " + id +
-                    " does not exist. It cannot be edited!");
-        }
-
-        if(editedTeachingAssistant == null){
-
-            throw new NullEntityException("Teaching Assistant cannot be modified with a null entity!");
-        }
-
-        if(!teachingAssistantRepository.findById(id).get().getStudents().equals(editedTeachingAssistant.getStudents())){
-
-            teachingAssistantRepository.findById(id).get().setStudents(editedTeachingAssistant.getStudents());
-        }
-        return true;
-    }
-    public boolean editInstructorByID(Long id, Instructor editedInstructor)
-            throws InstructorDoesNotExistException, NullEntityException {
-
-        Optional<Instructor> instructorOpt = instructorRepository.findById(id);
-        if(!instructorOpt.isPresent()){
-
-            throw new InstructorDoesNotExistException("Instructor with id " + id +
-                    " does not exist. It cannot be edited!");
-        }
-
-        if(editedInstructor == null){
-
-            throw new NullEntityException("Instructor cannot be modified with a null entity!");
-        }
-
-        if(!instructorRepository.findById(id).get().getStudents().equals(editedInstructor.getStudents())){
-
-            instructorRepository.findById(id).get().setStudents(editedInstructor.getStudents());
-        }
-        if(!instructorRepository.findById(id).get().getSignature().equals(editedInstructor.getSignature())){
-
-            instructorRepository.findById(id).get().setSignature(editedInstructor.getSignature());
-        }
-        return true;
-    }
-    public boolean editSummerTrainingCoordinatorByID(Long id, SummerTrainingCoordinator editedSummerTrainingCoordinator)
-            throws SummerTrainingCoordinatorDoesNotExistException, NullEntityException {
-
-        Optional<SummerTrainingCoordinator> summerTrainingCoordinatorOpt =
-            summerTrainingCoordinatorRepository.findById(id);
-        if(!summerTrainingCoordinatorOpt.isPresent()){
-
-            throw new SummerTrainingCoordinatorDoesNotExistException("Summer Training Coordinator with id " + id +
-                    " does not exist. It cannot be edited!");
-        }
-
-        if(editedSummerTrainingCoordinator == null){
-
-            throw new NullEntityException("Summer Training Coordinator cannot be modified with a null entity!");
-        }
-
-        if(!summerTrainingCoordinatorRepository.findById(id).get().getMadeAnnouncements()
-                .equals(editedSummerTrainingCoordinator.getMadeAnnouncements())){
-
-            summerTrainingCoordinatorRepository.findById(id).get()
-                    .setMadeAnnouncements(editedSummerTrainingCoordinator.getMadeAnnouncements());
-        }
-        return true;
-    }
-    public boolean editAdministrativeAssistantByID(Long id, AdministrativeAssistant editedAdministrativeAssistant)
-            throws AdministrativeAssistantDoesNotExistException, NullEntityException {
-
-        Optional<AdministrativeAssistant> administrativeAssistantOpt =
+        Optional<AdministrativeAssistant> administrativeAssistant =
                 administrativeAssistantRepository.findById(id);
-        if(!administrativeAssistantOpt.isPresent()){
-
-            throw new AdministrativeAssistantDoesNotExistException("Administrative Assistant with id " + id +
-                    " does not exist. It cannot be edited!");
+        if(!administrativeAssistant.isPresent()){
+            AdministrativeAssistant newAdministrativeAssistant = administrativeAssistant.get();
+            newAdministrativeAssistant.setFirstName(request.getFirstName());
+            newAdministrativeAssistant.setLastName(request.getLastName());
+            administrativeAssistantRepository.save(newAdministrativeAssistant);
+            return newAdministrativeAssistant;
         }
-
-        if(editedAdministrativeAssistant == null){
-
-            throw new NullEntityException("Administrative Assistant cannot be modified with a null entity!");
-        }
-
-        if(!administrativeAssistantRepository.findById(id).get().getStudentList()
-                .equals(editedAdministrativeAssistant.getStudentList())){
-
-            administrativeAssistantRepository.findById(id).get()
-                    .setStudentList(editedAdministrativeAssistant.getStudentList());
-        }
-        if(!administrativeAssistantRepository.findById(id).get().getTeachingAssistantList()
-                .equals(editedAdministrativeAssistant.getTeachingAssistantList())){
-
-            administrativeAssistantRepository.findById(id).get()
-                    .setTeachingAssistantList(editedAdministrativeAssistant.getTeachingAssistantList());
-        }
-        if(!administrativeAssistantRepository.findById(id).get().getInstructorList()
-                .equals(editedAdministrativeAssistant.getInstructorList())){
-
-            administrativeAssistantRepository.findById(id).get()
-                    .setInstructorList(editedAdministrativeAssistant.getInstructorList());
-        }
-        if(!administrativeAssistantRepository.findById(id).get().getCompanyList()
-                .equals(editedAdministrativeAssistant.getCompanyList())){
-
-            administrativeAssistantRepository.findById(id).get()
-                    .setCompanyList(editedAdministrativeAssistant.getCompanyList());
-        }
-        if(!administrativeAssistantRepository.findById(id).get().getMadeAnnouncementList()
-                .equals(editedAdministrativeAssistant.getMadeAnnouncementList())){
-
-            administrativeAssistantRepository.findById(id).get()
-                    .setMadeAnnouncementList(editedAdministrativeAssistant.getMadeAnnouncementList());
-        }
-        return true;
+        return null;
     }
 }

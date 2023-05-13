@@ -15,6 +15,7 @@ public class GradeForm {
     @Id
     @GeneratedValue
     private Long id;
+    private Long studentId;//ToDo
 
     @OneToOne
     @JoinColumn(name = "instructor_id")

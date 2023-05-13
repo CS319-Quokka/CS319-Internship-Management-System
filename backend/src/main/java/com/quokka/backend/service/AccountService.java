@@ -1,14 +1,7 @@
 package com.quokka.backend.service;
 
-import com.quokka.backend.exception.TeachingAssistantAlreadyExistsException;
-import com.quokka.backend.exception.UserProfileAlreadyExistsException;
-import com.quokka.backend.exception.UserProfileDoesNotExistException;
-import com.quokka.backend.models.TeachingAssistant;
-import com.quokka.backend.models.User;
 import com.quokka.backend.models.UserAccount;
-import com.quokka.backend.models.UserProfile;
 import com.quokka.backend.repository.AccountRepository;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +21,9 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
+    /*
     public List<UserProfile> getProfiles(Long id){
         return accountRepository.findById(id).get().getProfiles();
-    }
-
-    public UserAccount getUserByEmail(String email) {
-        return accountRepository.findByEmail(email)
-                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found"));
     }
 
     public boolean addUserProfile(UserProfile userProfile, Long accountId) throws UserProfileAlreadyExistsException {
@@ -70,19 +59,55 @@ public class AccountService {
         return true;
     }
 
-    public boolean checkCredentials(String email, String password){
+     */
 
-        boolean isValid = false;
-        for(UserAccount x : accountRepository.findAll()){
-
-            if(x.getEmail().equals(email) && x.getPassword().equals(password)){
-
-                isValid = true;
-            }
+    public UserAccount getAccountById(Long id){
+        Optional<UserAccount> account = accountRepository.findById(id);
+        if(!account.isPresent()){
+            throw new IllegalStateException("No account found with id:" + id + "!");
         }
-        return isValid;
+
+        return account.get();
     }
-    public String getRole(Long ID){
-        return accountRepository.getReferenceById(ID).getRole();
+
+    public UserAccount addUserAccount( UserAccount userAccount) {
+
+
+        return accountRepository.save(userAccount);
+    }
+
+    public List<UserAccount> getAllAccounts(){
+        return accountRepository.findAll();
+    }
+
+    public UserAccount editAccount( Long id, UserAccount userAccount)  {
+        Optional<UserAccount> account = accountRepository.findById(id);
+        if (!account.isPresent()){
+            throw new IllegalStateException("No account found with id:" + id + "!");
+        }
+        UserAccount foundUser = account.get();
+        foundUser.setDepartment(userAccount.getDepartment());
+        foundUser.setEmail(userAccount.getEmail());
+        foundUser.setName(userAccount.getName());
+        //foundUser.setProfiles(userAccount.getProfiles());
+        //foundUser.setUsers(userAccount.getUsers());
+        foundUser.setPassword(userAccount.getPassword());
+        foundUser.setProfilePic(userAccount.getProfilePic());
+
+        return accountRepository.save(foundUser);
+
+    }
+
+    public void deleteAccount(Long id) {
+        Optional<UserAccount> account = accountRepository.findById(id);
+        if (!account.isPresent()){
+            throw new IllegalStateException("No account found with id:" + id + "!");
+        }
+        accountRepository.deleteById(id);
+    }
+
+    public void deleteAllAccounts() {
+        accountRepository.deleteAll();
+        System.out.println("All accounts deleted!");
     }
 }

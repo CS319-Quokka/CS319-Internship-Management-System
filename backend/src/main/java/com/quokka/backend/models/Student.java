@@ -1,6 +1,7 @@
 package com.quokka.backend.models;
 
 import java.io.File;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -16,23 +17,16 @@ public class Student extends User{
     private String courseCode;
     private String letterGrade;
     private String companyName;
+    private Date deadline;
 
     @ManyToOne
-    @JoinColumn(name = "instructor")
+    @JoinColumn(name = "instructor_id")
     private Instructor instructor;
 
     @ManyToOne
     @JoinColumn(name = "teaching_assistant")
     private TeachingAssistant teachingAssistant;
 
-    private File companyEvaluationForm;
-    private boolean isCompanyEvaluationFormArrived;
-
-    @OneToMany
-    @JoinColumn(name = "student_id")
-    private List<Report> reports;
-
-    @OneToOne
-    @JoinColumn(name = "grade_form")
-    private GradeForm gradeForm;
+    private File companyEvaluationForm; // ToDo: request değişecek
+    //private boolean isCompanyEvaluationFormArrived;
 }

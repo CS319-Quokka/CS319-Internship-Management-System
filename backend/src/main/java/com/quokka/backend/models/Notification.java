@@ -10,7 +10,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-//@Table
+@Table
 public class Notification{
 
     // @Transient is used to not save the field in the database
