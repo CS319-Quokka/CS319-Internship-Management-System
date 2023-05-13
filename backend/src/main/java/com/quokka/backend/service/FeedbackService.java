@@ -2,7 +2,7 @@ package com.quokka.backend.service;
 
 import com.quokka.backend.models.Feedback;
 import com.quokka.backend.models.Report;
-import com.quokka.backend.models.UserProfile;
+import com.quokka.backend.models.User;
 import com.quokka.backend.repository.FeedbackRepository;
 import com.quokka.backend.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +43,7 @@ public class FeedbackService {
     }
 
     //Add a new feedback to a given report
-    public boolean addFeedback(long reportID, UserProfile sender, Date date, File feedbackFile, String feedbackDescription){
+    public boolean addFeedback(long reportID, User sender, Date date, File feedbackFile, String feedbackDescription){
 
         if(feedbackFile == null && feedbackDescription == null){
             throw new IllegalStateException("Cannot add feedback!");
@@ -63,7 +63,7 @@ public class FeedbackService {
         newFeedback.setAnnotatedPDFfile(feedbackFile);
         newFeedback.setFeedbackDescription(feedbackDescription);
         newFeedback.setDate(date);
-        newFeedback.setSender(sender);
+        //newFeedback.setSender(sender);
 
         internshipReport.setFeedback(newFeedback);
 

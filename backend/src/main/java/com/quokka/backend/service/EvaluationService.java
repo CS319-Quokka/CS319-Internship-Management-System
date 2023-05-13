@@ -15,13 +15,14 @@ import java.util.Optional;
 @Service
 public class EvaluationService {
 
-    private EvaluationRepository evaluationRepository;
+    /*private EvaluationRepository evaluationRepository;
     private StudentRepository studentRepository;
     private GradeFormStrategy gradeFormStrategy;
 
     @Autowired
     private StrategyFactory strategyFactory;
 
+    *//*
     public GradeFormStrategy chooseStrategy(long studentID){
         Optional<Student> studentOptional = studentRepository.findById(studentID);
         Student student = studentOptional.get();
@@ -34,6 +35,9 @@ public class EvaluationService {
         return gradeFormStrategy;
     }
 
+     *//*
+
+    *//*
     public boolean evaluateGradeForm(long gradeFormID, long studentID){
         GradeFormStrategy gradeFormStrategy = chooseStrategy(studentID);
         Optional<GradeForm> gradeFormOptional = evaluationRepository.findById(gradeFormID);
@@ -43,6 +47,8 @@ public class EvaluationService {
 
         return isEvaluated;
     }
+
+     *//*
 
     @Autowired
     public EvaluationService(EvaluationRepository evaluationRepository, StudentRepository studentRepository){
@@ -114,7 +120,7 @@ public class EvaluationService {
         }
 
         Student studentToAddGradeForm = student.get();
-        studentToAddGradeForm.setGradeForm(gradeForm);
+        //studentToAddGradeForm.setGradeForm(gradeForm);
 
         return true;
     }
@@ -127,5 +133,5 @@ public class EvaluationService {
 
         evaluationRepository.deleteById(ID);
         return true;
-    }
+    }*/
 }

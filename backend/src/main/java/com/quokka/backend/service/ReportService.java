@@ -1,14 +1,10 @@
 package com.quokka.backend.service;
-import com.quokka.backend.models.Feedback;
 import com.quokka.backend.models.Report;
-import com.quokka.backend.models.UserProfile;
-import com.quokka.backend.repository.FeedbackRepository;
 import com.quokka.backend.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.nio.file.FileAlreadyExistsException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -19,13 +15,12 @@ public class ReportService {
 
     private ReportRepository reportRepository;
 
-
-
     @Autowired
     public ReportService(ReportRepository reportRepository){
         this.reportRepository = reportRepository;
     }
-    public Report getReportWithID(long ID){
+
+    public Report getReportWithID(Long ID){
         Optional<Report> report = reportRepository.findById(ID);
         if(!report.isPresent()){
             throw new IllegalStateException("No report found!");
@@ -42,14 +37,14 @@ public class ReportService {
 
 
 
-    public String checkReportStatus(long StudentID){
+    public String checkReportStatus(Long StudentID){
 
         return getReportWithID(StudentID).getStatus();
 
 
     }
 
-    public boolean addReport(long StudentID,File reportFile, String reportDescription){
+    public boolean addReport(Long StudentID,File reportFile, String reportDescription){
 
 
         if(reportFile == null){
@@ -72,7 +67,7 @@ public class ReportService {
 
     //this is a method to not duplicate the code. It will check if we can make changes
     // about the report(remove or delete), it returns true when changes are available
-    public boolean reportExceptionCheck(long reportID, Date date){
+    public boolean reportExceptionCheck(Long reportID, Date date){
         if(!reportRepository.existsById(reportID)){
             throw new IllegalStateException("No report is found!");
         }
@@ -90,7 +85,7 @@ public class ReportService {
 
     }
 
-    public boolean removeReport(long reportID, Date date){
+    public boolean removeReport(Long reportID, Date date){
 
         if(reportExceptionCheck(reportID,date)){
             reportRepository.deleteById(reportID);
@@ -98,7 +93,7 @@ public class ReportService {
         }
         return false;
     }
-    public boolean editReport(long reportID, Date date, Report newReport){
+    public boolean editReport(Long reportID, Date date, Report newReport){
         if(reportExceptionCheck(reportID,date)) {
             Optional<Report> currentReport = reportRepository.findById(reportID);
             currentReport.get().setReportFile(newReport.getReportFile());

@@ -21,34 +21,34 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @GetMapping("/report/get/{id}")
+    @GetMapping("/{id}")
     public Report getReportWithID(@PathVariable("id") long ID){
         return reportService.getReportWithID(ID);
     }
 
-    @GetMapping("/report/get_all")
+    @GetMapping
     public List<Report> getAllReports(){
         return reportService.getAllReports();
     }
 
-    @GetMapping("/report/checkStatus/{studentID}")
+    @GetMapping("/{studentID}")
     public String checkReportStatus(@PathVariable long studentID){
         return reportService.checkReportStatus(studentID);
     }
 
-    @PostMapping("/report/add")
+    @PostMapping
     public boolean addReport(@RequestParam("studentID") long studentID, @RequestParam("reportFile") File reportFile, @RequestParam("reportDescription") String reportDescription) {
         return reportService.addReport(studentID, reportFile, reportDescription);
     }
 
 
-    @DeleteMapping("/report/delete/{id}")
+    @DeleteMapping("/{id}")
     public boolean removeReport(@PathVariable("id") long reportID, @RequestParam("date") Date date){
         return reportService.removeReport(reportID,date);
     }
 
 
-    @PutMapping("/report/edit/{reportID}")
+    @PutMapping("/{reportID}")
     public boolean editReport(@PathVariable("reportID") long reportID, @RequestParam("date")
     Date date, @RequestBody Report newReport) {
         return reportService.editReport(reportID, date, newReport);

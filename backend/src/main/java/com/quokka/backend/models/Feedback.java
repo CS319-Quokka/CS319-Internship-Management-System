@@ -15,10 +15,6 @@ import lombok.Setter;
 @Setter
 public class Feedback {
 
-    @OneToOne
-    @JoinColumn(name = "sender_id")
-    private UserProfile sender;
-
     @Column(name = "annotated_pdf_file")
     private File annotatedPDFfile;
 
@@ -29,11 +25,10 @@ public class Feedback {
     @GeneratedValue
     private Long id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @OneToOne(mappedBy = "feedback")
+    private Report report;
 
-    public Long getId() {
-        return id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
+    private User sender;
 }
