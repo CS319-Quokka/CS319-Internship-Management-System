@@ -36,8 +36,6 @@ public class UserAccount{
     private String department;
     private String password;
 
-    private String role;
-
 
 
 

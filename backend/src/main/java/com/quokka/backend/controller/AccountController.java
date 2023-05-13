@@ -14,11 +14,32 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/account")
-//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 public class AccountController {
 
     @Autowired
     private AccountService accountService;
+
+    @PostMapping("/api/login")
+    public ResponseEntity<String> login(@RequestBody UserAccount userAccount) {
+
+        try {
+
+            boolean isLoginSuccessful = accountService.checkCredentials(userAccount.getEmail(), userAccount.getPassword());
+            if (isLoginSuccessful) {
+
+                return ResponseEntity.status(HttpStatus.ACCEPTED).body("success");
+            }
+            else {
+
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("fail");
+            }
+        }
+        catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+        }
+    }
 
     @PostMapping
     public UserAccount addAccount(@RequestBody UserAccount userAccount){

@@ -36,6 +36,19 @@ public class AccountService {
         return accountRepository.save(userAccount);
     }
 
+    public boolean checkCredentials(String email, String password){
+
+        boolean isValid = false;
+        for(UserAccount x : accountRepository.findAll()){
+
+            if(x.getEmail().equals(email) && x.getPassword().equals(password)){
+
+                isValid = true;
+            }
+        }
+        return isValid;
+    }
+
     public List<UserAccount> getAllAccounts(){
         return accountRepository.findAll();
     }
