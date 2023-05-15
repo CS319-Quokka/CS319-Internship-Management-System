@@ -6,9 +6,6 @@ import lombok.Data;
 public class StudentAddRequest {
 
     private Long id;
-    private String firstName;
-    private String lastName;
-
 
     private String letterGrade;
     private String companyName;

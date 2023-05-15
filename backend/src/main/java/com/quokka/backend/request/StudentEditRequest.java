@@ -4,8 +4,6 @@ import lombok.Data;
 
 @Data
 public class StudentEditRequest {
-    private String firstName;
-    private String lastName;
     
     private String letterGrade;
     private String companyName;

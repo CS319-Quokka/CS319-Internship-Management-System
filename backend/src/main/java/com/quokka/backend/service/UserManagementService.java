@@ -59,8 +59,6 @@ public class UserManagementService {
 
         Student student = new Student();
         student.setId(request.getId());
-        student.setFirstName(request.getFirstName());
-        student.setLastName(request.getLastName());
         student.setCourseCode(request.getCourseCode());
         student.setLetterGrade(request.getLetterGrade());
         student.setCompanyName(request.getCompanyName());
@@ -81,8 +79,6 @@ public class UserManagementService {
         }
 
         TeachingAssistant teachingAssistant = new TeachingAssistant();
-        teachingAssistant.setLastName(request.getLastName());
-        teachingAssistant.setFirstName(request.getFirstName());
         teachingAssistant.setUserAccount(account);
 
         return teachingAssistantRepository.save(teachingAssistant);
@@ -96,8 +92,6 @@ public class UserManagementService {
         }
 
         Instructor instructor = new Instructor();
-        instructor.setLastName(request.getLastName());
-        instructor.setFirstName(request.getFirstName());
         instructor.setUserAccount(account);
 
         return instructorRepository.save(instructor);
@@ -111,8 +105,6 @@ public class UserManagementService {
         }
 
         SummerTrainingCoordinator summerTrainingCoordinator = new SummerTrainingCoordinator();
-        summerTrainingCoordinator.setLastName(request.getLastName());
-        summerTrainingCoordinator.setFirstName(request.getFirstName());
         summerTrainingCoordinator.setUserAccount(account);
 
         return summerTrainingCoordinatorRepository.save(summerTrainingCoordinator);
@@ -126,8 +118,6 @@ public class UserManagementService {
         }
 
         AdministrativeAssistant administrativeAssistant = new AdministrativeAssistant();
-        administrativeAssistant.setLastName(request.getLastName());
-        administrativeAssistant.setFirstName(request.getFirstName());
         administrativeAssistant.setUserAccount(account);
 
         return administrativeAssistantRepository.save(administrativeAssistant);
@@ -276,8 +266,6 @@ public class UserManagementService {
         Optional<Student> student = studentRepository.findById(id);
         if ( student.isPresent() ){
             Student newStudent = student.get();
-            newStudent.setFirstName(request.getFirstName());
-            newStudent.setLastName(request.getLastName());
             newStudent.setLetterGrade(request.getLetterGrade());
             newStudent.setCompanyName(request.getCompanyName());
             newStudent.setCourseCode(request.getCourseCode());
@@ -294,8 +282,6 @@ public class UserManagementService {
         Optional<TeachingAssistant> teachingAssistant = teachingAssistantRepository.findById(id);
         if (teachingAssistant.isPresent()){
             TeachingAssistant newTeachingAssistant = teachingAssistant.get();
-            newTeachingAssistant.setFirstName(request.getFirstName());
-            newTeachingAssistant.setLastName(request.getLastName());
             teachingAssistantRepository.save(newTeachingAssistant);
             return newTeachingAssistant;
         }
@@ -307,8 +293,6 @@ public class UserManagementService {
             Optional<Instructor> instructor = instructorRepository.findById(id);
             if (instructor.isPresent()){
                 Instructor newInstructor = instructor.get();
-                newInstructor.setFirstName(request.getFirstName());
-                newInstructor.setLastName(request.getLastName());
                 instructorRepository.save(newInstructor);
                 return newInstructor;
             }
@@ -320,8 +304,6 @@ public class UserManagementService {
                 summerTrainingCoordinatorRepository.findById(id);
         if(!summerTrainingCoordinator.isPresent()){
             SummerTrainingCoordinator newSummerTrainingCoordinator = summerTrainingCoordinator.get();
-            newSummerTrainingCoordinator.setFirstName(request.getFirstName());
-            newSummerTrainingCoordinator.setLastName(request.getLastName());
             summerTrainingCoordinatorRepository.save(newSummerTrainingCoordinator);
             return newSummerTrainingCoordinator;
         }
@@ -333,8 +315,6 @@ public class UserManagementService {
                 administrativeAssistantRepository.findById(id);
         if(!administrativeAssistant.isPresent()){
             AdministrativeAssistant newAdministrativeAssistant = administrativeAssistant.get();
-            newAdministrativeAssistant.setFirstName(request.getFirstName());
-            newAdministrativeAssistant.setLastName(request.getLastName());
             administrativeAssistantRepository.save(newAdministrativeAssistant);
             return newAdministrativeAssistant;
         }
