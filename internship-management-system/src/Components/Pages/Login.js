@@ -60,15 +60,15 @@ class Login extends Component {
             localStorage.setItem('token', response.data.token);
 
             const id = response.data.id;
-            const response2 = await axios.get('http://localhost:8080/account/${id}');
+            const response2 = await axios.get(`http://localhost:8080/get_all_users/${id}`);
+
            
             //get the role of the body, we will assign a sidebar according to this role
 
 
-            console.log("ROLE",response2);
+            const role = response2.data[0].role;
 
-
-            this.props.onLogin(response2); // call onLogin prop
+            this.props.onLogin(role); // call onLogin prop
         } catch (error) {
             if (error?.response?.status === 401) {
                 this.setState({

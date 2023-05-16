@@ -76,6 +76,7 @@ public class UserManagementService {
         student.setCourseCode(request.getCourseCode());
         student.setLetterGrade(request.getLetterGrade());
         student.setCompanyName(request.getCompanyName());
+        student.setRole("student");
 
 
         student.setUserAccount(account);
@@ -94,6 +95,7 @@ public class UserManagementService {
 
         TeachingAssistant teachingAssistant = new TeachingAssistant();
         teachingAssistant.setUserAccount(account);
+        teachingAssistant.setRole("TA");
 
         return teachingAssistantRepository.save(teachingAssistant);
     }
@@ -107,6 +109,7 @@ public class UserManagementService {
 
         Instructor instructor = new Instructor();
         instructor.setUserAccount(account);
+        instructor.setRole("instructor");
 
         return instructorRepository.save(instructor);
     }
@@ -120,6 +123,7 @@ public class UserManagementService {
 
         SummerTrainingCoordinator summerTrainingCoordinator = new SummerTrainingCoordinator();
         summerTrainingCoordinator.setUserAccount(account);
+        summerTrainingCoordinator.setRole("coordinator");
 
         return summerTrainingCoordinatorRepository.save(summerTrainingCoordinator);
     }
@@ -133,6 +137,7 @@ public class UserManagementService {
 
         AdministrativeAssistant administrativeAssistant = new AdministrativeAssistant();
         administrativeAssistant.setUserAccount(account);
+        administrativeAssistant.setRole("administrative-assistant");
 
         return administrativeAssistantRepository.save(administrativeAssistant);
     }

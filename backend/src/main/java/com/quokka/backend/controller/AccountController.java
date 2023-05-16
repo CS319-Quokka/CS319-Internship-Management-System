@@ -20,7 +20,6 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
-    private UserManagementService userManagementService;
 
     @PostMapping("/api/login")
     public ResponseEntity<AuthResponse> login(@RequestBody UserAccount userAccount) {
@@ -48,16 +47,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("/get_all_users/{id}")
-    public List<User> getProfilesByAccountId(@PathVariable Long id) {
 
-        List<User> usersList = userManagementService.getProfilesByAccountId(id);
-        if(usersList.size() == 0){
-
-            return null;
-        }
-        return usersList;
-    }
 
     @PostMapping
     public UserAccount addAccount(@RequestBody UserAccount userAccount){

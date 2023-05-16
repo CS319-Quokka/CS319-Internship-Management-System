@@ -28,7 +28,7 @@ public class User {
     //If you delete the account, you delete the users
     @OnDelete(action = OnDeleteAction.CASCADE)
 
-
     //@JsonIgnore //this is for the json to not show the inside entities(serialization )
      UserAccount userAccount;
+     private String role;
 }

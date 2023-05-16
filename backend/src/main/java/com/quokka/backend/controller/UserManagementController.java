@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class UserManagementController {
 
     private UserManagementService userManagementService;
@@ -21,11 +22,23 @@ public class UserManagementController {
         this.userManagementService = userManagementService;
     }
 
+    @GetMapping("/get_all_users/{id}")
+    public List<User> getProfilesByAccountId(@PathVariable Long id) {
+
+        List<User> usersList = userManagementService.getProfilesByAccountId(id);
+        if(usersList.size() == 0){
+
+            return null;
+        }
+        return usersList;
+    }
+
     @PostMapping("/student")
     public Student addStudent(@RequestBody StudentAddRequest request){
 
         return userManagementService.addStudent(request);
     }
+
 
     @PostMapping("/teaching_assistant")
     public TeachingAssistant addTeachingAssistant(@RequestBody TeachingAssistantAddRequest request){

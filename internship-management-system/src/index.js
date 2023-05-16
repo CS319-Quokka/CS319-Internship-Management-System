@@ -107,8 +107,7 @@ const App = () => {
 
 const AppLayout = ({ logged, userType }) => (
     <>
-    {console.log("oluo:",userType)}
-      {logged && <Sidebar userType = "student" />}
+      {logged && <Sidebar userType = {userType} />}
       <Outlet />
     </>
 );
