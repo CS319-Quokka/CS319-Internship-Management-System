@@ -1,5 +1,6 @@
 package com.quokka.backend.controller;
 
+import com.quokka.backend.Auth.AuthResponse;
 import com.quokka.backend.exception.TeachingAssistantAlreadyExistsException;
 import com.quokka.backend.models.User;
 import com.quokka.backend.models.UserAccount;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -21,23 +23,32 @@ public class AccountController {
     private AccountService accountService;
 
     @PostMapping("/api/login")
-    public ResponseEntity<String> login(@RequestBody UserAccount userAccount) {
+    public ResponseEntity<AuthResponse> login(@RequestBody UserAccount userAccount) {
 
+        AuthResponse response = new AuthResponse();
         try {
 
             boolean isLoginSuccessful = accountService.checkCredentials(userAccount.getEmail(), userAccount.getPassword());
+
+
+
+
             if (isLoginSuccessful) {
 
-                return ResponseEntity.status(HttpStatus.ACCEPTED).body("success");
+                UserAccount user = accountService.findByEmail(userAccount.getEmail()); // get the user object
+
+                response.setId(user.getId());
+                response.setEmail(user.getEmail());
+                return ResponseEntity.ok(response);
             }
             else {
 
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("fail");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
         }
         catch (Exception e) {
 
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 

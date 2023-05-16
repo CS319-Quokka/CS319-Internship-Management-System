@@ -59,9 +59,11 @@ class Login extends Component {
 
             localStorage.setItem('token', response.data.token);
 
-
+           
             //get the role of the body, we will assign a sidebar according to this role
-            const role = response.data.role;
+            const role = response.data.id;
+
+
             console.log("ROLE",role);
 
 

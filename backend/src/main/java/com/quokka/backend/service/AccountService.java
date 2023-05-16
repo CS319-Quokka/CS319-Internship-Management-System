@@ -36,6 +36,13 @@ public class AccountService {
         return accountRepository.save(userAccount);
     }
 
+    public UserAccount findByEmail(String mail){
+
+        Optional<UserAccount> account =  accountRepository.findByEmail(mail);
+
+        return accountRepository.findByEmail(mail).get();
+    }
+
     public boolean checkCredentials(String email, String password){
 
         boolean isValid = false;
