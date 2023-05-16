@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +40,19 @@ public class UserManagementService {
         this.instructorRepository = instructorRepository;
         this.summerTrainingCoordinatorRepository = summerTrainingCoordinatorRepository;
         this.administrativeAssistantRepository = administrativeAssistantRepository;
+    }
+
+    public List<User> getProfilesByAccountId(Long accountId) {
+
+        List<User> returnList = new ArrayList<User>();
+
+        returnList.addAll(studentRepository.findByUserAccountId(accountId));
+        returnList.addAll(teachingAssistantRepository.findByUserAccountId(accountId));
+        returnList.addAll(instructorRepository.findByUserAccountId(accountId));
+        returnList.addAll(summerTrainingCoordinatorRepository.findByUserAccountId(accountId));
+        returnList.addAll(administrativeAssistantRepository.findByUserAccountId(accountId));
+
+        return returnList;
     }
 
     public Student addStudent(StudentAddRequest request){

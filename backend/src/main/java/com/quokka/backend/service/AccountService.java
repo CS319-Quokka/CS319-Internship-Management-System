@@ -1,5 +1,6 @@
 package com.quokka.backend.service;
 
+import com.quokka.backend.models.User;
 import com.quokka.backend.models.UserAccount;
 import com.quokka.backend.repository.AccountRepository;
 import lombok.Getter;
