@@ -1,8 +1,10 @@
 import { useState, useRef } from "react";
 import "./Styles/FileSubmission.css"
+import axios from "axios";
 const DragDropFiles = (props) => {
   const [files, setFiles] = useState(null);
   const inputRef = useRef();
+
 
   const handleDragOver = (event) => {
     event.preventDefault();
@@ -14,16 +16,20 @@ const DragDropFiles = (props) => {
   };
   
   // send files to the server // learn from my other video
-  const handleUpload = () => {
-    const formData = new FormData();
-    formData.append("Files", files);
-    console.log(formData.getAll())
-    // fetch(
-    //   "link", {
-    //     method: "POST",
-    //     body: formData
-    //   }  
-    // )
+  const handleUpload = async(event) => {
+
+    event.preventDefault();
+   
+    axios.post('http://localhost:8080/report', null)
+      .then((response) => {
+        // Handle success response
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+      });
+    
   };
 
   if (files) return (

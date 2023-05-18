@@ -41,6 +41,7 @@ public class ReportController {
     @PostMapping
     public boolean addReport(@RequestParam("studentID") Long studentID, @RequestParam("reportFile") ReportFile reportFile, @RequestParam("reportDescription") String reportDescription) {
 
+        System.out.println("geldi!");
         if(!reportFile.isEmpty()){
 
             System.out.println("Report added!");
