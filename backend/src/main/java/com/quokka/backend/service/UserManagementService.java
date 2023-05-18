@@ -61,14 +61,16 @@ public class UserManagementService {
             return null;
         }
 
-        Instructor instructor = this.getInstructorByID(request.getInstructorId());
-        if (instructor == null) {
-            return null;
+        Long instructorId = request.getInstructorId();
+        Instructor instructor = null;
+        if (instructorId != null) {
+            instructor = this.getInstructorByID(instructorId);
         }
 
-        TeachingAssistant teachingAssistant = this.getTeachingAssistantByID(request.getTeachingAssistantId());
-        if (teachingAssistant == null) {
-            return null;
+        Long teachingAssistantId = request.getTeachingAssistantId();
+        TeachingAssistant teachingAssistant = null;
+        if (instructorId != null) {
+            teachingAssistant = this.getTeachingAssistantByID(teachingAssistantId);
         }
 
         Student student = new Student();
@@ -77,7 +79,6 @@ public class UserManagementService {
         student.setLetterGrade(request.getLetterGrade());
         student.setCompanyName(request.getCompanyName());
         student.setRole("student");
-
 
         student.setUserAccount(account);
         student.setInstructor(instructor);
