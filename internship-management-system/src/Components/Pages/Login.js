@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import '../Styles/LoginStyle.css';
 import logo from '../Images/bilko.png';
+
+import { useHistory } from "react-router-dom";
 import { Link, Redirect } from 'react-router-dom';
 import Popup from "../Popup";
 import FAQ from "./FAQ";
 import axios from "axios";
+
 import { useEffect,useState } from 'react';
 import { get } from 'react-hook-form';
 
@@ -68,7 +71,7 @@ class Login extends Component {
 
             const role = response2.data[0].role;
 
-            this.props.onLogin(role); // call onLogin prop
+            this.props.onLogin(role, id); // call onLogin prop
         } catch (error) {
             if (error?.response?.status === 401) {
                 this.setState({

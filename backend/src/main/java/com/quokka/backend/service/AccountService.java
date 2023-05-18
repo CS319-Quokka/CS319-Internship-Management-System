@@ -69,7 +69,8 @@ public class AccountService {
         UserAccount foundUser = account.get();
         foundUser.setDepartment(userAccount.getDepartment());
         foundUser.setEmail(userAccount.getEmail());
-        foundUser.setName(userAccount.getName());
+        foundUser.setFirstName(userAccount.getFirstName());
+        foundUser.setLastName(userAccount.getLastName());
         //foundUser.setProfiles(userAccount.getProfiles());
         //foundUser.setUsers(userAccount.getUsers());
         foundUser.setPassword(userAccount.getPassword());

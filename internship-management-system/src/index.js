@@ -25,24 +25,28 @@ import "./App.css";
 const App = () => {
   const [logged, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState(null);
+  const [userId, setUserId] = useState(null);
 
-  const handleSubmit = (type) => {
+  const handleSubmit = (type, id) => {
     setIsLoggedIn(true);
     setUserType(type);
+    setUserId(id)
     console.log("type:" ,type);
+    console.log("id: ", id)
   };
 
   const router = createBrowserRouter([
     {
-      element: <AppLayout logged={logged} userType={userType} onLogin={setUserType}/>,
+      element: <AppLayout logged={logged} userType={userType} onLogin={(userType, userId) => { setUserType(userType); setUserId(userId); }} />,
+
       children: [
         {
           path: "login",
-          element: <Login onLogin={handleSubmit} userType={userType}/>,
+          element: <Login onLogin={handleSubmit} userType={userType} userId = {userId}/>,
         },
         {
           path: "/",
-          element: <Profile />,
+          element: <Profile userId = {userId} />,
         },
         {
           path: "studentnotifications",
@@ -99,15 +103,15 @@ const App = () => {
             <RouterProvider router={router} />
         ) : (
 
-            <Login onLogin={handleSubmit} userType={userType} />
+            <Login onLogin={handleSubmit} userType={userType} userId = {userId} />
         )}
       </>
   );
 };
 
-const AppLayout = ({ logged, userType }) => (
+const AppLayout = ({ logged, userType,userId }) => (
     <>
-      {logged && <Sidebar userType = {userType} />}
+      {logged && <Sidebar userType = {userType} userId = {userId} />}
       <Outlet />
     </>
 );

@@ -62,7 +62,7 @@ public class AccountController {
         return accountService.getAllAccounts();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get_account/{id}")
     public UserAccount getAccountById(@PathVariable Long id){
 
         return accountService.getAccountById(id);

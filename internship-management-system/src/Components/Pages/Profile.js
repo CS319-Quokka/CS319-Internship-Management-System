@@ -1,6 +1,7 @@
 import React, { Component, useState, useEffect } from 'react'
 import '../Styles/Profile.css'
 import pic from "../Images/quokka.png";
+import axios from "axios";
 {/*
 const [error, setError] = useState(null);
 const [isLoaded, setIsLoaded] = useState(null);
@@ -30,20 +31,71 @@ class Profile extends Component {
         super(props)
 
         this.state = {
-            firstName: "İdil",
-            lastName: "Atmaca",
-            userType: "Student",
+            firstName: "",
+            lastName: "",
+            userType: "",
             university: "Bilkent University",
-            mail: "idil.atmaca@ug.bilkent.edu.tr",
-            status: "Pending Approval",
-            course: "CS299",
-            progress: 50,
-            notification: "5+",
-            instructor: "Eray Tüzün"
+            mail: "",
+            status: "",
+            course: "",
+            progress: 0,
+            notification: "",
+            instructor: "",
+            instructorMail:""
         }
+    }
+    componentDidMount() {
+        console.log("HERE")
+        this.getInformation();
     }
 
 
+    getInformation = async () =>{
+        console.log("ID",this.props.userId)
+        const id = this.props.userId;
+        const response = await axios.get(`http://localhost:8080/get_all_users/${id}`);
+        const info = response.data[0]
+        console.log(info);
+        console.log(info.role);
+        console.log(info.mail);
+        console.log(info.courseCode);
+
+
+        const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${id}`);
+        const userAccount = accountResponse.data;
+
+        console.log("inst:", info.instructor.id);
+
+        const instructorID =  info.instructor.userAccount.id;
+        const response2 = await axios.get(`http://localhost:8080/account/get_account/${instructorID}`);
+        
+        const instructorInfo = response2.data;
+        console.log("response2:",instructorInfo);
+
+        console.log("account:",userAccount.name);
+        const instructorName = instructorInfo.firstName + " " + instructorInfo.lastName ;
+        
+        // if (instructorInfo) {
+           
+        //     const email = instructorInfo.email;
+          
+        //     console.log("Name:", name);
+        //     console.log("Email:", email);
+        //   } else {
+        //     console.log("Instructor info is undefined");
+        //   }
+        this.setState({
+            firstName:userAccount.firstName,
+            lastName:userAccount.lastName,
+            mail: userAccount.email,
+            userType:info.role,
+            course: info.courseCode,
+            instructor: instructorName,
+            instructorMail:instructorInfo.email
+            
+        })
+
+    }
 
     statushandler = (event) => {
 
@@ -67,7 +119,10 @@ class Profile extends Component {
         else {
         */}
             return (
+
+              
                 <div className='page'>
+
                     <div className='container'>
 
 
@@ -75,8 +130,10 @@ class Profile extends Component {
                             <h1><strong>{this.state.firstName} {this.state.lastName}</strong></h1>
                             <br></br>
 
+                           
                             <img className='profilePic' src={pic} alt="Profile"/>
                             <p><em>{this.state.userType}</em></p><br/>
+            
                             <button className='button'>Change Password</button>
                             <br></br>
                         </div>
@@ -115,7 +172,7 @@ class Profile extends Component {
                                 <div className="row">
                                     <p className="label">Instructor Mail:</p>
                                     <p className="value"><em> <a
-                                        href="mailto:e.tuzun@cs.bilkent.edu.tr">e.tuzun@bilkent.cs.tr</a></em></p>
+                                        href={`mailto:${this.state.instructorMail}`}>{this.state.instructorMail}</a></em></p>
                                 </div>
                             </div>
                         </div>

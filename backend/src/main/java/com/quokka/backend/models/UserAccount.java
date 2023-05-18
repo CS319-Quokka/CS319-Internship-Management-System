@@ -26,7 +26,8 @@ public class UserAccount{
     //private Long accountId;
 
 
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
 
     @Id
