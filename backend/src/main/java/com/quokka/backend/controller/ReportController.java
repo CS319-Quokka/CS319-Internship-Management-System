@@ -2,12 +2,12 @@ package com.quokka.backend.controller;
 
 import com.quokka.backend.models.Report;
 import com.quokka.backend.models.ReportFile;
+import com.quokka.backend.request.ReportFileAddRequest;
+import com.quokka.backend.request.ReportFileEditRequest;
 import com.quokka.backend.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -62,5 +62,41 @@ public class ReportController {
     Date date, @RequestBody Report newReport){
 
         return reportService.editReport(reportID, date, newReport);
+    }
+
+    @PostMapping("/file")
+    public boolean addReportFile(ReportFileAddRequest request){
+
+        return reportService.addReportFile(request);
+    }
+
+    @GetMapping("/file/{id}")
+    public ReportFile getReportFileByReportFileId(@PathVariable Long id){
+
+        return reportService.getReportFileWithReportId(id);
+    }
+
+    @GetMapping("/file")
+    public List<ReportFile> getAllReportFiles(){
+
+        return reportService.getAllReportFiles();
+    }
+
+    @DeleteMapping("/file")
+    public boolean removeAllReportFiles(){
+
+        return reportService.removeAllReportFiles();
+    }
+
+    @DeleteMapping("/file/{id}")
+    public boolean removeReportFileById(@PathVariable Long id){
+
+        return reportService.removeReportFile(id);
+    }
+
+    @PatchMapping("/file/{id}")
+    public boolean editReportFileById(@PathVariable Long id, ReportFileEditRequest request){
+
+        return reportService.editReportFile(id, request);
     }
 }

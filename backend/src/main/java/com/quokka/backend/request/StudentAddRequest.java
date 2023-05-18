@@ -14,7 +14,4 @@ public class StudentAddRequest {
     private Long accountId;
     private Long instructorId;
     private Long teachingAssistantId;
-    //private Long companyEvaluationFormId;
-
-    //private boolean isCompanyEvaluationFormArrived;
 }

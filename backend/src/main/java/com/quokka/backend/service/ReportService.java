@@ -3,6 +3,8 @@ import com.quokka.backend.models.Report;
 import com.quokka.backend.models.ReportFile;
 import com.quokka.backend.repository.ReportFileRepository;
 import com.quokka.backend.repository.ReportRepository;
+import com.quokka.backend.request.ReportFileAddRequest;
+import com.quokka.backend.request.ReportFileEditRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,13 +61,14 @@ public class ReportService {
         }
 
         Report newInternshipReport = new Report();
-        newInternshipReport.setId(StudentID); //not sure about his part
+
 
         ReportFile reportFile1 = new ReportFile();
         reportFile1.setFileName(reportFile.getFileName());
         reportFile1.setFileData(reportFile.getFileData());
         reportFileRepository.save(reportFile1);
 
+        reportFile1.setReport(newInternshipReport); //not sure about this part
         newInternshipReport.setReportDescription(reportDescription);
         reportRepository.save(newInternshipReport);
         return true;
@@ -119,7 +122,69 @@ public class ReportService {
         }
         return false;
     }
+
+    public ReportFile getReportFileWithReportId(Long id){
+
+        Optional<ReportFile> reportFileOpt = reportFileRepository.findByReportId(id);
+        if(reportFileOpt.isPresent()){
+
+            return reportFileOpt.get();
+        }
+        return null;
+    }
+
+    public List<ReportFile> getAllReportFiles(){
+
+        return reportFileRepository.findAll();
+    }
+
+    public boolean addReportFile(ReportFileAddRequest request){
+
+        Report report = this.getReportWithID(request.getReportId());
+        if(report == null){
+
+            return false;
+        }
+
+        ReportFile reportFile = new ReportFile();
+        reportFile.setReport(report);
+        reportFile.setId(request.getId());
+        reportFile.setFileName(request.getFileName());
+        reportFile.setFileData(request.getFileData());
+
+        reportFileRepository.save(reportFile);
+        return true;
+    }
+
+    public boolean removeAllReportFiles(){
+
+        reportFileRepository.deleteAll();
+        return true;
+    }
+
+    public boolean removeReportFile(Long reportFileId){
+
+        Optional<ReportFile> reportFileOpt = reportFileRepository.findById(reportFileId);
+        if(!reportFileOpt.isPresent()){
+
+            return false;
+        }
+
+        reportFileRepository.deleteById(reportFileId);
+        return true;
+    }
+
+    public boolean editReportFile(Long id, ReportFileEditRequest request){
+
+        Optional<ReportFile> reportFileOpt = reportFileRepository.findById(id);
+        if(!reportFileOpt.isPresent()){
+
+            return false;
+        }
+
+        reportFileOpt.get().setFileData(request.getFileData());
+        reportFileOpt.get().setFileName(request.getFileName());
+        reportFileOpt.get().setReport(reportRepository.findById(request.getReportId()).get());
+        return true;
+    }
 }
-
-
-

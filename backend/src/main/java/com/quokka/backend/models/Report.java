@@ -1,6 +1,5 @@
 package com.quokka.backend.models;
 
-import java.io.File;
 import java.util.Date;
 
 import jakarta.persistence.*;
@@ -31,12 +30,8 @@ public class Report {
     @GeneratedValue
     private Long id;
 
-    //If you don't want to see the inside entities, fetch = FetchType.LAZY
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
-    //If you delete the student or user, you delete the reports
     @OnDelete(action = OnDeleteAction.CASCADE)
-    //@JsonIgnore //this is for the json to not show the inside entities(serialization )
     private Student student;
-
 }
