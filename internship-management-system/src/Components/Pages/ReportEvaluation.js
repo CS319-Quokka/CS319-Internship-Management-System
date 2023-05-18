@@ -5,6 +5,12 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import DownloadIcon from '@mui/icons-material/Download'
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const statusOptions = ["Submitted", 
                        "Assigned to Grader",
@@ -85,9 +91,79 @@ function StatusList(){
       </ul>
     );
 }
+function FormDialog(props) {
+    const [open, setOpen] = React.useState(false);
+  
+    const handleClickOpen = () => {
+      setOpen(true);
+      props.setButtonClicked(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+      props.setButtonClicked(false);
+    };
+    const handleSubmit = () => {
+        setOpen(false);
+    }
+    return (
+      <div>
+        <Button variant="outlined" onClick={handleClickOpen}>
+          Open Grade Form
+        </Button>
+        <Dialog fullWidth= "md" open={open} onClose={handleClose}>
+          <DialogTitle>Subscribe</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Entering the grades for {props.studentFirstName} {props.studentLastName}
+            </DialogContentText>
+    
+            <Typography>Part A</Typography>
+            <Typography>Company Evaluation Form Grade</Typography>
+            <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            label="CEF"
+            type="number"
+            variant="standard"
+            inputProps={{
+            min: 0,
+            max: 10,
+            align: 'right',
+            style: { width: '5ch' },
+            }}
+            />
+            <Typography>Is the work done related to computer engineering?</Typography>
+            <Button variant="outlined" color="success"> Yes </Button>
+            <Button variant="outlined" color="error"> No </Button>
+
+            <Typography>Is the supervisor a computer engineer or has a similar engineering background?</Typography>
+            <Button variant="outlined" color="success"> Yes </Button>
+            <Button variant="outlined" color="error"> No </Button>
+            <TextField 
+             autoFocus
+             margin="dense"
+             id="name"
+             label="Email Address"
+             type="email"
+             fullWidth
+             variant="standard"
+             />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleSubmit}>Submit</Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
 class ReportEvaluation extends Component {
     
+    
     constructor(props) {
+   
         
         super(props)
         this.state = {
@@ -101,7 +177,7 @@ class ReportEvaluation extends Component {
             prevfilename:"DenizSunReportRevision1.docx",
             prevstatus: "Unsatisfactory. Waiting for revision.",
             prevfeedback: "Your report is insufficient. Try to emphasize your experiences and (...) \n\nUpload a revised version.",
-        
+            isButtonClicked: false,
 
         }    
      
@@ -118,23 +194,23 @@ class ReportEvaluation extends Component {
                 </div>
                 <div className="pastuploads">   
                     <IconButton onClick={downloadAnnotated} aria-label="download">
-                            <DownloadIcon />
+                        <DownloadIcon />
                     </IconButton>
                     <Button onClick={downloadAnnotated} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.prevfilename}</Button>
                                                   
                     <div className="prevreport">
-                        <h1>The grade distribution of the previous submission:</h1>
+                        <h1>Previous Submission Grades</h1>
                         <br></br>
-                        <h4>Grade for Part A: {this.state.prevGradeA}</h4>
-                        <h4>Grade for Part B: {this.state.prevGradeB}/60</h4>
-                        <h4>Grade for Part C: {this.state.prevGradeC}/60</h4>
+                        <h4>Part A: {this.state.prevGradeA}</h4>
+                        <h4>Part B: {this.state.prevGradeB}</h4>
+                      
                         <hr></hr>
                         <h4>Overall progress: <br></br> {this.state.prevstatus}</h4>
 
                     </div>
-                    <hr></hr>  
-                </div>
                 
+                </div>
+                <hr></hr>  
                 <div className="evaluation">
                     <h1>Your overall feedback for this submission</h1>
                     <textarea readOnly>{this.state.prevfeedback}</textarea>
@@ -161,7 +237,9 @@ class ReportEvaluation extends Component {
 
                 <div className= "statuslist"> 
                     <hr></hr>
-                    <StatusList/>
+                    <FormDialog studentFirstName={this.state.studentFirstName} studentLastName={this.state.studentLastName}
+                    setButtonClicked={(value) => this.setState({isButtonClicked: value})}/>
+                 {  /* <StatusList/> */}
                 </div>
                 
             </div>                  
