@@ -16,8 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Setter
 public class Report {
 
-    private File reportFile;
-    private String revisionDescription;
+    private String reportDescription;
 
     @OneToOne
     @JoinColumn(name = "feedback_id")

@@ -16,9 +16,4 @@ import lombok.Setter;
 @Setter
 public class SummerTrainingCoordinator extends User{
 
-    /*
-    @OneToMany
-    @JoinColumn(name = "summer_training_coordinator_id")
-    private List<Announcement> madeAnnouncements;
-     */
 }

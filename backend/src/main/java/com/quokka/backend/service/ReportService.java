@@ -1,10 +1,11 @@
 package com.quokka.backend.service;
 import com.quokka.backend.models.Report;
+import com.quokka.backend.models.ReportFile;
+import com.quokka.backend.repository.ReportFileRepository;
 import com.quokka.backend.repository.ReportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,9 +15,12 @@ public class ReportService {
 
 
     private ReportRepository reportRepository;
+    private ReportFileRepository reportFileRepository;
 
     @Autowired
-    public ReportService(ReportRepository reportRepository){
+    public ReportService(ReportRepository reportRepository, ReportFileRepository reportFileRepository){
+
+        this.reportFileRepository = reportFileRepository;
         this.reportRepository = reportRepository;
     }
 
@@ -44,12 +48,11 @@ public class ReportService {
 
     }
 
-    public boolean addReport(Long StudentID,File reportFile, String reportDescription){
+    public boolean addReport(Long StudentID, ReportFile reportFile, String reportDescription){
 
 
         if(reportFile == null){
             throw new IllegalStateException("File cannot be empty!");
-
         }
         if(reportDescription == null){
             throw new IllegalStateException("Description necessary!");
@@ -57,8 +60,13 @@ public class ReportService {
 
         Report newInternshipReport = new Report();
         newInternshipReport.setId(StudentID); //not sure about his part
-        newInternshipReport.setReportFile(reportFile);
-        newInternshipReport.setRevisionDescription(reportDescription);
+
+        ReportFile reportFile1 = new ReportFile();
+        reportFile1.setFileName(reportFile.getFileName());
+        reportFile1.setFileData(reportFile.getFileData());
+        reportFileRepository.save(reportFile1);
+
+        newInternshipReport.setReportDescription(reportDescription);
         reportRepository.save(newInternshipReport);
         return true;
 
@@ -93,19 +101,24 @@ public class ReportService {
         }
         return false;
     }
+
     public boolean editReport(Long reportID, Date date, Report newReport){
+
         if(reportExceptionCheck(reportID,date)) {
             Optional<Report> currentReport = reportRepository.findById(reportID);
-            currentReport.get().setReportFile(newReport.getReportFile());
-            currentReport.get().setRevisionDescription(newReport.getRevisionDescription());
-            currentReport.get().setUploadDate(date);
+            if(!currentReport.isPresent()){
+
+                return false;
+            }
+
+            ReportFile reportFile = reportFileRepository.findByReportId(newReport.getId()).get();
+            removeReport(reportID, date);
+            addReport(newReport.getStudent().getId(), reportFile, newReport.getReportDescription());
             reportRepository.save(currentReport.get());
             return true;
         }
         return false;
-
     }
-
 }
 
 

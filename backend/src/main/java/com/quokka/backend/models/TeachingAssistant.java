@@ -18,9 +18,4 @@ import lombok.Setter;
 
 public class TeachingAssistant extends User{
 
-    /*
-    @OneToMany
-    @JoinColumn(name = "teaching_assistant_id")
-    private List<Student> students;
-     */
 }

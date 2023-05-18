@@ -1,9 +1,11 @@
 package com.quokka.backend.controller;
 
 import com.quokka.backend.models.Report;
+import com.quokka.backend.models.ReportFile;
 import com.quokka.backend.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.Date;
@@ -22,8 +24,8 @@ public class ReportController {
     }
 
     @GetMapping("/{id}")
-    public Report getReportWithID(@PathVariable("id") long ID){
-        return reportService.getReportWithID(ID);
+    public Report getReportWithID(@PathVariable("id") Long id){
+        return reportService.getReportWithID(id);
     }
 
     @GetMapping
@@ -32,25 +34,32 @@ public class ReportController {
     }
 
     @GetMapping("/{studentID}")
-    public String checkReportStatus(@PathVariable long studentID){
+    public String checkReportStatus(@PathVariable Long studentID){
         return reportService.checkReportStatus(studentID);
     }
 
     @PostMapping
-    public boolean addReport(@RequestParam("studentID") long studentID, @RequestParam("reportFile") File reportFile, @RequestParam("reportDescription") String reportDescription) {
-        return reportService.addReport(studentID, reportFile, reportDescription);
+    public boolean addReport(@RequestParam("studentID") Long studentID, @RequestParam("reportFile") ReportFile reportFile, @RequestParam("reportDescription") String reportDescription) {
+
+        if(!reportFile.isEmpty()){
+
+            System.out.println("Report added!");
+            return reportService.addReport(studentID, reportFile, reportDescription);
+        }
+
+        System.out.println("Report not added!");
+        return false;
     }
 
-
     @DeleteMapping("/{id}")
-    public boolean removeReport(@PathVariable("id") long reportID, @RequestParam("date") Date date){
+    public boolean removeReport(@PathVariable("id") Long reportID, @RequestParam("date") Date date){
         return reportService.removeReport(reportID,date);
     }
 
+    @PatchMapping("/{reportID}")
+    public boolean editReport(@PathVariable("reportID") Long reportID, @RequestParam("date")
+    Date date, @RequestBody Report newReport){
 
-    @PutMapping("/{reportID}")
-    public boolean editReport(@PathVariable("reportID") long reportID, @RequestParam("date")
-    Date date, @RequestBody Report newReport) {
         return reportService.editReport(reportID, date, newReport);
     }
 }
