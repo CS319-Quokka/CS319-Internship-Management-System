@@ -1,4 +1,5 @@
 import React, {Component, useState, handleChange} from 'react'
+import axios from 'axios';
 import '../Styles/ReportEvaluation.css'
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
@@ -11,6 +12,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Alert from '@mui/material/Alert';
+
 
 const statusOptions = ["Submitted", 
                        "Assigned to Grader",
@@ -29,30 +35,6 @@ const statusOptions = ["Submitted",
     {value: 'unsatisfactory', label: 'Unsatisfactory'}
     */
 
-
-
-    {/** feedback textbox is editable. will be sent to the database*/}
-const currentSubmission = [
-    {
-        part: "A",
-        partstatus: statusOptions[6],
-        feedback:"Company has approved the student's training with a grade of 8.",
-        compform: "Check student's grade here:" + "DenizSunCompanyEvaluationForm.pdf",
-        gradeOutOf: 10
-    },
-    {
-        part: "B",
-        partstatus: statusOptions[3],
-        feedback:"The report is insufficient in these parts:\n(...) \nPlease revise and resubmit it.", 
-        gradeOutOf: 60
-    },
-    {
-        part: "C",
-        partstatus: statusOptions[2],
-        feedback:"Waiting for revision.",
-        gradeOutOf: 60
-    }
-]
 const downloadAnnotated = () => {
     const link = document.createElement("a");
     //the "download.txt" will be replaced by the link name. (this.state = {annotatedfeedback}) is the file needed. 
@@ -60,45 +42,67 @@ const downloadAnnotated = () => {
     link.href = "./annotated.txt";
     link.click();
 };
-function StatusList(){
-    const [grades, setGrades] = useState({});
+const FileUpload = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [studentId, setStudentId] = useState('');
+  const [feedbackId, setFeedbackId] = useState('');
 
-  function handleGradeChange(event, part) {
-    const newGrades = { ...grades, [part]: parseInt(event.target.value) };
-    setGrades(newGrades);
-  }
-  var gradeOutOf;
-    return (
-      <ul>
-        {currentSubmission.map(status => ( 
-          <li key={status.part}>
-            <h2>Part {status.part}</h2>
-            <h2>Status: {status.partstatus}</h2>
-            <p>{status.compform}</p>
-            <div className="gradeentry">
-                
-                
-                <h2>Enter Grade:  <input type="number" value={grades[status.part] || ''}
-                onChange={event => handleGradeChange(event, status.part)}
-                /> / {status.gradeOutOf}      </h2>
-               
-            </div>
-           
-            <textarea>{status.feedback}</textarea>
-            <hr></hr>
-          </li>
-        ))}
-      </ul>
-    );
+
+  const handleFileChange = (event) => {
+    setSelectedFile(event.target.files[0]);
+  };
+  const handleStudentIdChange = (event) => {
+    setStudentId(event.target.value);
+  };
+
+  const handleFeedbackIdChange = (event) => {
+    setFeedbackId(event.target.value);
+  };
+  const handleUpload = () => {
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('studentId', studentId);
+    formData.append('feedbackId', feedbackId);
+    axios.post('http://localhost:8080/report', formData)
+      .then((response) => {
+        // Handle success response
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error(error);
+      });
+  };
+}
+{
+    /*
+     <div>
+      <input type="file" onChange={handleFileChange} />
+      <input type="text" placeholder="Student ID" value={studentId} onChange={handleStudentIdChange} />
+      <input type="text" placeholder="Feedback ID" value={feedbackId} onChange={handleFeedbackIdChange} />
+      <button onClick={handleUpload}>Upload</button>
+    </div>
+    */
 }
 function FormDialog(props) {
     const [open, setOpen] = React.useState(false);
+    
+  const [isSatisfactory, setIsSatisfactory] = useState(false);
+
+  const handleSatisfactoryClick = () => {
+    setIsSatisfactory(false);
+  };
+
+  const handleRevisionRequiredClick = () => {
+    setIsSatisfactory(true);
+  };
+  
   
     const handleClickOpen = () => {
       setOpen(true);
       props.setButtonClicked(true);
     };
-  
+
     const handleClose = () => {
       setOpen(false);
       props.setButtonClicked(false);
@@ -114,11 +118,11 @@ function FormDialog(props) {
         <Dialog fullWidth= "md" open={open} onClose={handleClose}>
           <DialogTitle>Subscribe</DialogTitle>
           <DialogContent>
-            <DialogContentText>
+            <DialogContentText sx ={{fontWeight: 'bold'}}>
               Entering the grades for {props.studentFirstName} {props.studentLastName}
             </DialogContentText>
     
-            <Typography>Part A</Typography>
+            <Typography sx ={{fontWeight: 'bold'}}>Part A - Work Place</Typography>
             <Typography>Company Evaluation Form Grade</Typography>
             <TextField
             autoFocus
@@ -141,22 +145,49 @@ function FormDialog(props) {
             <Typography>Is the supervisor a computer engineer or has a similar engineering background?</Typography>
             <Button variant="outlined" color="success"> Yes </Button>
             <Button variant="outlined" color="error"> No </Button>
-            <TextField 
-             autoFocus
-             margin="dense"
-             id="name"
-             label="Email Address"
-             type="email"
-             fullWidth
-             variant="standard"
-             />
+      
+            <div>
+      <Typography sx={{ fontWeight: 'bold' }}>Part B - Report</Typography>
+      <Button
+        variant={isSatisfactory ? 'outlined' : 'contained'}
+        color="success"
+        onClick={handleSatisfactoryClick}
+        sx={{ marginRight: '10px' }}
+      >
+        Satisfactory
+      </Button>
+      <Button
+        variant={isSatisfactory ? 'contained' : 'outlined'}
+        color="secondary"
+        onClick={handleRevisionRequiredClick}
+      >
+        Revision Required
+      </Button>
+      {isSatisfactory && (
+        <div>
+          <Typography>If revision is requested, enter the due date for the resubmission.</Typography>
+          <DateComponent />
+        </div>
+      )}
+    </div>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSubmit}>Submit</Button>
+            <Button  onClick={() => {
+          //    <Alert severity="success">Grade form is filled!</Alert>
+              handleSubmit();
+            }}
+            >Submit</Button>
           </DialogActions>
         </Dialog>
       </div>
+    );
+  }
+function DateComponent() {
+    return (
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DatePicker label="Due Date" />
+      </LocalizationProvider>
     );
   }
 class ReportEvaluation extends Component {
@@ -197,7 +228,7 @@ class ReportEvaluation extends Component {
                         <DownloadIcon />
                     </IconButton>
                     <Button onClick={downloadAnnotated} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.prevfilename}</Button>
-                                                  
+          
                     <div className="prevreport">
                         <h1>Previous Submission Grades</h1>
                         <br></br>
@@ -232,23 +263,21 @@ class ReportEvaluation extends Component {
         
             <div className="reportstatus">
                 <div className="information">
-                    <h1>The student's current submission for {this.state.course} </h1>                        
+                    <h1>The student's current submission for {this.state.course} </h1>
                 </div>
 
-                <div className= "statuslist"> 
                     <hr></hr>
                     <FormDialog studentFirstName={this.state.studentFirstName} studentLastName={this.state.studentLastName}
                     setButtonClicked={(value) => this.setState({isButtonClicked: value})}/>
-                 {  /* <StatusList/> */}
-                </div>
                 
-            </div>                  
+            </div>
         </div>
 
 
     
     );
-   }       
+       
+   }
 }
 
 export default ReportEvaluation
