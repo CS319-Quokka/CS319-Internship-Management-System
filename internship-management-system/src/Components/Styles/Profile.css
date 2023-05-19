@@ -9,6 +9,21 @@ h1{
   font-size: 38px;
 }
 
+.additionalInfo {
+  line-height: 200%;
+  position: absolute;
+  left: 50%;
+  top:30%;
+  margin-top: 5%;
+  padding: 1%;
+  background-color: white;
+  border-radius: 15px;
+  width: 40%;
+  display: flex;
+  flex-direction: column; /* Change to column layout */
+  align-items: center; /* Center align items vertically */
+}
+
 .page{
   width:100%;
   height:100vh;

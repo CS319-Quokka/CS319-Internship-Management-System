@@ -35,6 +35,7 @@ class Profile extends Component {
             lastName: "",
             userType: "",
             university: "Bilkent University",
+            department: "",
             mail: "",
             status: "",
             course: "",
@@ -53,46 +54,42 @@ class Profile extends Component {
     getInformation = async () =>{
         console.log("ID",this.props.userId)
         const id = this.props.userId;
-        const response = await axios.get(`http://localhost:8080/get_all_users/${id}`);
-        const info = response.data[0]
-        console.log(info);
-        console.log(info.role);
-        console.log(info.mail);
-        console.log(info.courseCode);
-
 
         const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${id}`);
         const userAccount = accountResponse.data;
 
-        console.log("inst:", info.instructor.id);
+        console.log("inst:", userAccount);
 
-        const instructorID =  info.instructor.userAccount.id;
-        const response2 = await axios.get(`http://localhost:8080/account/get_account/${instructorID}`);
-        
-        const instructorInfo = response2.data;
-        console.log("response2:",instructorInfo);
+        const response = await axios.get(`http://localhost:8080/get_all_users/${id}`);
+        const info = response.data[0]
+        console.log(info);
+        console.log("ROLE:",info.role);
 
-        console.log("account:",userAccount.name);
-        const instructorName = instructorInfo.firstName + " " + instructorInfo.lastName ;
-        
-        // if (instructorInfo) {
-           
-        //     const email = instructorInfo.email;
-          
-        //     console.log("Name:", name);
-        //     console.log("Email:", email);
-        //   } else {
-        //     console.log("Instructor info is undefined");
-        //   }
+        if(info.role === "instructor"){
+            console.log("grader");
+        }
+
+        if(info.role === "student"){
+            const instructorID =  info.instructor.userAccount.id;
+            const response2 = await axios.get(`http://localhost:8080/account/get_account/${instructorID}`);
+            const instructorInfo = response2.data;
+            console.log("response2:",instructorInfo);
+            console.log("account:",userAccount.name);
+            const instructorName = instructorInfo.firstName + " " + instructorInfo.lastName ;
+
+            this.setState({
+                course: info.courseCode,
+                instructor: instructorName,
+                instructorMail:instructorInfo.email
+            })
+        }
+
         this.setState({
             firstName:userAccount.firstName,
             lastName:userAccount.lastName,
             mail: userAccount.email,
-            userType:info.role,
-            course: info.courseCode,
-            instructor: instructorName,
-            instructorMail:instructorInfo.email
-            
+            department: userAccount.department,
+            userType:info.role
         })
 
     }
@@ -109,18 +106,8 @@ class Profile extends Component {
     }
 
     render() {
-        {/*
-        if (error) {
-            return <div> Error !! </div>
-        }
-        else if (!isLoaded){
-            return <div> Loading... </div>
-        }
-        else {
-        */}
-            return (
-
-              
+        const {userType} = this.state;
+            return ( 
                 <div className='page'>
 
                     <div className='container'>
@@ -141,53 +128,66 @@ class Profile extends Component {
 
                         <div className='right-containers'>
 
-                            <div className="info-container">
+                        <div className="info-container">
+                        <div className="row">
+                            <p className="label">Mail:</p>
+                            <p className="value">{this.state.mail}</p>
+                        </div>
+                        <hr />
 
-                                <div className="row">
-                                    <p className="label">Mail:</p>
-                                    <p className="value">{this.state.mail}</p>
-                                </div>
-                                <hr></hr>
+                        <div className="row">
+                            <p className="label">Institute:</p>
+                            <p className="value">{this.state.university}</p>
+                        </div>
+                        <hr />
 
-                                <div className="row">
-                                    <p className="label">Institute:</p>
-                                    <p className="value">{this.state.university}</p>
-                                </div>
-                                <hr></hr>
-
-                                <div class="row">
-                                    <p className="label">Course Taken:</p>
-                                    <p className="value">{this.state.course}</p>
-                                </div>
-
-                                <hr></hr>
-
-                                <div className="row">
-                                    <p className="label">Instructor:</p>
-                                    <p className="value">{this.state.instructor}</p>
-                                </div>
-
-                                <hr></hr>
-
-                                <div className="row">
-                                    <p className="label">Instructor Mail:</p>
-                                    <p className="value"><em> <a
-                                        href={`mailto:${this.state.instructorMail}`}>{this.state.instructorMail}</a></em></p>
-                                </div>
-                            </div>
+                        <div className="row">
+                            <p className="label">Department:</p>
+                            <p className="value">{this.state.department}</p>
+                        </div>
+                       
                         </div>
 
-                        <div className='progress'>
+                        {userType === 'student' && (
+                            <div className="additionalInfo">
                             <div className="row">
-                                <p className="label">Report Progress:</p>
-                                <p className="value">%{this.state.progress}</p>
+                                <p className="label">Course Taken:</p>
+                                <p className="value">{this.state.course}</p>
                             </div>
+                            <hr />
+
+                            <div className="row">
+                                <p className="label">Instructor Mail:</p>
+                                <p className="value">
+                                <em>
+                                    <a href={`mailto:${this.state.instructorMail}`}>{this.state.instructorMail}</a>
+                                </em>
+                                </p>
+                            </div>
+                            <hr />
 
                             <div className="row">
                                 <p className="label">Report Status:</p>
                                 <p className="value">{this.state.status}</p>
                             </div>
+                            </div>
+                        )}
+
+                        {userType === 'instructor' && (
+
+                            <div class = "additionalInfo">
+                            <div class="row">
+                            <p className="label"># of students:</p>
+                            <p className="value">{this.state.numOfStudents}</p>
+                            </div>
+                            </div>                                  
+
+                        )}
+                               
                         </div>
+                        
+
+                        
                     </div>
                 </div>
             )
