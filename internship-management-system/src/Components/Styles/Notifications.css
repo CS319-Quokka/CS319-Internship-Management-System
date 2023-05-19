@@ -30,7 +30,7 @@
 .maincontainer-notif h1{
     font-size: 2.35vh;
     color:rgb(12, 0, 53);
-    position: relative;   
+    position: relative;
 }
 .announcementList{
     position: relative;
@@ -49,10 +49,10 @@
 
     padding: 20px 20px;
     box-sizing: border-box;
-    border: 2px solid #ccc;
+    border: 2px solid #d2d2d2;
     font-size: 1.7vh;
     border-radius: 15px;
-    background-color:hwb(207 91% 0%);
+    background-color:white;
     font-size: 16px;
     text-align: left;
     resize: none;

@@ -131,7 +131,6 @@
     font-size: 1.7vh;
     border-color:hwb(207 91% 0%);
     border-radius: 15px;
-    background-color:hwb(208 94% 0%);
     font-size: 16px;
     text-align: left;
     resize: none;
@@ -172,13 +171,11 @@
     height:11vh;
 }
 .reportevaluation .annotatedupload{
-    background-color: white;
-    position: absolute;
-    left:5%;
-    top: 75%;
+    position: relative;
+    top: 30%;
     height: 20vh;
     border-radius: 16px;
-    width: 35%;
+    width: 100%;
     padding: 4vh;
 }
 .reportevaluation .gradeentry{
@@ -193,4 +190,10 @@
     border-color:rgb(194, 209, 237);
     border-radius: 5px;
    
+}
+.reportstatus .texteditor{
+    position: relative;
+    top: 8%;
+    height: 10%;
+
 }

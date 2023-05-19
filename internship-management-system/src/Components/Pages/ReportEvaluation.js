@@ -15,7 +15,17 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Alert from '@mui/material/Alert';
+import Box from '@mui/joy/Box';
+import FormControl from '@mui/joy/FormControl';
+import FormLabel from '@mui/joy/FormLabel';
+import Textarea from '@mui/joy/Textarea';
+import Menu from '@mui/joy/Menu';
+import MenuItem from '@mui/joy/MenuItem';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import FormatBold from '@mui/icons-material/FormatBold';
+import FormatItalic from '@mui/icons-material/FormatItalic';
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import Check from '@mui/icons-material/Check';
 
 
 const statusOptions = ["Submitted", 
@@ -38,10 +48,16 @@ const statusOptions = ["Submitted",
 const downloadAnnotated = () => {
     const link = document.createElement("a");
     //the "download.txt" will be replaced by the link name. (this.state = {annotatedfeedback}) is the file needed. 
-    link.download = `annotatedfeed.txt`;
+    link.download = `${this.state.studentFirstName}${this.state.studentLastName}AnnotatedFeedback.txt`;
     link.href = "./annotated.txt";
     link.click();
 };
+const downloadCEF = () => {
+    const link = document.createElement("a");
+    link.download = `companyevaluationform.txt`;
+    link.href = "./companyevaluationform.txt";
+    link.click();
+}
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [studentId, setStudentId] = useState('');
@@ -63,7 +79,7 @@ const FileUpload = () => {
     formData.append('file', selectedFile);
     formData.append('studentId', studentId);
     formData.append('feedbackId', feedbackId);
-    axios.post('http://localhost:8080/report', formData)
+    axios.post('http://localhost:8080/evaluation', formData)  //
       .then((response) => {
         // Handle success response
         console.log(response.data);
@@ -74,18 +90,82 @@ const FileUpload = () => {
       });
   };
 }
-{
-    /*
-     <div>
-      <input type="file" onChange={handleFileChange} />
-      <input type="text" placeholder="Student ID" value={studentId} onChange={handleStudentIdChange} />
-      <input type="text" placeholder="Feedback ID" value={feedbackId} onChange={handleFeedbackIdChange} />
-      <button onClick={handleUpload}>Upload</button>
-    </div>
-    */
+function TextareaValidator() {
+  const [italic, setItalic] = React.useState(false);
+  const [fontWeight, setFontWeight] = React.useState('normal');
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  return (
+    <FormControl>
+      <FormLabel>Feedback comments</FormLabel>
+      <Textarea
+        placeholder="Type your feedback comments here..."
+        minRows={3}
+        endDecorator={
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 'var(--Textarea-paddingBlock)',
+            pt: 'var(--Textarea-paddingBlock)',
+            borderTop: '1px solid',
+            borderColor: 'divider',
+            flex: 'auto',
+          }}
+        >
+          <IconButton
+            variant="plain"
+            color="neutral"
+            onClick={(event) => setAnchorEl(event.currentTarget)}
+          >
+            <FormatBold />
+            <KeyboardArrowDown fontSize="md" />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={() => setAnchorEl(null)}
+            size="sm"
+            placement="bottom-start"
+            sx={{ '--ListItemDecorator-size': '24px' }}
+          >
+            {['200', 'normal', 'bold'].map((weight) => (
+              <MenuItem
+                key={weight}
+                selected={fontWeight === weight}
+                onClick={() => {
+                  setFontWeight(weight);
+                  setAnchorEl(null);
+                }}
+                sx={{ fontWeight: weight }}
+              >
+                <ListItemDecorator>
+                  {fontWeight === weight && <Check fontSize="sm" />}
+                </ListItemDecorator>
+                {weight === '200' ? 'lighter' : weight}
+              </MenuItem>
+            ))}
+          </Menu>
+          <IconButton
+            variant={italic ? 'soft' : 'plain'}
+            color={italic ? 'primary' : 'neutral'}
+            aria-pressed={italic}
+            onClick={() => setItalic((bool) => !bool)}
+          >
+            <FormatItalic />
+          </IconButton>
+          <Button sx={{ ml: 'auto' }}>Send</Button>
+        </Box>
+        }
+        sx={{
+          minWidth: 300,
+          fontWeight,
+          fontStyle: italic ? 'italic' : 'initial',
+        }}
+      />
+    </FormControl>
+  );
 }
 function FormDialog(props) {
-    const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
     
   const [isSatisfactory, setIsSatisfactory] = useState(false);
 
@@ -98,91 +178,138 @@ function FormDialog(props) {
   };
   
   
-    const handleClickOpen = () => {
-      setOpen(true);
-      props.setButtonClicked(true);
-    };
+  const handleClickOpen = () => {
+    setOpen(true);
+    props.setButtonClicked(true);
+  };
 
-    const handleClose = () => {
+  const handleClose = () => {
+    setOpen(false);
+    props.setButtonClicked(false);
+  };
+  const handleSubmit = () => {
       setOpen(false);
-      props.setButtonClicked(false);
-    };
-    const handleSubmit = () => {
-        setOpen(false);
-    }
-    return (
-      <div>
-        <Button variant="outlined" onClick={handleClickOpen}>
-          Open Grade Form
-        </Button>
-        <Dialog fullWidth= "md" open={open} onClose={handleClose}>
-          <DialogTitle>Subscribe</DialogTitle>
-          <DialogContent>
-            <DialogContentText sx ={{fontWeight: 'bold'}}>
-              Entering the grades for {props.studentFirstName} {props.studentLastName}
-            </DialogContentText>
-    
-            <Typography sx ={{fontWeight: 'bold'}}>Part A - Work Place</Typography>
-            <Typography>Company Evaluation Form Grade</Typography>
-            <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="CEF"
-            type="number"
-            variant="standard"
-            inputProps={{
-            min: 0,
-            max: 10,
-            align: 'right',
-            style: { width: '5ch' },
-            }}
-            />
-            <Typography>Is the work done related to computer engineering?</Typography>
-            <Button variant="outlined" color="success"> Yes </Button>
-            <Button variant="outlined" color="error"> No </Button>
-
-            <Typography>Is the supervisor a computer engineer or has a similar engineering background?</Typography>
-            <Button variant="outlined" color="success"> Yes </Button>
-            <Button variant="outlined" color="error"> No </Button>
-      
-            <div>
-      <Typography sx={{ fontWeight: 'bold' }}>Part B - Report</Typography>
-      <Button
-        variant={isSatisfactory ? 'outlined' : 'contained'}
-        color="success"
-        onClick={handleSatisfactoryClick}
-        sx={{ marginRight: '10px' }}
-      >
-        Satisfactory
-      </Button>
-      <Button
-        variant={isSatisfactory ? 'contained' : 'outlined'}
-        color="secondary"
-        onClick={handleRevisionRequiredClick}
-      >
-        Revision Required
-      </Button>
-      {isSatisfactory && (
-        <div>
-          <Typography>If revision is requested, enter the due date for the resubmission.</Typography>
-          <DateComponent />
-        </div>
-      )}
-    </div>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button  onClick={() => {
-          //    <Alert severity="success">Grade form is filled!</Alert>
-              handleSubmit();
-            }}
-            >Submit</Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
   }
+  return (
+    <div>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Open Grade Form
+      </Button>
+      <Dialog fullWidth open={open} onClose={handleClose}>
+        <DialogTitle>Grade Form</DialogTitle>
+        <DialogContentText sx ={{fontWeight: 'bold'}}>
+            Entering the grades for {props.studentFirstName} {props.studentLastName}
+        </DialogContentText>
+        <DialogContent>
+        
+          <Typography sx ={{fontWeight: 'bold'}}>Part A - Work Place</Typography>
+          <Typography>Company Evaluation Form Grade</Typography>
+          <TextField
+          required
+          autoFocus
+          margin="dense"
+          id="name"
+          label="CEF"
+          type="number"
+          variant="standard"
+          inputProps={{
+          min: 0,
+          max: 10,
+          align: 'right',
+          style: { width: '5ch' },
+          }}
+          />
+          <Typography>Is the work done related to computer engineering?</Typography>
+          <Button variant="outlined" color="success"> Yes </Button>
+          <Button variant="outlined" color="error"> No </Button>
+
+          <Typography>Is the supervisor a computer engineer or has a similar engineering background?</Typography>
+          <Button variant="outlined" color="success"> Yes </Button>
+          <Button variant="outlined" color="error"> No </Button>
+          <hr></hr>
+          <Typography sx={{ fontWeight: 'bold' }}>Part B - Report</Typography>
+          <Button
+            variant={isSatisfactory ? 'outlined' : 'contained'}
+            color="success"
+            onClick={handleSatisfactoryClick}
+            sx={{ marginRight: '10px' }}
+          > Satisfactory </Button>
+          <Button
+            variant={isSatisfactory ? 'contained' : 'outlined'}
+            color="secondary"
+            onClick={handleRevisionRequiredClick}
+          > Revision Required </Button>
+          {isSatisfactory && (
+            <div>
+              <Typography>Enter the due date for the resubmission.</Typography>
+              <DateComponent />
+            </div>
+          )}
+          <hr></hr>
+          <Typography sx={{ fontWeight: 'bold' }}>Part C - Final version of the report</Typography>
+          <Typography>Assessment score of Evaluation of the Work </Typography>
+          <TextField
+          required
+          autoFocus
+          margin="dense"
+          id="name"
+          label="score"
+          type="number"
+          variant="standard"
+          inputProps={{
+          min: 0,
+          max: 10,
+          align: 'right',
+          style: { width: '6ch' },
+          }}
+          />
+          <Typography>Sum of the assessment scores of Evaluation of the Work </Typography>
+          <TextField
+          required
+          autoFocus
+          margin="dense"
+          id="name"
+          label="score"
+          type="number"
+          variant="standard"
+          inputProps={{
+          min: 0,
+          max: 60,
+          align: 'right',
+          style: { width: '6ch' },
+          }}
+          />
+
+          <Typography>The assessment score of Evaluation of the report  </Typography>
+          <TextField
+          required
+          autoFocus
+          margin="dense"
+          id="name"
+          label="score"
+          type="number"
+          variant="standard"
+          inputProps={{
+          min: 0,
+          max: 10,
+          align: 'right',
+          style: { width: '6ch' },
+          }}
+          />
+
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button  onClick={() => {
+        //    <Alert severity="success">Grade form is filled!</Alert>
+            handleSubmit();
+          }}
+          >Submit</Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
+}
 function DateComponent() {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -203,7 +330,7 @@ class ReportEvaluation extends Component {
             course: "CS299",
             userType: "Student",
             prevGradeA: statusOptions[4],
-            prevGradeB: "17",
+            prevGradeB: statusOptions[4],
             prevGradeC: "22",
             prevfilename:"DenizSunReportRevision1.docx",
             prevstatus: "Unsatisfactory. Waiting for revision.",
@@ -248,27 +375,38 @@ class ReportEvaluation extends Component {
                 </div>
                 
             </div>
-            
-            <div className="annotatedupload">
-                <h2>Upload your annotated feedback here: </h2>
-                <FileUploadIcon/>
-                <Button variant="contained" component="label" >
-                    Upload File
-                    <input type="file" hidden />
-                </Button>
-         
-      
-            </div>
-
         
             <div className="reportstatus">
                 <div className="information">
                     <h1>The student's current submission for {this.state.course} </h1>
+                    <br></br>
+                    <hr></hr>
                 </div>
 
-                    <hr></hr>
+                    <Typography>{
+                        <Button onClick={downloadCEF} variant="text" style={{textTransform: 'none'}}  size="large">Click here</Button>
+                      } 
+                      to download the student's company evaluation form.</Typography>  
+                    <br></br>
+                    <Typography>To enter the student's grades, use the Grade Form</Typography>
                     <FormDialog studentFirstName={this.state.studentFirstName} studentLastName={this.state.studentLastName}
                     setButtonClicked={(value) => this.setState({isButtonClicked: value})}/>
+
+
+                <div className="texteditor">
+                  <TextareaValidator/>
+                
+                </div>
+                    
+                <div className="annotatedupload">
+                    <h2>Upload annotated feedback here: </h2>
+                   
+                      <FileUploadIcon/>
+                    <Button variant="contained" component="label" >
+                        Upload File
+                        <input type="file" hidden />
+                    </Button>
+                </div>
                 
             </div>
         </div>
