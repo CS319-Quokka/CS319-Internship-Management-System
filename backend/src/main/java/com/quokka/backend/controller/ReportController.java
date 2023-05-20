@@ -8,11 +8,7 @@ import com.quokka.backend.request.ReportFileAddRequest;
 import com.quokka.backend.request.ReportFileEditRequest;
 import com.quokka.backend.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -29,13 +25,23 @@ public class ReportController {
     }
 
     @GetMapping("/{id}")
-    public Report getReportWithID(@PathVariable("id") Long id){
+    public Report getReportWithID(@PathVariable Long id){
         return reportService.getReportWithID(id);
     }
 
     @GetMapping
     public List<Report> getAllReports(){
         return reportService.getAllReports();
+    }
+
+    @PostMapping
+    public boolean addReport(@RequestBody ReportAddRequest request){
+
+        if(!(request == null)){
+
+            return reportService.addReport(request);
+        }
+        return false;
     }
 
     @GetMapping("/status/{studentID}")
@@ -47,16 +53,6 @@ public class ReportController {
     public List<Report> getAllReportsByStudentId(@PathVariable Long studentId){
 
         return reportService.getAllReportsByStudentId(studentId);
-    }
-
-    @PostMapping
-    public boolean addReport(@RequestBody ReportAddRequest request){
-
-        if(!(request == null)){
-
-            return reportService.addReport(request);
-        }
-        return false;
     }
 
     @DeleteMapping("/{id}")

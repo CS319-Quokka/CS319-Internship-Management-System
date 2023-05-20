@@ -9,5 +9,4 @@ public class ReportEditRequest {
 
     private Date deadline;
     private Long studentId;
-    private String reportDescription;
 }

@@ -4,12 +4,12 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 @Data
-public class ReportFileAddRequest {
+public class FeedbackFileAddRequest {
 
     private Long id;
 
-    private String reportDescription;
     private Long studentId;
-    private Long reportId;
     private MultipartFile fileData;
+    private String feedbackDescription;
+    private Long feedbackId;
 }

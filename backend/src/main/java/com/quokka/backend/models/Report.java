@@ -1,7 +1,6 @@
 package com.quokka.backend.models;
 
 import java.util.Date;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,14 +14,12 @@ import org.hibernate.annotations.OnDeleteAction;
 @Setter
 public class Report {
 
-    private String reportDescription;
-    private Date uploadDate;
-    private Date deadline;
-    private String status;
-
     @Id
     @GeneratedValue
     private Long id;
+
+    private Date uploadDate;
+    private Date deadline;
 
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)

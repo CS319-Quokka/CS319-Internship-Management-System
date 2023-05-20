@@ -11,5 +11,4 @@ public class ReportAddRequest {
 
     private Date deadline;
     private Long studentId;
-    private String reportDescription;
 }

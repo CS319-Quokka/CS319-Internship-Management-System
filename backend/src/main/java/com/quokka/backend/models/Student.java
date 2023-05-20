@@ -18,6 +18,8 @@ public class Student extends User{
     private String letterGrade;
     private String companyName;
     private Date deadline;
+    private String status;
+    private Long activeReportId;
 
     @ManyToOne
     @JoinColumn(name = "instructor_id")

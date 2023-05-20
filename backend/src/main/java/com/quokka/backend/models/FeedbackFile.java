@@ -14,24 +14,23 @@ import java.io.InputStream;
 @Table
 @Getter
 @Setter
-public class ReportFile implements MultipartFile {
+public class FeedbackFile implements MultipartFile{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String reportDescription;
     private String fileName;
+    private String feedbackDescription;
 
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     private byte[] fileData;
 
     @OneToOne
-    @JoinColumn(name = "report_id", nullable = false)
+    @JoinColumn(name = "feedback_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    Report report;
-
+    Feedback feedback;
 
     @Override
     public String getName() {
@@ -54,13 +53,13 @@ public class ReportFile implements MultipartFile {
     }
 
     @Override
-    public long getSize() {
+    public long getSize(){
 
         return fileData.length;
     }
 
     @Override
-    public byte[] getBytes() throws IOException {
+    public byte[] getBytes() throws IOException{
 
         return fileData;
     }
