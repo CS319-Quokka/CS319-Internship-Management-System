@@ -36,6 +36,13 @@ const downloadPrevious = () => {
     link.href = "./prevreport.txt";
     link.click();
 };
+const downloadCurrent = () => {
+    const link = document.createElement("a");
+    //the "download.txt" will be replaced by the link name. (this.state = {prevfilename}) is the file needed.
+    link.download = `currentreport.txt`;
+    link.href = "./currentreport.txt";
+    link.click();
+};
 const revisionHistory = [
     {
         revisionCount: "1",
@@ -73,10 +80,10 @@ function RevisionList() {
                         <hr></hr>
                         <h2>◾Revision : {revision.revisionCount}</h2>
                         <p>The report you submitted for this revision:</p>
-                        <IconButton aria-label="download" onClick={downloadPrevious}>
+                        <IconButton aria-label="download" onClick={downloadCurrent}>
                             <DownloadIcon/>
                         </IconButton>
-                        <Button variant="text" onClick={downloadPrevious} style={{textTransform: 'none'}} size="large">{revision.prevfilename}</Button>
+                        <Button variant="text" onClick={downloadCurrent} style={{textTransform: 'none'}} size="large">{revision.prevfilename}</Button>
 
                         <b><br></br>◾The grade distribution of this submission◾</b>
                         <br></br>
@@ -108,6 +115,7 @@ class ReportsStudents extends Component {
             annotatedfeedback: "DenizSunFeedback.pdf",
             overallstatus: statusOptions[2],
             partAstatus: statusOptions[4],
+            currentreport: "DenizSunReport.pdf"
             
 
         }
@@ -133,6 +141,13 @@ class ReportsStudents extends Component {
                     <div className="information">
                         <h1>Progress and feedback of your current report for {this.state.course} </h1>
                     </div>
+                    <hr></hr>
+                    <b>The report you submitted is: </b>
+                    <IconButton onClick={downloadCurrent} aria-label="download">
+                    <DownloadIcon />
+                </IconButton>
+                    <Button onClick={downloadCurrent} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.currentreport}</Button>
+
                     <hr></hr>   
                     <b>Part A ~ Work Place</b>
                     <p >Status: {this.state.partAstatus}</p>
