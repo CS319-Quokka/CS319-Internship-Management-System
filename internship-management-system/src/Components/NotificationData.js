@@ -1,4 +1,4 @@
-import React from 'react'
+
 export const AnnouncementData = [
     {   poster: "Begüm Çınar",
         message: "The deadline for submitting the summer training reports has been extended to 15/05/2023",
@@ -43,7 +43,3 @@ export const InstructorNotifData = [
     }
 
 ]
-
-   
-  
-    

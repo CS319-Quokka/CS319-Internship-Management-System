@@ -1,9 +1,24 @@
 import React, { Component } from 'react';
 import '../Styles/Statistics.css';
-import { PieChart } from "react-minimal-pie-chart";
 import {GraderData} from "../GraderData"
 import {StudentData} from "../StudentData"
+import PropTypes from 'prop-types';
+import { styled } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
+    height: 10,
+    borderRadius: 5,
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+        backgroundColor: theme.palette.grey[theme.palette.mode === 'light' ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+        borderRadius: 5,
+        backgroundColor: theme.palette.mode === 'light' ? '#1a90ff' : '#308fe8',
+    },
+}));
 function InstructorList() {
   return (
     <ul>
@@ -12,6 +27,7 @@ function InstructorList() {
           <p>Instructor: {instructor.name}</p>
           <p>Assigned Student Count: {instructor.assigned}</p>
           <p>Graded Reports Status: {instructor.progress}</p>
+            <BorderLinearProgress variant="determinate" value={instructor.progress} />
           <hr></hr>
         </li>
       ))}
@@ -35,7 +51,6 @@ function StudentList() {
     </ul>
   );
 }
-
 class Statistics extends Component {
 
   studentParts = [{title: "Part A", value: 127, color: "indigo"},
@@ -50,9 +65,10 @@ class Statistics extends Component {
       cef_pending: 45,
       overall_satisfactory: 87,
       overall_unsatisfactory: 34,
-      overall_pending: 69
+      overall_pending: 69,
+      value: 80
     };
-  }                
+  }
   render() {
     const {  cef_satisfactory, cef_unsatisfactory, cef_pending,
       overall_satisfactory,       overall_unsatisfactory, overall_pending } = this.state;

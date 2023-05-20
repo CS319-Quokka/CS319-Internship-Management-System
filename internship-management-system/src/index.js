@@ -19,8 +19,9 @@ import StudentOperations from "./Components/Pages/StudentOperations";
 import ManageUsers from "./Components/Pages/ManageUsers";
 import Sidebar from "./Components/Sidebar";
 import FAQ from "./Components/Pages/FAQ"
-
+import AdminAssNotifications from "./Components/Pages/AdminAssNotifications";
 import "./App.css";
+
 
 const App = () => {
   const [logged, setIsLoggedIn] = useState(false);
@@ -55,6 +56,10 @@ const App = () => {
         {
           path: "instructornotifications",
           element: <InstructorNotifications />,
+        },
+        {
+          path: "adminassnotifications",
+          element: <AdminAssNotifications />,
         },
         {
           path: "reports",

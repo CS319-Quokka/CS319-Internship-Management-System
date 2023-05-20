@@ -8,15 +8,7 @@ function ManageUsersAdd() {
 
   return (
 
-
-
-    
-   
     <div className="add-user">
-
-
-
-      
 
       <FormProvider {...methods}>
         <form >

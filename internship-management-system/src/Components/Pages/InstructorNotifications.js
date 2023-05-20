@@ -145,9 +145,6 @@ function FormDialog() {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Announcement</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Enter your announcement here
-          </DialogContentText>
           <TextareaValidator/>
         </DialogContent>
         <DialogActions>

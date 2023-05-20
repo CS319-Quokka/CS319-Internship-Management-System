@@ -27,6 +27,18 @@
     left: 65%;
     overflow-y: auto;
 }
+.admin{
+    background-color: white;
+    position: absolute;
+    box-sizing: border-box;
+    height: 90%;
+    width: 50%;
+    border-radius: 15px;
+    margin-top: 5vh;
+    padding:2%;
+    left: 30%;
+    overflow-y: auto;
+}
 .maincontainer-notif h1{
     font-size: 2.35vh;
     color:rgb(12, 0, 53);

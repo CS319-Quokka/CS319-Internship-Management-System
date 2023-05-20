@@ -8,7 +8,7 @@ export const GraderData = [
     type: "Grader",
     department: "CS",
     assigned: "5",
-    progress: "80%",
+    progress: "80",
   },
 
       {
@@ -17,7 +17,7 @@ export const GraderData = [
     grader: "-",
     department: "CS",
     assigned: "11",
-    progress: "90%",
+    progress: "90",
   },
 
   {
@@ -25,21 +25,21 @@ export const GraderData = [
     type: "Grader",
     department: "CS",
     assigned: "15",
-    progress: "40%",
+    progress: "40",
   },
 
   {
     name: " Aynur Dayanık",
     department: "CS",
     assigned: "20",
-    progress: "10%",
+    progress: "10",
   },
 
   {
     name: " Altay Güvenir",
     department: "CS",
     assigned: "12",
-    progress: "60%",
+    progress: "60",
   },
 
  
@@ -47,14 +47,14 @@ export const GraderData = [
     name: " Fazlı Can",
     department: "CS",
     assigned: "10",
-    progress: "40%",
+    progress: "40",
   },
   {
     name: " Can Alkan",
     type: "Grader",
     department: "CS",
     assigned: "15",
-    progress: "40%",
+    progress: "40",
   },
   
  ];
