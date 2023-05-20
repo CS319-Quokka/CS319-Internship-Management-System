@@ -82,6 +82,12 @@ public class ReportController {
         return reportService.getAllReportFiles();
     }
 
+    @DeleteMapping
+    public boolean removeAllReports(){
+
+        return reportService.removeAllReports();
+    }
+
     @DeleteMapping("/file")
     public boolean removeAllReportFiles(){
 

@@ -72,6 +72,12 @@ public class ReportService {
         return true;
     }
 
+    public boolean removeAllReports(){
+
+        reportRepository.deleteAll();
+        return true;
+    }
+
     public boolean reportExceptionCheck(Long reportID, Date date){
 
         if(!reportRepository.existsById(reportID)){
