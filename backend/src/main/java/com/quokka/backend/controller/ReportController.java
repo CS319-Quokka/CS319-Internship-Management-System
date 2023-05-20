@@ -6,8 +6,11 @@ import com.quokka.backend.request.ReportFileAddRequest;
 import com.quokka.backend.request.ReportFileEditRequest;
 import com.quokka.backend.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -65,9 +68,19 @@ public class ReportController {
     }
 
     @PostMapping("/file")
-    public boolean addReportFile(ReportFileAddRequest request){
+    public ResponseEntity<String> addReportFile(@RequestBody ReportFileAddRequest request){
 
-        return reportService.addReportFile(request);
+        System.out.println("coming");
+        boolean result = reportService.addReportFile(request);
+
+        System.out.println("back to life");
+        if (result) {
+            return ResponseEntity.ok("File uploaded successfully.");
+        } else {
+            System.out.println("FAILLIYO");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file.");
+        }
+
     }
 
     @GetMapping("/file/{id}")

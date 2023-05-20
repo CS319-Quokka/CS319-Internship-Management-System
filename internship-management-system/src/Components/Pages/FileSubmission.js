@@ -1,8 +1,10 @@
 import React from "react";
 import Dropzone from "../Dropzone";
 import "../Styles/FileSubmission.css"
-function FileSubmission() {
+function FileSubmission(props) {
   // const [images, setImages] = useState([]);
+
+  
   return (
     <div className="page">
       <div className="uploads">
@@ -11,7 +13,8 @@ function FileSubmission() {
           <br></br>
         </div>
        
-        <Dropzone afterUpload = {
+        <Dropzone id = {props.userId}  />
+        {/* <Dropzone afterUpload = {
              <div className="actions">
              <label className="s-text"> 🗨 Please enter your message here</label> 
        
@@ -19,7 +22,7 @@ function FileSubmission() {
              
              
            </div>
-        } />
+        } /> */}
       </div>
      
             

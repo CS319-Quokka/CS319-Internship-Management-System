@@ -18,6 +18,8 @@ import java.io.InputStream;
 public class ReportFile implements MultipartFile {
 
     private String fileName;
+
+    @Lob
     private byte [] fileData;
 
 
@@ -25,14 +27,17 @@ public class ReportFile implements MultipartFile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne
+
+
+    @OneToOne(optional = true)
     @JoinColumn(name = "report_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     Report report;
 
+
     @Override
     public String getName() {
-        return null;
+        return fileName;
     }
 
     @Override
@@ -52,12 +57,12 @@ public class ReportFile implements MultipartFile {
 
     @Override
     public long getSize() {
-        return 0;
+        return fileData.length;
     }
 
     @Override
     public byte[] getBytes() throws IOException {
-        return new byte[0];
+        return fileData;
     }
 
     @Override

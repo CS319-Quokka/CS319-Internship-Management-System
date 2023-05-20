@@ -65,7 +65,7 @@ public class FeedbackService {
         newFeedback.setDate(date);
         //newFeedback.setSender(sender);
 
-        internshipReport.setFeedback(newFeedback);
+       // internshipReport.setFeedback(newFeedback);
 
         return true;
 
