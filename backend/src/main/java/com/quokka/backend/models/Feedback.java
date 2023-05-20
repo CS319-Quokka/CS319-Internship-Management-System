@@ -25,13 +25,11 @@ public class Feedback {
     @GeneratedValue
     private Long id;
 
-    /*
-    @OneToOne(mappedBy = "feedback")
+    @OneToOne
+    @JoinColumn(name = "report_id")
     private Report report;
 
     @ManyToOne
     @JoinColumn(name = "sender_id")
     private User sender;
-
-     */
 }

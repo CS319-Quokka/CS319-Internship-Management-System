@@ -8,8 +8,6 @@ public class ReportFileAddRequest {
 
     private Long id;
 
-   // private Long reportId;
-    private Long senderId;
-    private String fileName;
+    private Long reportId;
     private MultipartFile fileData;
 }

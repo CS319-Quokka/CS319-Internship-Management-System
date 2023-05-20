@@ -2,6 +2,8 @@ package com.quokka.backend.controller;
 
 import com.quokka.backend.models.Report;
 import com.quokka.backend.models.ReportFile;
+import com.quokka.backend.request.ReportAddRequest;
+import com.quokka.backend.request.ReportEditRequest;
 import com.quokka.backend.request.ReportFileAddRequest;
 import com.quokka.backend.request.ReportFileEditRequest;
 import com.quokka.backend.service.ReportService;
@@ -42,16 +44,12 @@ public class ReportController {
     }
 
     @PostMapping
-    public boolean addReport(@RequestParam("studentID") Long studentID, @RequestParam("reportFile") ReportFile reportFile, @RequestParam("reportDescription") String reportDescription) {
+    public boolean addReport(@RequestBody ReportAddRequest request){
 
-        System.out.println("geldi!");
-        if(!reportFile.isEmpty()){
+        if(!(request == null)){
 
-            System.out.println("Report added!");
-            return reportService.addReport(studentID, reportFile, reportDescription);
+            return reportService.addReport(request);
         }
-
-        System.out.println("Report not added!");
         return false;
     }
 
@@ -61,26 +59,15 @@ public class ReportController {
     }
 
     @PatchMapping("/{reportID}")
-    public boolean editReport(@PathVariable("reportID") Long reportID, @RequestParam("date")
-    Date date, @RequestBody Report newReport){
+    public boolean editReport(@PathVariable("reportID") Long reportID, @RequestBody ReportEditRequest request){
 
-        return reportService.editReport(reportID, date, newReport);
+        return reportService.editReport(reportID, request);
     }
 
     @PostMapping("/file")
-    public ResponseEntity<String> addReportFile(@RequestBody ReportFileAddRequest request){
+    public boolean addReportFile(ReportFileAddRequest request){
 
-        System.out.println("coming");
-        boolean result = reportService.addReportFile(request);
-
-        System.out.println("back to life");
-        if (result) {
-            return ResponseEntity.ok("File uploaded successfully.");
-        } else {
-            System.out.println("FAILLIYO");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload file.");
-        }
-
+        return reportService.addReportFile(request);
     }
 
     @GetMapping("/file/{id}")

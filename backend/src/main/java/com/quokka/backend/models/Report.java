@@ -16,16 +16,7 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Report {
 
     private String reportDescription;
-
-    /*
-    @OneToOne(optional = true)
-    @JoinColumn(name = "feedback_id")
-    private Feedback feedback;
-
-     */
-
     private Date uploadDate;
-    //deadline has been moved to student entity
     private Date deadline;
     private String status;
 
@@ -33,11 +24,8 @@ public class Report {
     @GeneratedValue
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Student student;
-
-
 }

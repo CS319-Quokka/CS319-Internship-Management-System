@@ -20,7 +20,8 @@ public class ReportFile implements MultipartFile {
     private String fileName;
 
     @Lob
-    private byte [] fileData;
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] fileData;
 
 
     @Id
@@ -29,7 +30,7 @@ public class ReportFile implements MultipartFile {
 
 
 
-    @OneToOne(optional = true)
+    @OneToOne
     @JoinColumn(name = "report_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     Report report;
@@ -57,11 +58,13 @@ public class ReportFile implements MultipartFile {
 
     @Override
     public long getSize() {
+
         return fileData.length;
     }
 
     @Override
     public byte[] getBytes() throws IOException {
+
         return fileData;
     }
 

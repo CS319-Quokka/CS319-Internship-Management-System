@@ -36,6 +36,7 @@ public class UserManagementController {
     @PostMapping("/student")
     public Student addStudent(@RequestBody StudentAddRequest request){
 
+
         return userManagementService.addStudent(request);
     }
 
