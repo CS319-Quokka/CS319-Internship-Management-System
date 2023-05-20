@@ -1,18 +1,20 @@
 package com.quokka.backend.service;
 import com.quokka.backend.models.Report;
 import com.quokka.backend.models.ReportFile;
+import com.quokka.backend.models.Student;
 import com.quokka.backend.repository.ReportFileRepository;
 import com.quokka.backend.repository.ReportRepository;
+import com.quokka.backend.repository.StudentRepository;
 import com.quokka.backend.request.ReportFileAddRequest;
 import com.quokka.backend.request.ReportFileEditRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.*;
 import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+
 import org.apache.commons.io.IOUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -21,12 +23,14 @@ public class ReportService {
 
     private ReportRepository reportRepository;
     private ReportFileRepository reportFileRepository;
+    private StudentRepository studentRepository;
 
     @Autowired
-    public ReportService(ReportRepository reportRepository, ReportFileRepository reportFileRepository){
+    public ReportService(ReportRepository reportRepository, ReportFileRepository reportFileRepository, StudentRepository studentRepository){
 
         this.reportFileRepository = reportFileRepository;
         this.reportRepository = reportRepository;
+        this.studentRepository = studentRepository;
     }
 
     public Report getReportWithID(Long ID){
@@ -69,11 +73,13 @@ public class ReportService {
         ReportFile reportFile1 = new ReportFile();
         reportFile1.setFileName(reportFile.getFileName());
         reportFile1.setFileData(reportFile.getFileData());
-        reportFileRepository.save(reportFile1);
+    //    reportFileRepository.save(reportFile1);
 
+        System.out.println("here");
         //reportFile1.setReport(newInternshipReport); //not sure about this part
         newInternshipReport.setReportDescription(reportDescription);
         reportRepository.save(newInternshipReport);
+        System.out.println("here not");
         return true;
 
 
@@ -86,10 +92,13 @@ public class ReportService {
             throw new IllegalStateException("No report is found!");
         }
 
+        /*
         //if the feedback is already given you cannot make changes
         if(getReportWithID(reportID).getFeedback() != null){
             throw new IllegalStateException("Feedback is already added!");
         }
+
+         */
 
         //if the deadline has passed, you cannot make changes
         if(getReportWithID(reportID).getDeadline().after(date)){
@@ -155,34 +164,44 @@ public class ReportService {
             return false;
         }
         System.out.println("COULD IT FIND REPORT");
-        //Report report = this.getReportWithID(request.getReportId());
-        System.out.println("NO");
-        /*
-          if(report == null){
-
-            System.out.println("report is empty!!");
-            return false;
-        }
-
-
-         */
 
         try {
             MultipartFile file = request.getFileData();
             byte[] fileData = file.getBytes();
             ReportFile reportFile =  new ReportFile();
 
-            //Report report = new Report();
-           // reportRepository.save(report);
-           // reportFile.setReport(report);
-            //reportFile.setId(1L);
+
             reportFile.setFileData(fileData);
             reportFile.setFileName(file.getName());
-            System.out.println(reportFile.getId() + " " + reportFile.getFileName() + " " + reportFile.getFileData());
+            Report report = new Report();
+            report.setReportDescription("internship added");
+            report.setStatus("Pending feedback");
+            System.out.println("ID: " + request.getSenderId());
+            Optional<Student> s= studentRepository.findById(request.getSenderId());
+
+            if(s == null){
+                System.out.println("NO STUDENT");
+                return false;
+            }
+
+
+            System.out.println("report repo?");
+            report.setStudent(s.get());
+
+            reportFile.setReport(report);
+
+            reportRepository.save(report);
+
+            System.out.println("TRY saving the report");
+
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+            System.out.println(reportFile.getId() + " " +fileName + " " + reportFile.getFileData());
             System.out.println("finishes");
             reportFileRepository.save(reportFile);
 
 
+            System.out.println(Arrays.toString(fileData));
             System.out.println("saves");
             return true;
         } catch (IOException e) {
@@ -191,27 +210,6 @@ public class ReportService {
             return false;
         }
 
-        /*
-
-        byte[] fileBytes = IOUtils.toByteArray(request.getFileData().getInputStream());
-        ReportFile reportFile = new ReportFile();
-       // reportFile.setReport(report);
-
-        System.out.println(1);
-        reportFile.setId(request.getId());
-        System.out.println(2);
-        reportFile.setFileName(request.getFileName());
-        System.out.println(3);
-        reportFile.setFileData(request.getFileData());
-
-
-        System.out.println(4);
-        System.out.println(reportFile.getId() + " " + reportFile.getFileName() + " " + reportFile.getFileData());
-        reportFileRepository.save(reportFile);
-        System.out.println(5);
-        return true;
-
-         */
     }
 
     public boolean removeAllReportFiles(){

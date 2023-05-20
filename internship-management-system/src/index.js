@@ -63,7 +63,7 @@ const App = () => {
 
         {
           path: "submission",
-          element: <FileSubmission />,
+          element: <FileSubmission userId = {userId}/>,
         },
         {
           path: "evaluation",

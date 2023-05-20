@@ -17,9 +17,12 @@ public class Report {
 
     private String reportDescription;
 
-    @OneToOne
+    /*
+    @OneToOne(optional = true)
     @JoinColumn(name = "feedback_id")
     private Feedback feedback;
+
+     */
 
     private Date uploadDate;
     //deadline has been moved to student entity
@@ -30,8 +33,11 @@ public class Report {
     @GeneratedValue
     private Long id;
 
+
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Student student;
+
+
 }

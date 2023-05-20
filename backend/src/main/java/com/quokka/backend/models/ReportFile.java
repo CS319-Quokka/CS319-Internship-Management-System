@@ -28,17 +28,11 @@ public class ReportFile implements MultipartFile {
     private Long id;
 
 
-    /*
-    @OneToOne
+
+    @OneToOne(optional = true)
     @JoinColumn(name = "report_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     Report report;
-
-     */
-
-
-
-
 
 
     @Override

@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef ,  useEffect } from "react";
 import axios from "axios";
 
 const DragDropFiles = (props) => {
   const [file, setFile] = useState(null);
+  const [userId, setId] = useState(null);
   //const [description, setDescription] = useState("");
   const inputRef = useRef();
 
@@ -28,6 +29,22 @@ const DragDropFiles = (props) => {
     
   }
 
+  useEffect(() => {
+    const getInformation = async () => {
+
+      try {
+        const response = await axios.get(`http://localhost:8080/get_all_users/${props.id}`);
+        const info = response.data[0];
+        // Process the received data as needed
+        console.log(info.id);
+        setId(info.id)
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getInformation();
+  }, [props.id]);
   const handleUpload = async (event) => {
     event.preventDefault();
 
@@ -40,7 +57,8 @@ const DragDropFiles = (props) => {
     const formData = new FormData();
     //formData.append("reportId", 1); // Replace reportId with the actual report ID
     console.log(file.name);
-    formData.append("reportId",1)
+    console.log("id: " , userId)
+    formData.append("senderId",userId);
     formData.append("fileName", file.name);
     formData.append("fileData", file);
       try {
