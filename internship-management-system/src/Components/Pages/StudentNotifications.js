@@ -9,7 +9,7 @@ function AnnouncementList() {
       {AnnouncementData.map(announcement => (
         <li key={announcement.date}>
           <h2>From: {announcement.poster}</h2>
-          <textarea>{announcement.message}</textarea>
+          <textarea readOnly>{announcement.message}</textarea>
           <h2>{announcement.date}</h2>
           <hr></hr>
         </li>
@@ -23,7 +23,7 @@ function NotificationList(){
       {StudentNotifData.map(notification => (
         <li key={notification.date}>
           <h2>From: {notification.sender}</h2>
-          <textarea>{notification.message}</textarea>
+          <textarea readOnly>{notification.message}</textarea>
           <h2>{notification.date}</h2>
           <hr></hr>
         </li>

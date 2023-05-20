@@ -9,16 +9,14 @@
     left: 15%;
 }
 .reportstatus{
-    width:50%;
-    left: 45%;
+    width:40%;
+    left: 50%;
     height:90vh;
     background-color: white;
-    position: relative;
+    position: absolute;
     padding:1%;
     top: 5%;
-    border-radius: 16px;    
-    
-
+    border-radius: 16px;
 }
 
 .reportevaluation .history{
@@ -26,11 +24,12 @@
     position: absolute;
     left:5%;
     top: 5%;
-    height: 65vh;
-    width: 35%;
+    height: 90vh;
+    width: 40%;
     border-radius: 16px;
-    
+    padding: 1%;
 }
+
 .reportevaluation h1{
     top:1vh;
     font-size: 2.35vh;
@@ -43,7 +42,7 @@
     color:rgb(12, 0, 53);
     margin-left: 2vh;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 2vh;
+    font-size: 2.35vh;
     position: relative;
  
    
@@ -52,7 +51,7 @@
     color: rgb(64, 64, 64);
     text-align: right;
     font-size: 2.4vh;
-    margin-top: 2;
+
     position: relative;
     text-decoration: underline;
 }
@@ -63,39 +62,6 @@
     font-size: 2vh;
     position: relative;
 
-}
-
-.reportevaluation .pastuploads{
-    background-color:rgb(255, 255, 255);
-    width: 90%;
-    height: 35vh;
-    text-align: left;
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 5%;
-    margin-bottom: 5%;
-}
-
-.reportevaluation .evaluation{
-    width: 100%;
-    height: 30%;
-    position: relative;
-    overflow-y:auto;
-
-
-
-}
-.reportevaluation .docpic{
-    margin-top: 10px;
-    position:relative;
-    width:90%
-
-}
-.reportevaluation .docpic img {
-    width:7vh;
-    height:7vh;
-    position: absolute;
-    margin-left:5vh;
 }
 
 .reportevaluation.information{
@@ -149,17 +115,9 @@
     background-color:rgb(255, 255, 255);
     position: relative;
     align-self: center;
-    height: 25vh;
+    height: 100%;
     margin-left: 5%;
     margin-right: 5%;
-    margin-top: 15%;
-
-}  
-.reportevaluation .evaluation textarea{
-    position: relative;
-    width: 80%;
-    height: 50%;
-
 }
 .reportevaluation .statuslist{
     position: relative;
@@ -196,4 +154,11 @@
     top: 8%;
     height: 10%;
 
+}
+.reportevaluation .prevlist{
+    position: absolute;
+    box-sizing: border-box;
+    overflow-y: auto;
+    height:90%;
+    width: 95%;
 }

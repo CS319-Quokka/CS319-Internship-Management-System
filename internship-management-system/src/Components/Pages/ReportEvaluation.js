@@ -44,6 +44,72 @@ const statusOptions = ["Submitted",
     {value: 'satisfactory', label: 'Satisfactory'},
     {value: 'unsatisfactory', label: 'Unsatisfactory'}
     */
+const revisionHistory = [
+    {
+        revisionCount: "1",
+        prevfilename: "DenizSunReportRevision1.pdf",
+        prevstatus: "Unsatisfactory. Waiting for revision.",
+        prevfeedback: "Your report is insufficient. Try to emphasize your experiences and (...) \n\nUpload a revised version.",
+        annotatedfeedback: "DenizSunFeedback1.pdf",
+
+    },
+    {
+        revisionCount: "2",
+        prevfilename:"DenizSunReportRevision2.pdf",
+        prevstatus: "Unsatisfactory. Waiting for revision.",
+        prevfeedback: "Better but fix the format.",
+        annotatedfeedback: "DenizSunFeedback2.pdf",
+
+    },
+    {
+        revisionCount: "3",
+        prevfilename:"DenizSunReportRevision3.pdf",
+        prevstatus: "Unsatisfactory. Waiting for revision.",
+        prevfeedback: "Nice :)",
+        annotatedfeedback: "DenizSunFeedback3.pdf"
+
+    }
+]
+
+function RevisionList() {
+    return (
+        <ul>
+            {revisionHistory.map(revision => (
+                <div className="prevreport">
+                    <li key={revision.revisionCount}>
+                        <hr></hr>
+                        <h2>Revision : {revision.revisionCount}</h2>
+                        <p>The student's submission for this revision:</p>
+                        <IconButton aria-label="download" onClick={downloadPrevious}>
+                            <DownloadIcon/>
+                        </IconButton>
+                        <Button variant="text" onClick={downloadPrevious} style={{textTransform: 'none'}} size="large">{revision.prevfilename}</Button>
+
+                        <b><br></br>◾The grade distribution of this submission◾</b>
+                        <br></br>
+                        <p>Overall progress: {revision.prevstatus}</p>
+                        <b><br></br>Your feedback for this submission</b>
+                        <textarea readOnly>{revision.prevfeedback}</textarea>
+                        <b>Your annotated feedback for this submission<br></br></b>
+                        <IconButton aria-label="download" onClick={downloadAnnotated}>
+                            <DownloadIcon/>
+                        </IconButton>
+                        <Button variant="text" onClick={downloadAnnotated} style={{textTransform: 'none'}} size="large">{revision.annotatedfeedback}</Button>
+
+                    </li>
+                </div>
+            ))}
+        </ul>
+    );
+}
+
+const downloadPrevious = () => {
+    const link = document.createElement("a");
+    //the "download.txt" will be replaced by the link name. (this.state = {prevfilename}) is the file needed.
+    link.download = `prevreport.txt`;
+    link.href = "./prevreport.txt";
+    link.click();
+};
 
 const downloadAnnotated = () => {
     const link = document.createElement("a");
@@ -79,7 +145,7 @@ const FileUpload = () => {
     formData.append('file', selectedFile);
     formData.append('studentId', studentId);
     formData.append('feedbackId', feedbackId);
-    axios.post('http://localhost:8080/evaluation', formData)  //
+    axios.post('http://localhost:8080/evaluation', formData)  //????
       .then((response) => {
         // Handle success response
         console.log(response.data);
@@ -165,7 +231,8 @@ function TextareaValidator() {
   );
 }
 function FormDialog(props) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [isClicked, setIsClicked] = useState(false);
     
   const [isSatisfactory, setIsSatisfactory] = useState(false);
 
@@ -176,7 +243,9 @@ function FormDialog(props) {
   const handleRevisionRequiredClick = () => {
     setIsSatisfactory(true);
   };
-  
+  const handleIsClicked = () => {
+      setIsClicked(true);
+  }
   
   const handleClickOpen = () => {
     setOpen(true);
@@ -222,7 +291,6 @@ function FormDialog(props) {
           <Typography>Is the work done related to computer engineering?</Typography>
           <Button variant="outlined" color="success"> Yes </Button>
           <Button variant="outlined" color="error"> No </Button>
-
           <Typography>Is the supervisor a computer engineer or has a similar engineering background?</Typography>
           <Button variant="outlined" color="success"> Yes </Button>
           <Button variant="outlined" color="error"> No </Button>
@@ -279,7 +347,6 @@ function FormDialog(props) {
           style: { width: '6ch' },
           }}
           />
-
           <Typography>The assessment score of Evaluation of the report  </Typography>
           <TextField
           required
@@ -318,71 +385,37 @@ function DateComponent() {
     );
   }
 class ReportEvaluation extends Component {
-    
-    
     constructor(props) {
-   
-        
         super(props)
         this.state = {
             studentFirstName: "Deniz",
             studentLastName: "Sun",
             course: "CS299",
-            userType: "Student",
             prevGradeA: statusOptions[4],
             prevGradeB: statusOptions[4],
-            prevGradeC: "22",
-            prevfilename:"DenizSunReportRevision1.docx",
-            prevstatus: "Unsatisfactory. Waiting for revision.",
-            prevfeedback: "Your report is insufficient. Try to emphasize your experiences and (...) \n\nUpload a revised version.",
             isButtonClicked: false,
-
-        }    
-     
+        }
     }
-    
-    
-
    render(){
     return (
         <div className='reportevaluation' >
               <div className="history">
-                <div className="information">
-                    <h1>Viewing the submission history of: {this.state.studentFirstName} {this.state.studentLastName} </h1>    
-                </div>
-                <div className="pastuploads">   
-                    <IconButton onClick={downloadAnnotated} aria-label="download">
-                        <DownloadIcon />
-                    </IconButton>
-                    <Button onClick={downloadAnnotated} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.prevfilename}</Button>
-          
-                    <div className="prevreport">
-                        <h1>Previous Submission Grades</h1>
-                        <br></br>
-                        <h4>Part A: {this.state.prevGradeA}</h4>
-                        <h4>Part B: {this.state.prevGradeB}</h4>
-                      
+                  <div className="information">
+                      <h1>Viewing the submission history of: {this.state.studentFirstName} {this.state.studentLastName} </h1>
                         <hr></hr>
-                        <h4>Overall progress: <br></br> {this.state.prevstatus}</h4>
-
-                    </div>
-                
-                </div>
-                <hr></hr>  
-                <div className="evaluation">
-                    <h1>Your overall feedback for this submission</h1>
-                    <textarea readOnly>{this.state.prevfeedback}</textarea>
-                </div>
-                
-            </div>
-        
+                  </div>
+                  <div className="prevlist">
+                      <h1>Previous Revisions</h1>
+                      <RevisionList/>
+                  </div>
+              </div>
+              <hr></hr>
             <div className="reportstatus">
                 <div className="information">
                     <h1>The student's current submission for {this.state.course} </h1>
                     <br></br>
                     <hr></hr>
                 </div>
-
                     <Typography>{
                         <Button onClick={downloadCEF} variant="text" style={{textTransform: 'none'}}  size="large">Click here</Button>
                       } 
@@ -391,28 +424,19 @@ class ReportEvaluation extends Component {
                     <Typography>To enter the student's grades, use the Grade Form</Typography>
                     <FormDialog studentFirstName={this.state.studentFirstName} studentLastName={this.state.studentLastName}
                     setButtonClicked={(value) => this.setState({isButtonClicked: value})}/>
-
-
                 <div className="texteditor">
                   <TextareaValidator/>
-                
                 </div>
-                    
                 <div className="annotatedupload">
                     <h2>Upload annotated feedback here: </h2>
-                   
                       <FileUploadIcon/>
                     <Button variant="contained" component="label" >
                         Upload File
                         <input type="file" hidden />
                     </Button>
                 </div>
-                
             </div>
         </div>
-
-
-    
     );
        
    }

@@ -11,12 +11,13 @@
 .reportspage .reportstatus{
     width:40%;
     left: 55%;
-    height:90vh;
+    height:70vh;
     background-color: white;
     position: relative;
     padding:1%;
-    top: 5%;
-    border-radius: 16px;    
+    top: 15%;
+    border-radius: 16px;
+    padding:2%;
     
 
 }
@@ -29,6 +30,7 @@
     height: 90vh;
     width: 40%;
     border-radius: 16px;
+    padding: 1%;
     
 }
 .reportspage h1{
@@ -50,7 +52,6 @@
     color: rgb(64, 64, 64);
     text-align: right;
     font-size: 2.8vh;
-    margin-top: 2;
     position: relative;
     text-decoration: underline;
 }
@@ -83,19 +84,6 @@
 
 
 }
-.reportspage .docpic{
-    margin-top: 10px;
-    position:relative;
-    width:100%
-
-}
-.reportspage .docpic img {
-    width:7vh;
-    height:7vh;
-    position: absolute;
-    margin-left:5vh;
-}
-
 .reportspage .information{
     background-color:rgb(255, 255, 255);
     width: 100%;
@@ -147,12 +135,18 @@
     background-color:rgb(255, 255, 255);
     position: relative;
     align-self: center;
-    height: 25vh;
+    height: 100%;
     margin-left: 5%;
     margin-right: 5%;
-    margin-top: 15%;
 
-}  
+}
+.reportspage .prevlist{
+    position: absolute;
+    box-sizing: border-box;
+    overflow-y: auto;
+    height:90%;
+    width: 95%;
+}
 .reportspage .evaluation textarea{
     position: relative;
     width: 80%;
@@ -168,5 +162,5 @@
 .reportspage .reportstatus textarea{
     position:relative;
     height:20vh;
-    
+
 }
