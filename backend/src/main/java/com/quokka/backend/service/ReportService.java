@@ -8,9 +8,12 @@ import com.quokka.backend.request.ReportFileEditRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.io.IOUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ReportService {
@@ -68,7 +71,7 @@ public class ReportService {
         reportFile1.setFileData(reportFile.getFileData());
         reportFileRepository.save(reportFile1);
 
-        reportFile1.setReport(newInternshipReport); //not sure about this part
+        //reportFile1.setReport(newInternshipReport); //not sure about this part
         newInternshipReport.setReportDescription(reportDescription);
         reportRepository.save(newInternshipReport);
         return true;
@@ -114,9 +117,9 @@ public class ReportService {
                 return false;
             }
 
-            ReportFile reportFile = reportFileRepository.findByReportId(newReport.getId()).get();
+            //  ReportFile reportFile = reportFileRepository.findByReportId(newReport.getId()).get();
             removeReport(reportID, date);
-            addReport(newReport.getStudent().getId(), reportFile, newReport.getReportDescription());
+          //  addReport(newReport.getStudent().getId(), reportFile, newReport.getReportDescription());
             reportRepository.save(currentReport.get());
             return true;
         }
@@ -125,11 +128,16 @@ public class ReportService {
 
     public ReportFile getReportFileWithReportId(Long id){
 
-        Optional<ReportFile> reportFileOpt = reportFileRepository.findByReportId(id);
+        //Optional<ReportFile> reportFileOpt = reportFileRepository.findByReportId(id);
+        /*
+
         if(reportFileOpt.isPresent()){
 
             return reportFileOpt.get();
         }
+
+
+         */
         return null;
     }
 
@@ -140,20 +148,70 @@ public class ReportService {
 
     public boolean addReportFile(ReportFileAddRequest request){
 
-        Report report = this.getReportWithID(request.getReportId());
-        if(report == null){
+        System.out.println("trying to upload 2");
 
+        if(request == null){
+            System.out.println("request is empty!!");
+            return false;
+        }
+        System.out.println("COULD IT FIND REPORT");
+        //Report report = this.getReportWithID(request.getReportId());
+        System.out.println("NO");
+        /*
+          if(report == null){
+
+            System.out.println("report is empty!!");
             return false;
         }
 
+
+         */
+
+        try {
+            MultipartFile file = request.getFileData();
+            byte[] fileData = file.getBytes();
+            ReportFile reportFile =  new ReportFile();
+
+            //Report report = new Report();
+           // reportRepository.save(report);
+           // reportFile.setReport(report);
+            //reportFile.setId(1L);
+            reportFile.setFileData(fileData);
+            reportFile.setFileName(file.getName());
+            System.out.println(reportFile.getId() + " " + reportFile.getFileName() + " " + reportFile.getFileData());
+            System.out.println("finishes");
+            reportFileRepository.save(reportFile);
+
+
+            System.out.println("saves");
+            return true;
+        } catch (IOException e) {
+            System.out.println("IO EXCETPTION");
+            e.printStackTrace();
+            return false;
+        }
+
+        /*
+
+        byte[] fileBytes = IOUtils.toByteArray(request.getFileData().getInputStream());
         ReportFile reportFile = new ReportFile();
-        reportFile.setReport(report);
+       // reportFile.setReport(report);
+
+        System.out.println(1);
         reportFile.setId(request.getId());
+        System.out.println(2);
         reportFile.setFileName(request.getFileName());
+        System.out.println(3);
         reportFile.setFileData(request.getFileData());
 
+
+        System.out.println(4);
+        System.out.println(reportFile.getId() + " " + reportFile.getFileName() + " " + reportFile.getFileData());
         reportFileRepository.save(reportFile);
+        System.out.println(5);
         return true;
+
+         */
     }
 
     public boolean removeAllReportFiles(){
@@ -184,7 +242,7 @@ public class ReportService {
 
         reportFileOpt.get().setFileData(request.getFileData());
         reportFileOpt.get().setFileName(request.getFileName());
-        reportFileOpt.get().setReport(reportRepository.findById(request.getReportId()).get());
+      //  reportFileOpt.get().setReport(reportRepository.findById(request.getReportId()).get());
         return true;
     }
 }

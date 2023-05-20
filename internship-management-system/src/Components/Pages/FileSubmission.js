@@ -11,7 +11,8 @@ function FileSubmission() {
           <br></br>
         </div>
        
-        <Dropzone afterUpload = {
+        <Dropzone />
+        {/* <Dropzone afterUpload = {
              <div className="actions">
              <label className="s-text"> 🗨 Please enter your message here</label> 
        
@@ -19,7 +20,7 @@ function FileSubmission() {
              
              
            </div>
-        } />
+        } /> */}
       </div>
      
             

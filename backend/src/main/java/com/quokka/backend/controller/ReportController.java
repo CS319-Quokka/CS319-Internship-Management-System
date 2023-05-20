@@ -67,6 +67,7 @@ public class ReportController {
     @PostMapping("/file")
     public boolean addReportFile(ReportFileAddRequest request){
 
+        System.out.println("trying to upload");
         return reportService.addReportFile(request);
     }
 
