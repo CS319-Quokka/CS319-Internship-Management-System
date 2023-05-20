@@ -69,7 +69,7 @@ public class UserManagementService {
 
         Long teachingAssistantId = request.getTeachingAssistantId();
         TeachingAssistant teachingAssistant = null;
-        if (instructorId != null) {
+        if (teachingAssistantId != null) {
             teachingAssistant = this.getTeachingAssistantByID(teachingAssistantId);
         }
 
@@ -198,7 +198,7 @@ public class UserManagementService {
         return true;
     }
 
-        public List<Student> getAllStudents(Optional<Long> userAccountId, Optional <Long> instructorId, Optional <Long> teachingAssistantId){
+    public List<Student> getAllStudents(Optional<Long> userAccountId, Optional <Long> instructorId, Optional <Long> teachingAssistantId){
         if(userAccountId.isPresent()){
 
             return studentRepository.findByUserAccountId(userAccountId.get());
