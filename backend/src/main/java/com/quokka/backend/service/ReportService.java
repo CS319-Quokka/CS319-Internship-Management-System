@@ -72,6 +72,19 @@ public class ReportService {
         return true;
     }
 
+    public List<Report> getAllReportsByStudentId(Long studentId){
+
+        List<Report> reports = new ArrayList<Report>();
+        for(Report report : reportRepository.findAll()){
+
+            if(report.getStudent().getId() == studentId){
+
+                reports.add(report);
+            }
+        }
+        return reports;
+    }
+
     public boolean removeAllReports(){
 
         reportRepository.deleteAll();

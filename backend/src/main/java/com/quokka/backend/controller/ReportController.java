@@ -38,9 +38,15 @@ public class ReportController {
         return reportService.getAllReports();
     }
 
-    @GetMapping("/{studentID}")
+    @GetMapping("/status/{studentID}")
     public String checkReportStatus(@PathVariable Long studentID){
         return reportService.checkReportStatus(studentID);
+    }
+
+    @GetMapping("/students_all_reports/{studentId}")
+    public List<Report> getAllReportsByStudentId(@PathVariable Long studentId){
+
+        return reportService.getAllReportsByStudentId(studentId);
     }
 
     @PostMapping
