@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,8 +58,11 @@ public class AccountService {
         return isValid;
     }
 
-    public List<UserAccount> getAllAccounts(){
-        return accountRepository.findAll();
+    public List<UserAccount> getAllAccounts(Optional<String> department){
+        if (department.isEmpty()){
+            return accountRepository.findAll();
+        }
+        return accountRepository.findByDepartment( department.get());
     }
 
     public UserAccount editAccount( Long id, UserAccount userAccount)  {

@@ -12,14 +12,7 @@ import java.util.Date;
 @Data
 public class AnnouncementAddRequest {
 
-    private Long id;
     private String title;
     private String content;
     private Date date;
-    private boolean isSeen; // I think no need
-
-//    private Long senderId;
-//    private String senderRole;
-//    private String audience;
-
 }

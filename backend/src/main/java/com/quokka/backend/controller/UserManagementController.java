@@ -65,6 +65,8 @@ public class UserManagementController {
             return userManagementService.addAdministrativeAssistant(request);
     }
 
+    // TODO: add message to remove methods to check the deletion status in the postman
+
     @DeleteMapping("/student/{id}")
     public void removeStudentByID(@PathVariable Long id){
 
@@ -126,33 +128,40 @@ public class UserManagementController {
     }
 
     @GetMapping("/student")
-    public List<Student> getAllStudents(@RequestParam Optional<Long> accountId, @RequestParam Optional<Long> instructorId, @RequestParam Optional<Long> teachingAssistantId){
+    public List<Student> getAllStudents(@RequestParam Optional<Long> accountId,
+                                        @RequestParam Optional<Long> instructorId,
+                                        @RequestParam Optional<Long> teachingAssistantId,
+                                        @RequestParam Optional<String> department){
 
-        return userManagementService.getAllStudents(accountId, instructorId, teachingAssistantId);
+        return userManagementService.getAllStudents(accountId, instructorId, teachingAssistantId, department);
     }
 
     @GetMapping("/teaching_assistant")
-    public List<TeachingAssistant> getAllTeachingAssistants(@RequestParam Optional<Long> accountId){
+    public List<TeachingAssistant> getAllTeachingAssistants(@RequestParam Optional<Long> accountId,
+                                                            @RequestParam Optional<String> department){
 
-        return userManagementService.getAllTeachingAssistants(accountId);
+        return userManagementService.getAllTeachingAssistants(accountId, department);
     }
 
     @GetMapping("/instructor")
-    public List<Instructor> getAllInstructors(@RequestParam Optional<Long> accountId){
+    public List<Instructor> getAllInstructors(@RequestParam Optional<Long> accountId,
+                                              @RequestParam Optional<String> department){
 
-        return userManagementService.getAllInstructors(accountId);
+        return userManagementService.getAllInstructors(accountId, department);
     }
 
     @GetMapping("/summer_training_coordinator")
-    public List<SummerTrainingCoordinator> getAllSummerTrainingCoordinators(@RequestParam Optional<Long> accountId){
+    public List<SummerTrainingCoordinator> getAllSummerTrainingCoordinators(@RequestParam Optional<Long> accountId,
+                                                                            @RequestParam Optional<String> department){
 
-        return userManagementService.getAllSummerTrainingCoordinators(accountId);
+        return userManagementService.getAllSummerTrainingCoordinators(accountId, department);
     }
 
     @GetMapping("/administrative_assistant")
-    public List<AdministrativeAssistant> getAllAdministrativeAssistants(@RequestParam Optional<Long> accountId){
+    public List<AdministrativeAssistant> getAllAdministrativeAssistants(@RequestParam Optional<Long> accountId,
+                                                                        @RequestParam Optional<String> department){
 
-        return userManagementService.getAllAdministrativeAssistants(accountId);
+        return userManagementService.getAllAdministrativeAssistants(accountId, department);
     }
 
     @GetMapping("/student/{id}")

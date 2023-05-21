@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -57,9 +58,9 @@ public class AccountController {
     }
 
     @GetMapping
-    public List<UserAccount> getAllAccounts(){
+    public List<UserAccount> getAllAccounts(@RequestParam Optional<String> department){
 
-        return accountService.getAllAccounts();
+        return accountService.getAllAccounts( department);
     }
 
     @GetMapping("/get_account/{id}")

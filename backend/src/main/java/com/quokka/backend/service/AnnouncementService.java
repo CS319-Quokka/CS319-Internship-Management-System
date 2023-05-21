@@ -25,37 +25,35 @@ public class AnnouncementService {
 
     public Announcement addAnnouncement(String senderRole, Long senderId, String audience, AnnouncementAddRequest request) {
         User sender = null;
-        if (senderRole.equals("student")) {
-            sender = userManagementService.getStudentByID(senderId);
-        }
-        else if (senderRole.equals("instructor")) {
+        if (senderRole.equals("instructor")) {
             sender = userManagementService.getInstructorByID(senderId);
         }
         else if (senderRole.equals("TA")) {
             sender = userManagementService.getTeachingAssistantByID(senderId);
         }
-//        else if (senderRole.equals("coordinator")) {
-//            sender = userManagementService.getCoordinatorByID(senderId);
-//        }
-//        else if (senderRole.equals("admin")) {
+        else if (senderRole.equals("administrative-assistant")) {
+            sender = userManagementService.getAdministrativeAssistantByID(senderId);
+        }
+        else if (senderRole.equals("coordinator")) {
+            sender = userManagementService.getSummerTrainingCoordinatorByID(senderId);
+        }
+//        else if (senderRole.equals("admin")) { // TODO: admin ??
 //            sender = userManagementService.getAdminByID(senderId);
 //        }
 
-//        User sender = userManagementService.getUserByIdAndRole(senderId, senderRole);
         if (sender == null) {
             throw new IllegalStateException("Sender for the announcement not found");
         }
 
         Announcement announcement = new Announcement();
-//        announcement.setId(request.getId()); // TODO: I think no need
+
         announcement.setTitle(request.getTitle());
         announcement.setContent(request.getContent());
         announcement.setDate(request.getDate());
-        announcement.setSeen(request.isSeen());
 
         announcement.setSenderRole(senderRole);
         announcement.setSender(sender);
-        announcement.setAudience(audience); // TODO
+        announcement.setAudience(audience);
 
         return announcementRepository.save(announcement);
     }
@@ -64,75 +62,175 @@ public class AnnouncementService {
         return announcementRepository.findById(id).orElseThrow(() -> new AnnouncementNotFoundException(id));
     }
 
-    public List<Announcement> getAllAnnouncements(Optional<String> userRole, Optional<Long> userId) { // TODO: Optional<String> userRole, Optional<Long> userId --> we need to getAllAnnouncements without parameter to gel all announcements in the system.
-        if (userRole.isEmpty() || userId.isEmpty()) {
-            return announcementRepository.findAll();
+
+    // TODO: remove duplicate codes
+    public List<Announcement> getAllAnnouncements(Optional<String> userRole, Optional<Long> userId) {
+        if ( !(userRole.isPresent() && userId.isPresent() ) ) {
+            System.out.println("optional parameter userRole or userId is not present");
+            return null;
         }
+
+        System.out.println("userRole: " + userRole.get() + " and userId: " + userId.get());
+
         List<Announcement> announcements= new ArrayList<Announcement>();
 
-        if(userRole.equals("student") ) {
+        if(userRole.get().equals("student") ) { // ToDo: .get() is IMPORTANT
             Student student = userManagementService.getStudentByID(userId.get());
             if (student == null) {
                 throw new IllegalStateException("Student not found");
             }
 
+            System.out.println("Show announcements for student: " + student.getUserAccount().getLastName() );
+
             Instructor instructor = student.getInstructor();
             TeachingAssistant teachingAssistant = student.getTeachingAssistant();
-            // TODO: getCoordinators for a department --> getCoordinatorsByDepartment()  -> returns a list of coordinators
-            // TODO: getAdministrativeAssistants for a department --> getAdministrativeAssistantsByDepartment() -> returns a list of administrative assistants
+            List<AdministrativeAssistant> administrativeAssistants =
+                    userManagementService.getAllAdministrativeAssistants(Optional.empty(),
+                            student.getUserAccount().getDepartment().describeConstable());
+            List<SummerTrainingCoordinator> coordinators =
+                    userManagementService.getAllSummerTrainingCoordinators(Optional.empty(),
+                            student.getUserAccount().getDepartment().describeConstable());
+
 
             if (instructor != null) {
-                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(instructor.getRole(), instructor.getId(), "students"));
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(instructor.getRole(),
+                                                            instructor.getId(), "students"));
             }
 
             if(teachingAssistant != null) {
-                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(teachingAssistant.getRole(), teachingAssistant.getId(), "students"));
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                                        teachingAssistant.getRole(), teachingAssistant.getId(), "students"));
             }
 
+            for (AdministrativeAssistant administrativeAssistant : administrativeAssistants) {
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        administrativeAssistant.getRole(),
+                        administrativeAssistant.getId(), "students"));
+            }
+
+            for (SummerTrainingCoordinator coordinator : coordinators) {
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        coordinator.getRole(),
+                        coordinator.getId(), "students"));
+            }
             // TODO: if coordinator list is not empty ...
             // TODO: if administrative assistant list is not empty ...
 
             return announcements;
-
         }
-        else if( userRole.equals("instructor") ) {
+        else if( userRole.get().equals("instructor") ) {
             Instructor instructor = userManagementService.getInstructorByID(userId.get());
             if (instructor == null) {
                 throw new IllegalStateException("Instructor not found");
             }
 
-            // TODO: getCoordinators for a department --> getCoordinatorsByDepartment()  -> returns a list of coordinators
-            // TODO: getAdministrativeAssistants for a department --> getAdministrativeAssistantsByDepartment() -> returns a list of administrative assistants
+            System.out.println("Show announcements for instructor: " + instructor.getUserAccount().getLastName() );
+
+            List<AdministrativeAssistant> administrativeAssistants =
+                    userManagementService.getAllAdministrativeAssistants(Optional.empty(),
+                            instructor.getUserAccount().getDepartment().describeConstable());
+
+            List<SummerTrainingCoordinator> coordinators =
+                    userManagementService.getAllSummerTrainingCoordinators(Optional.empty(),
+                            instructor.getUserAccount().getDepartment().describeConstable());
+
+            for (AdministrativeAssistant administrativeAssistant : administrativeAssistants) {
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                                                            administrativeAssistant.getRole(),
+                                                            administrativeAssistant.getId(), "instructors"));
+            }
+            for (SummerTrainingCoordinator coordinator : coordinators) {
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                                                            coordinator.getRole(),
+                                                            coordinator.getId(), "instructors"));
+            }
 
             return announcements;
         }
-        else if( userRole.equals("TA") ) {
+        else if( userRole.get().equals("TA") ) {
             TeachingAssistant teachingAssistant = userManagementService.getTeachingAssistantByID(userId.get());
             if (teachingAssistant == null) {
                 throw new IllegalStateException("Teaching Assistant not found");
             }
 
-            // TODO: getCoordinators for a department --> getCoordinatorsByDepartment()  -> returns a list of coordinators
-            // TODO: getAdministrativeAssistants for a department --> getAdministrativeAssistantsByDepartment() -> returns a list of administrative assistants
+            List<AdministrativeAssistant> administrativeAssistants =
+                    userManagementService.getAllAdministrativeAssistants(Optional.empty(),
+                            teachingAssistant.getUserAccount().getDepartment().describeConstable());
+
+            List<SummerTrainingCoordinator> coordinators =
+                    userManagementService.getAllSummerTrainingCoordinators(Optional.empty(),
+                            teachingAssistant.getUserAccount().getDepartment().describeConstable());
+
+            for (AdministrativeAssistant administrativeAssistant : administrativeAssistants) {
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        administrativeAssistant.getRole(),
+                        administrativeAssistant.getId(), "TAs"));
+            }
+            for (SummerTrainingCoordinator coordinator : coordinators) {
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        coordinator.getRole(),
+                        coordinator.getId(), "TAs"));
+            }
+
+            return announcements;
+        }
+        else if( userRole.get().equals("administrative-assistant") ) {
+            AdministrativeAssistant administrativeAssistant = userManagementService.getAdministrativeAssistantByID(userId.get());
+            if (administrativeAssistant == null) {
+                throw new IllegalStateException("Administrative Assistant not found");
+            }
+
+            // TODO: announcements that are sent by him/her are also included in the list !!!
+            List<AdministrativeAssistant> administrativeAssistants =
+                    userManagementService.getAllAdministrativeAssistants(Optional.empty(),
+                            administrativeAssistant.getUserAccount().getDepartment().describeConstable());
+
+            List<SummerTrainingCoordinator> coordinators =
+                    userManagementService.getAllSummerTrainingCoordinators(Optional.empty(),
+                            administrativeAssistant.getUserAccount().getDepartment().describeConstable());
+
+            for (AdministrativeAssistant otherAdministrativeAssistant : administrativeAssistants) {
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        otherAdministrativeAssistant.getRole(),
+                        otherAdministrativeAssistant.getId(), "AAs"));
+            }
+            for (SummerTrainingCoordinator coordinator : coordinators) {
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        coordinator.getRole(),
+                        coordinator.getId(), "AAs"));
+            }
 
             return announcements;
         }
         else if( userRole.get().equals("coordinator") ) {
+            SummerTrainingCoordinator coordinator = userManagementService.getSummerTrainingCoordinatorByID(userId.get());
+            if (coordinator == null) {
+                throw new IllegalStateException("Coordinator not found");
+            }
 
-            // TODO: getCoordinators for a department --> getCoordinatorsByDepartment()  -> returns a list of coordinators
-            // TODO: getAdministrativeAssistants for a department --> getAdministrativeAssistantsByDepartment() -> returns a list of administrative assistants
             // TODO: announcements that are sent by him/her are also included in the list !!!
+            List<AdministrativeAssistant> administrativeAssistants =
+                    userManagementService.getAllAdministrativeAssistants(Optional.empty(),
+                            coordinator.getUserAccount().getDepartment().describeConstable());
+            List<SummerTrainingCoordinator> coordinators =
+                    userManagementService.getAllSummerTrainingCoordinators(Optional.empty(),
+                            coordinator.getUserAccount().getDepartment().describeConstable());
+            for (AdministrativeAssistant administrativeAssistant : administrativeAssistants) {
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        administrativeAssistant.getRole(),
+                        administrativeAssistant.getId(), "STCs"));
+            }
+            for (SummerTrainingCoordinator otherCoordinator : coordinators) {
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        otherCoordinator.getRole(),
+                        otherCoordinator.getId(), "STCs"));
+            }
 
             return announcements;
         }
-        else if( userRole.equals("administrative-assistant") ) {
-
-            // TODO: getCoordinators for a department --> getCoordinatorsByDepartment()  -> returns a list of coordinators
-            // TODO: getAdministrativeAssistants for a department --> getAdministrativeAssistantsByDepartment() -> returns a list of administrative assistants
-            // TODO: announcements that are sent by him/her are also included in the list !!!
-
-            return announcements;
-        }
+//        else if( userRole.get().equals("admin")) { // TODO: admin ??
+//
+//        }
 
         return null;
     }

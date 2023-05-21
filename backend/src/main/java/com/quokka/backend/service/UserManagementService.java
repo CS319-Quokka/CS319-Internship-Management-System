@@ -198,63 +198,126 @@ public class UserManagementService {
         return true;
     }
 
-    public List<Student> getAllStudents(Optional<Long> userAccountId, Optional <Long> instructorId, Optional <Long> teachingAssistantId){
-        if(userAccountId.isPresent()){
-
+    public List<Student> getAllStudents(Optional<Long> userAccountId, Optional <Long> instructorId,
+                                        Optional <Long> teachingAssistantId, Optional <String> department){
+        if (userAccountId.isPresent() && department.isPresent()) {
+            return null;
+        }
+        else if (userAccountId.isPresent()) { // get all students in a user account
             return studentRepository.findByUserAccountId(userAccountId.get());
         }
-
-        if(instructorId.isPresent()){
-
+        else if (department.isPresent() ) { // get all students in a department
+            List<UserAccount> accountsInDepartment = accountService.getAllAccounts(department); // department.get() ??
+            List<Student> studentsInDepartment = new ArrayList<Student>();
+            for (UserAccount account : accountsInDepartment) {
+                studentsInDepartment.addAll(studentRepository.findByUserAccountId(account.getId()));
+            }
+            return studentsInDepartment;
+        }
+        else if (instructorId.isPresent()) { // get all students of an instructor
             return studentRepository.findByInstructorId(instructorId.get());
         }
-
-        if(teachingAssistantId.isPresent()){
-
+        else if(teachingAssistantId.isPresent()){  // get all students of a teaching assistant
             return studentRepository.findByTeachingAssistantId(teachingAssistantId.get());
         }
 
-        return studentRepository.findAll();
+        return studentRepository.findAll(); // get all students
     }
 
-    public List<TeachingAssistant> getAllTeachingAssistants(Optional<Long> userAccountId){
-        if(userAccountId.isPresent()){
-
+    public List<TeachingAssistant> getAllTeachingAssistants(Optional<Long> userAccountId, Optional <String> department){
+        if(userAccountId.isPresent() && department.isPresent() ) {
+            return null;
+        }
+        else if(userAccountId.isPresent() ){ // get all teaching assistants in a user account
             return teachingAssistantRepository.findByUserAccountId(userAccountId.get());
         }
+        else if (department.isPresent()) {  // get all teaching assistants in a department
+            List<UserAccount> accountsInDepartment = accountService.getAllAccounts(department); // department.get() ??
+            List<TeachingAssistant> teachingAssistantsInDepartment = new ArrayList<>();
 
-        return teachingAssistantRepository.findAll();
+            for (UserAccount account : accountsInDepartment) {
+                teachingAssistantsInDepartment.addAll(teachingAssistantRepository.findByUserAccountId(account.getId()));
+            }
 
-    }
-
-    public List<Instructor> getAllInstructors(Optional<Long> userAccountId){
-        if(userAccountId.isPresent()){
-
-            return instructorRepository.findByUserAccountId(userAccountId.get());
+            return teachingAssistantsInDepartment;
         }
 
-        return instructorRepository.findAll();
+        return teachingAssistantRepository.findAll(); // get all teaching assistants
 
     }
 
-    public List<SummerTrainingCoordinator> getAllSummerTrainingCoordinators(Optional<Long> userAccountId){
-        if (userAccountId.isPresent()){
+    public List<Instructor> getAllInstructors(Optional<Long> userAccountId,
+                                              Optional <String> department){
+        if(userAccountId.isPresent() && department.isPresent() ) {
+            return null;
+        }
+        else if(userAccountId.isPresent()){ // get all instructors in a user account
+            return instructorRepository.findByUserAccountId(userAccountId.get());
+        }
+        else if (department.isPresent()) { // get all instructors in a department
+            List<UserAccount> accountsInDepartment = accountService.getAllAccounts(department); // department.get() ??
+            List<Instructor> instructorsInDepartment = new ArrayList<>();
+
+            for (UserAccount account : accountsInDepartment) {
+                instructorsInDepartment.addAll(instructorRepository.findByUserAccountId(account.getId()));
+            }
+
+            return instructorsInDepartment;
+
+        }
+
+        return instructorRepository.findAll(); // get all instructors
+
+    }
+
+    public List<SummerTrainingCoordinator> getAllSummerTrainingCoordinators(Optional<Long> userAccountId,
+                                                                            Optional <String> department){
+        if ( userAccountId.isPresent() && department.isPresent() ) {
+            return null;
+        }
+        else if (userAccountId.isPresent()){ // get all summer training coordinators in a user account
 
             return summerTrainingCoordinatorRepository.findByUserAccountId(userAccountId.get());
         }
+        else if ( department.isPresent() ) { // get all summer training coordinators in a department
 
-        return summerTrainingCoordinatorRepository.findAll();
+            List<UserAccount> accountsInDepartment = accountService.getAllAccounts(department); // department.get() ??
+            List<SummerTrainingCoordinator> summerTrainingCoordinatorsInDepartment = new ArrayList<>();
+
+            for (UserAccount account : accountsInDepartment) {
+                summerTrainingCoordinatorsInDepartment.addAll(summerTrainingCoordinatorRepository.findByUserAccountId(account.getId()));
+            }
+
+            return summerTrainingCoordinatorsInDepartment;
+        }
+
+        return summerTrainingCoordinatorRepository.findAll(); // get all summer training coordinators
 
 
     }
 
-    public List<AdministrativeAssistant> getAllAdministrativeAssistants(Optional<Long> userAccountId){
-        if (userAccountId.isPresent()){
+    public List<AdministrativeAssistant> getAllAdministrativeAssistants(Optional<Long> userAccountId,
+                                                                        Optional <String> department){
+        if ( userAccountId.isPresent() && department.isPresent() ) {
+            return null;
+        }
+        else if (userAccountId.isPresent()){
 
             return administrativeAssistantRepository.findByUserAccountId(userAccountId.get());
         }
+        else if ( department.isPresent() ) {
 
-        return administrativeAssistantRepository.findAll();
+            List<UserAccount> accountsInDepartment = accountService.getAllAccounts(department); // department.get() ??
+            List<AdministrativeAssistant> administrativeAssistantsInDepartment = new ArrayList<>();
+
+            for (UserAccount account : accountsInDepartment) {
+                administrativeAssistantsInDepartment.addAll(administrativeAssistantRepository.findByUserAccountId(account.getId()));
+            }
+
+            return administrativeAssistantsInDepartment;
+        }
+
+        return administrativeAssistantRepository.findAll(); // get all administrative assistants
     }
 
     public Student getStudentByID(Long id) {
