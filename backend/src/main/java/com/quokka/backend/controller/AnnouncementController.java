@@ -1,10 +1,13 @@
 package com.quokka.backend.controller;
 
 import com.quokka.backend.models.Announcement;
+import com.quokka.backend.request.AnnouncementAddRequest;
 import com.quokka.backend.service.AnnouncementService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequestMapping("/announcement")
 @RestController
@@ -12,13 +15,15 @@ public class AnnouncementController {
 
     private AnnouncementService announcementService;
 
+    @Autowired
     public AnnouncementController (AnnouncementService announcementService) {
         this.announcementService = announcementService;
     }
 
-    @PostMapping
-    public Announcement addAnnouncement( @RequestBody Announcement announcement) {
-        return announcementService.addAnnouncement(announcement);
+    @PostMapping("/made/{senderRole}/{senderId}/{audience}")
+    public Announcement addAnnouncement( @PathVariable String senderRole, @PathVariable Long senderId,
+                                         @PathVariable String audience, @RequestBody AnnouncementAddRequest request) {
+        return announcementService.addAnnouncement(senderRole, senderId, audience,request);
     }
 
     @GetMapping("/{id}")
@@ -26,9 +31,17 @@ public class AnnouncementController {
         return announcementService.getAnnouncementById(id);
     }
 
-    @GetMapping
-    public List<Announcement> getAllAnnouncements() {
-        return announcementService.getAllAnnouncements();
+    // TODO
+    @GetMapping//("/{userRole}/{userId}")
+    public List<Announcement> getAllAnnouncements(@RequestParam Optional<String> userRole, @RequestParam Optional<Long> userId) { //  public List<Announcement> getAllAnnouncements(@PathVariable String userRole, @PathVariable Long userId) {
+
+        return announcementService.getAllAnnouncements(userRole, userId);
+    }
+
+    @GetMapping("/made/{senderRole}/{senderId}")
+    public List<Announcement> getAllMadeAnnouncements(@PathVariable String senderRole, @PathVariable Long senderId,
+                                                      @RequestParam Optional<String> audience) {
+        return announcementService.getAllMadeAnnouncements(senderRole, senderId, audience);
     }
 
     @PatchMapping("/{id}")
