@@ -54,6 +54,7 @@ public class AnnouncementService {
         announcement.setSenderRole(senderRole);
         announcement.setSender(sender);
         announcement.setAudience(audience);
+        // "CS" -> CS deparment, "IE" -> IE department etc.
 
         return announcementRepository.save(announcement);
     }
@@ -106,12 +107,21 @@ public class AnnouncementService {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         administrativeAssistant.getRole(),
                         administrativeAssistant.getId(), "students"));
+
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        administrativeAssistant.getRole(),
+                        administrativeAssistant.getId(), student.getCourseCode().substring(0,2)) ); // substring(0,2) -> CS, IE, ...
             }
 
             for (SummerTrainingCoordinator coordinator : coordinators) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         coordinator.getRole(),
                         coordinator.getId(), "students"));
+
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        coordinator.getRole(),
+                        coordinator.getId(), student.getCourseCode().substring(0,2)) );
+
             }
             // TODO: if coordinator list is not empty ...
             // TODO: if administrative assistant list is not empty ...
@@ -138,11 +148,20 @@ public class AnnouncementService {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                                                             administrativeAssistant.getRole(),
                                                             administrativeAssistant.getId(), "instructors"));
+
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                                                            administrativeAssistant.getRole(),
+                                                            administrativeAssistant.getId(),
+                                                            instructor.getUserAccount().getDepartment() ));
             }
             for (SummerTrainingCoordinator coordinator : coordinators) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                                                             coordinator.getRole(),
                                                             coordinator.getId(), "instructors"));
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                                                            coordinator.getRole(),
+                                                            coordinator.getId(),
+                                                            instructor.getUserAccount().getDepartment() ));
             }
 
             return announcements;
@@ -165,11 +184,22 @@ public class AnnouncementService {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         administrativeAssistant.getRole(),
                         administrativeAssistant.getId(), "TAs"));
+
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        administrativeAssistant.getRole(),
+                        administrativeAssistant.getId(),
+                        teachingAssistant.getUserAccount().getDepartment() ) );
+
             }
             for (SummerTrainingCoordinator coordinator : coordinators) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         coordinator.getRole(),
                         coordinator.getId(), "TAs"));
+
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        coordinator.getRole(),
+                        coordinator.getId(),
+                        teachingAssistant.getUserAccount().getDepartment() ) );
             }
 
             return announcements;
@@ -193,11 +223,21 @@ public class AnnouncementService {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         otherAdministrativeAssistant.getRole(),
                         otherAdministrativeAssistant.getId(), "AAs"));
+
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        otherAdministrativeAssistant.getRole(),
+                        otherAdministrativeAssistant.getId(),
+                        administrativeAssistant.getUserAccount().getDepartment() ) );
             }
             for (SummerTrainingCoordinator coordinator : coordinators) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         coordinator.getRole(),
                         coordinator.getId(), "AAs"));
+
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        coordinator.getRole(),
+                        coordinator.getId(),
+                        administrativeAssistant.getUserAccount().getDepartment() ) );
             }
 
             return announcements;
@@ -219,11 +259,21 @@ public class AnnouncementService {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         administrativeAssistant.getRole(),
                         administrativeAssistant.getId(), "STCs"));
+
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        administrativeAssistant.getRole(),
+                        administrativeAssistant.getId(),
+                        coordinator.getUserAccount().getDepartment() ) );
             }
             for (SummerTrainingCoordinator otherCoordinator : coordinators) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         otherCoordinator.getRole(),
                         otherCoordinator.getId(), "STCs"));
+
+                announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
+                        otherCoordinator.getRole(),
+                        otherCoordinator.getId(),
+                        coordinator.getUserAccount().getDepartment() ) );
             }
 
             return announcements;

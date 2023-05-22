@@ -31,8 +31,7 @@ public class AnnouncementController {
         return announcementService.getAnnouncementById(id);
     }
 
-    // TODO: remove unnecessary path variables
-    @GetMapping//("/{userRole}/{userId}")
+    @GetMapping
     public List<Announcement> getAllAnnouncements(@RequestParam Optional<String> userRole, @RequestParam Optional<Long> userId) {
         return announcementService.getAllAnnouncements(userRole, userId);
     }
