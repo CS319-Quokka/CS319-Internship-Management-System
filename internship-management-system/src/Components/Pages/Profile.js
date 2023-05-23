@@ -2,6 +2,13 @@ import React, { Component, useState, useEffect } from 'react'
 import '../Styles/Profile.css'
 import pic from "../Images/quokka.png";
 import axios from "axios";
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 {/*
 const [error, setError] = useState(null);
 const [isLoaded, setIsLoaded] = useState(null);
@@ -23,6 +30,74 @@ useEffect( () => {
         )
 },[])
 */}
+
+
+function FormDialog() {
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    const handleConfirm = () => {
+        setOpen(false);
+        // TODO: Change password
+    };
+
+    return (
+        <div>
+            <Button variant="outlined" onClick={handleClickOpen}>
+                Change Password
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogContent>
+                    <DialogContentText>
+
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
+                        label="Old Password"
+                        type="password"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
+                        label="New Password"
+                        type="password"
+                        fullWidth
+                        variant="standard"
+                    />
+                    <TextField
+                        autoFocus
+                        required
+                        margin="dense"
+                        id="name"
+                        label="Enter New Password Again"
+                        type="password"
+                        fullWidth
+                        variant="standard"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleConfirm}>Confirm</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
+
 
 class Profile extends Component {
 
@@ -120,8 +195,8 @@ class Profile extends Component {
                            
                             <img className='profilePic' src={pic} alt="Profile"/>
                             <p><em>{this.state.userType}</em></p><br/>
-            
-                            <button className='button'>Change Password</button>
+
+                            <FormDialog/>
                             <br></br>
                         </div>
 
