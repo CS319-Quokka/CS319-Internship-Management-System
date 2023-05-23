@@ -4,6 +4,7 @@ import com.quokka.backend.Auth.AuthResponse;
 import com.quokka.backend.models.User;
 import com.quokka.backend.models.UserAccount;
 import com.quokka.backend.service.AccountService;
+import com.quokka.backend.service.EmailSenderService;
 import com.quokka.backend.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,8 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @PostMapping("/api/login")
     public ResponseEntity<AuthResponse> login(@RequestBody UserAccount userAccount) {
@@ -58,6 +61,8 @@ public class AccountController {
 
         // Set the generated password to the userAccount
         userAccount.setPassword(password);
+        emailSenderService.sendMail(userAccount.getEmail(), "Your password is: " + password,
+                "Internship Management System Password");
         return accountService.addUserAccount(userAccount);
 
     }
