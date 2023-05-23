@@ -19,7 +19,7 @@ public class Announcement {
     private Long id;
     private String title;
     private String content;
-    private Date date;
+    private Date date; // TODO
     private boolean isSeen; // I think no need
 
     @ManyToOne // it was before @OneToOne

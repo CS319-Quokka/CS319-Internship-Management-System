@@ -1,37 +1,45 @@
 package com.quokka.backend.controller;
 
 import com.quokka.backend.models.Notification;
+import com.quokka.backend.request.AnnouncementAddRequest;
+import com.quokka.backend.request.NotificationAddRequest;
 import com.quokka.backend.service.NotificationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-
 @RequestMapping("/notification")
 public class NotificationController {
 
     private NotificationService notificationService;
 
+    @Autowired
     public NotificationController(NotificationService notificationService){
         this.notificationService = notificationService;
     }
 
-    @PostMapping
-    public Notification addNotification(@RequestBody Notification newNotification){
-        return notificationService.addNotification(newNotification);
+    // DONE
+    @PostMapping("/{userId}")
+    public Notification addNotification( @PathVariable Long userId,  @RequestBody NotificationAddRequest request){
+        return notificationService.addNotification(userId, request);
     }
 
+    // DONE
     @GetMapping ("/{id}")
     public Notification getNotificationById(@PathVariable Long id) {
         return notificationService.getNotificationById(id);
     }
 
+    // DONE
     @GetMapping
-    public List<Notification> getAllNotifications() {
-        return notificationService.getAllNotifications();
+    public List<Notification> getAllNotifications(Optional<Long> userId) {
+        return notificationService.getAllNotifications(userId);
     }
 
+    // TODO
     @PutMapping("/{id}")
     public Notification updateNotification(@RequestBody Notification newNotification, @PathVariable Long id) {
         return notificationService.updateNotification(newNotification, id);

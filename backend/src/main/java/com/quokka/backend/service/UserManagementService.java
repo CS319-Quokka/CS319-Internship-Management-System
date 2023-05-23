@@ -42,6 +42,41 @@ public class UserManagementService {
         this.administrativeAssistantRepository = administrativeAssistantRepository;
     }
 
+    // TODO: Use this in AnnouncementService
+    public User getUserById(Long userId) {
+
+        // TODO: most of the time we will get the Student. ??
+
+        Optional<Student> student = studentRepository.findById(userId);
+        if (student.isPresent()) {
+            return student.get();
+        }
+
+        Optional<Instructor> instructor = instructorRepository.findById(userId);
+        if (instructor.isPresent()) {
+            return instructor.get();
+        }
+
+        Optional<TeachingAssistant> teachingAssistant = teachingAssistantRepository.findById(userId);
+        if (teachingAssistant.isPresent()) {
+            return teachingAssistant.get();
+        }
+
+        Optional<SummerTrainingCoordinator> summerTrainingCoordinator = summerTrainingCoordinatorRepository.findById(userId);
+        if (summerTrainingCoordinator.isPresent()) {
+            return summerTrainingCoordinator.get();
+        }
+
+        Optional<AdministrativeAssistant> administrativeAssistant = administrativeAssistantRepository.findById(userId);
+        if (administrativeAssistant.isPresent()) {
+            return administrativeAssistant.get();
+        }
+
+        // TODO: Add Admin case
+
+        return null;
+    }
+
     public List<User> getProfilesByAccountId(Long accountId) {
 
         List<User> returnList = new ArrayList<User>();

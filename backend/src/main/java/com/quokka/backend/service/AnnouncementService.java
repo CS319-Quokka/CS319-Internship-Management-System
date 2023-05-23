@@ -75,7 +75,7 @@ public class AnnouncementService {
 
         List<Announcement> announcements= new ArrayList<Announcement>();
 
-        if(userRole.get().equals("student") ) { // ToDo: .get() is IMPORTANT
+        if(userRole.get().equals("student") ) {
             Student student = userManagementService.getStudentByID(userId.get());
             if (student == null) {
                 throw new IllegalStateException("Student not found");
@@ -123,8 +123,6 @@ public class AnnouncementService {
                         coordinator.getId(), student.getCourseCode().substring(0,2)) );
 
             }
-            // TODO: if coordinator list is not empty ...
-            // TODO: if administrative assistant list is not empty ...
 
             return announcements;
         }
@@ -210,7 +208,7 @@ public class AnnouncementService {
                 throw new IllegalStateException("Administrative Assistant not found");
             }
 
-            // TODO: announcements that are sent by him/her are also included in the list !!!
+            // Announcements that are sent by this administrative assistant are also included in the list.
             List<AdministrativeAssistant> administrativeAssistants =
                     userManagementService.getAllAdministrativeAssistants(Optional.empty(),
                             administrativeAssistant.getUserAccount().getDepartment().describeConstable());
@@ -248,7 +246,7 @@ public class AnnouncementService {
                 throw new IllegalStateException("Coordinator not found");
             }
 
-            // TODO: announcements that are sent by him/her are also included in the list !!!
+            // Announcements that are sent by this coordinator are also included in the list !!!
             List<AdministrativeAssistant> administrativeAssistants =
                     userManagementService.getAllAdministrativeAssistants(Optional.empty(),
                             coordinator.getUserAccount().getDepartment().describeConstable());
