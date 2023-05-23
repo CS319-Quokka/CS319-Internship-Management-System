@@ -95,4 +95,10 @@ public class AccountController {
     public void deleteAllAccounts(){
         accountService.deleteAllAccounts();
     }
+
+    @PatchMapping("/{id}")
+    public int changePassword(@PathVariable Long id, @RequestParam String oldPassword, @RequestParam String newPassword){
+
+        return accountService.changePassword(id, oldPassword, newPassword);
+    }
 }

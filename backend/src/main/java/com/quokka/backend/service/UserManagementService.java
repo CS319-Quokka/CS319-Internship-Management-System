@@ -113,12 +113,12 @@ public class UserManagementService {
         student.setCourseCode(request.getCourseCode());
         student.setLetterGrade(request.getLetterGrade());
         student.setCompanyName(request.getCompanyName());
-        student.setRole("student");
+        student.setRole("Student");
 
         student.setUserAccount(account);
         student.setInstructor(instructor);
         student.setTeachingAssistant(teachingAssistant);
-
+        student.setStatus("Waiting for company evaluation form");
         return studentRepository.save(student);
     }
 
@@ -131,7 +131,7 @@ public class UserManagementService {
 
         TeachingAssistant teachingAssistant = new TeachingAssistant();
         teachingAssistant.setUserAccount(account);
-        teachingAssistant.setRole("TA");
+        teachingAssistant.setRole("Teaching Assistant");
 
         return teachingAssistantRepository.save(teachingAssistant);
     }
@@ -145,7 +145,7 @@ public class UserManagementService {
 
         Instructor instructor = new Instructor();
         instructor.setUserAccount(account);
-        instructor.setRole("instructor");
+        instructor.setRole("Instructor");
 
         return instructorRepository.save(instructor);
     }
@@ -159,7 +159,7 @@ public class UserManagementService {
 
         SummerTrainingCoordinator summerTrainingCoordinator = new SummerTrainingCoordinator();
         summerTrainingCoordinator.setUserAccount(account);
-        summerTrainingCoordinator.setRole("coordinator");
+        summerTrainingCoordinator.setRole("Summer Training Coordinator");
 
         return summerTrainingCoordinatorRepository.save(summerTrainingCoordinator);
     }
@@ -173,7 +173,7 @@ public class UserManagementService {
 
         AdministrativeAssistant administrativeAssistant = new AdministrativeAssistant();
         administrativeAssistant.setUserAccount(account);
-        administrativeAssistant.setRole("administrative-assistant");
+        administrativeAssistant.setRole("Administrative Assistant");
 
         return administrativeAssistantRepository.save(administrativeAssistant);
     }

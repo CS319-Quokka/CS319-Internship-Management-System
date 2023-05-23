@@ -2,10 +2,8 @@ package com.quokka.backend.controller;
 
 import com.quokka.backend.models.Report;
 import com.quokka.backend.models.ReportFile;
-import com.quokka.backend.request.ReportAddRequest;
-import com.quokka.backend.request.ReportEditRequest;
-import com.quokka.backend.request.ReportFileAddRequest;
-import com.quokka.backend.request.ReportFileEditRequest;
+import com.quokka.backend.request.*;
+import com.quokka.backend.service.FeedbackService;
 import com.quokka.backend.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +16,11 @@ import java.util.List;
 public class ReportController {
 
     private ReportService reportService;
+    private FeedbackService feedbackService;
 
     @Autowired
-    public ReportController(ReportService reportService){
+    public ReportController(ReportService reportService, FeedbackService feedbackService){
+        this.feedbackService = feedbackService;
         this.reportService = reportService;
     }
 
@@ -69,7 +69,17 @@ public class ReportController {
     @PostMapping("/file")
     public boolean addReportFile(ReportFileAddRequest request){
 
-        return reportService.addReportFile(request);
+        boolean reportFileSubmitted = reportService.addReportFile(request);
+        if(reportFileSubmitted){
+
+            FeedbackAddRequest feedbackRequest = new FeedbackAddRequest();
+            feedbackRequest.setReportId(request.getReportId());
+            feedbackRequest.setSenderId(request.getStudentId());
+            feedbackRequest.setFeedbackDescription("");
+            feedbackRequest.setUploadDate(null);
+            feedbackService.addFeedback(feedbackRequest);
+        }
+        return reportFileSubmitted;
     }
 
     @GetMapping("/file/{id}")

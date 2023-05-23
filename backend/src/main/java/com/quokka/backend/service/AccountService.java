@@ -1,5 +1,6 @@
 package com.quokka.backend.service;
 
+import com.quokka.backend.models.Student;
 import com.quokka.backend.models.User;
 import com.quokka.backend.models.UserAccount;
 import com.quokka.backend.repository.AccountRepository;
@@ -16,6 +17,7 @@ import java.util.Optional;
 @Setter
 @Service
 public class AccountService {
+
     private final AccountRepository accountRepository;
 
     @Autowired
@@ -95,5 +97,27 @@ public class AccountService {
     public void deleteAllAccounts() {
         accountRepository.deleteAll();
         System.out.println("All accounts deleted!");
+    }
+
+    public int changePassword(Long id, String oldPassword, String newPassword){
+
+        Optional<UserAccount> accountOpt = accountRepository.findById(id);
+        if(!accountOpt.isPresent()){
+
+            return -2;
+        }
+
+        if(!(accountOpt.get().getPassword().equals(oldPassword))){
+
+            return -1;
+        }
+
+        if(oldPassword.equals(newPassword)){
+
+            return 0;
+        }
+
+        accountOpt.get().setPassword(newPassword);
+        return 1;
     }
 }

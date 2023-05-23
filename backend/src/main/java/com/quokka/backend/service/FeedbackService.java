@@ -55,18 +55,13 @@ public class FeedbackService {
 
     public boolean addFeedback(FeedbackAddRequest request){
 
-        if(request.getFeedbackDescription() == null){
-
-            throw new IllegalStateException("Cannot add feedback!");
-        }
-
         Feedback newFeedback = new Feedback();
         Optional<Report> report = reportRepository.findById(request.getReportId());
         if(!report.isPresent()){
 
             newFeedback.setReport(null);
         }
-        else{
+        else {
 
             newFeedback.setReport(report.get());
         }
@@ -86,8 +81,16 @@ public class FeedbackService {
             newFeedback.setSender(null);
         }
 
+        if(request.getFeedbackDescription() == null){
+
+            newFeedback.setFeedbackDescription("");
+        }
+        else{
+
+            newFeedback.setFeedbackDescription(request.getFeedbackDescription());
+        }
+
         newFeedback.setId(request.getId());
-        newFeedback.setFeedbackDescription(request.getFeedbackDescription());
         newFeedback.setUploadDate(request.getUploadDate());
         feedbackRepository.save(newFeedback);
         return true;
