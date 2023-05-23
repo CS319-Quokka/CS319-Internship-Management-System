@@ -99,7 +99,12 @@ public class AccountService {
         System.out.println("All accounts deleted!");
     }
 
-    public int changePassword(Long id, String oldPassword, String newPassword){
+    public int changePassword(Long id, String oldPassword, String newPassword, String newPassword2){
+
+        if(!(newPassword.equals(newPassword2))){
+
+            return -3;
+        }
 
         Optional<UserAccount> accountOpt = accountRepository.findById(id);
         if(!accountOpt.isPresent()){
