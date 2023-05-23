@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @RestController
@@ -53,6 +54,10 @@ public class AccountController {
     @PostMapping
     public UserAccount addAccount(@RequestBody UserAccount userAccount){
 
+        String password = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 15);
+
+        // Set the generated password to the userAccount
+        userAccount.setPassword(password);
         return accountService.addUserAccount(userAccount);
 
     }
