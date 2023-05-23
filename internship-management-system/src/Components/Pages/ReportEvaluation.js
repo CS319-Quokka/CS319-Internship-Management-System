@@ -144,12 +144,19 @@ const FileUpload = () => {
   };
   const handleUpload = () => {
     const formData = new FormData();
-    formData.append('file', selectedFile);
     formData.append('studentId', studentId);
+    formData.append('fileData', selectedFile);
+    formData.append('feedbackDescription', "asd");
     formData.append('feedbackId', feedbackId);
-    axios.post('http://localhost:8080/evaluation', formData)  //????
+    axios.post("http://localhost:8080/feedback/file",
+        formData,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })  //????
       .then((response) => {
-        // Handle success response
+        console.log("success");
         console.log(response.data);
       })
       .catch((error) => {

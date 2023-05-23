@@ -4,6 +4,7 @@ import com.quokka.backend.Auth.AuthResponse;
 import com.quokka.backend.models.User;
 import com.quokka.backend.models.UserAccount;
 import com.quokka.backend.service.AccountService;
+import com.quokka.backend.service.EmailSenderService;
 import com.quokka.backend.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @RestController
@@ -21,6 +23,8 @@ public class AccountController {
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private EmailSenderService emailSenderService;
 
     @PostMapping("/api/login")
     public ResponseEntity<AuthResponse> login(@RequestBody UserAccount userAccount) {
@@ -53,6 +57,12 @@ public class AccountController {
     @PostMapping
     public UserAccount addAccount(@RequestBody UserAccount userAccount){
 
+        String password = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 15);
+
+        // Set the generated password to the userAccount
+        userAccount.setPassword(password);
+        emailSenderService.sendMail(userAccount.getEmail(), "Your password is: " + password,
+                "Internship Management System Password");
         return accountService.addUserAccount(userAccount);
 
     }
@@ -84,5 +94,11 @@ public class AccountController {
     @DeleteMapping
     public void deleteAllAccounts(){
         accountService.deleteAllAccounts();
+    }
+
+    @PatchMapping("/{id}")
+    public int changePassword(@PathVariable Long id, @RequestParam String oldPassword, @RequestParam String newPassword){
+
+        return accountService.changePassword(id, oldPassword, newPassword);
     }
 }

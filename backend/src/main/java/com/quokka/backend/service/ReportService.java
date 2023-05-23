@@ -1,15 +1,14 @@
 package com.quokka.backend.service;
 
+import com.quokka.backend.controller.FeedbackController;
 import com.quokka.backend.models.Report;
 import com.quokka.backend.models.ReportFile;
 import com.quokka.backend.models.Student;
+import com.quokka.backend.repository.FeedbackRepository;
 import com.quokka.backend.repository.ReportFileRepository;
 import com.quokka.backend.repository.ReportRepository;
 import com.quokka.backend.repository.StudentRepository;
-import com.quokka.backend.request.ReportAddRequest;
-import com.quokka.backend.request.ReportEditRequest;
-import com.quokka.backend.request.ReportFileAddRequest;
-import com.quokka.backend.request.ReportFileEditRequest;
+import com.quokka.backend.request.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
@@ -24,10 +23,13 @@ public class ReportService {
     private ReportRepository reportRepository;
     private ReportFileRepository reportFileRepository;
     private StudentRepository studentRepository;
+    private FeedbackRepository feedbackRepository;
 
     @Autowired
-    public ReportService(ReportRepository reportRepository, ReportFileRepository reportFileRepository, StudentRepository studentRepository) {
+    public ReportService(ReportRepository reportRepository, ReportFileRepository reportFileRepository,
+                         StudentRepository studentRepository, FeedbackRepository feedbackRepository) {
 
+        this.feedbackRepository = feedbackRepository;
         this.reportFileRepository = reportFileRepository;
         this.reportRepository = reportRepository;
         this.studentRepository = studentRepository;
@@ -54,6 +56,16 @@ public class ReportService {
     }
 
     public boolean addReport(ReportAddRequest request) {
+
+        List<Report> studentsReports = getAllReportsByStudentId(request.getStudentId());
+        if(studentsReports.size() != 0){
+
+            Long lastReportId = studentsReports.get(studentsReports.size() - 1).getId();
+            if(getReportFileWithReportId(lastReportId) == null){
+
+                return false;
+            }
+        }
 
         Report newInternshipReport = new Report();
         Optional<Student> student = studentRepository.findById(request.getStudentId());
@@ -137,6 +149,13 @@ public class ReportService {
 
     public ReportFile getReportFileWithReportId(Long id) {
 
+        for (ReportFile reportFile : reportFileRepository.findAll()) {
+
+            if (reportFile.getReport().getId() == id) {
+
+                return reportFile;
+            }
+        }
         return null;
     }
 

@@ -9,7 +9,7 @@ import * as GiIcons from "react-icons/gi";
 export const SidebarData = [
 
   {
-    userType : "student",
+    userType : "Student",
     items:[
       {
         title: "Profile",
@@ -44,7 +44,7 @@ export const SidebarData = [
     
   },
   {
-    userType : "instructor",
+    userType : "Instructor",
     items:[
     { 
       title: "Profile",
@@ -83,7 +83,7 @@ export const SidebarData = [
     ],
   },
   {
-    userType : "administrative-assistant",
+    userType : "Administrative Assistant",
     items:[
     { 
       title: "Profile",
@@ -130,7 +130,7 @@ export const SidebarData = [
   },
 
   {
-    userType : "TA",
+    userType : "Teaching Assistant",
     items:[
     { 
       title: "Profile",
@@ -160,7 +160,7 @@ export const SidebarData = [
     ],
   },
   {
-    userType : "coordinator",
+    userType : "Summer Training Coordinator",
     items:[
     { 
       title: "Profile",
