@@ -1,4 +1,4 @@
-import React, {Component, useState, handleChange} from 'react'
+import React, {Component, useState, handleChange, useEffect} from 'react'
 import axios from 'axios';
 import '../Styles/ReportEvaluation.css'
 import IconButton from '@mui/material/IconButton';
@@ -26,6 +26,8 @@ import FormatBold from '@mui/icons-material/FormatBold';
 import FormatItalic from '@mui/icons-material/FormatItalic';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Check from '@mui/icons-material/Check';
+
+
 
 
 const statusOptions = ["Submitted", 
@@ -233,8 +235,33 @@ function TextareaValidator() {
 function FormDialog(props) {
   const [open, setOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
+  const [buttonName,setButtonName] = useState("");
     
   const [isSatisfactory, setIsSatisfactory] = useState(false);
+
+  useEffect(() => {
+    const getInformation = async () => {
+      const studentId = 3;
+      try {
+        const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
+        console.log("reports:", response.data.length);
+
+        const numOfReport = response.data.length;
+        if(numOfReport == 0){
+          setButtonName("Create Submission")
+        }
+
+        else{
+          setButtonName("Revision Required")
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  
+    getInformation();
+  }, []);
+
 
   const handleSatisfactoryClick = () => {
     setIsSatisfactory(false);
@@ -306,7 +333,7 @@ function FormDialog(props) {
             variant={isSatisfactory ? 'contained' : 'outlined'}
             color="secondary"
             onClick={handleRevisionRequiredClick}
-          > Revision Required </Button>
+          > {buttonName}</Button>
           {isSatisfactory && (
             <div>
               <Typography>Enter the due date for the resubmission.</Typography>

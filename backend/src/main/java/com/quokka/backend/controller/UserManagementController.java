@@ -13,7 +13,6 @@ import java.util.Optional;
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 public class UserManagementController {
-
     private UserManagementService userManagementService;
 
     @Autowired
@@ -171,7 +170,6 @@ public class UserManagementController {
 
     @GetMapping("/student/{id}")
     public Student getStudentByID(@PathVariable Long id){
-
         return userManagementService.getStudentByID(id);
     }
 

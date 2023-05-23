@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { IconContext } from "react-icons";
 import * as SlIcons from "react-icons/sl";
 import * as IoIcons from "react-icons/io";
+import { withRouter } from 'react-router-dom';
 import "../Styles/List.css";
 
 class DisplayList extends Component {
@@ -43,7 +44,12 @@ class DisplayList extends Component {
     
   };
   
-
+  handleDirect = (index) => 
+  {
+    console.log("Clicked at user: ", index)
+    const history = this.props
+    history.push('/evaluation"');
+  };
 
   render() {
     const { searchTerm } = this.state;
@@ -94,7 +100,7 @@ class DisplayList extends Component {
                   <React.Fragment key={index}>
                     <li className="list-item">
                       <Link>
-                        <div className="row">
+                        <div className="row" onClick={() => this.handleDirect(item.id)}>
                             {displayFields.map((field, index) => (
                             <div className="value">{item[field]}</div>
                             ))}
@@ -106,7 +112,7 @@ class DisplayList extends Component {
                             <div className="choices">
                              
                             <div id="reminder"> <button onClick={this.handleReminder} className="button">{<IoIcons.IoMdAlert />}</button></div>
-                             < div id="options"><button onClick={() => this.handleOptions(index)} className="icon-button">{<SlIcons.SlOptionsVertical />}</button>
+                            < div id="options"><button onClick={() => this.handleOptions(index)} className="icon-button">{<SlIcons.SlOptionsVertical />}</button>
 
                              {showOptions === index  && (
                                this.props.choice
