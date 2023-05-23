@@ -13,7 +13,9 @@ class ManageUsers extends Component {
       showPopup:false,
       showRemove:false,
       showChoices:false,
-      showEdit:false
+      showEdit:false,
+      selectedCode: "",
+      selectedRole:""
     };
 
     this.handleMenu = this.handleMenu.bind(this);
@@ -22,7 +24,9 @@ class ManageUsers extends Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleRemove = this.handleRemove.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
+    this.handleSelected= this.handleSelected.bind(this);
   }
+  
 
   handleRemove(){
     console.log(this.showRemove)
@@ -47,6 +51,27 @@ class ManageUsers extends Component {
     });
     this.setState({showMenu:false});
   }
+
+  
+  handleSelected= (role,code) => {
+    console.log("code is: ",code )
+    console.log("role is: ",role )
+    var selectedCode = "";
+
+    if(code == 1){
+      selectedCode = "CS299"
+    }
+    if(code == 2){
+      selectedCode = "CS399"
+    }
+
+
+
+    this.setState({selectedCode:selectedCode});
+   
+  };
+
+
 
   handleMenu(){
     console.log(this.showMenu)
@@ -74,6 +99,7 @@ class ManageUsers extends Component {
     const {showRemove} = this.state;
     const {showEdit} = this.state;
     const {showChoices} = this.state;
+    const { handleSelected} = this;
     return (
       
       <div className="maincontainer">
@@ -103,7 +129,7 @@ class ManageUsers extends Component {
         )}
 
         
-        {showPopup &&<Popup name = "Add" className="popup" handleClose={this.handleClose} isAdd = {true} tag = "Manage Users:" contents = {<ManageUsersAdd/>}>
+        {showPopup &&<Popup name = "Add" className="popup" handleSelected= {handleSelected} handleClose={this.handleClose} isAdd = {true} tag = "Manage Users:" contents = {<ManageUsersAdd/>}>
           </Popup>}
         </div>
         <div className="remove">
