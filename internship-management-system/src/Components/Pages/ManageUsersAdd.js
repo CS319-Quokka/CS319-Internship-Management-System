@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import Popup from "../Popup"
 import "../Styles/Popup.css"
+import Button from '@mui/material/Button';
 
+const handleAddUser = () => {
+  //backend code to add user
+}
 function ManageUsersAdd() {
   const methods = useForm();
 
@@ -50,8 +54,12 @@ function ManageUsersAdd() {
           )} */}
           
         </form>
+
       </FormProvider>
+      <Button variant="outlined" onClick={handleAddUser}>ADD USER</Button>
+
     </div>
+
   );
 }
 
