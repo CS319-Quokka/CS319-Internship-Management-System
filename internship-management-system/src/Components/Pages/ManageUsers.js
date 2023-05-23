@@ -4,6 +4,8 @@ import DisplayList from "./DisplayList";
 import "../Styles/ManageUsers.css"
 import ManageUsersAdd from "./ManageUsersAdd";
 import Popup from "../Popup"
+import ManageUsersEdit from "./ManageUsersEdit";
+import ManageUsersRemove from "./ManageUsersRemove";
 
 class ManageUsers extends Component {
   constructor(props) {
@@ -31,7 +33,9 @@ class ManageUsers extends Component {
   handleRemove(){
     console.log(this.showRemove)
     this.setState({
-      showRemove:true
+      showRemove:true,
+      selectedUser: UserData
+
     });
     this.setState({showChoices:false});
     
@@ -39,7 +43,8 @@ class ManageUsers extends Component {
 
   handleEdit(){
     this.setState({
-      showEdit:true
+      showEdit:true,
+      selectedUser: UserData
     });
     this.setState({showChoices:false});
 
@@ -116,7 +121,8 @@ class ManageUsers extends Component {
           </ul>
         </div>
         }/>
-        <div className="add"><button onClick={this.handleMenu} className = "button" id = "add-button" >+</button>
+        <div className="add">
+          <button onClick={this.handleMenu} className = "button" id = "add-button" >+</button>
         {console.log(showMenu)}
         {showMenu && (
           <div className="menu">
@@ -133,12 +139,12 @@ class ManageUsers extends Component {
           </Popup>}
         </div>
         <div className="remove">
-        {showRemove&&<Popup name = "Remove" className="popup" handleClose={this.handleClose} tag = "Manage Users:" contents = "remove">
+        {showRemove&&<Popup name = "Remove" className="popup" handleClose={this.handleClose} tag = "Manage Users:"
+                            contents = {<ManageUsersRemove user={this.state.selectedUser} />}>
          </Popup>}
         </div>
-
         <div className="edit">
-        {showEdit&&<Popup name = "Edit" className="popup" handleClose={this.handleClose} tag = "Manage Users:" contents = "edit">
+        {showEdit&&<Popup name = "Edit" className="popup" handleClose={this.handleClose} tag = "Manage Users:" contents = {<ManageUsersEdit user={this.state.selectedUser} />}>
          </Popup>}
         </div>
       </div>

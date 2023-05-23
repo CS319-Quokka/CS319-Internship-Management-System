@@ -30,13 +30,13 @@ function ManageUsersAdd(props) {
     console.log(data)
   };
 
-  
-    
+
+
 
     let courseSelection = null;
     if (selectedValue === "Student") {
       courseSelection = <div >
-        
+
 
     <label className="input-label">
           <h3 className="input-tag" id="course-tag">Course:</h3>
@@ -45,13 +45,13 @@ function ManageUsersAdd(props) {
         <option value="1">CS299</option>
         <option value="2">CS399</option>
       </select>
-    
-    </label>  
-     
-    </div>;
-    } 
 
-  
+    </label>
+
+    </div>;
+    }
+
+
   return (
 
     <div className="add-user">
@@ -94,7 +94,7 @@ function ManageUsersAdd(props) {
             />
           </label>
 
-          
+
 
           {/* {isFormSubmitted && !formState.isValid && (
             <div className="error-message">Please fill out all fields.</div>
@@ -103,7 +103,7 @@ function ManageUsersAdd(props) {
 
           <div className="add-user">
 
-         
+
                 <div className="role">
                 <select className = "select-menu" id = "type" value={selectedValue} onChange={handleSelectChange}>
                   <option value="0">Select role:</option>
@@ -113,17 +113,17 @@ function ManageUsersAdd(props) {
                   <option value="Administrative Assistant">Administrative Assistant</option>
                   <option value="Summer Training Coordinator">Summer Training Coordinator</option>
                 </select>
-                </div> 
-          
+                </div>
+
          </div>
         {courseSelection}
-          
+
         </form>
-     
+
 
       </FormProvider>
       <Button variant="outlined" onClick={handleAddUser}>ADD USER</Button>
-      
+
 
 
     </div>
@@ -149,15 +149,15 @@ export default ManageUsersAdd;
         </label>
         <label className="input-label">
         <h3 className="input-tag">Email:</h3>
-          
+
           <input className="input-box" type="email" />
         </label>
         <label className="input-label">
         <h3 className="input-tag">Department:</h3>
-        
+
           <input  className="input-box" type="department" />
         </label>
         {courseSelection}
       </form>
       </FormProvider> */}
-      
+

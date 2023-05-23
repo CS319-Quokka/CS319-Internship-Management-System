@@ -91,7 +91,14 @@
     width: 20%;
     border-radius: 8px;
   } 
-  
+  #instructor{
+    width: 20%;
+    border-radius: 8px;
+  }
+  #ta{
+    width: 20%;
+    border-radius: 8px;
+  }
   /* #course-tag{
     right:9%;
   } */
@@ -108,3 +115,14 @@
     border: 1px solid #999;
     overflow: auto;
   }
+.buttoncontainer{
+  position: fixed;
+  top: 80%;
+  left: 70%;
+}
+
+.maincontainer .add{
+  position: fixed;
+  width: 100%;
+
+}
