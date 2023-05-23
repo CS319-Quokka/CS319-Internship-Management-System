@@ -21,7 +21,6 @@ import Sidebar from "./Components/Sidebar";
 import FAQ from "./Components/Pages/FAQ"
 import AdminAssNotifications from "./Components/Pages/AdminAssNotifications";
 import "./App.css";
-import { createBrowserHistory } from 'history';
 
 
 const App = () => {
@@ -37,7 +36,6 @@ const App = () => {
     console.log("id: ", id)
   };
 
-  const history = createBrowserHistory();
 
   const router = createBrowserRouter([
     {
@@ -83,7 +81,7 @@ const App = () => {
         },
         {
           path: "students",
-          element: <StudentList history = {history} userId = {userId}/>,
+          element: <StudentList userId = {userId}/>,
         },
         {
           path: "forms",
@@ -103,9 +101,7 @@ const App = () => {
         }
       ],
     },
-    {
-      history: history, // Pass the created history object to createBrowserRouter
-    }
+   
   ]);
 
   return (
