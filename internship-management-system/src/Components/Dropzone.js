@@ -13,16 +13,21 @@ import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Check from "@mui/icons-material/Check";
 import FormatItalic from "@mui/icons-material/FormatItalic";
 
-function TextareaValidator() {
+function TextareaValidator({ value, onChange }) {
   const [italic, setItalic] = React.useState(false);
   const [fontWeight, setFontWeight] = React.useState('normal');
   const [anchorEl, setAnchorEl] = React.useState(null);
+    const handleInputChange = (event) => {
+        onChange(event.target.value);
+    };
   return (
       <FormControl>
         <FormLabel>Submission Comments</FormLabel>
         <Textarea
             placeholder="Type your message here..."
             minRows={3}
+            value={value}
+            onChange={handleInputChange}
             endDecorator={
               <Box
                   sx={{
@@ -92,7 +97,7 @@ function TextareaValidator() {
 const DragDropFiles = (props) => {
   const [file, setFile] = useState(null);
   const [userId, setId] = useState(null);
-  //const [description, setDescription] = useState("");
+  const [description, setDescription] = useState("");
   const inputRef = useRef();
 
   const handleSelectFile = (event) => {
@@ -102,6 +107,9 @@ const DragDropFiles = (props) => {
     
   };
 
+    const handleDescriptionChange = (value) => {
+        setDescription(value);
+    };
   const handleDropFile = (event) => {
     console.log("HERE2")
     event.preventDefault();
@@ -186,7 +194,8 @@ const DragDropFiles = (props) => {
         <h2>Uploading the following file:</h2>
         <p>{file.name}</p>
         <br></br>
-        <TextareaValidator/>
+        <TextareaValidator value={description}
+                           onChange={handleDescriptionChange} />
 
         {/* <input
           type="text"
