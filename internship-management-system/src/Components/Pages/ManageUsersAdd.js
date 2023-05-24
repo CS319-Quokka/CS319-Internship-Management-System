@@ -147,16 +147,21 @@ function ManageUsersAdd(props) {
     };
 
     console.log("formData:",formData);
-    
-    try {
-      const response = await axios.post("http://localhost:8080/account", formData);
+
+    const response = await axios.post("http://localhost:8080/account", formData);
+    if ( response.data.email !== formData.email) {
+      console.log("account with this email already exists");
+    }
+    else {
       console.log(response.data); // Handle the response if needed
+
+      console.log("User added successfully");
+
 
       // Reset the form
       methods.reset();
-    } catch (error) {
-      console.error("Error adding user:", error);
     }
+    
 };
 
   const handleOperation = (data) => {
@@ -176,7 +181,7 @@ function ManageUsersAdd(props) {
                   <select className="select-menu" id = "selector" value = {selectedCode} onChange={handleSelectedCode}>
                 <option value="0">Select course</option>
                 <option value="1">{methods.getValues("department")}299</option>
-                <option value="2">CS399</option>
+                <option value="2">{methods.getValues("department")}399</option>
               </select>
 
             </label>
