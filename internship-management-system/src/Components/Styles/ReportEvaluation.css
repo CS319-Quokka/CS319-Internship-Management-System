@@ -130,7 +130,7 @@
 }
 .reportevaluation .annotatedupload{
     position: relative;
-    top: 30%;
+    top: 20%;
     height: 20vh;
     border-radius: 16px;
     width: 100%;
@@ -151,7 +151,6 @@
 }
 .reportstatus .texteditor{
     position: relative;
-    top: 8%;
     height: 10%;
 
 }

@@ -38,41 +38,42 @@ const statusOptions = ["Submitted",
                        "Unsatisfactory",
                        "Pending Company Form Approval",
                                                            ]
-    /*
-    {value: 'submitted', label: 'Submitted'},
-    {value: 'assigned', label: 'Assigned'},
-    {value: 'under_evaluation', label: 'Under Evaluation'},
-    {value: 'under_revision', label: 'Under Revision'},
-    {value: 'satisfactory', label: 'Satisfactory'},
-    {value: 'unsatisfactory', label: 'Unsatisfactory'}
-    */
 const revisionHistory = [
     {
         revisionCount: "1",
-        prevfilename: "DenizSunReportRevision1.pdf",
-        prevstatus: "Unsatisfactory. Waiting for revision.",
-        prevfeedback: "Your report is insufficient. Try to emphasize your experiences and (...) \n\nUpload a revised version.",
-        annotatedfeedback: "DenizSunFeedback1.pdf",
+        prevFileName: "DenizSunReportRevision1.pdf",
+        prevStatus: "Unsatisfactory. Waiting for revision.",
+        prevFeedback: "Your report is insufficient. Try to emphasize your experiences and (...) \n\nUpload a revised version.",
+        annotatedFeedback: "DenizSunFeedback1.pdf",
+        studentComment: "I barely uploaded on time. :) "
 
     },
     {
         revisionCount: "2",
-        prevfilename:"DenizSunReportRevision2.pdf",
-        prevstatus: "Unsatisfactory. Waiting for revision.",
-        prevfeedback: "Better but fix the format.",
-        annotatedfeedback: "DenizSunFeedback2.pdf",
+        prevFileName:"DenizSunReportRevision2.pdf",
+        prevStatus: "Unsatisfactory. Waiting for revision.",
+        prevFeedback: "Better but fix the format.",
+        annotatedFeedback: "DenizSunFeedback2.pdf",
+        studentComment: "I hope this is better."
 
     },
     {
         revisionCount: "3",
-        prevfilename:"DenizSunReportRevision3.pdf",
-        prevstatus: "Unsatisfactory. Waiting for revision.",
-        prevfeedback: "Nice :)",
-        annotatedfeedback: "DenizSunFeedback3.pdf"
+        prevFileName:"DenizSunReportRevision3.pdf",
+        prevStatus: "Unsatisfactory. Waiting for revision.",
+        prevFeedback: "Nice :)",
+        annotatedFeedback: "DenizSunFeedback3.pdf",
+        studentComment: "I have fixed the format. Please check again."
 
     }
 ]
-
+const downloadCurrent = () => {
+    const link = document.createElement("a");
+    //the "download.txt" will be replaced by the link name. (this.state = {prevFileName}) is the file needed.
+    link.download = `currentreport.txt`;
+    link.href = "./currentreport.txt";
+    link.click();
+};
 function RevisionList() {
     return (
         <ul>
@@ -85,18 +86,20 @@ function RevisionList() {
                         <IconButton aria-label="download" onClick={downloadPrevious}>
                             <DownloadIcon/>
                         </IconButton>
-                        <Button variant="text" onClick={downloadPrevious} style={{textTransform: 'none'}} size="large">{revision.prevfilename}</Button>
+                        <Button variant="text" onClick={downloadPrevious} style={{textTransform: 'none'}} size="large">{revision.prevFileName}</Button>
+                        <Typography>Student's comments:</Typography>
+                        <textarea readOnly>{revision.studentComment}</textarea>
 
                         <b><br></br>◾The grade distribution of this submission◾</b>
                         <br></br>
-                        <p>Overall progress: {revision.prevstatus}</p>
+                        <p>Overall progress: {revision.prevStatus}</p>
                         <b><br></br>Your feedback for this submission</b>
-                        <textarea readOnly>{revision.prevfeedback}</textarea>
+                        <textarea readOnly>{revision.prevFeedback}</textarea>
                         <b>Your annotated feedback for this submission<br></br></b>
                         <IconButton aria-label="download" onClick={downloadAnnotated}>
                             <DownloadIcon/>
                         </IconButton>
-                        <Button variant="text" onClick={downloadAnnotated} style={{textTransform: 'none'}} size="large">{revision.annotatedfeedback}</Button>
+                        <Button variant="text" onClick={downloadAnnotated} style={{textTransform: 'none'}} size="large">{revision.annotatedFeedback}</Button>
 
                     </li>
                 </div>
@@ -107,7 +110,7 @@ function RevisionList() {
 
 const downloadPrevious = () => {
     const link = document.createElement("a");
-    //the "download.txt" will be replaced by the link name. (this.state = {prevfilename}) is the file needed.
+    //the "download.txt" will be replaced by the link name. (this.state = {prevFileName}) is the file needed.
     link.download = `prevreport.txt`;
     link.href = "./prevreport.txt";
     link.click();
@@ -115,8 +118,8 @@ const downloadPrevious = () => {
 
 const downloadAnnotated = () => {
     const link = document.createElement("a");
-    //the "download.txt" will be replaced by the link name. (this.state = {annotatedfeedback}) is the file needed. 
-    link.download = `${this.state.studentFirstName}${this.state.studentLastName}AnnotatedFeedback.txt`;
+    //the "download.txt" will be replaced by the link name. (this.state = {annotatedFeedback}) is the file needed. 
+    link.download = `${this.state.studentFirstName}${this.state.studentLastName}annotatedFeedback.txt`;
     link.href = "./annotated.txt";
     link.click();
 };
@@ -280,7 +283,13 @@ function FormDialog(props) {
   const handleIsClicked = () => {
       setIsClicked(true);
   }
-  
+    const downloadCurrent = () => {
+        const link = document.createElement("a");
+        //the "download.txt" will be replaced by the link name. (this.state = {prevFileName}) is the file needed.
+        link.download = `currentreport.txt`;
+        link.href = "./currentreport.txt";
+        link.click();
+    };
   const handleClickOpen = () => {
     setOpen(true);
     props.setButtonClicked(true);
@@ -428,6 +437,8 @@ class ReportEvaluation extends Component {
             prevGradeA: statusOptions[4],
             prevGradeB: statusOptions[4],
             isButtonClicked: false,
+            currentReport: "report.pdf",
+            currentComment: "I fixed everything according to the feedback. :) ",
         }
     }
    render(){
@@ -448,13 +459,21 @@ class ReportEvaluation extends Component {
                 <div className="information">
                     <h1>The student's current submission for {this.state.course} </h1>
                     <br></br>
+                    <IconButton onClick={downloadCurrent} aria-label="download">
+                        <DownloadIcon />
+                    </IconButton>
+                    <Button onClick={downloadCurrent} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.currentReport}</Button>
+                    <Typography>Student's comments:</Typography>
+                    <textarea readOnly>{this.state.currentComment}</textarea>
                     <hr></hr>
+                    <h1>REPORT ASSESSMENT</h1>
+
                 </div>
                     <Typography>{
                         <Button onClick={downloadCEF} variant="text" style={{textTransform: 'none'}}  size="large">Click here</Button>
                       } 
                       to download the student's company evaluation form.</Typography>  
-                    <br></br>
+
                     <Typography>To enter the student's grades, use the Grade Form</Typography>
                     <FormDialog studentFirstName={this.state.studentFirstName} studentLastName={this.state.studentLastName}
                     setButtonClicked={(value) => this.setState({isButtonClicked: value})}/>
@@ -464,7 +483,7 @@ class ReportEvaluation extends Component {
                 <div className="annotatedupload">
                     <h2>Upload annotated feedback here: </h2>
                       <FileUploadIcon/>
-                    <Button variant="contained" component="label" >
+                    <Button variant="contained" component="label">
                         Upload File
                         <input type="file" hidden />
                     </Button>
