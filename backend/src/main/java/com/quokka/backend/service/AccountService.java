@@ -47,7 +47,10 @@ public class AccountService {
 
 
     public UserAccount addUserAccount( UserAccount userAccount) {
-
+        Optional<UserAccount> account = accountRepository.findByEmail(userAccount.getEmail());
+        if (account.isPresent()){
+            return null;
+        }
 
         return accountRepository.save(userAccount);
     }
