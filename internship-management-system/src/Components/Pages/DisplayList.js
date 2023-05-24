@@ -44,13 +44,7 @@ class DisplayList extends Component {
     
   };
   
-  handleDirect = (index) => 
-  {
-    console.log("Clicked at user: ", index)
-    const history = this.props
-    history.push('/evaluation"');
-  };
-
+  
   render() {
     const { searchTerm } = this.state;
     const { showOptions } = this.state;
@@ -82,7 +76,6 @@ class DisplayList extends Component {
 
             <div className="add"></div>
             </div>
-            
            
           <div className="list-header">
                 
@@ -99,8 +92,9 @@ class DisplayList extends Component {
                 return (
                   <React.Fragment key={index}>
                     <li className="list-item">
-                      <Link>
-                        <div className="row" onClick={() => this.handleDirect(item.id)}>
+
+                      <Link to = {`/evaluation?studentId=${item.id}`}>
+                        <div className="row">
                             {displayFields.map((field, index) => (
                             <div className="value">{item[field]}</div>
                             ))}

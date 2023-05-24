@@ -1,5 +1,6 @@
 package com.quokka.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,7 @@ public class ReportFile implements MultipartFile {
     private String fileName;
 
     @Lob
+    @JsonBackReference
     @Column(columnDefinition = "LONGBLOB")
     private byte[] fileData;
 

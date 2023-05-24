@@ -20,7 +20,10 @@ import ManageUsers from "./Components/Pages/ManageUsers";
 import Sidebar from "./Components/Sidebar";
 import FAQ from "./Components/Pages/FAQ"
 import AdminAssNotifications from "./Components/Pages/AdminAssNotifications";
+import { StudentProvider } from "./Components/StudentContext";
 import "./App.css";
+//import { useNavigate } from "react-router-dom";
+
 
 
 const App = () => {
@@ -28,10 +31,12 @@ const App = () => {
   const [userType, setUserType] = useState(null);
   const [userId, setUserId] = useState(null);
 
+  //const navigate = useNavigate();
   const handleSubmit = (type, id) => {
     setIsLoggedIn(true);
     setUserType(type);
     setUserId(id)
+   // navigate("/");
     console.log("type:" ,type);
     console.log("id: ", id)
   };
@@ -73,7 +78,8 @@ const App = () => {
         },
         {
           path: "evaluation",
-          element: <ReportEvaluation />,
+          element: 
+          <ReportEvaluation />
         },
         {
           path: "statistics",

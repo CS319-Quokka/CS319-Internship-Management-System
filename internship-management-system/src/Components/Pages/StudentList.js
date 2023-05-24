@@ -83,7 +83,7 @@ getAllStudents = async () =>{
     return (
       <div className="student-list">
         {console.log("list for students: ", studentNameList)}
-        <DisplayList history = {history} data={studentNameList} displayFields={['name','class', 'status']} />
+        <DisplayList  data={studentNameList} displayFields={['name','class', 'status']} />
       </div>
     );
   }

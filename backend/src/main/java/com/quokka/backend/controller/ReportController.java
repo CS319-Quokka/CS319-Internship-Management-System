@@ -1,14 +1,23 @@
 package com.quokka.backend.controller;
 
+import com.quokka.backend.Auth.AuthResponse;
+import com.quokka.backend.Auth.ReportFileResponse;
 import com.quokka.backend.models.Report;
 import com.quokka.backend.models.ReportFile;
+import com.quokka.backend.models.UserAccount;
 import com.quokka.backend.request.*;
 import com.quokka.backend.service.FeedbackService;
 import com.quokka.backend.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.http.HttpHeaders;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/report")
@@ -50,8 +59,9 @@ public class ReportController {
     }
 
     @GetMapping("/students_all_reports/{studentId}")
-    public List<Report> getAllReportsByStudentId(@PathVariable Long studentId){
+    public List<Report> getAllReportsByStudentId(@PathVariable("studentId") Long studentId){
 
+        System.out.println("HEREEE");
         return reportService.getAllReportsByStudentId(studentId);
     }
 
@@ -72,6 +82,7 @@ public class ReportController {
         boolean reportFileSubmitted = reportService.addReportFile(request);
         if(reportFileSubmitted){
 
+
             FeedbackAddRequest feedbackRequest = new FeedbackAddRequest();
             feedbackRequest.setReportId(request.getReportId());
             feedbackRequest.setSenderId(request.getStudentId());
@@ -83,13 +94,34 @@ public class ReportController {
     }
 
     @GetMapping("/file/{id}")
-    public ReportFile getReportFileByReportFileId(@PathVariable Long id){
+    public ResponseEntity<ReportFileResponse> getReportFileByReportFileId(@PathVariable Long id){
 
-        return reportService.getReportFileWithReportId(id);
+        ReportFileResponse response = new ReportFileResponse();
+
+        ReportFile reportFile = reportService.getReportFileWithReportId(id);
+
+        System.out.println("file:" + reportFile);
+
+        if (reportFile != null) {
+
+
+            response.setReportDescription(reportFile.getReportDescription());
+            response.setFileData(reportFile.getFileData());
+            response.setFileName(reportFile.getFileName());
+            response.setReportId(reportFile.getReport().getId());
+
+            return ResponseEntity.ok(response);
+        }
+        else {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+
     }
 
+
     @GetMapping("/file")
-    public List<ReportFile> getAllReportFiles(){
+    public Stream<ReportFile> getAllReportFiles(){
 
         return reportService.getAllReportFiles();
     }

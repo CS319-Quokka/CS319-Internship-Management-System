@@ -26,6 +26,7 @@ import FormatBold from '@mui/icons-material/FormatBold';
 import FormatItalic from '@mui/icons-material/FormatItalic';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Check from '@mui/icons-material/Check';
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -38,6 +39,14 @@ const statusOptions = ["Submitted",
                        "Unsatisfactory",
                        "Pending Company Form Approval",
                                                            ]
+    /*
+    {value: 'submitted', label: 'Submitted'},
+    {value: 'assigned', label: 'Assigned'},
+    {value: 'under_evaluation', label: 'Under Evaluation'},
+    {value: 'under_revision', label: 'Under Revision'},
+    {value: 'satisfactory', label: 'Satisfactory'},
+    {value: 'unsatisfactory', label: 'Unsatisfactory'}
+    */
 const revisionHistory = [
     {
         revisionCount: "1",
@@ -67,14 +76,107 @@ const revisionHistory = [
 
     }
 ]
-const downloadCurrent = () => {
-    const link = document.createElement("a");
-    //the "download.txt" will be replaced by the link name. (this.state = {prevFileName}) is the file needed.
-    link.download = `currentreport.txt`;
-    link.href = "./currentreport.txt";
-    link.click();
-};
+
+
+
 function RevisionList() {
+
+const [reports,setReports] = useState(null)
+const [studentId, setStudentId] = useState('');
+const location = useLocation();
+const [link,setLink] = useState("");
+
+
+downloadPrevious = (link) => {
+    
+  if (link) {
+    link.click();
+  }
+};
+
+
+useEffect(() => {
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get('studentId');
+  setStudentId(id);
+}, [location.search]);
+
+useEffect(() => {
+  if (studentId) {
+    getAllReports();
+  }
+}, [studentId]);
+
+
+
+const createDownloadUrl = (fileData,fileName) =>{
+  // Create a Blob object from the file data
+
+  console.log("HERE DOWNLOAD")
+  const blob = new Blob([fileData]);
+
+  // Create a URL for the blob object
+  const url = URL.createObjectURL(blob);
+
+   // Create a temporary link element
+   const link = document.createElement('a');
+   link.href = url;
+   link.download = fileName;
+
+   setLink(link)
+}
+
+const getReportFile = async (id) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/report/file/${id}`);
+    const reportFile = response
+    console.log("rapurunu sikim: ", reportFile);
+
+    // Call the downloadCurrent function with the file data and name
+    createDownloadUrl(reportFile.fileData, reportFile.fileName);
+  } catch (error) {
+    console.error("Failed to fetch report file: ", error);
+  }
+    
+};
+const getAllReports = async () => {
+  try {
+    const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
+    const info = response.data;
+    console.log("REPORTS: ", info);
+
+
+    var reportIdList = [];
+
+    for (var i = 0; i < info.length; i++) {
+      console.log(i, "th report: ", info[i].id);
+      reportIdList.push(info[i].id)
+    }
+
+
+
+    console.log("ids: ", reportIdList)
+
+    getReportFile(reportIdList[0])
+
+
+
+    const reports = info.map((report) => ({
+      revisionCount: report.revisionCount,
+      prevfilename: report.prevfilename,
+      prevstatus: report.prevstatus,
+      prevfeedback: report.prevfeedback,
+      annotatedfeedback: report.annotatedfeedback
+    }));
+
+    console.log("list: ", reports);
+    setReports(reports);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
     return (
         <ul>
             {revisionHistory.map(revision => (
@@ -118,7 +220,7 @@ const downloadPrevious = () => {
 
 const downloadAnnotated = () => {
     const link = document.createElement("a");
-    //the "download.txt" will be replaced by the link name. (this.state = {annotatedFeedback}) is the file needed. 
+    //the "download.txt" will be replaced by the link name. (this.state = {annotatedFeedback}) is the file needed.
     link.download = `${this.state.studentFirstName}${this.state.studentLastName}annotatedFeedback.txt`;
     link.href = "./annotated.txt";
     link.click();
@@ -283,16 +385,11 @@ function FormDialog(props) {
   const handleIsClicked = () => {
       setIsClicked(true);
   }
-    const downloadCurrent = () => {
-        const link = document.createElement("a");
-        //the "download.txt" will be replaced by the link name. (this.state = {prevFileName}) is the file needed.
-        link.download = `currentreport.txt`;
-        link.href = "./currentreport.txt";
-        link.click();
-    };
+
   const handleClickOpen = () => {
     setOpen(true);
     props.setButtonClicked(true);
+    {console.log("Student id: ", props.studentId)}
   };
 
   const handleClose = () => {
@@ -302,7 +399,10 @@ function FormDialog(props) {
   const handleSubmit = () => {
       setOpen(false);
   }
+
+
   return (
+
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
         Open Grade Form

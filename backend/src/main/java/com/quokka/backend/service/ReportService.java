@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.*;
 import java.io.IOException;
+import java.util.stream.Stream;
+
 import org.springframework.util.StringUtils;
 
 
@@ -86,14 +88,17 @@ public class ReportService {
 
     public List<Report> getAllReportsByStudentId(Long studentId) {
 
+        System.out.println("1");
         List<Report> reports = new ArrayList<Report>();
         for (Report report : reportRepository.findAll()) {
 
+            System.out.println("r: "+report);
             if (report.getStudent().getId() == studentId) {
 
                 reports.add(report);
             }
         }
+        System.out.println("2 " + reports);
         return reports;
     }
 
@@ -159,9 +164,9 @@ public class ReportService {
         return null;
     }
 
-    public List<ReportFile> getAllReportFiles() {
+    public Stream<ReportFile> getAllReportFiles() {
 
-        return reportFileRepository.findAll();
+        return reportFileRepository.findAll().stream();
     }
 
     public boolean addReportFile(ReportFileAddRequest request){
@@ -182,6 +187,7 @@ public class ReportService {
             else{
 
                 reportFile.setReport(reportOpt.get());
+                reportFile.setReportDescription(request.getReportDescription());
             }
 
             if(request.getFileData() == null){
