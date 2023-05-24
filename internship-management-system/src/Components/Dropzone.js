@@ -19,7 +19,7 @@ function TextareaValidator() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   return (
       <FormControl>
-        <FormLabel>Submission Comments</FormLabel>
+        <FormLabel>Comments</FormLabel>
         <Textarea
             placeholder="Type your message here..."
             minRows={3}

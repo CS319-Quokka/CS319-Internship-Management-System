@@ -1,43 +1,59 @@
-.page{
+.statspage{
     width:85%;
-    margin-left: 15%;
+    left: 15%;
     height:100vh;
+    position: absolute;
     background-color: hwb(207 91% 0%);
-    overflow: auto;
     justify-content: center;
     align-items: center;
+}
+.statspage .maincontainer{
+    position: absolute;
+    height: 80%;
+    width: 70%;
+    top:10%;
+    background-color: white;
+    border-radius: 16px;
+    padding: 1vh;
 }
 .instructorstatus{
     position: relative;
     background-color: white;
     border-radius: 16px;
-    width: 35%;
+    width: 40%;
     height: 40%;
     left: 10%;
-    top: 5%;
+    top: 3%;
     overflow-y:auto;
     box-sizing: border-box;
-    
+    border-color: slategray;
+    border-style: solid;
+    padding: 2vh;
 }
 .studentstatus{
     position: relative;
     background-color: white;
     border-radius: 16px;
-    width: 35%;
+    width: 40%;
     height: 40%;
     left: 10%;
-    top: 15%;
+    top: 12%;
     overflow-y:auto;
+    border-color: slategray;
+    border-style: solid;
+    padding: 2vh;
 }
 .gradestatus{
     position:absolute;
     background-color: white;
     border-radius: 16px;
-    width: 25%;
-    height: 50%;
+    width: 30%;
+    height: 60%;
     top:25%;
-    left: 65%;
-
+    left: 60%;
+    border-color: slategray;
+    border-style: solid;
+    padding: 2vh;
 }
 .statlist{
     width:90%;
@@ -59,10 +75,16 @@
 .cef{
     position: relative;
     top: 10%;
-
 }
 .overall{
     position: relative;
     top:10%;
-    
+}
+.statspage h2{
+    color: black;
+}
+.statspage h3{
+    font-size: 3.5vh;
+    position: relative;
+    text-align: center;
 }

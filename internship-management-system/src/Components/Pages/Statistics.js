@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import '../Styles/Statistics.css';
 import {GraderData} from "../GraderData"
 import {StudentData} from "../StudentData"
-import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -34,7 +33,16 @@ function InstructorList() {
     </ul>
   );
 }
-
+function checkForm (form) {
+  if (form === "Uploaded") {
+    return "green";
+  }
+  else if (form === "Not Uploaded") {
+    return "red";
+  }
+  else
+      return "black";
+}
 
 function StudentList() {
   return (
@@ -44,7 +52,8 @@ function StudentList() {
           <p>Student: {student.name}</p>
           <p>Grader: {student.grader}</p>
           <p>Status: {student.status}</p>
-          <p>Report: {student.form}</p>
+          <p style={{ color: checkForm(student.form) }}>Report:{student.form}</p>
+
           <hr></hr>
         </li>
       ))}
@@ -74,7 +83,9 @@ class Statistics extends Component {
       overall_satisfactory,       overall_unsatisfactory, overall_pending } = this.state;
 
     return (
-      <div className="page">
+    <div className="statspage">
+      <div className="maincontainer">
+          <h3>Evaluation Statistics</h3>
         <div className="instructorstatus">
           <h2>Instructor Status</h2>
           <div className="statlist">
@@ -96,8 +107,8 @@ class Statistics extends Component {
             <div className="cef">
               <h2>Company Evaluation Forms</h2>
               <br></br>
-              <p>Satisfactory: {this.state.cef_satisfactory} </p>
-              <p>Unsatisfactory: {this.state.cef_unsatisfactory}</p>
+              <p style={{color: "green"}}>Satisfactory: {this.state.cef_satisfactory} </p>
+              <p style={{color: "red"}}>Unsatisfactory: {this.state.cef_unsatisfactory}</p>
               <p>Pending Form: {this.state.cef_pending} </p>
             </div>
            
@@ -105,8 +116,8 @@ class Statistics extends Component {
             <hr></hr>
               <h2>Overall</h2>
               <br></br>
-              <p>Satisfactory: {this.state.overall_satisfactory} </p>
-              <p>Unsatisfactory: {this.state.overall_unsatisfactory}</p>
+              <p style={{color: "green"}} >Satisfactory: {this.state.overall_satisfactory} </p>
+              <p style={{color: "red"}}>Unsatisfactory: {this.state.overall_unsatisfactory}</p>
               <p>Under Evaluation: {this.state.overall_pending} </p>
             </div>
           
@@ -140,6 +151,7 @@ class Statistics extends Component {
         
         />
         */}
+            </div>
         </div>
       </div>
     );
