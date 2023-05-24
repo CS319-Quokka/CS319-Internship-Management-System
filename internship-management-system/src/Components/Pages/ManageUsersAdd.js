@@ -136,10 +136,28 @@ function ManageUsersAdd(props) {
     setSelectedCode(event.target.value);
   };
 
-  const handleAddUser = () => {
-     console.log(selectedValue)
-     console.log(selectedCode)
-  }
+  const handleAddUser = async () => {
+    const formData = {
+        firstName: methods.getValues("firstName"),
+        lastName: methods.getValues("lastName"),
+        email: methods.getValues("email"),
+        department: methods.getValues("department"),
+        role: selectedValue,
+        courseCode: selectedCode
+    };
+
+    console.log("formData:",formData);
+    
+    try {
+      const response = await axios.post("http://localhost:8080/account", formData);
+      console.log(response.data); // Handle the response if needed
+
+      // Reset the form
+      methods.reset();
+    } catch (error) {
+      console.error("Error adding user:", error);
+    }
+};
 
   const handleOperation = (data) => {
     console.log("add");
@@ -157,7 +175,7 @@ function ManageUsersAdd(props) {
                   <h3 className="input-tag" id="course-tag">Course:</h3>
                   <select className="select-menu" id = "selector" value = {selectedCode} onChange={handleSelectedCode}>
                 <option value="0">Select course</option>
-                <option value="1">CS299</option>
+                <option value="1">{methods.getValues("department")}299</option>
                 <option value="2">CS399</option>
               </select>
 
