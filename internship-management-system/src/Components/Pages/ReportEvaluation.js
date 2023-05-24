@@ -87,7 +87,7 @@ const location = useLocation();
 const [link,setLink] = useState("");
 
 
-downloadPrevious = (link) => {
+const downloadPrevious = (link) => {
     
   if (link) {
     link.click();
@@ -210,13 +210,7 @@ const getAllReports = async () => {
     );
 }
 
-const downloadPrevious = () => {
-    const link = document.createElement("a");
-    //the "download.txt" will be replaced by the link name. (this.state = {prevFileName}) is the file needed.
-    link.download = `prevreport.txt`;
-    link.href = "./prevreport.txt";
-    link.click();
-};
+
 
 const downloadAnnotated = () => {
     const link = document.createElement("a");
@@ -527,72 +521,95 @@ function DateComponent() {
       </LocalizationProvider>
     );
   }
-class ReportEvaluation extends Component {
+  class ReportEvaluation extends Component {
     constructor(props) {
-        super(props)
-        this.state = {
-            studentFirstName: "Deniz",
-            studentLastName: "Sun",
-            course: "CS299",
-            prevGradeA: statusOptions[4],
-            prevGradeB: statusOptions[4],
-            isButtonClicked: false,
-            currentReport: "report.pdf",
-            currentComment: "I fixed everything according to the feedback. :) ",
-        }
+      super(props);
+      this.state = {
+        studentFirstName: "Deniz",
+        studentLastName: "Sun",
+        course: "CS299",
+        prevGradeA: statusOptions[4],
+        prevGradeB: statusOptions[4],
+        isButtonClicked: false,
+        currentReport: "report.pdf",
+        currentComment: "I fixed everything according to the feedback. :) ",
+      };
     }
-   render(){
-    return (
-        <div className='reportevaluation' >
-              <div className="history">
-                  <div className="information">
-                      <h1>Viewing the submission history of: {this.state.studentFirstName} {this.state.studentLastName} </h1>
-                        <hr></hr>
-                  </div>
-                  <div className="prevlist">
-                      <h1>Previous Revisions</h1>
-                      <RevisionList/>
-                  </div>
-              </div>
+  
+    downloadCurrent = () => {
+      // Handle downloading the current report
+    };
+  
+    render() {
+      return (
+        <div className="reportevaluation">
+          <div className="history">
+            <div className="information">
+              <h1>
+                Viewing the submission history of: {this.state.studentFirstName} {this.state.studentLastName}
+              </h1>
               <hr></hr>
-            <div className="reportstatus">
-                <div className="information">
-                    <h1>The student's current submission for {this.state.course} </h1>
-                    <br></br>
-                    <IconButton onClick={downloadCurrent} aria-label="download">
-                        <DownloadIcon />
-                    </IconButton>
-                    <Button onClick={downloadCurrent} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.currentReport}</Button>
-                    <Typography>Student's comments:</Typography>
-                    <textarea readOnly>{this.state.currentComment}</textarea>
-                    <hr></hr>
-                    <h1>REPORT ASSESSMENT</h1>
-
-                </div>
-                    <Typography>{
-                        <Button onClick={downloadCEF} variant="text" style={{textTransform: 'none'}}  size="large">Click here</Button>
-                      } 
-                      to download the student's company evaluation form.</Typography>  
-
-                    <Typography>To enter the student's grades, use the Grade Form</Typography>
-                    <FormDialog studentFirstName={this.state.studentFirstName} studentLastName={this.state.studentLastName}
-                    setButtonClicked={(value) => this.setState({isButtonClicked: value})}/>
-                <div className="texteditor">
-                  <TextareaValidator/>
-                </div>
-                <div className="annotatedupload">
-                    <h2>Upload annotated feedback here: </h2>
-                      <FileUploadIcon/>
-                    <Button variant="contained" component="label">
-                        Upload File
-                        <input type="file" hidden />
-                    </Button>
-                </div>
             </div>
+            <div className="prevlist">
+              <h1>Previous Revisions</h1>
+              <RevisionList />
+            </div>
+          </div>
+          <hr></hr>
+          <div className="reportstatus">
+            <div className="information">
+              <h1>The student's current submission for {this.state.course}</h1>
+              <br></br>
+              <IconButton onClick={this.downloadCurrent} aria-label="download">
+                <DownloadIcon />
+              </IconButton>
+              <Button
+                onClick={this.downloadCurrent}
+                variant="text"
+                style={{ textTransform: "none" }}
+                size="large"
+              >
+                {this.state.currentReport}
+              </Button>
+              <Typography>Student's comments:</Typography>
+              <textarea readOnly>{this.state.currentComment}</textarea>
+              <hr></hr>
+              <h1>REPORT ASSESSMENT</h1>
+            </div>
+            <Typography>
+              {
+                <Button
+                  onClick={downloadCEF}
+                  variant="text"
+                  style={{ textTransform: "none" }}
+                  size="large"
+                >
+                  Click here
+                </Button>
+              } to download the student's company evaluation form.
+            </Typography>
+            <Typography>To enter the student's grades, use the Grade Form</Typography>
+            <FormDialog
+              studentFirstName={this.state.studentFirstName}
+              studentLastName={this.state.studentLastName}
+              setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
+            />
+            <div className="texteditor">
+              <TextareaValidator />
+            </div>
+            <div className="annotatedupload">
+              <h2>Upload annotated feedback here: </h2>
+              <FileUploadIcon />
+              <Button variant="contained" component="label">
+                Upload File
+                <input type="file" hidden />
+              </Button>
+            </div>
+          </div>
         </div>
-    );
-       
-   }
-}
-
-export default ReportEvaluation
+      );
+    }
+  }
+  
+  export default ReportEvaluation;
+  

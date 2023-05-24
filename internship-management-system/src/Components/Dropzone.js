@@ -91,7 +91,7 @@ function TextareaValidator() {
 
 const DragDropFiles = (props) => {
   const [file, setFile] = useState(null);
-  const [userId, setId] = useState(null);
+  const [userId, setId] = useState("");
   //const [description, setDescription] = useState("");
   const inputRef = useRef();
 
@@ -102,9 +102,6 @@ const DragDropFiles = (props) => {
     
   };
 
-    const handleDescriptionChange = (value) => {
-        setDescription(value);
-    };
   const handleDropFile = (event) => {
     console.log("HERE2")
     event.preventDefault();
@@ -151,6 +148,8 @@ const DragDropFiles = (props) => {
     console.log("id: " , userId);
 
     const response1 = await axios.get(`http://localhost:8080/report/students_all_reports/${userId}`);
+
+    console.log("repo id:", response1.data);
     const reportId = response1.data[response1.data.length - 1].id;
 
     formData.append("reportDescription", "emreReport1"); // Replace reportDescription with the actual report description
@@ -189,8 +188,7 @@ const DragDropFiles = (props) => {
         <h2>Uploading the following file:</h2>
         <p>{file.name}</p>
         <br></br>
-        <TextareaValidator value={description}
-                           onChange={handleDescriptionChange} />
+        <TextareaValidator/>
 
         {/* <input
           type="text"
