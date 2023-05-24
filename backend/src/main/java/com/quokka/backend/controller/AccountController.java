@@ -80,6 +80,12 @@ public class AccountController {
         return accountService.getAccountById(id);
     }
 
+    @GetMapping("/get_account_by_email/{email}")
+    public UserAccount getAccountByEmail(@PathVariable String email){
+
+        return accountService.getAccountByEmail(email);
+    }
+
     @PutMapping("/{id}")
     public UserAccount editAccount(@PathVariable Long id, @RequestBody UserAccount newAccount){
 

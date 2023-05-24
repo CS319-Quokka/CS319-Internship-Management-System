@@ -35,6 +35,17 @@ public class AccountService {
         return account.get();
     }
 
+    public UserAccount getAccountByEmail(String email){
+        Optional<UserAccount> account = accountRepository.findByEmail(email);
+        if(!account.isPresent()){
+            return null;
+        }
+
+        return account.get();
+    }
+
+
+
     public UserAccount addUserAccount( UserAccount userAccount) {
 
 
