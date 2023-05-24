@@ -3,6 +3,7 @@ package com.quokka.backend.controller;
 import com.quokka.backend.Auth.AuthResponse;
 import com.quokka.backend.models.User;
 import com.quokka.backend.models.UserAccount;
+import com.quokka.backend.request.ChangePasswordRequest;
 import com.quokka.backend.service.AccountService;
 import com.quokka.backend.service.EmailSenderService;
 import com.quokka.backend.service.UserManagementService;
@@ -97,9 +98,8 @@ public class AccountController {
     }
 
     @PatchMapping("/{id}")
-    public int changePassword(@PathVariable Long id, @RequestParam String oldPassword, @RequestParam String newPassword,
-                              @RequestParam String newPassword2){
+    public int changePassword(@PathVariable Long id, @RequestBody ChangePasswordRequest request){
 
-        return accountService.changePassword(id, oldPassword, newPassword, newPassword2);
+        return accountService.changePassword(id, request);
     }
 }

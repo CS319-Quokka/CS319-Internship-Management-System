@@ -4,6 +4,7 @@ import com.quokka.backend.models.Student;
 import com.quokka.backend.models.User;
 import com.quokka.backend.models.UserAccount;
 import com.quokka.backend.repository.AccountRepository;
+import com.quokka.backend.request.ChangePasswordRequest;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,9 +100,9 @@ public class AccountService {
         System.out.println("All accounts deleted!");
     }
 
-    public int changePassword(Long id, String oldPassword, String newPassword, String newPassword2){
+    public int changePassword(Long id, ChangePasswordRequest request){
 
-        if(!(newPassword.equals(newPassword2))){
+        if(!(request.getNewPassword().equals(request.getNewPassword2()))){
 
             return -3;
         }
@@ -112,17 +113,20 @@ public class AccountService {
             return -2;
         }
 
-        if(!(accountOpt.get().getPassword().equals(oldPassword))){
+        if(!(accountOpt.get().getPassword().equals(request.getOldPassword()))){
 
             return -1;
         }
 
-        if(oldPassword.equals(newPassword)){
+        if(request.getOldPassword().equals(request.getNewPassword())){
 
             return 0;
         }
 
-        accountOpt.get().setPassword(newPassword);
+        UserAccount foundUser = accountOpt.get();
+        foundUser.setPassword(request.getNewPassword());
+
+        accountRepository.save(foundUser);
         return 1;
     }
 }
