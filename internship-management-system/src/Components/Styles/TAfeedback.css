@@ -1,9 +1,23 @@
 .page{
-    width:85%;
-    margin-left: 15%;
-    height:100vh;
+    position: absolute;
     background-color: hwb(207 91% 0%);
-    overflow: auto;
     justify-content: center;
     align-items: center;
+    overflow: auto;
+    height: 100vh;
+    width: 85%;
+    left: 15%;
+}
+.page .section{
+    width:40%;
+    left: 55%;
+    height:75vh;
+    background-color: white;
+    position: relative;
+    padding:1%;
+    top: 15%;
+    border-radius: 16px;
+    padding:2%;
+
+
 }

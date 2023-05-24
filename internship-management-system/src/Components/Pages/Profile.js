@@ -32,8 +32,9 @@ useEffect( () => {
 */}
 
 
-function FormDialog() {
+function FormDialog(props) {
     const [open, setOpen] = React.useState(false);
+    const [newPassword, setNewPassword] = React.useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -43,9 +44,14 @@ function FormDialog() {
         setOpen(false);
     };
 
-    const handleConfirm = () => {
-        setOpen(false);
-        // TODO: Change password
+    const handleConfirm = (newPassword, confirmPassword) => {
+        if (newPassword === confirmPassword) {
+            // TODO: Change password
+            console.log("Passwords match. Change password logic here.");
+        } else {
+            console.log("Passwords do not match.");
+            // TODO: Show an error message or take appropriate action
+        }
     };
 
     return (
@@ -77,6 +83,10 @@ function FormDialog() {
                         type="password"
                         fullWidth
                         variant="standard"
+                        value={props.newPassword}
+                        onChange={(event) => props.setState({ newPassword: event.target.value })}
+
+
                     />
                     <TextField
                         autoFocus
@@ -87,6 +97,9 @@ function FormDialog() {
                         type="password"
                         fullWidth
                         variant="standard"
+                        value={props.confirmPassword}
+                        onChange={(event) => props.setState({ confirmPassword: event.target.value })}
+
                     />
                 </DialogContent>
                 <DialogActions>
@@ -100,7 +113,6 @@ function FormDialog() {
 
 
 class Profile extends Component {
-
 
     constructor(props) {
         super(props)
@@ -117,7 +129,8 @@ class Profile extends Component {
             progress: 0,
             notification: "",
             instructor: "",
-            instructorMail:""
+            instructorMail:"",
+            confirmPassword: "",
         }
     }
     componentDidMount() {
@@ -196,7 +209,7 @@ class Profile extends Component {
                             <img className='profilePic' src={pic} alt="Profile"/>
                             <p><em>{this.state.userType}</em></p><br/>
 
-                            <FormDialog/>
+                            <FormDialog onConfirm={this.handleConfirm}/>
                             <br></br>
                         </div>
 
