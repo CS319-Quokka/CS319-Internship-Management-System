@@ -1,6 +1,7 @@
 package com.quokka.backend.Auth;
 
 
+import com.quokka.backend.models.Feedback;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,4 +15,5 @@ public class ReportFileResponse {
     private String reportDescription;
     private Long reportId;
     private String fileName;
+    private Feedback feedback;
 }

@@ -81,18 +81,33 @@ const revisionHistory = [
 
 function RevisionList() {
 
-const [reports,setReports] = useState(null)
 const [studentId, setStudentId] = useState('');
 const location = useLocation();
 const [link,setLink] = useState("");
+const [links,setLinks] = useState([]);
+const [reportFile,setReportFile] = useState(null)
+const [reportHistory,setReportHistory] = useState([])
 
 
-const downloadPrevious = (link) => {
-    
-  if (link) {
+const downloadPrevious = (fileData, fileName) => {
+  return () => {
+    const binaryString = window.atob(fileData);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes.buffer]);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
     link.click();
-  }
+    document.body.removeChild(link);
+  };
 };
+
 
 
 useEffect(() => {
@@ -119,21 +134,34 @@ const createDownloadUrl = (fileData,fileName) =>{
   const url = URL.createObjectURL(blob);
 
    // Create a temporary link element
-   const link = document.createElement('a');
-   link.href = url;
-   link.download = fileName;
+   const newLink = document.createElement('a');
+   newLink.href = url;
+   newLink.download = fileName;
 
-   setLink(link)
+   console.log("here:",newLink)
+   setLink(newLink)
+   links.push(newLink)
+
 }
 
-const getReportFile = async (id) => {
+const getReportFile = async (id, reports,index) => {
   try {
     const response = await axios.get(`http://localhost:8080/report/file/${id}`);
-    const reportFile = response
+    const reportFile = response.data
     console.log("rapurunu sikim: ", reportFile);
+
+
+    reports.push({
+      revisionCount:index +1,
+      fileName: reportFile.fileName,
+      description:reportFile.reportDescription,
+      fileData:reportFile.fileData
+    });
 
     // Call the downloadCurrent function with the file data and name
     createDownloadUrl(reportFile.fileData, reportFile.fileName);
+    console.log("linko:",link)
+    links.push(link)
   } catch (error) {
     console.error("Failed to fetch report file: ", error);
   }
@@ -148,29 +176,37 @@ const getAllReports = async () => {
 
     var reportIdList = [];
 
+    var allReports = [];
+
     for (var i = 0; i < info.length; i++) {
       console.log(i, "th report: ", info[i].id);
       reportIdList.push(info[i].id)
+      getReportFile(reportIdList[i],allReports,i)
+     
     }
 
 
 
     console.log("ids: ", reportIdList)
 
-    getReportFile(reportIdList[0])
+    
+    //console.log("1:", reportFile)
+    //getReportFile(reportIdList[1],allReports)
+    //console.log("2:", reportFile)
 
 
+    console.log("ALL REPOS:", allReports)
+    
+    setReportHistory(allReports)
 
-    const reports = info.map((report) => ({
-      revisionCount: report.revisionCount,
-      prevfilename: report.prevfilename,
-      prevstatus: report.prevstatus,
-      prevfeedback: report.prevfeedback,
-      annotatedfeedback: report.annotatedfeedback
-    }));
+    // const reports = allReports.map((report,index) => ({
+    //   revisionCount: index + 1,
+    //   fileName: report.fileName,
+    //   description:report.reportDescription
+    // }));
+   
 
-    console.log("list: ", reports);
-    setReports(reports);
+
   } catch (error) {
     console.log(error);
   }
@@ -179,29 +215,30 @@ const getAllReports = async () => {
 
     return (
         <ul>
-            {revisionHistory.map(revision => (
+          {console.log("AAA:",reportHistory)}
+            {reportHistory.map((revision,index) => (
                 <div className="prevreport">
-                    <li key={revision.revisionCount}>
+                    <li key={index}>
                         <hr></hr>
                         <h2>Revision : {revision.revisionCount}</h2>
                         <p>The student's submission for this revision:</p>
-                        <IconButton aria-label="download" onClick={downloadPrevious}>
+                        <IconButton aria-label="download" onClick={downloadPrevious(revision.fileData,revision.fileName)}>
                             <DownloadIcon/>
                         </IconButton>
-                        <Button variant="text" onClick={downloadPrevious} style={{textTransform: 'none'}} size="large">{revision.prevFileName}</Button>
+                        <Button variant="text" onClick={downloadPrevious(revision.fileData,revision.fileName)} style={{textTransform: 'none'}} size="large">{revision.fileName}</Button>
                         <Typography>Student's comments:</Typography>
-                        <textarea readOnly>{revision.studentComment}</textarea>
+                        <textarea readOnly>{revision.description}</textarea>
 
                         <b><br></br>◾The grade distribution of this submission◾</b>
                         <br></br>
-                        <p>Overall progress: {revision.prevStatus}</p>
+                        <p>Overall progress: {}</p>
                         <b><br></br>Your feedback for this submission</b>
-                        <textarea readOnly>{revision.prevFeedback}</textarea>
+                        <textarea readOnly>{}</textarea>
                         <b>Your annotated feedback for this submission<br></br></b>
                         <IconButton aria-label="download" onClick={downloadAnnotated}>
                             <DownloadIcon/>
                         </IconButton>
-                        <Button variant="text" onClick={downloadAnnotated} style={{textTransform: 'none'}} size="large">{revision.annotatedFeedback}</Button>
+                        <Button variant="text" onClick={downloadAnnotated} style={{textTransform: 'none'}} size="large">{}</Button>
 
                     </li>
                 </div>
