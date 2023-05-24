@@ -1,10 +1,126 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import Popup from "../Popup"
 import "../Styles/Popup.css"
 import Button from '@mui/material/Button';
+import axios from "axios";
+import Typography from "@mui/material/Typography";
 
 
+
+function InstructorOptionsList() {
+    const [instructorOptions, setInstructorOptions] = useState([]);
+
+    useEffect(() => {
+        fetchInstructorOptions()
+            .then((options) => setInstructorOptions(options))
+            .catch((error) => console.log(error));
+    }, []);
+
+    const fetchInstructorOptions = async () => {
+        try {
+            // Make an API call or database query to retrieve the options
+            const response = await axios.get('...'); //link to the API
+            const data = response.data;
+
+            // Return the options as an array
+            return data.map((instructor) => ({
+                value: instructor.id,
+                label: instructor.name,
+            }));
+        } catch (error) {
+            throw new Error('Failed to fetch instructors.');
+        }
+    };
+
+    return (
+        <label className="input-label">
+            <h3 className="input-tag" id="instructor-tag">Instructor:</h3>
+            <select className="select-menu" id="selector">
+                <option value="0">Select instructor</option>
+                {instructorOptions.map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+            </select>
+        </label>
+    );
+}
+
+
+function TaOptionsList() {
+    const [TaOptions, setTaOptions] = useState([]);
+
+    useEffect(() => {
+        fetchTaOptions()
+            .then((options) => setTaOptions(options))
+            .catch((error) => console.log(error));
+    }, []);
+
+    const fetchTaOptions = async () => {
+        try {
+            const response = await axios.get('...'); //link to the API
+            const data = response.data;
+
+            // Return the options as an array
+            return data.map((ta) => ({
+                value: ta.id,
+                label: ta.name,
+            }));
+        } catch (error) {
+            throw new Error('Failed to fetch TAs.');
+        }
+    };
+
+    return (
+        <label className="input-label">
+            <h3 className="input-tag" id="ta-tag">Teaching Assistant:</h3>
+            <select className="select-menu" id="selector">
+                <option value="0">Select TA</option>
+                {TaOptions.map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+            </select>
+        </label>
+    );
+}
+
+function StudentOptionsList() {
+    const [studentOptions, setStudentOptions] = useState([]);
+
+    useEffect(() => {
+        fetchStudentOptions()
+            .then((options) => setStudentOptions(options))
+            .catch((error) => console.log(error));
+    }, []);
+
+    const fetchStudentOptions = async () => {
+        try {
+            const response = await axios.get('...'); //link to the API
+            const data = response.data;
+
+            // Return the options as an array
+            return data.map((student) => ({
+                value: student.id,
+                label: student.name,
+            }));
+        } catch (error) {
+            throw new Error('Failed to fetch students.');
+        }
+    };
+
+
+    return (
+        <label className="input-label">
+            <h3 className="input-tag" id="student-tag">Student:</h3>
+            <select className="select-menu" id="selector">
+                <option value="0">Select student</option>
+                {studentOptions.map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
+            </select>
+        </label>
+    );
+}
 
 function ManageUsersAdd(props) {
   const methods = useForm();
@@ -35,18 +151,19 @@ function ManageUsersAdd(props) {
 
     let courseSelection = null;
     if (selectedValue === "Student") {
-      courseSelection = <div >
+      courseSelection =
+          <div >
+            <label className="input-label">
+                  <h3 className="input-tag" id="course-tag">Course:</h3>
+                  <select className="select-menu" id = "selector" value = {selectedCode} onChange={handleSelectedCode}>
+                <option value="0">Select course</option>
+                <option value="1">CS299</option>
+                <option value="2">CS399</option>
+              </select>
 
-
-    <label className="input-label">
-          <h3 className="input-tag" id="course-tag">Course:</h3>
-          <select className="select-menu" id = "course" value = {selectedCode} onChange={handleSelectedCode}>
-        <option value="0">Select course:</option>
-        <option value="1">CS299</option>
-        <option value="2">CS399</option>
-      </select>
-
-    </label>
+            </label>
+          <InstructorOptionsList/>
+          <TaOptionsList/>
 
     </div>;
     }
@@ -61,6 +178,8 @@ function ManageUsersAdd(props) {
       {console.log("COURSE CODE: ",props.code )} */}
       <FormProvider {...methods}>
         <form >
+            <h1  >Enter the information of the user to be added</h1>
+            <hr></hr>
           <label className="input-label">
             <h3 className="input-tag">First Name:</h3>
             <input
@@ -103,7 +222,6 @@ function ManageUsersAdd(props) {
 
           <div className="add-user">
 
-
                 <div className="role">
                 <select className = "select-menu" id = "type" value={selectedValue} onChange={handleSelectChange}>
                   <option value="0">Select role:</option>
@@ -122,8 +240,9 @@ function ManageUsersAdd(props) {
 
 
       </FormProvider>
-      <Button variant="outlined" onClick={handleAddUser}>ADD USER</Button>
-
+        <div className="add-button">
+            <Button variant="outlined" onClick={handleAddUser}>ADD USER</Button>
+        </div>
 
 
     </div>

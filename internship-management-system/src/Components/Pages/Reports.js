@@ -24,7 +24,7 @@ const statusOptions = ["Submitted",
 
 const downloadAnnotated = () => {
     const link = document.createElement("a");
-    //the "download.txt" will be replaced by the link name. (this.state = {annotatedfeedback}) is the file needed. 
+    //the "download.txt" will be replaced by the link name. (this.state = {annotatedFeedback}) is the file needed. 
     link.download = `annotatedfeed.txt`;
     link.href = "./annotated.txt";
     link.click();
@@ -39,34 +39,36 @@ const downloadPrevious = () => {
 const downloadCurrent = () => {
     const link = document.createElement("a");
     //the "download.txt" will be replaced by the link name. (this.state = {prevfilename}) is the file needed.
-    link.download = `currentreport.txt`;
-    link.href = "./currentreport.txt";
+    link.download = `currentReport.txt`;
+    link.href = "./currentReport.txt";
     link.click();
 };
 const revisionHistory = [
     {
         revisionCount: "1",
-        prevfilename: "DenizSunReportRevision1.pdf",
-        prevstatus: "Unsatisfactory. Waiting for revision.",
-        prevfeedback: "Your report is insufficient. Try to emphasize your experiences and (...) \n\nUpload a revised version.",
-        annotatedfeedback: "DenizSunFeedback1.pdf",
+        prevFileName: "DenizSunReportRevision1.pdf",
+        prevStatus: "Unsatisfactory. Waiting for revision.",
+        prevFeedback: "Your report is insufficient. Try to emphasize your experiences and (...) \n\nUpload a revised version.",
+        annotatedFeedback: "DenizSunFeedback1.pdf",
+        studentComment: "I barely uploaded on time. :) "
 
     },
     {
         revisionCount: "2",
-        prevfilename:"DenizSunReportRevision2.pdf",
-        prevstatus: "Unsatisfactory. Waiting for revision.",
-        prevfeedback: "Better but fix the format.",
-        annotatedfeedback: "DenizSunFeedback2.pdf",
+        prevFileName:"DenizSunReportRevision2.pdf",
+        prevStatus: "Unsatisfactory. Waiting for revision.",
+        prevFeedback: "Better but fix the format.",
+        annotatedFeedback: "DenizSunFeedback2.pdf",
+        studentComment: "I hope this is better."
 
     },
     {
         revisionCount: "3",
-        prevfilename:"DenizSunReportRevision3.pdf",
-        prevstatus: "Unsatisfactory. Waiting for revision.",
-        prevfeedback: "Nice :)",
-        annotatedfeedback: "DenizSunFeedback3.pdf"
-
+        prevFileName: "DenizSunReportRevision3.pdf",
+        prevStatus: "Unsatisfactory. Waiting for revision.",
+        prevFeedback: "Nice :)",
+        annotatedFeedback: "DenizSunFeedback3.pdf",
+        studentComment: "I have fixed the format. Please check again."
     }
 ]
 
@@ -83,19 +85,21 @@ function RevisionList() {
                         <IconButton aria-label="download" onClick={downloadCurrent}>
                             <DownloadIcon/>
                         </IconButton>
-                        <Button variant="text" onClick={downloadCurrent} style={{textTransform: 'none'}} size="large">{revision.prevfilename}</Button>
+                        <Button variant="text" onClick={downloadCurrent} style={{textTransform: 'none'}} size="large">{revision.prevFileName}</Button>
+
+                        <Typography>Your comments:</Typography>
+                        <textarea readOnly>{revision.studentComment}</textarea>
 
                         <b><br></br>◾The grade distribution of this submission◾</b>
                         <br></br>
-                        <p>Overall progress: {revision.prevstatus}</p>
+                        <p>Overall progress: {revision.prevStatus}</p>
                         <b><br></br>Instructor's feedback for this submission</b>
-                        <textarea readOnly>{revision.prevfeedback}</textarea>
+                        <textarea readOnly>{revision.prevFeedback}</textarea>
                         <b>Instructor's annotated feedback for this submission<br></br></b>
                         <IconButton aria-label="download" onClick={downloadAnnotated}>
                             <DownloadIcon/>
                         </IconButton>
-                        <Button variant="text" onClick={downloadAnnotated} style={{textTransform: 'none'}} size="large">{revision.annotatedfeedback}</Button>
-
+                        <Button variant="text" onClick={downloadAnnotated} style={{textTransform: 'none'}} size="large">{revision.annotatedFeedback}</Button>
                     </li>
                 </div>
             ))}
@@ -111,18 +115,13 @@ class ReportsStudents extends Component {
             lastName: "Sun",
             course: "CS299",
             userType: "Student",
-            feedbackB:"The report is insufficient in these parts:\n(...) \nPlease revise and resubmit it.",
-            annotatedfeedback: "DenizSunFeedback.pdf",
-            overallstatus: statusOptions[2],
+            feedbackB:"Good job.",
+            annotatedFeedback: "DenizSunFeedback.pdf",
+            overallStatus: statusOptions[2],
             partAstatus: statusOptions[4],
-            currentreport: "DenizSunReport.pdf"
-            
-
+            currentReport: "DenizSunReport.pdf"
         }
-    
-        }
-    
-
+    }
    render(){
     return (
         <div className='reportspage' >
@@ -144,9 +143,9 @@ class ReportsStudents extends Component {
                     <hr></hr>
                     <b>The report you submitted is: </b>
                     <IconButton onClick={downloadCurrent} aria-label="download">
-                    <DownloadIcon />
-                </IconButton>
-                    <Button onClick={downloadCurrent} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.currentreport}</Button>
+                        <DownloadIcon />
+                    </IconButton>
+                    <Button onClick={downloadCurrent} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.currentReport}</Button>
 
                     <hr></hr>   
                     <b>Part A ~ Work Place</b>
@@ -157,13 +156,13 @@ class ReportsStudents extends Component {
                     <textarea readOnly>{this.state.feedbackB}</textarea>
                     <hr></hr>
                    <b>Part C ~ Final version of the report</b>
-                   <p>Overall Status: {this.state.overallstatus} </p>
+                   <p>Overall Status: {this.state.overallStatus} </p>
                     <b><br></br>Instructor's annotated feedback</b>
                     <br></br>
                     <IconButton onClick={downloadAnnotated} aria-label="download">
                         <DownloadIcon />
                     </IconButton>
-                    <Button onClick={downloadAnnotated} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.annotatedfeedback}</Button>
+                    <Button onClick={downloadAnnotated} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.annotatedFeedback}</Button>
                 </div>                  
             </div>
     );
