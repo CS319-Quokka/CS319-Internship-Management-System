@@ -11,7 +11,7 @@ import Typography from "@mui/material/Typography";
 function InstructorOptionsList({ methods }) {
     const [instructorOptions, setInstructorOptions] = useState([]);
 
-	const department = methods.watch("department");
+    const department = methods.watch("department");
 
     useEffect(() => {
         fetchInstructorOptions()
@@ -22,26 +22,26 @@ function InstructorOptionsList({ methods }) {
     const fetchInstructorOptions = async () => {
         try {
             // Make an API call or database query to retrieve the options
-			console.log("methods.getValues:" , methods.getValues("department"));
+            console.log("methods.getValues:" , methods.getValues("department"));
             const response = await axios.get(`http://localhost:8080/instructor?department=${department}`); //link to the API
             const instructors = response.data;
 
-			console.log(instructors);
+            console.log(instructors);
 
-			 // Now fetch each instructor's UserAccount data
-			 const instructorOptions = await Promise.all(instructors.map(async (instructor) => {
-				console.log("instructor.userAccount.id: ", instructor.userAccount.id);
-				const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${instructor.userAccount.id}`);
-				const account = accountResponse.data;
-	
-				return {
-					value: instructor.id,
-					label: `${account.firstName} ${account.lastName}`,
-				};
-			}));
-	
-			// Return the options as an array
-			return instructorOptions;
+            // Now fetch each instructor's UserAccount data
+            const instructorOptions = await Promise.all(instructors.map(async (instructor) => {
+                console.log("instructor.userAccount.id: ", instructor.userAccount.id);
+                const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${instructor.userAccount.id}`);
+                const account = accountResponse.data;
+
+                return {
+                    value: instructor.id,
+                    label: `${account.firstName} ${account.lastName}`,
+                };
+            }));
+
+            // Return the options as an array
+            return instructorOptions;
 
 
             // // Return the options as an array
@@ -71,7 +71,7 @@ function InstructorOptionsList({ methods }) {
 function TaOptionsList({ methods }) {
     const [TaOptions, setTaOptions] = useState([]);
 
-	const department = methods.watch("department");
+    const department = methods.watch("department");
 
     useEffect(() => {
         fetchTaOptions()
@@ -81,25 +81,25 @@ function TaOptionsList({ methods }) {
 
     const fetchTaOptions = async () => {
         try {
-			console.log("methods.getValues:" , methods.getValues("department"));
+            console.log("methods.getValues:" , methods.getValues("department"));
             const response = await axios.get(`http://localhost:8080/teaching_assistant?department=${department}`); //link to the API
             const teachingAssistants = response.data;
 
-			console.log(teachingAssistants);
-			// Now fetch each instructor's UserAccount data
-			const teachingAssistantOptions = await Promise.all(teachingAssistants.map(async (teachingAssistant) => {
-				console.log("teachingAssistant.userAccount.id: ", teachingAssistant.userAccount.id);
-				const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${teachingAssistant.userAccount.id}`);
-				const account = accountResponse.data;
-	
-				return {
-					value: teachingAssistant.id,
-					label: `${account.firstName} ${account.lastName}`,
-				};
-			}));
-	
-			// Return the options as an array
-			return teachingAssistantOptions;
+            console.log(teachingAssistants);
+            // Now fetch each instructor's UserAccount data
+            const teachingAssistantOptions = await Promise.all(teachingAssistants.map(async (teachingAssistant) => {
+                console.log("teachingAssistant.userAccount.id: ", teachingAssistant.userAccount.id);
+                const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${teachingAssistant.userAccount.id}`);
+                const account = accountResponse.data;
+
+                return {
+                    value: teachingAssistant.id,
+                    label: `${account.firstName} ${account.lastName}`,
+                };
+            }));
+
+            // Return the options as an array
+            return teachingAssistantOptions;
 
             // // Return the options as an array
             // return data.map((ta) => ({
@@ -125,7 +125,7 @@ function TaOptionsList({ methods }) {
 }
 
 function StudentOptionsList() {
-	const methods = useForm();
+    const methods = useForm();
     const [studentOptions, setStudentOptions] = useState([]);
 
     useEffect(() => {
@@ -164,227 +164,227 @@ function StudentOptionsList() {
 }
 
 function ManageUsersAdd(props) {
-  const methods = useForm();
-  const [selectedValue, setSelectedValue] = useState("");
-  const [selectedCode, setSelectedCode] = useState("");
+    const methods = useForm();
+    const [selectedValue, setSelectedValue] = useState("");
+    const [selectedCode, setSelectedCode] = useState("");
 
-  const handleSelectChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
-
-  //IF SELECTED CODE IS 1 IT IS CS299, IF SELECTED CODE IS 2 IT IS CS399
-  const handleSelectedCode = (event) => {
-    setSelectedCode(event.target.value);
-  };
-
-  const handleAddUser = async () => {
-    console.log("selectedValue:",selectedValue);
-    console.log("selectedCode:",selectedCode);
-
-    const formData = {
-        firstName: methods.getValues("firstName"),
-        lastName: methods.getValues("lastName"),
-        email: methods.getValues("email"),
-        department: methods.getValues("department"),
-        role: selectedValue,
-        courseCode: selectedCode
+    const handleSelectChange = (event) => {
+        setSelectedValue(event.target.value);
     };
 
-    console.log("formData:",formData);
+    //IF SELECTED CODE IS 1 IT IS CS299, IF SELECTED CODE IS 2 IT IS CS399
+    const handleSelectedCode = (event) => {
+        setSelectedCode(event.target.value);
+    };
 
-    const addAccountResponse = await axios.post("http://localhost:8080/account", formData);
-    if ( addAccountResponse.data.email !== formData.email) {
-    	console.log("account with this email already exists");
-		// TODO: already has an account add new user role to account 
-    }
-    else {
-      
-      	console.log(addAccountResponse.data); // Handle the response if needed
+    const handleAddUser = async () => {
+        console.log("selectedValue:",selectedValue);
+        console.log("selectedCode:",selectedCode);
 
-      	console.log("User Account created successfully.");
+        const formData = {
+            firstName: methods.getValues("firstName"),
+            lastName: methods.getValues("lastName"),
+            email: methods.getValues("email"),
+            department: methods.getValues("department"),
+            role: selectedValue,
+            courseCode: selectedCode
+        };
 
-	  	
-    }
+        console.log("formData:",formData);
 
-	const accountResponse = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);
+        const addAccountResponse = await axios.post("http://localhost:8080/account", formData);
+        if ( addAccountResponse.data.email !== formData.email) {
+            console.log("account with this email already exists");
+            // TODO: already has an account add new user role to account
+        }
+        else {
 
-	const userData = {
-        accountId: accountResponse.data.id
-        // courseCode: selectedCode,
-		// instructorId: methods.get
-		// teachingAssistantId: methods.get
-		// companyName: methods.get
-	};
+            console.log(addAccountResponse.data); // Handle the response if needed
 
-
-    if(selectedValue === "Administrative Assistant"){
-		const addAdministrativeAssistantResponse = await axios.post("http://localhost:8080/administrative_assistant", userData);
-		// TODO
-		if ( addAdministrativeAssistantResponse.data.role !== formData.role) {
-		console.log("Error: Administrative Assistant not added");
-		}
-		else {
-		console.log(addAdministrativeAssistantResponse.data); // Handle the response if needed
-		console.log("Administrative Assistant added successfully.");
-		}
-	}
-	else if(selectedValue === "Instructor"){
-		const addInstructorResponse = await axios.post("http://localhost:8080/instructor", userData);
-
-		if ( addInstructorResponse.data.role !== formData.role) {
-		console.log("Error: Instructor not added");
-		}
-		else {
-		console.log(addInstructorResponse.data); // Handle the response if needed
-		console.log("Instructor added successfully.");
-		}
-	}
-	else if(selectedValue === "Teaching Assistant"){
-		const addTeachingAssistantResponse = await axios.post("http://localhost:8080/teaching_assistant", userData);
-		if ( addTeachingAssistantResponse.data.role !== formData.role) {
-		console.log("Error: Teaching Assistant not added");
-		}
-		else {
-		console.log(addTeachingAssistantResponse.data); // Handle the response if needed
-		console.log("Teaching Assistant added successfully.");
-		}
-	
-	}
-	else if(selectedValue === "Student"){
-		// TODO
-	}
-	else if(selectedValue === "Summer Training Coordinator"){
-		const addSummerTrainingCoordinatorResponse = await axios.post("http://localhost:8080/summer_training_coordinator", userData);
-		if ( addSummerTrainingCoordinatorResponse.data.role !== formData.role) {
-		console.log("Error: Summer Training Coordinator not added");
-		}
-		else {
-		console.log(addSummerTrainingCoordinatorResponse.data); // Handle the response if needed
-		console.log("Summer Training Coordinator added successfully.");
-		}
-	}
-	else{
-		console.log("Error: Invalid role");
-	}
-
-	
-	// Reset the form
-	methods.reset();
-    
-};
-
-  const handleOperation = (data) => {
-    console.log("add");
-    console.log(data)
-  };
+            console.log("User Account created successfully.");
 
 
+        }
+
+        const accountResponse = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);
+
+        const userData = {
+            accountId: accountResponse.data.id
+            // courseCode: selectedCode,
+            // instructorId: methods.get
+            // teachingAssistantId: methods.get
+            // companyName: methods.get
+        };
 
 
-    let courseSelection = null;
-    if (selectedValue === "Student") {
-      courseSelection =
-          <div >
-            <label className="input-label">
-                  <h3 className="input-tag" id="course-tag">Course:</h3>
-                  <select className="select-menu" id = "selector" value = {selectedCode} onChange={handleSelectedCode}>
-                <option value="0">Select course</option>
-                <option value="1">{methods.getValues("department")}299</option>
-                <option value="2">{methods.getValues("department")}399</option>
-              </select>
+        if(selectedValue === "Administrative Assistant"){
+            const addAdministrativeAssistantResponse = await axios.post("http://localhost:8080/administrative_assistant", userData);
+            // TODO
+            if ( addAdministrativeAssistantResponse.data.role !== formData.role) {
+                console.log("Error: Administrative Assistant not added");
+            }
+            else {
+                console.log(addAdministrativeAssistantResponse.data); // Handle the response if needed
+                console.log("Administrative Assistant added successfully.");
+            }
+        }
+        else if(selectedValue === "Instructor"){
+            const addInstructorResponse = await axios.post("http://localhost:8080/instructor", userData);
 
-            </label>
-          <InstructorOptionsList/>
-          <TaOptionsList/>
+            if ( addInstructorResponse.data.role !== formData.role) {
+                console.log("Error: Instructor not added");
+            }
+            else {
+                console.log(addInstructorResponse.data); // Handle the response if needed
+                console.log("Instructor added successfully.");
+            }
+        }
+        else if(selectedValue === "Teaching Assistant"){
+            const addTeachingAssistantResponse = await axios.post("http://localhost:8080/teaching_assistant", userData);
+            if ( addTeachingAssistantResponse.data.role !== formData.role) {
+                console.log("Error: Teaching Assistant not added");
+            }
+            else {
+                console.log(addTeachingAssistantResponse.data); // Handle the response if needed
+                console.log("Teaching Assistant added successfully.");
+            }
 
-    </div>;
-    }
+        }
+        else if(selectedValue === "Student"){
+            // TODO
+        }
+        else if(selectedValue === "Summer Training Coordinator"){
+            const addSummerTrainingCoordinatorResponse = await axios.post("http://localhost:8080/summer_training_coordinator", userData);
+            if ( addSummerTrainingCoordinatorResponse.data.role !== formData.role) {
+                console.log("Error: Summer Training Coordinator not added");
+            }
+            else {
+                console.log(addSummerTrainingCoordinatorResponse.data); // Handle the response if needed
+                console.log("Summer Training Coordinator added successfully.");
+            }
+        }
+        else{
+            console.log("Error: Invalid role");
+        }
 
 
-  return (
+        // Reset the form
+        methods.reset();
 
-    <div className="add-user">
+    };
+
+    const handleOperation = (data) => {
+        console.log("add");
+        console.log(data)
+    };
 
 
-      {/* {console.log("ROLE: ",props.role )}
+
+
+
+    return (
+
+        <div className="add-user">
+
+
+            {/* {console.log("ROLE: ",props.role )}
       {console.log("COURSE CODE: ",props.code )} */}
-      <FormProvider {...methods}>
-        <form >
-            <h1  >Enter the information of the user to be added</h1>
-            <hr></hr>
-          <label className="input-label">
-            <h3 className="input-tag">First Name:</h3>
-            <input
-              className="input-box"
-              type="text"
-              {...methods.register("firstName", { required: true })}
-            />
-          </label>
-          <label className="input-label">
-            <h3 className="input-tag">Last Name:</h3>
-            <input
-              className="input-box"
-              type="text"
-              {...methods.register("lastName", { required: true })}
-            />
-          </label>
-          <label className="input-label">
-            <h3 className="input-tag">Email:</h3>
-            <input
-              className="input-box"
-              type="email"
-              {...methods.register("email", { required: true })}
-            />
-          </label>
-          <label className="input-label">
-            <h3 className="input-tag">Department:</h3>
-            <input
-              className="input-box"
-              type="text"
-              {...methods.register("department", { required: true })}
-            />
-          </label>
+            <FormProvider {...methods}>
+                <form >
+                    <h1  >Enter the information of the user to be added</h1>
+                    <hr></hr>
+                    <label className="input-label">
+                        <h3 className="input-tag">First Name:</h3>
+                        <input
+                            className="input-box"
+                            type="text"
+                            {...methods.register("firstName", { required: true })}
+                        />
+                    </label>
+                    <label className="input-label">
+                        <h3 className="input-tag">Last Name:</h3>
+                        <input
+                            className="input-box"
+                            type="text"
+                            {...methods.register("lastName", { required: true })}
+                        />
+                    </label>
+                    <label className="input-label">
+                        <h3 className="input-tag">Email:</h3>
+                        <input
+                            className="input-box"
+                            type="email"
+                            {...methods.register("email", { required: true })}
+                        />
+                    </label>
+                    <label className="input-label">
+                        <h3 className="input-tag">Department:</h3>
+                        <input
+                            className="input-box"
+                            type="text"
+                            {...methods.register("department", { required: true })}
+                        />
+                    </label>
 
 
 
-          {/* {isFormSubmitted && !formState.isValid && (
+                    {/* {isFormSubmitted && !formState.isValid && (
             <div className="error-message">Please fill out all fields.</div>
           )} */}
 
 
-          <div className="add-user">
+                    <div className="add-user">
 
-                <div className="role">
-                <select className = "select-menu" id = "type" value={selectedValue} onChange={handleSelectChange}>
-                  <option value="0">Select role:</option>
-                  <option value="Student">Student</option>
-                  <option value="Instructor">Instructor</option>
-                  <option value="Teaching Assistant">Teaching Assistant</option>
-                  <option value="Administrative Assistant">Administrative Assistant</option>
-                  <option value="Summer Training Coordinator">Summer Training Coordinator</option>
-                </select>
-                </div>
+                        <div className="role">
+                            <select className = "select-menu" id = "type" value={selectedValue} onChange={handleSelectChange}>
+                                <option value="0">Select role:</option>
+                                <option value="Student">Student</option>
+                                <option value="Instructor">Instructor</option>
+                                <option value="Teaching Assistant">Teaching Assistant</option>
+                                <option value="Administrative Assistant">Administrative Assistant</option>
+                                <option value="Summer Training Coordinator">Summer Training Coordinator</option>
+                            </select>
+                        </div>
 
-         </div>
-        {courseSelection && 
-			<div>
-                <InstructorOptionsList methods={methods} />
-                <TaOptionsList methods={methods} />
+                    </div>
+                    {selectedValue == "Student" &&
+
+                        <div>
+
+                            <div >
+                                <label className="input-label">
+                                    <h3 className="input-tag" id="course-tag">Course:</h3>
+                                    <select className="select-menu" id = "selector" value = {selectedCode} onChange={handleSelectedCode}>
+                                        <option value="0">Select course</option>
+                                        <option value="1">{methods.getValues("department")}299</option>
+                                        <option value="2">{methods.getValues("department")}399</option>
+                                    </select>
+
+                                </label>
+
+                            </div>
+                        <div>
+                            <InstructorOptionsList methods={methods} />
+                            <TaOptionsList methods={methods} />
+                        </div>
+
+
+                        </div>     }
+
+
+
+                </form>
+
+
+            </FormProvider>
+            <div className="add-button">
+                <Button variant="outlined" onClick={handleAddUser}>ADD USER</Button>
             </div>
-		}
-
-        </form>
 
 
-      </FormProvider>
-        <div className="add-button">
-            <Button variant="outlined" onClick={handleAddUser}>ADD USER</Button>
         </div>
 
-
-    </div>
-
-  );
+    );
 }
 
 export default ManageUsersAdd;
@@ -392,7 +392,7 @@ export default ManageUsersAdd;
 
 
 
-  {/* <ManageUsersAdd/> */}
+{/* <ManageUsersAdd/> */}
 {/* <FormProvider {...methods}>
             <form>
         <label className="input-label">
