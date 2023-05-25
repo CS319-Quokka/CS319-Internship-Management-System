@@ -167,17 +167,14 @@ public class ReportService {
 
     public Report getActiveReport(Long studentId) {
 
-        System.out.println("active 1");
         List<Report> reports = new ArrayList<Report>();
         for (Report report : reportRepository.findAll()) {
 
-            System.out.println("r: "+report);
             if (report.getStudent().getId() == studentId) {
 
                 reports.add(report);
             }
         }
-        System.out.println("active 2 " + reports.get(reports.size()-1));
         return reports.get(reports.size()-1);
     }
 
@@ -217,6 +214,7 @@ public class ReportService {
             else{
 
                 reportFile.setFileData(request.getFileData().getBytes());
+                reportFile.setReportDescription(request.getReportDescription());
                 String fileName = StringUtils.cleanPath(request.getFileData().getOriginalFilename());
                 reportFile.setFileName(fileName);
             }

@@ -13,14 +13,26 @@ import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Check from "@mui/icons-material/Check";
 import FormatItalic from "@mui/icons-material/FormatItalic";
 
-function TextareaValidator() {
+
+function FileUpload(props) {
+  const [message, setMessage] = React.useState("");
+
+  return (
+    <div>
+      
+      <DragDropFiles id = {props.id} message={message} setMessage={setMessage} />
+    </div>
+  );
+}
+
+
+function TextareaValidator(props) {
   const [italic, setItalic] = React.useState(false);
   const [fontWeight, setFontWeight] = React.useState('normal');
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [message, setMessage] = useState("");
 
     const handleMessageChange = (event) => {
-        setMessage(event.target.value);
+        props.setMessage(event.target.value);
     };
 
 
@@ -160,10 +172,13 @@ const DragDropFiles = (props) => {
     console.log("repo id:", response1.data);
     const reportId = response1.data[response1.data.length - 1].id;
 
+    console.log("MESSAGE: ", props.message)
+
     formData.append("reportDescription", "emreReport1"); // Replace reportDescription with the actual report description
     formData.append("studentId", userId); // Replace studentId with the actual student ID
     formData.append("reportId", reportId); // Replace reportId with the actual report ID
     formData.append("fileData", file);
+    formData.append("reportDescription",props.message)
 
       try {
         const response = await axios.post(
@@ -196,7 +211,7 @@ const DragDropFiles = (props) => {
         <h2>Uploading the following file:</h2>
         <p>{file.name}</p>
         <br></br>
-        <TextareaValidator/>
+        <TextareaValidator message={props.message} setMessage={props.setMessage} />
 
         {/* <input
           type="text"
@@ -248,4 +263,4 @@ const DragDropFiles = (props) => {
   );
 };
 
-export default DragDropFiles;
+export default FileUpload;

@@ -61,7 +61,6 @@ public class ReportController {
     @GetMapping("/students_all_reports/{studentId}")
     public List<Report> getAllReportsByStudentId(@PathVariable("studentId") Long studentId){
 
-        System.out.println("HEREEE");
         return reportService.getAllReportsByStudentId(studentId);
     }
 
@@ -69,7 +68,6 @@ public class ReportController {
     @GetMapping("/file/active/{studentId}")
     public ResponseEntity<ReportFileResponse> getActiveReport(@PathVariable("studentId") Long studentId){
 
-        System.out.println("activee");
         Report report = reportService.getActiveReport(studentId);
         ReportFile reportFile = reportService.getReportFileWithReportId(report.getId());
 

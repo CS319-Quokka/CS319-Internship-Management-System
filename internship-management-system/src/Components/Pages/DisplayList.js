@@ -101,7 +101,7 @@ class DisplayList extends Component {
                   <React.Fragment key={index}>
                     <li className="list-item">
 
-                      <Link to = {`/evaluation?studentId=${item.id}`} onClick={this.selectUser(item.id)} >
+                      <Link to = "/evaluation" onClick={this.selectUser(item.id)} >
                         <div className="row">
                             {displayFields.map((field, index) => (
                             <div className="value">{item[field]}</div>

@@ -1,4 +1,4 @@
-import React, {Component, useState, handleChange, useEffect} from 'react'
+import React, {Component, useState, handleChange, useEffect,  useContext } from 'react'
 import axios from 'axios';
 import '../Styles/ReportEvaluation.css'
 import IconButton from '@mui/material/IconButton';
@@ -88,6 +88,7 @@ const [link,setLink] = useState("");
 const [links,setLinks] = useState([]);
 const [reportFile,setReportFile] = useState(null)
 const [reportHistory,setReportHistory] = useState([])
+const userContext = useContext(UserContext);
 
 
 const downloadPrevious = (fileData, fileName) => {
@@ -112,10 +113,9 @@ const downloadPrevious = (fileData, fileName) => {
 
 
 useEffect(() => {
-  const searchParams = new URLSearchParams(location.search);
-  const id = searchParams.get('studentId');
-  setStudentId(id);
-}, [location.search]);
+  console.log("BUNUN IDSI: ",userContext.userId)
+  setStudentId(userContext.userId);
+}, [userContext.userId]);
 
 useEffect(() => {
   if (studentId) {
@@ -189,7 +189,7 @@ const getAllReports = async () => {
     var allReports = [];
 
     //get every report except the last one (report history)
-    for (var i = 0; i < info.length -1; i++) {
+    for (var i = 0; i < info.length ; i++) {
       console.log(i, "th report: ", info[i].id);
       reportIdList.push(info[i].id)
       getReportFile(reportIdList[i],allReports,i)
@@ -573,35 +573,102 @@ function DateComponent() {
     constructor(props) {
       super(props);
       this.state = {
-        studentFirstName: "Deniz",
-        studentLastName: "Sun",
-        course: "CS299",
+        studentFirstName: "",
+        studentLastName: "",
+        course: "",
+        studentId:null,
         prevGradeA: statusOptions[4],
         prevGradeB: statusOptions[4],
         isButtonClicked: false,
-        currentReport: "report.pdf",
-        currentComment: "I fixed everything according to the feedback. :) ",
+        currentReport: "",
+        currentComment: "",
+        fileData:null
       };
+      this.downloadCurrent = this.downloadCurrent.bind(this);
     }
 
     static contextType = UserContext;
     componentDidMount() {
      
       console.log("STUDENT IDDDD:",this.context.userId)
-      this.getActiveReport();
+      const id = this.context.userId
+
+      this.setState({studentId:id})
+      this.getCurrentStudent(id);
+      this.getActiveReport(id);
+
+      console.log("WORKS AGA. ", this.state.fileData)
   }
   
-    downloadCurrent = () => {
-      // Handle downloading the current report
-    };
+  downloadCurrent = () =>{
+
+    const fileData = this.state.fileData
+    const fileName = this.state.currentReport
+
+    console.log("data: ", fileData)
+    if (typeof fileData !== "string" || !(/^[A-Za-z0-9+/=]*$/g.test(fileData))) {
+      console.error("Invalid base64 string");
+      return;
+    }
+  
+    const byteCharacters = atob(fileData);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray]);
+    
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName); // Use the right file extension here
+    document.body.appendChild(link);
+    link.click();
+    
+  }
+  
 
 
-    getActiveReport = async () => {
+    getCurrentStudent = async (id) => {
+
+      const {studentId} = this.state;
       try {
        
-        const response2 = await axios.get(`http://localhost:8080/report/file/active/${1}`);
+        const response2 = await axios.get(`http://localhost:8080/${id}`);
+        const studentInfo = response2.data;
+        console.log("ACTIVE STUDENT: ", studentInfo);
+
+        this.setState({
+          studentFirstName: studentInfo.userAccount.firstName,
+          studentLastName: studentInfo.userAccount.lastName,
+          course: studentInfo.courseCode,
+
+        })
+  
+    
+      } catch (error) {
+        console.log(error);
+      }
+
+    }
+    getActiveReport = async (id) => {
+      try {
+       
+        const response2 = await axios.get(`http://localhost:8080/report/file/active/${id}`);
         const info2 = response2.data;
         console.log("ACTIVE REPORT: ", info2);
+
+        this.setState({
+          currentReport: info2.fileName,
+          currentComment: info2.reportDescription,
+          fileData:info2.fileData
+        }, () => {
+          console.log("repo:",this.state.currentReport);
+          console.log("commenti:",this.state.currentComment);
+          //console.log("commenti:",this.state.fileData);
+          
+        });
   
     
       } catch (error) {
@@ -631,11 +698,11 @@ function DateComponent() {
             <div className="information">
               <h1>The student's current submission for {this.state.course}</h1>
               <br></br>
-              <IconButton onClick={this.downloadCurrent} aria-label="download">
+              <IconButton  onClick={() => this.downloadCurrent()} aria-label="download">
                 <DownloadIcon />
               </IconButton>
               <Button
-                onClick={this.downloadCurrent}
+                 onClick={() => this.downloadCurrent()}
                 variant="text"
                 style={{ textTransform: "none" }}
                 size="large"
@@ -643,7 +710,7 @@ function DateComponent() {
                 {this.state.currentReport}
               </Button>
               <Typography>Student's comments:</Typography>
-              <textarea readOnly>{this.state.currentComment}</textarea>
+              <textarea readOnly value={this.state.currentComment || ''}></textarea>
               <hr></hr>
               <h1>REPORT ASSESSMENT</h1>
             </div>
