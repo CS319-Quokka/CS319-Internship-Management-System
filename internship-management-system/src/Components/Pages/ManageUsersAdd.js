@@ -33,13 +33,13 @@ function InstructorOptionsList({ methods }) {
 				console.log("instructor.userAccount.id: ", instructor.userAccount.id);
 				const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${instructor.userAccount.id}`);
 				const account = accountResponse.data;
-	
+
 				return {
 					value: instructor.id,
 					label: `${account.firstName} ${account.lastName}`,
 				};
 			}));
-	
+
 			// Return the options as an array
 			return instructorOptions;
 
@@ -91,13 +91,13 @@ function TaOptionsList({ methods }) {
 				console.log("teachingAssistant.userAccount.id: ", teachingAssistant.userAccount.id);
 				const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${teachingAssistant.userAccount.id}`);
 				const account = accountResponse.data;
-	
+
 				return {
 					value: teachingAssistant.id,
 					label: `${account.firstName} ${account.lastName}`,
 				};
 			}));
-	
+
 			// Return the options as an array
 			return teachingAssistantOptions;
 
@@ -164,142 +164,134 @@ function StudentOptionsList() {
 }
 
 function ManageUsersAdd(props) {
-  const methods = useForm();
-  const [selectedValue, setSelectedValue] = useState("");
-  const [selectedCode, setSelectedCode] = useState("");
+    const methods = useForm();
+    const [selectedValue, setSelectedValue] = useState("");
+    const [selectedCode, setSelectedCode] = useState("");
 
-  const handleSelectChange = (event) => {
-    setSelectedValue(event.target.value);
-  };
-
-  //IF SELECTED CODE IS 1 IT IS CS299, IF SELECTED CODE IS 2 IT IS CS399
-  const handleSelectedCode = (event) => {
-    setSelectedCode(event.target.value);
-  };
-
-  const handleAddUser = async () => {
-    console.log("selectedValue:",selectedValue);
-    console.log("selectedCode:",selectedCode);
-
-    const formData = {
-        firstName: methods.getValues("firstName"),
-        lastName: methods.getValues("lastName"),
-        email: methods.getValues("email"),
-        department: methods.getValues("department"),
-        role: selectedValue,
-        courseCode: selectedCode
+    const handleSelectChange = (event) => {
+        setSelectedValue(event.target.value);
     };
 
-    console.log("formData:",formData);
+    //values are CS299 and CS399
+    const handleSelectedCode = (event) => {
+        setSelectedCode(event.target.value);
+    };
 
-    const addAccountResponse = await axios.post("http://localhost:8080/account", formData);
-    if ( addAccountResponse.data.email !== formData.email) {
-    	console.log("account with this email already exists");
-		// TODO: already has an account add new user role to account 
-    }
-    else {
-      
-      	console.log(addAccountResponse.data); // Handle the response if needed
+    const handleAddUser = async () => {
+        console.log("selectedValue:", selectedValue);
+        console.log("selectedCode:", selectedCode);
 
-      	console.log("User Account created successfully.");
+        const formData = {
+            firstName: methods.getValues("firstName"),
+            lastName: methods.getValues("lastName"),
+            email: methods.getValues("email"),
+            department: methods.getValues("department"),
+            role: selectedValue,
+            courseCode: selectedCode
+        };
 
-	  	
-    }
+        console.log("formData:", formData);
 
-	const accountResponse = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);
+        const addAccountResponse = await axios.post("http://localhost:8080/account", formData);
+        if (addAccountResponse.data.email !== formData.email) {
+            console.log("account with this email already exists");
+            // TODO: already has an account add new user role to account
+        } else {
 
-	const userData = {
-        accountId: accountResponse.data.id
-        // courseCode: selectedCode,
-		// instructorId: methods.get
-		// teachingAssistantId: methods.get
-		// companyName: methods.get
-	};
+            console.log(addAccountResponse.data); // Handle the response if needed
 
-
-    if(selectedValue === "Administrative Assistant"){
-		const addAdministrativeAssistantResponse = await axios.post("http://localhost:8080/administrative_assistant", userData);
-		// TODO
-		if ( addAdministrativeAssistantResponse.data.role !== formData.role) {
-		console.log("Error: Administrative Assistant not added");
-		}
-		else {
-		console.log(addAdministrativeAssistantResponse.data); // Handle the response if needed
-		console.log("Administrative Assistant added successfully.");
-		}
-	}
-	else if(selectedValue === "Instructor"){
-		const addInstructorResponse = await axios.post("http://localhost:8080/instructor", userData);
-
-		if ( addInstructorResponse.data.role !== formData.role) {
-		console.log("Error: Instructor not added");
-		}
-		else {
-		console.log(addInstructorResponse.data); // Handle the response if needed
-		console.log("Instructor added successfully.");
-		}
-	}
-	else if(selectedValue === "Teaching Assistant"){
-		const addTeachingAssistantResponse = await axios.post("http://localhost:8080/teaching_assistant", userData);
-		if ( addTeachingAssistantResponse.data.role !== formData.role) {
-		console.log("Error: Teaching Assistant not added");
-		}
-		else {
-		console.log(addTeachingAssistantResponse.data); // Handle the response if needed
-		console.log("Teaching Assistant added successfully.");
-		}
-	
-	}
-	else if(selectedValue === "Student"){
-		// TODO
-	}
-	else if(selectedValue === "Summer Training Coordinator"){
-		const addSummerTrainingCoordinatorResponse = await axios.post("http://localhost:8080/summer_training_coordinator", userData);
-		if ( addSummerTrainingCoordinatorResponse.data.role !== formData.role) {
-		console.log("Error: Summer Training Coordinator not added");
-		}
-		else {
-		console.log(addSummerTrainingCoordinatorResponse.data); // Handle the response if needed
-		console.log("Summer Training Coordinator added successfully.");
-		}
-	}
-	else{
-		console.log("Error: Invalid role");
-	}
-
-	
-	// Reset the form
-	methods.reset();
-    
-};
-
-  const handleOperation = (data) => {
-    console.log("add");
-    console.log(data)
-  };
+            console.log("User Account created successfully.");
 
 
+        }
 
+        const accountResponse = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);
+
+        const userData = {
+            accountId: accountResponse.data.id
+            // courseCode: selectedCode,
+            // instructorId: methods.get
+            // teachingAssistantId: methods.get
+            // companyName: methods.get
+        };
+
+
+        if (selectedValue === "Administrative Assistant") {
+            const addAdministrativeAssistantResponse = await axios.post("http://localhost:8080/administrative_assistant", userData);
+            // TODO
+            if (addAdministrativeAssistantResponse.data.role !== formData.role) {
+                console.log("Error: Administrative Assistant not added");
+            } else {
+                console.log(addAdministrativeAssistantResponse.data); // Handle the response if needed
+                console.log("Administrative Assistant added successfully.");
+            }
+        } else if (selectedValue === "Instructor") {
+            const addInstructorResponse = await axios.post("http://localhost:8080/instructor", userData);
+
+            if (addInstructorResponse.data.role !== formData.role) {
+                console.log("Error: Instructor not added");
+            } else {
+                console.log(addInstructorResponse.data); // Handle the response if needed
+                console.log("Instructor added successfully.");
+            }
+        } else if (selectedValue === "Teaching Assistant") {
+            const addTeachingAssistantResponse = await axios.post("http://localhost:8080/teaching_assistant", userData);
+            if (addTeachingAssistantResponse.data.role !== formData.role) {
+                console.log("Error: Teaching Assistant not added");
+            } else {
+                console.log(addTeachingAssistantResponse.data); // Handle the response if needed
+                console.log("Teaching Assistant added successfully.");
+            }
+
+        } else if (selectedValue === "Student") {
+            // TODO
+        } else if (selectedValue === "Summer Training Coordinator") {
+            const addSummerTrainingCoordinatorResponse = await axios.post("http://localhost:8080/summer_training_coordinator", userData);
+            if (addSummerTrainingCoordinatorResponse.data.role !== formData.role) {
+                console.log("Error: Summer Training Coordinator not added");
+            } else {
+                console.log(addSummerTrainingCoordinatorResponse.data); // Handle the response if needed
+                console.log("Summer Training Coordinator added successfully.");
+            }
+        } else {
+            console.log("Error: Invalid role");
+        }
+
+
+        // Reset the form
+        methods.reset();
+
+    };
+
+    const handleOperation = (data) => {
+        console.log("add");
+        console.log(data)
+    };
 
     let courseSelection = null;
     if (selectedValue === "Student") {
-      courseSelection =
-          <div >
-            <label className="input-label">
-                  <h3 className="input-tag" id="course-tag">Course:</h3>
-                  <select className="select-menu" id = "selector" value = {selectedCode} onChange={handleSelectedCode}>
-                <option value="0">Select course</option>
-                <option value="1">{methods.getValues("department")}299</option>
-                <option value="2">{methods.getValues("department")}399</option>
-              </select>
+        courseSelection =
+            <div>
+                <label className="input-label">
+                    <h3 className="input-tag" id="course-tag">Course:</h3>
+                    <select className="select-menu" id="selector" value={selectedCode} onChange={handleSelectedCode}>
+                        <option value="0">Select course</option>
+                        {
+                            /*
+                            the department selection is not working. and the values can be switched to {departmentCode + 299 .. }
+                             instead of 1 and 2. if that's how they are stored, it might fix the issue but idk
+                             about the department value part.
+                             */
+                        }
+                        <option value="1">{methods.getValues("department")}299</option>
+                        <option value="2">{methods.getValues("department")}399</option>
+                    </select>
 
-            </label>
-          <InstructorOptionsList/>
-          <TaOptionsList/>
-
-    </div>;
+                </label>
+                <InstructorOptionsList methods={methods} />
+                <TaOptionsList methods={methods} />
+            </div>;
     }
-
 
   return (
 
@@ -366,12 +358,8 @@ function ManageUsersAdd(props) {
                 </div>
 
          </div>
-        {courseSelection && 
-			<div>
-                <InstructorOptionsList methods={methods} />
-                <TaOptionsList methods={methods} />
-            </div>
-		}
+
+            {courseSelection}
 
         </form>
 
@@ -416,3 +404,4 @@ export default ManageUsersAdd;
         {courseSelection}
       </form>
       </FormProvider> */}
+
