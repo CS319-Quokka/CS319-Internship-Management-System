@@ -61,10 +61,6 @@
     display: flex;
     margin-top: 1%;
   }
-   .buttons .button{
-    margin-left: 20%;
-    margin-right: 10px;
-   }
 
   #exit{
     position: fixed;
@@ -73,6 +69,8 @@
   }
   .select-menu{
     border: solid black;
+    position: relative;
+    border-radius: 10px;
   }
   #type{
     width: 100%;
@@ -80,18 +78,12 @@
     margin-left: 50%;
   }
 
-  #course{
-    width: 20%;
-    border-radius: 8px;
-  } 
-  #instructor{
-    width: 20%;
-    border-radius: 8px;
+  #selector{
+    width: 60%;
+    border-radius: 10px;
+    border-color: #4a5880;
   }
-  #ta{
-    width: 20%;
-    border-radius: 8px;
-  }
+
   /* #course-tag{
     right:9%;
   } */
@@ -120,7 +112,23 @@
 
 }
 .input-box{
-  height: 6vh;
+  height: 5vh;
   width: 30vh;
 }
-
+h1 {
+  align-self: baseline;
+  margin-left: 9%;
+}
+.add-user{
+  position: relative;
+  padding: 1%;
+}
+.add-button{
+  position: relative;
+  left: 70%;
+  width: 15%;
+}
+.uploadmessage h1{
+  position: fixed;
+  left: 35%;
+}
