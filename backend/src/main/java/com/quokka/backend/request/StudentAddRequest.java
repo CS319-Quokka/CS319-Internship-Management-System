@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class StudentAddRequest {
 
-    private Long id; // I think we can delete this. We don't use it.
+//    private Long id; // I think we can delete this. We don't use it.
 
-    private String letterGrade;
+//    private String letterGrade;
     private String companyName;
     private String courseCode;
 

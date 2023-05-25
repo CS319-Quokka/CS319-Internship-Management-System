@@ -96,6 +96,11 @@ public class UserManagementService {
             return null;
         }
 
+        List<Student> existingStudents = studentRepository.findByCourseCode(request.getCourseCode());
+        if (existingStudents.size() > 0) {
+            return null;
+        }
+
         Long instructorId = request.getInstructorId();
         Instructor instructor = null;
         if (instructorId != null) {
@@ -109,9 +114,9 @@ public class UserManagementService {
         }
 
         Student student = new Student();
-        student.setId(request.getId());
+//        student.setId(request.getId());
         student.setCourseCode(request.getCourseCode());
-        student.setLetterGrade(request.getLetterGrade());
+//        student.setLetterGrade(request.getLetterGrade());
         student.setCompanyName(request.getCompanyName());
         student.setRole("Student");
 
@@ -129,6 +134,11 @@ public class UserManagementService {
             return null;
         }
 
+        List<TeachingAssistant> existingTeachingAssistants = teachingAssistantRepository.findByUserAccountId(request.getAccountId());
+        if (existingTeachingAssistants.size() > 0) {
+            return null;
+        }
+
         TeachingAssistant teachingAssistant = new TeachingAssistant();
         teachingAssistant.setUserAccount(account);
         teachingAssistant.setRole("Teaching Assistant");
@@ -140,6 +150,11 @@ public class UserManagementService {
 
         UserAccount account = accountService.getAccountById(request.getAccountId());
         if (account == null) {
+            return null;
+        }
+
+        List<Instructor> existingInstructors = instructorRepository.findByUserAccountId(request.getAccountId());
+        if (existingInstructors.size() > 0) {
             return null;
         }
 
@@ -157,6 +172,11 @@ public class UserManagementService {
             return null;
         }
 
+        List<SummerTrainingCoordinator> existingSummerTrainingCoordinators = summerTrainingCoordinatorRepository.findByUserAccountId(request.getAccountId());
+        if (existingSummerTrainingCoordinators.size() > 0) {
+            return null;
+        }
+
         SummerTrainingCoordinator summerTrainingCoordinator = new SummerTrainingCoordinator();
         summerTrainingCoordinator.setUserAccount(account);
         summerTrainingCoordinator.setRole("Summer Training Coordinator");
@@ -168,6 +188,11 @@ public class UserManagementService {
 
         UserAccount account = accountService.getAccountById(request.getAccountId());
         if (account == null) {
+            return null;
+        }
+
+        List<AdministrativeAssistant> existingAdministrativeAssistants = administrativeAssistantRepository.findByUserAccountId(request.getAccountId());
+        if (existingAdministrativeAssistants.size() > 0) {
             return null;
         }
 
