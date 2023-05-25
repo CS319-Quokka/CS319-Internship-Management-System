@@ -8,26 +8,47 @@ import Typography from "@mui/material/Typography";
 
 
 
-function InstructorOptionsList() {
+function InstructorOptionsList({ methods }) {
     const [instructorOptions, setInstructorOptions] = useState([]);
+
+	const department = methods.watch("department");
 
     useEffect(() => {
         fetchInstructorOptions()
             .then((options) => setInstructorOptions(options))
             .catch((error) => console.log(error));
-    }, []);
+    }, [department]);
 
     const fetchInstructorOptions = async () => {
         try {
             // Make an API call or database query to retrieve the options
-            const response = await axios.get('...'); //link to the API
-            const data = response.data;
+			console.log("methods.getValues:" , methods.getValues("department"));
+            const response = await axios.get(`http://localhost:8080/instructor?department=${department}`); //link to the API
+            const instructors = response.data;
 
-            // Return the options as an array
-            return data.map((instructor) => ({
-                value: instructor.id,
-                label: instructor.name,
-            }));
+			console.log(instructors);
+
+			 // Now fetch each instructor's UserAccount data
+			 const instructorOptions = await Promise.all(instructors.map(async (instructor) => {
+				console.log("instructor.userAccount.id: ", instructor.userAccount.id);
+				const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${instructor.userAccount.id}`);
+				const account = accountResponse.data;
+	
+				return {
+					value: instructor.id,
+					label: `${account.firstName} ${account.lastName}`,
+				};
+			}));
+	
+			// Return the options as an array
+			return instructorOptions;
+
+
+            // // Return the options as an array
+            // return data.map((instructor) => ({
+            //     value: instructor.id,
+            //     label: instructor.name,
+            // }));
         } catch (error) {
             throw new Error('Failed to fetch instructors.');
         }
@@ -47,25 +68,44 @@ function InstructorOptionsList() {
 }
 
 
-function TaOptionsList() {
+function TaOptionsList({ methods }) {
     const [TaOptions, setTaOptions] = useState([]);
+
+	const department = methods.watch("department");
 
     useEffect(() => {
         fetchTaOptions()
             .then((options) => setTaOptions(options))
             .catch((error) => console.log(error));
-    }, []);
+    }, [department]);
 
     const fetchTaOptions = async () => {
         try {
-            const response = await axios.get('...'); //link to the API
-            const data = response.data;
+			console.log("methods.getValues:" , methods.getValues("department"));
+            const response = await axios.get(`http://localhost:8080/teaching_assistant?department=${department}`); //link to the API
+            const teachingAssistants = response.data;
 
-            // Return the options as an array
-            return data.map((ta) => ({
-                value: ta.id,
-                label: ta.name,
-            }));
+			console.log(teachingAssistants);
+			// Now fetch each instructor's UserAccount data
+			const teachingAssistantOptions = await Promise.all(teachingAssistants.map(async (teachingAssistant) => {
+				console.log("teachingAssistant.userAccount.id: ", teachingAssistant.userAccount.id);
+				const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${teachingAssistant.userAccount.id}`);
+				const account = accountResponse.data;
+	
+				return {
+					value: teachingAssistant.id,
+					label: `${account.firstName} ${account.lastName}`,
+				};
+			}));
+	
+			// Return the options as an array
+			return teachingAssistantOptions;
+
+            // // Return the options as an array
+            // return data.map((ta) => ({
+            //     value: ta.id,
+            //     label: ta.name,
+            // }));
         } catch (error) {
             throw new Error('Failed to fetch TAs.');
         }
@@ -85,6 +125,7 @@ function TaOptionsList() {
 }
 
 function StudentOptionsList() {
+	const methods = useForm();
     const [studentOptions, setStudentOptions] = useState([]);
 
     useEffect(() => {
@@ -137,6 +178,9 @@ function ManageUsersAdd(props) {
   };
 
   const handleAddUser = async () => {
+    console.log("selectedValue:",selectedValue);
+    console.log("selectedCode:",selectedCode);
+
     const formData = {
         firstName: methods.getValues("firstName"),
         lastName: methods.getValues("lastName"),
@@ -148,19 +192,84 @@ function ManageUsersAdd(props) {
 
     console.log("formData:",formData);
 
-    const response = await axios.post("http://localhost:8080/account", formData);
-    if ( response.data.email !== formData.email) {
-      console.log("account with this email already exists");
+    const addAccountResponse = await axios.post("http://localhost:8080/account", formData);
+    if ( addAccountResponse.data.email !== formData.email) {
+    	console.log("account with this email already exists");
+		// TODO: already has an account add new user role to account 
     }
     else {
-      console.log(response.data); // Handle the response if needed
+      
+      	console.log(addAccountResponse.data); // Handle the response if needed
 
-      console.log("User added successfully");
+      	console.log("User Account created successfully.");
 
-
-      // Reset the form
-      methods.reset();
+	  	
     }
+
+	const accountResponse = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);
+
+	const userData = {
+        accountId: accountResponse.data.id
+        // courseCode: selectedCode,
+		// instructorId: methods.get
+		// teachingAssistantId: methods.get
+		// companyName: methods.get
+	};
+
+
+    if(selectedValue === "Administrative Assistant"){
+		const addAdministrativeAssistantResponse = await axios.post("http://localhost:8080/administrative_assistant", userData);
+		// TODO
+		if ( addAdministrativeAssistantResponse.data.role !== formData.role) {
+		console.log("Error: Administrative Assistant not added");
+		}
+		else {
+		console.log(addAdministrativeAssistantResponse.data); // Handle the response if needed
+		console.log("Administrative Assistant added successfully.");
+		}
+	}
+	else if(selectedValue === "Instructor"){
+		const addInstructorResponse = await axios.post("http://localhost:8080/instructor", userData);
+
+		if ( addInstructorResponse.data.role !== formData.role) {
+		console.log("Error: Instructor not added");
+		}
+		else {
+		console.log(addInstructorResponse.data); // Handle the response if needed
+		console.log("Instructor added successfully.");
+		}
+	}
+	else if(selectedValue === "Teaching Assistant"){
+		const addTeachingAssistantResponse = await axios.post("http://localhost:8080/teaching_assistant", userData);
+		if ( addTeachingAssistantResponse.data.role !== formData.role) {
+		console.log("Error: Teaching Assistant not added");
+		}
+		else {
+		console.log(addTeachingAssistantResponse.data); // Handle the response if needed
+		console.log("Teaching Assistant added successfully.");
+		}
+	
+	}
+	else if(selectedValue === "Student"){
+		// TODO
+	}
+	else if(selectedValue === "Summer Training Coordinator"){
+		const addSummerTrainingCoordinatorResponse = await axios.post("http://localhost:8080/summer_training_coordinator", userData);
+		if ( addSummerTrainingCoordinatorResponse.data.role !== formData.role) {
+		console.log("Error: Summer Training Coordinator not added");
+		}
+		else {
+		console.log(addSummerTrainingCoordinatorResponse.data); // Handle the response if needed
+		console.log("Summer Training Coordinator added successfully.");
+		}
+	}
+	else{
+		console.log("Error: Invalid role");
+	}
+
+	
+	// Reset the form
+	methods.reset();
     
 };
 
@@ -257,7 +366,12 @@ function ManageUsersAdd(props) {
                 </div>
 
          </div>
-        {courseSelection}
+        {courseSelection && 
+			<div>
+                <InstructorOptionsList methods={methods} />
+                <TaOptionsList methods={methods} />
+            </div>
+		}
 
         </form>
 
@@ -302,4 +416,3 @@ export default ManageUsersAdd;
         {courseSelection}
       </form>
       </FormProvider> */}
-
