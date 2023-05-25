@@ -3,6 +3,8 @@ import { useForm, FormProvider } from "react-hook-form";
 import Popup from "../Popup"
 import "../Styles/Popup.css"
 import Button from '@mui/material/Button';
+import {InstructorOptionsList} from "./FetchUserList";
+
 
 
 
@@ -19,10 +21,14 @@ function ReassignInstructor(props) {
 
             <FormProvider {...methods}>
                 <form >
+                    <h1>Student's information: </h1>
+                    {/*  <h1>{props.user}</h1>
+                        */}
+                    <h1>Student's current instructor</h1>
 
 
-            <h1>hi</h1>
-
+                    <h1>Choose the new instructor </h1>
+                    <InstructorOptionsList methods={methods}/>
 
                 </form>
 
@@ -30,6 +36,8 @@ function ReassignInstructor(props) {
 
 
         </div>
+
+
 
 
     );

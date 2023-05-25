@@ -35,7 +35,6 @@ class ManageUsers extends Component {
     this.setState({
       showRemove:true,
       selectedUser: UserData
-
     });
     this.setState({showChoices:false});
     
@@ -69,9 +68,6 @@ class ManageUsers extends Component {
     if(code == 2){
       selectedCode = "CS399"
     }
-
-
-
     this.setState({selectedCode:selectedCode});
    
   };
