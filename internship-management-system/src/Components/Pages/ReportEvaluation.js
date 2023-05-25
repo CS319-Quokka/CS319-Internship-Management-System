@@ -27,6 +27,7 @@ import FormatItalic from '@mui/icons-material/FormatItalic';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Check from '@mui/icons-material/Check';
 import { useLocation } from 'react-router-dom';
+import { UserContext } from '../UserContext';
 
 
 
@@ -146,10 +147,13 @@ const createDownloadUrl = (fileData,fileName) =>{
 
 const getReportFile = async (id, reports,index) => {
   try {
-    const response = await axios.get(`http://localhost:8080/report/file/${id}`);
-    const reportFile = response.data
-    console.log("rapurunu sikim: ", reportFile);
 
+    const response = await axios.get(`http://localhost:8080/report/file/${id}`);
+    const reportFile = response.data;
+
+
+
+    
 
     reports.push({
       revisionCount:index +1,
@@ -167,6 +171,7 @@ const getReportFile = async (id, reports,index) => {
   }
     
 };
+
 const getAllReports = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
@@ -174,11 +179,17 @@ const getAllReports = async () => {
     console.log("REPORTS: ", info);
 
 
+    const response2 = await axios.get(`http://localhost:8080/report/file/active/${studentId}`);
+    const info2 = response2.data;
+    console.log("ACTIVE REPORT: ", info2);
+
+
     var reportIdList = [];
 
     var allReports = [];
 
-    for (var i = 0; i < info.length; i++) {
+    //get every report except the last one (report history)
+    for (var i = 0; i < info.length -1; i++) {
       console.log(i, "th report: ", info[i].id);
       reportIdList.push(info[i].id)
       getReportFile(reportIdList[i],allReports,i)
@@ -572,10 +583,33 @@ function DateComponent() {
         currentComment: "I fixed everything according to the feedback. :) ",
       };
     }
+
+    static contextType = UserContext;
+    componentDidMount() {
+     
+      console.log("STUDENT IDDDD:",this.context.userId)
+      this.getActiveReport();
+  }
   
     downloadCurrent = () => {
       // Handle downloading the current report
     };
+
+
+    getActiveReport = async () => {
+      try {
+       
+        const response2 = await axios.get(`http://localhost:8080/report/file/active/${1}`);
+        const info2 = response2.data;
+        console.log("ACTIVE REPORT: ", info2);
+  
+    
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    
+
   
     render() {
       return (

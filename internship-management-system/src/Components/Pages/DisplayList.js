@@ -5,6 +5,7 @@ import * as SlIcons from "react-icons/sl";
 import * as IoIcons from "react-icons/io";
 import { withRouter } from 'react-router-dom';
 import "../Styles/List.css";
+import { UserContext } from "../UserContext";
 
 class DisplayList extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ class DisplayList extends Component {
     this.handleReminder = this.handleReminder.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
+  static contextType = UserContext;
 
   handleSearchChange(event) {
     this.setState({ searchTerm: event.target.value });
@@ -43,6 +45,12 @@ class DisplayList extends Component {
     }
     
   };
+  selectUser = (id) => {
+    return () => {  // Return a function that will be called on click
+      console.log("SELECT USER");
+      this.context.setUserIdValue(id);
+    };
+  }
   
   
   render() {
@@ -93,7 +101,7 @@ class DisplayList extends Component {
                   <React.Fragment key={index}>
                     <li className="list-item">
 
-                      <Link to = {`/evaluation?studentId=${item.id}`}>
+                      <Link to = {`/evaluation?studentId=${item.id}`} onClick={this.selectUser(item.id)} >
                         <div className="row">
                             {displayFields.map((field, index) => (
                             <div className="value">{item[field]}</div>

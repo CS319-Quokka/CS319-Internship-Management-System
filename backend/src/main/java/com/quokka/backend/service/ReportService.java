@@ -164,6 +164,25 @@ public class ReportService {
         return null;
     }
 
+
+    public Report getActiveReport(Long studentId) {
+
+        System.out.println("active 1");
+        List<Report> reports = new ArrayList<Report>();
+        for (Report report : reportRepository.findAll()) {
+
+            System.out.println("r: "+report);
+            if (report.getStudent().getId() == studentId) {
+
+                reports.add(report);
+            }
+        }
+        System.out.println("active 2 " + reports.get(reports.size()-1));
+        return reports.get(reports.size()-1);
+    }
+
+
+
     public Stream<ReportFile> getAllReportFiles() {
 
         return reportFileRepository.findAll().stream();

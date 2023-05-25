@@ -20,7 +20,7 @@ import ManageUsers from "./Components/Pages/ManageUsers";
 import Sidebar from "./Components/Sidebar";
 import FAQ from "./Components/Pages/FAQ"
 import AdminAssNotifications from "./Components/Pages/AdminAssNotifications";
-import { StudentProvider } from "./Components/StudentContext";
+import  UserProvider , { UserContext } from './Components/UserContext';
 import "./App.css";
 //import { useNavigate } from "react-router-dom";
 
@@ -129,4 +129,8 @@ const AppLayout = ({ logged, userType,userId }) => (
     </>
 );
 
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(document.getElementById("root")).render( <React.StrictMode>
+  <UserProvider>
+    <App />
+  </UserProvider>
+</React.StrictMode>,);

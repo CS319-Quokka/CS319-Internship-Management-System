@@ -16,8 +16,9 @@ class StudentList extends Component {
         studentNameList:[]
     }
 }
+
+
 componentDidMount() {
-    console.log("HERE")
     this.getAllStudents();
 }
 

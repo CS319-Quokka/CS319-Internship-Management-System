@@ -65,6 +65,31 @@ public class ReportController {
         return reportService.getAllReportsByStudentId(studentId);
     }
 
+
+    @GetMapping("/file/active/{studentId}")
+    public ResponseEntity<ReportFileResponse> getActiveReport(@PathVariable("studentId") Long studentId){
+
+        System.out.println("activee");
+        Report report = reportService.getActiveReport(studentId);
+        ReportFile reportFile = reportService.getReportFileWithReportId(report.getId());
+
+        ReportFileResponse response = new ReportFileResponse();
+        if (reportFile != null) {
+
+            response.setReportDescription(reportFile.getReportDescription());
+            response.setFileData(reportFile.getFileData());
+            response.setFileName(reportFile.getFileName());
+            response.setReportId(reportFile.getReport().getId());
+
+            return ResponseEntity.ok(response);
+        }
+        else {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
+
+
     @DeleteMapping("/{id}")
     public boolean removeReport(@PathVariable("id") Long reportID, @RequestParam("date") Date date){
         return reportService.removeReport(reportID,date);
@@ -120,11 +145,17 @@ public class ReportController {
     }
 
 
+
+
     @GetMapping("/file")
     public Stream<ReportFile> getAllReportFiles(){
 
         return reportService.getAllReportFiles();
     }
+
+
+
+
 
     @DeleteMapping
     public boolean removeAllReports(){
