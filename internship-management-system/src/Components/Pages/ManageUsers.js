@@ -6,6 +6,7 @@ import ManageUsersAdd from "./ManageUsersAdd";
 import Popup from "../Popup"
 import ManageUsersEdit from "./ManageUsersEdit";
 import ManageUsersRemove from "./ManageUsersRemove";
+import axios from "axios"
 
 class ManageUsers extends Component {
   constructor(props) {
@@ -17,7 +18,8 @@ class ManageUsers extends Component {
       showChoices:false,
       showEdit:false,
       selectedCode: "",
-      selectedRole:""
+      selectedRole:"",
+      userList:[]
     };
 
     this.handleMenu = this.handleMenu.bind(this);
@@ -97,6 +99,41 @@ class ManageUsers extends Component {
   }
 
 
+  getAllStudents = async () =>{
+
+    console.log("ID",this.props.userId)
+    const department = this.props.department;
+
+    const response = await axios.get(`http://localhost:8080/account/${department}`);
+
+    const info = response.data[0]
+    console.log(info.id);
+
+
+    //const response2 = await axios.get(`http://localhost:8080/student?instructorId=${info.id}`);
+
+    //const studentInfo = response2.data;
+
+    //console.log(studentInfo)
+
+    
+  
+     var allTypeUsers = [];
+
+     for (var i = 0; i < response.length; i++) {
+      console.log(response[i].fullName, response[i].role);
+    
+        allTypeUsers.push({
+        name: response[i].firstName + " " + response[i].lastName,
+        role: response[i].selectedRole
+      });
+    }
+    
+     console.log("list: ", allTypeUsers);
+
+     this.setState({ userList: allTypeUsers});
+  
+}
 
   render() {
     const { showMenu } = this.state;
@@ -105,12 +142,14 @@ class ManageUsers extends Component {
     const {showEdit} = this.state;
     const {showChoices} = this.state;
     const { handleSelected} = this;
+    const userList = this.state.userList;
+    
     return (
       
       <div className="maincontainer">
         
         {console.log(showChoices)}
-        <DisplayList data={UserData} displayFields={['name', 'role', 'department'] }isAdd = {true} tag = "Manage Users:" setControllerState={this.handleChoiceMenu} choice = 
+        <DisplayList data={userList} displayFields={['name', 'role'] }isAdd = {true} tag = "Manage Users:" setControllerState={this.handleChoiceMenu} choice = 
         
 
           {showChoices&& <div className="menu" id=  "choice-menu">
