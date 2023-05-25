@@ -17,12 +17,20 @@ function TextareaValidator() {
   const [italic, setItalic] = React.useState(false);
   const [fontWeight, setFontWeight] = React.useState('normal');
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [message, setMessage] = useState("");
+
+    const handleMessageChange = (event) => {
+        setMessage(event.target.value);
+    };
+
+
   return (
       <FormControl>
         <FormLabel>Comments</FormLabel>
         <Textarea
             placeholder="Type your message here..."
             minRows={3}
+            onChange={handleMessageChange}
             endDecorator={
               <Box
                   sx={{
