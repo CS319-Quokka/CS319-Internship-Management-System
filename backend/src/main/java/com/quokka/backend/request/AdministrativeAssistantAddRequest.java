@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class AdministrativeAssistantAddRequest {
-    private Long id;
+//    private Long id;
     private Long accountId;
 }
