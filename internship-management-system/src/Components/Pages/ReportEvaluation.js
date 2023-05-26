@@ -409,90 +409,6 @@ function TextareaValidator() {
     </FormControl>
   );
 }
-function FormDialogB(props) {
-    const [openB, setOpenB] = useState(false);
-    const [isClicked1, setIsClicked1] = useState(false);
-    const [buttonNameB, setButtonNameB] = useState("");
-    const [isClicked2, setIsClicked2] = useState(false);
-    const [partBstatus, setPartBstatus] = useState("Unsatisfactory");
-    const [isSatisfactoryB, setIsSatisfactoryB] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(null);
-
-
-
-  useEffect(() => {
-    const getInformation = async () => {
-      const studentId = 3;
-      try {
-        const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
-        console.log("reports:", response.data.length);
-
-       
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    getInformation();
-  }, []);
-
-    const handleClickOpenB = () => {
-        setOpenB(true);
-        props.setButtonClicked(true);
-        {console.log("Student id: ", props.studentId)}
-    };
-    const handleSatisfactoryClick = () => {
-        setIsSatisfactoryB(false);
-    };
-
-    const handleCloseB = () => {
-        setOpenB(false);
-        props.setButtonClicked(false);
-    };
-    const handleSubmitB = () => {
-        setOpenB(false);
-    }
-    const handleRevisionRequiredClick = () => {
-        setIsSatisfactoryB(true);
-    };
-    return (
-
-        <div>
-            <Button variant="outlined" onClick={handleClickOpenB}>
-                Part B
-            </Button>
-            <Dialog fullWidth open={openB} onClose={handleCloseB}>
-                <DialogTitle>Grade Form</DialogTitle>
-                <DialogContent>
-                    <Typography sx={{fontWeight: 'bold'}}>Part B - Report</Typography>
-                    <Button
-                        variant={isSatisfactoryB ? 'outlined' : 'contained'}
-                        color="success"
-                        onClick={handleSatisfactoryClick}
-                        sx={{marginRight: '10px'}}
-                    > Satisfactory </Button>
-                    <Button
-                        variant={isSatisfactoryB ? 'contained' : 'outlined'}
-                        color="secondary"
-                        onClick={handleRevisionRequiredClick}
-                    >Revision Required</Button>
-                    {isSatisfactoryB && (
-                        <div>
-                            <Typography>Enter the due date for the resubmission.</Typography>
-                            <DateComponent/>
-                        </div>
-                    )}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseB}>Cancel</Button>
-                    <Button onClick={handleSubmitB}> Submit
-                    </Button>
-
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
-}
 
 function FormDialogA(props) {
   const [openA, setOpenA] = useState(false);
@@ -546,35 +462,10 @@ function FormDialogA(props) {
     setOpenA(false);
     props.setButtonClicked(false);
   };
-  const handleSubmitA = () => {
-
-
-      console.log("Student id: ", props.studentId, "Deadline:", selectedDate)
-      const reportData = {
-        studentId: props.studentId,
-        deadline: selectedDate
-      };
-
-
-      axios.post("http://localhost:8080/report", reportData)
-        .then((response) => {
-          console.log("Report created successfully");
-          console.log( "report: ",response.data);
-
-
-        })
-        .catch((error) => {
-          // Handle error
-          console.error(error);
-        });
-
-        setOpenA(false);
-
-  }
-
-  const handleDateSelection = (date) => {
-    setSelectedDate(date);
-  };
+ const handleSubmitA = () => {
+     setOpenA(false);
+     // save CEF grades.
+ }
 
   return (
 
@@ -626,6 +517,118 @@ function FormDialogA(props) {
     </div>
   );
 }
+function FormDialogB(props) {
+    const [openB, setOpenB] = useState(false);
+    const [isClicked1, setIsClicked1] = useState(false);
+    const [buttonNameB, setButtonNameB] = useState("");
+    const [isClicked2, setIsClicked2] = useState(false);
+    const [partBstatus, setPartBstatus] = useState("Unsatisfactory");
+    const [isSatisfactoryB, setIsSatisfactoryB] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+
+    const handleDateSelection = (date) => {
+        setSelectedDate(date);
+    };
+
+    const handleSubmitB = () => {
+
+
+        console.log("Student id: ", props.studentId, "Deadline:", selectedDate)
+        const reportData = {
+            studentId: props.studentId,
+            deadline: selectedDate
+        };
+
+
+        axios.post("http://localhost:8080/report", reportData)
+            .then((response) => {
+                console.log("Report created successfully");
+                console.log( "report: ",response.data);
+
+
+            })
+            .catch((error) => {
+                // Handle error
+                console.error(error);
+            });
+
+        setOpenB(false);
+
+    }
+
+
+    useEffect(() => {
+        const getInformation = async () => {
+            const studentId = 3;
+            try {
+                const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
+                console.log("reports:", response.data.length);
+
+
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getInformation();
+    }, []);
+
+    const handleClickOpenB = () => {
+        setOpenB(true);
+        props.setButtonClicked(true);
+        {console.log("Student id: ", props.studentId)}
+    };
+    const handleSatisfactoryClick = () => {
+        setIsSatisfactoryB(false);
+    };
+
+    const handleCloseB = () => {
+        setOpenB(false);
+        props.setButtonClicked(false);
+    };
+
+    const handleRevisionRequiredClick = () => {
+        setIsSatisfactoryB(true);
+    };
+    return (
+
+        <div>
+            <Button variant="outlined" onClick={handleClickOpenB}>
+                Part B
+            </Button>
+            <Dialog fullWidth open={openB} onClose={handleCloseB}>
+                <DialogTitle>Grade Form</DialogTitle>
+                <DialogContent>
+                    <Typography sx={{fontWeight: 'bold'}}>Part B - Report</Typography>
+                    <Button
+                        variant={isSatisfactoryB ? 'outlined' : 'contained'}
+                        color="success"
+                        onClick={handleSatisfactoryClick}
+                        sx={{marginRight: '10px'}}
+                    > Satisfactory </Button>
+                    <Button
+                        variant={isSatisfactoryB ? 'contained' : 'outlined'}
+                        color="secondary"
+                        onClick={handleRevisionRequiredClick}
+                    >Revision Required</Button>
+                    {isSatisfactoryB && (
+                        <div>
+                            <Typography>Enter the due date for the resubmission.</Typography>
+                            <DateComponent/>
+                        </div>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseB}>Cancel</Button>
+                    <Button onClick={handleSubmitB}> Submit
+                    </Button>
+
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
+
 function FormDialogC(props){
     const [openC, setOpenC] = useState(false);
     const [input1, setInput1] = useState(0);
@@ -1039,22 +1042,23 @@ function DateComponent() {
               } to download the student's company evaluation form.
             </Typography>
             <Typography>To enter the student's grades, use the Grade Form</Typography>
-            <FormDialog
-              studentId = {this.state.studentId}
             <Typography>Part A - Enter the Company Evaluation Form Assessment </Typography>
             <FormDialogA
+              studentId = {this.state.studentId}
               studentFirstName={this.state.studentFirstName}
               studentLastName={this.state.studentLastName}
               setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
             />
               <Typography>Part B - Enter the Report Assessment </Typography>
               <FormDialogB
+                  studentId = {this.state.studentId}
                studentFirstName={this.state.studentFirstName}
                studentLastName={this.state.studentLastName}
                setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
             />
               <Typography>Part C - Enter the Overall Assessment </Typography>
               <FormDialogC
+                  studentId = {this.state.studentId}
                   studentFirstName={this.state.studentFirstName}
                   studentLastName={this.state.studentLastName}
                   setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
