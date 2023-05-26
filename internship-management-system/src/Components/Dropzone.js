@@ -164,21 +164,13 @@ const DragDropFiles = (props) => {
 
     const formData = new FormData();
 
-    console.log(file.name);
-    console.log("id: " , userId);
-
     const response1 = await axios.get(`http://localhost:8080/report/students_all_reports/${userId}`);
 
-    console.log("repo id:", response1.data);
     const reportId = response1.data[response1.data.length - 1].id;
-
-    console.log("MESSAGE: ", props.message)
-
-    formData.append("reportDescription", "emreReport1"); // Replace reportDescription with the actual report description
-    formData.append("studentId", userId); // Replace studentId with the actual student ID
-    formData.append("reportId", reportId); // Replace reportId with the actual report ID
+    formData.append("reportDescription", props.message)
+    formData.append("studentId", userId);
+    formData.append("reportId", reportId);
     formData.append("fileData", file);
-    formData.append("reportDescription",props.message)
 
       try {
         const response = await axios.post(
