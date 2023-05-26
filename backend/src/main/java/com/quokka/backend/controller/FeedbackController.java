@@ -39,16 +39,23 @@ public class FeedbackController {
         Feedback feedback = feedbackService.findByReportId(reportId);
 
 
+        System.out.println("feedback found: " + feedback);
+
 
         FeedbackFile feedbackFile = null;
 
         if(feedback != null){
-            feedbackFile = feedbackService.getFeedbackFileById(feedback.getId());
+            System.out.println("feedback is  not null"  + feedback);
+
+            System.out.println("feedback id: "  + feedback.getId());
+
+            feedbackFile = feedbackService.getFeedbackFileByFeedbackId(feedback.getId());
 
         }
 
 
         if(feedbackFile != null){
+            System.out.println("feedback file is not  null" );
             response.setFileData(feedbackFile.getFileData());
             response.setFeedbackId(feedback.getId());
             response.setFeedbackDescription(feedback.getFeedbackDescription());

@@ -17,21 +17,22 @@ import java.util.Optional;
 public class FeedbackService {
 
     private FeedbackRepository feedbackRepository;
-    private ReportRepository reportRepository;
+
+    private ReportService reportService;
     private TeachingAssistantRepository teachingAssistantRepository;
     private InstructorRepository instructorRepository;
     private FeedbackFileRepository feedbackFileRepository;
     private StudentRepository studentRepository;
 
     @Autowired
-    public FeedbackService(FeedbackRepository feedbackRepository, ReportRepository reportRepository,
+    public FeedbackService(FeedbackRepository feedbackRepository, ReportService reportService,
                            TeachingAssistantRepository teachingAssistantRepository,
                            InstructorRepository instructorRepository,
                            FeedbackFileRepository feedbackFileRepository,
                            StudentRepository studentRepository){
 
         this.feedbackRepository = feedbackRepository;
-        this.reportRepository = reportRepository;
+        this.reportService = reportService;
         this.teachingAssistantRepository = teachingAssistantRepository;
         this.instructorRepository = instructorRepository;
         this.feedbackFileRepository = feedbackFileRepository;
@@ -56,15 +57,15 @@ public class FeedbackService {
     public Long addFeedback(FeedbackAddRequest request){
 
         Feedback newFeedback = new Feedback();
-        Optional<Report> report = reportRepository.findById(request.getReportId());
-        if(!report.isPresent()){
+        Report report = reportService.getReportWithID(request.getReportId());
+        if(report == null){
 
             System.out.println("REPORT NOT FOUND");
             newFeedback.setReport(null);
         }
         else {
 
-            newFeedback.setReport(report.get());
+            newFeedback.setReport(report);
         }
 
         Optional<TeachingAssistant> teachingAssistantOpt = teachingAssistantRepository.findById(request.getSenderId());
@@ -99,15 +100,18 @@ public class FeedbackService {
         return newFeedback.getId();
     }
     public Feedback findByReportId(Long reportId) {
+
         System.out.println("FEEDBACK ARANIYORR: " + reportId);
 
 
-        Optional<Feedback> feedback = feedbackRepository.findByReport_Id(reportId);
+        Optional<Feedback> feedback = feedbackRepository.findByReportId(reportId);
+
+
 
         System.out.println("feedback: " + feedback.get());
 
 
-        if(!feedback.isPresent()){
+        if(feedback.isPresent()){
             return feedback.get();
         }
         return null;
@@ -157,7 +161,7 @@ public class FeedbackService {
 
         editedFeedback.setId(feedbackID);
         editedFeedback.setFeedbackDescription(request.getFeedbackDescription());
-        editedFeedback.setReport(reportRepository.findById(request.getReportId()).get());
+        editedFeedback.setReport(reportService.getReportWithID(request.getReportId()));
         editedFeedback.setUploadDate(request.getUploadDate());
         return true;
     }
@@ -166,7 +170,15 @@ public class FeedbackService {
 
         Optional<FeedbackFile> feedbackFileOpt = feedbackFileRepository.findById(id);
         if(!feedbackFileOpt.isPresent()){
+            return null;
+        }
+        return feedbackFileOpt.get();
 
+    }
+    public FeedbackFile getFeedbackFileByFeedbackId(Long id){
+
+        Optional<FeedbackFile> feedbackFileOpt = feedbackFileRepository.findByFeedbackId(id);
+        if(!feedbackFileOpt.isPresent()){
             return null;
         }
         return feedbackFileOpt.get();

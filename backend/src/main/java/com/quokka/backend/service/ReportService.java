@@ -42,7 +42,7 @@ public class ReportService {
         Optional<Report> report = reportRepository.findById(ID);
         if (!report.isPresent()) {
 
-            throw new IllegalStateException("No report found!");
+            return null;
         }
         return report.get();
     }

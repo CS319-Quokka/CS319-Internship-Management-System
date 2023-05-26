@@ -110,7 +110,25 @@ const downloadPrevious = (fileData, fileName) => {
     document.body.removeChild(link);
   };
 };
+const downloadAnnotated = (fileData,fileName) => {
+  return () => {
 
+    const binaryString = window.atob(fileData);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+    const blob = new Blob([bytes.buffer]);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+}
 
 
 useEffect(() => {
@@ -146,51 +164,45 @@ const createDownloadUrl = (fileData,fileName) =>{
 
 }
 
-const getReportFile = async (id, reports,index) => {
+const getReportFile = async (id, reports, index) => {
   try {
-
     const response = await axios.get(`http://localhost:8080/report/file/${id}`);
     const reportFile = response.data;
 
-    
+    const feedback = await getFeedbackFile(id);
 
     reports.push({
-      revisionCount:index +1,
+      revisionCount: index + 1,
       fileName: reportFile.fileName,
-      description:reportFile.reportDescription,
-      fileData:reportFile.fileData
+      description: reportFile.reportDescription,
+      fileData: reportFile.fileData,
+      feedbackData: feedback ? feedback.fileData : null,
+      feedbackName: feedback ? feedback.fileName : null
     });
 
-    // Call the downloadCurrent function with the file data and name
     createDownloadUrl(reportFile.fileData, reportFile.fileName);
-    console.log("linko:",link)
-    links.push(link)
+    console.log("linko:", link);
+    links.push(link);
   } catch (error) {
     console.error("Failed to fetch report file: ", error);
   }
-    
 };
 
-const getFeedbackFile = async (id, feedbacks) => {
+const getFeedbackFile = async (id) => {
   try {
-
     const response = await axios.get(`http://localhost:8080/feedback/get_feedback_by_report/${id}`);
     const feedbackFile = response.data;
-    
-    console.log("feedback data:", feedbackFile)
 
-    feedbacks.push({
-      fileName: feedbackFile.fileName,
-      description:feedbackFile.reportDescription,
-      fileData:feedbackFile.fileData
-    });
+    console.log("feedback data:", feedbackFile);
 
-   
+    return feedbackFile;
   } catch (error) {
     console.error("Failed to fetch feedback file: ", error);
+    throw error;
   }
-    
 };
+
+
 
 const getAllReports = async () => {
   try {
@@ -230,6 +242,7 @@ const getAllReports = async () => {
 
 
     console.log("ALL REPOS:", allReports)
+    console.log("ALL FEEDBCAKS:", allFeedbacks)
     
     setReportHistory(allReports)
     setFeedbackHistory(allFeedbacks)
@@ -251,6 +264,7 @@ const getAllReports = async () => {
     return (
         <ul>
           {console.log("AAA:",reportHistory)}
+          {console.log("BBB:",feedbackHistory[0])}
             {reportHistory.map((revision,index) => (
                 <div className="prevreport">
                     <li key={index}>
@@ -270,10 +284,10 @@ const getAllReports = async () => {
                         <b><br></br>Your feedback for this submission</b>
                         <textarea readOnly>{}</textarea>
                         <b>Your annotated feedback for this submission<br></br></b>
-                        <IconButton aria-label="download" onClick={downloadAnnotated}>
+                        <IconButton aria-label="download" onClick={downloadAnnotated(revision.feedbackData,revision.feedbackName)}>
                             <DownloadIcon/>
                         </IconButton>
-                        <Button variant="text" onClick={downloadAnnotated} style={{textTransform: 'none'}} size="large">{}</Button>
+                        <Button variant="text" onClick={downloadAnnotated(revision.feedbackData,revision.feedbackName)} style={{textTransform: 'none'}} size="large">Feedback</Button>
 
                     </li>
                 </div>
@@ -688,6 +702,8 @@ function DateComponent() {
         feedbackDescription: "asd",
         uploadDate: new Date().toISOString(), // Set the appropriate date format
       };
+
+      console.log("uploaded a feedback")
     
       axios.post("http://localhost:8080/feedback", feedbackData)
         .then((response) => {

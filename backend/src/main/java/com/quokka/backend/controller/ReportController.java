@@ -25,6 +25,7 @@ public class ReportController {
     private ReportService reportService;
     private FeedbackService feedbackService;
 
+
     @Autowired
     public ReportController(ReportService reportService, FeedbackService feedbackService){
         this.feedbackService = feedbackService;
@@ -102,16 +103,7 @@ public class ReportController {
     public boolean addReportFile(ReportFileAddRequest request){
 
         boolean reportFileSubmitted = reportService.addReportFile(request);
-        if(reportFileSubmitted){
 
-
-            FeedbackAddRequest feedbackRequest = new FeedbackAddRequest();
-            feedbackRequest.setReportId(request.getReportId());
-            feedbackRequest.setSenderId(request.getStudentId());
-            feedbackRequest.setFeedbackDescription("");
-            feedbackRequest.setUploadDate(null);
-            feedbackService.addFeedback(feedbackRequest);
-        }
         return reportFileSubmitted;
     }
 
