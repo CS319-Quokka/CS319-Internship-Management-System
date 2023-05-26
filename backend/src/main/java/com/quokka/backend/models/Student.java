@@ -26,7 +26,7 @@ public class Student extends User{
     private Instructor instructor;
 
     @ManyToOne
-    @JoinColumn(name = "teaching_assistant")
+    @JoinColumn(name = "teaching_assistant") // TODO: make this teaching_assistant_id
     private TeachingAssistant teachingAssistant;
 
     private File companyEvaluationForm; // ToDo: request değişecek
