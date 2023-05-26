@@ -778,6 +778,7 @@ function DateComponent() {
 
   
     render() {
+      
       return (
         <div className="reportevaluation">
           <div className="history">

@@ -68,7 +68,6 @@ public class ReportService {
                 return false;
             }
         }
-
         Report newInternshipReport = new Report();
         Optional<Student> student = studentRepository.findById(request.getStudentId());
         if (!student.isPresent()) {

@@ -69,7 +69,7 @@ const App = () => {
         },
         {
           path: "reports",
-          element: <Reports />,
+          element: <Reports userId = {userId} />,
         },
 
         {
