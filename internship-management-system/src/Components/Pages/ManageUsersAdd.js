@@ -190,8 +190,6 @@ function ManageUsersAdd(props) {
         courseCode: selectedCode
     };
 
-    console.log("formData:",formData);
-
     const addAccountResponse = await axios.post("http://localhost:8080/account", formData);
     if ( addAccountResponse.data.email !== formData.email) {
     	console.log("account with this email already exists");
@@ -215,7 +213,6 @@ function ManageUsersAdd(props) {
 		// teachingAssistantId: methods.get
 		// companyName: methods.get
 	};
-
 
     if(selectedValue === "Administrative Assistant"){
 		const addAdministrativeAssistantResponse = await axios.post("http://localhost:8080/administrative_assistant", userData);
@@ -251,8 +248,24 @@ function ManageUsersAdd(props) {
 	
 	}
 	else if(selectedValue === "Student"){
-		// TODO
-	}
+
+        const formData = new FormData();
+
+        formData.append("companyName", methods.getValues("companyName"));
+        formData.append("courseCode", selectedCode);
+        formData.append("accountId", addAccountResponse.data.id);
+        formData.append("instructorId", methods.getValues("instructorId"));
+        formData.append("teachingAssistantId", methods.getValues("teachingAssistantId"));
+
+        const addStudentResponse = await axios.post("http://localhost:8080/student", formData);
+        if (addStudentResponse.data.role !== formData.role) {
+            console.log("Error: Student not added");
+        }
+        else {
+            console.log(addStudentResponse.data);
+            console.log("Student added successfully.");
+        }
+    }
 	else if(selectedValue === "Summer Training Coordinator"){
 		const addSummerTrainingCoordinatorResponse = await axios.post("http://localhost:8080/summer_training_coordinator", userData);
 		if ( addSummerTrainingCoordinatorResponse.data.role !== formData.role) {
@@ -267,10 +280,10 @@ function ManageUsersAdd(props) {
 		console.log("Error: Invalid role");
 	}
 
-	
+
 	// Reset the form
 	methods.reset();
-    
+
 };
 
   const handleOperation = (data) => {
@@ -281,7 +294,7 @@ function ManageUsersAdd(props) {
 
 
 
- 
+
 
 
   return (
