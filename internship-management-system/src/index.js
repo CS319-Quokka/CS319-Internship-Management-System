@@ -19,8 +19,10 @@ import StudentOperations from "./Components/Pages/StudentOperations";
 import ManageUsers from "./Components/Pages/ManageUsers";
 import Sidebar from "./Components/Sidebar";
 import FAQ from "./Components/Pages/FAQ"
-import AdminAssNotifications from "./Components/Pages/AdminAssNotifications";
-import  UserProvider , { UserContext } from './Components/UserContext';
+import AdministrativeAssistantNotifications from "./Components/Pages/AdministrativeAssistantNotifications";
+import UserProvider , { UserContext } from './Components/UserContext';
+import NotFoundPage from "./Components/NotFoundPage";
+
 import "./App.css";
 //import { useNavigate } from "react-router-dom";
 
@@ -65,7 +67,7 @@ const App = () => {
         },
         {
           path: "adminassnotifications",
-          element: <AdminAssNotifications />,
+          element: <AdministrativeAssistantNotifications />,
         },
         {
           path: "reports",
@@ -104,7 +106,11 @@ const App = () => {
         {
           path: 'faq',
           element: <FAQ />
-        }
+        },
+        {
+          path: "*",
+          element: <NotFoundPage />,
+        },
       ],
     },
    

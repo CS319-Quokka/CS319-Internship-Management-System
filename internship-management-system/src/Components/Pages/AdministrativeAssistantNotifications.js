@@ -142,7 +142,7 @@ function FormDialog() {
 
 
 
-class AdminAssNotifications extends Component {
+class AdministrativeAssistantNotifications extends Component {
     constructor(props) {
         super(props)
         this.state ={}
@@ -171,4 +171,4 @@ class AdminAssNotifications extends Component {
 
 }
 
-export default AdminAssNotifications
+export default AdministrativeAssistantNotifications

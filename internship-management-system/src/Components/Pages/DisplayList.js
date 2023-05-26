@@ -6,6 +6,68 @@ import * as IoIcons from "react-icons/io";
 import { withRouter } from 'react-router-dom';
 import "../Styles/List.css";
 import { UserContext } from "../UserContext";
+import IconButton from "@mui/material/IconButton";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+
+
+
+const options = [
+    'Reassign Instructor',
+    'Upload Company Evaluation Form'
+];
+const ITEM_HEIGHT = 48;
+
+
+function LongMenu() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+      <div>
+        <IconButton
+            aria-label="more"
+            id="long-button"
+            aria-controls={open ? 'long-menu' : undefined}
+            aria-expanded={open ? 'true' : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
+        >
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+            id="long-menu"
+            MenuListProps={{
+              'aria-labelledby': 'long-button',
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              style: {
+                maxHeight: ITEM_HEIGHT * 4.5,
+                overflow: 'auto',
+                width: '30ch',
+              },
+            }}
+        >
+          {options.map((option) => (
+              <MenuItem key={option} onClick={handleClose}>
+                {option}
+              </MenuItem>
+          ))}
+        </Menu>
+      </div>
+  );
+}
+
 
 class DisplayList extends Component {
   constructor(props) {
@@ -17,7 +79,6 @@ class DisplayList extends Component {
       
     };
     this.handleOptions = this.handleOptions.bind(this);
-    
     this.handleReminder = this.handleReminder.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
@@ -33,7 +94,6 @@ class DisplayList extends Component {
       window.alert("Reminder sent!");
     } 
   }
-
 
   handleOptions = (index) => {
     if (this.state.showOptions === index) {
@@ -101,26 +161,34 @@ class DisplayList extends Component {
                   <React.Fragment key={index}>
                     <li className="list-item">
 
-                      <Link to = "/evaluation" onClick={this.selectUser(item.id)} >
+                      <Link
+                          /*to = "/evaluation" onClick={this.selectUser(item.id)}
+
+                           */ >
                         <div className="row">
                             {displayFields.map((field, index) => (
                             <div className="value">{item[field]}</div>
                             ))}
                       
 
-                          <div
-                            className="options"
-                          >
+                          <div className="options">
                             <div className="choices">
-                             
-                            <div id="reminder"> <button onClick={this.handleReminder} className="button">{<IoIcons.IoMdAlert />}</button></div>
-                            < div id="options"><button onClick={() => this.handleOptions(index)} className="icon-button">{<SlIcons.SlOptionsVertical />}</button>
-
+                                <div id="reminder">
+                                    <button onClick={this.handleReminder} className="button">{<IoIcons.IoMdAlert />}</button>
+                                </div>
+                            <div id="options">
+                                {/*
+                                <button onClick={() => this.handleOptions(index)} className="icon-button">{<SlIcons.SlOptionsVertical />}</button>
+*/}
+                                <LongMenu
+                                  /*  content={}*/
+                                />
+                                {/*
                              {showOptions === index  && (
                                this.props.choice
                              
                             )}
-                            
+                            */}
                             </div>
                             </div>
                             

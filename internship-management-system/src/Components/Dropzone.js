@@ -19,7 +19,7 @@ function FileUpload(props) {
 
   return (
     <div>
-      
+
       <DragDropFiles id = {props.id} message={message} setMessage={setMessage} />
     </div>
   );
@@ -42,6 +42,7 @@ function TextareaValidator(props) {
         <Textarea
             placeholder="Type your message here..."
             minRows={3}
+            required
             onChange={handleMessageChange}
             endDecorator={
               <Box
@@ -114,6 +115,8 @@ const DragDropFiles = (props) => {
   const [userId, setId] = useState("");
   //const [description, setDescription] = useState("");
   const inputRef = useRef();
+  const [uploadSubmitted, setUploadSubmitted] = useState(false); // Track upload status
+
 
   const handleSelectFile = (event) => {
 
@@ -191,7 +194,8 @@ const DragDropFiles = (props) => {
         );
         // Handle success response
         console.log("success");
-        console.log(response.data);
+          setUploadSubmitted(true);
+          console.log(response.data);
       } catch (error) {
         // Handle error
         console.log("fail");
@@ -204,13 +208,13 @@ const DragDropFiles = (props) => {
   //   setDescription(event.target.value);
   // };
 
-  if (file)
-    return (
-      <div className="upload-confirm">
-        <h2>Uploading the following file:</h2>
-        <p>{file.name}</p>
-        <br></br>
-        <TextareaValidator message={props.message} setMessage={props.setMessage} />
+  if (file && !uploadSubmitted) {
+      return (
+          <div className="upload-confirm">
+              <h2>Uploading the following file:</h2>
+              <p>{file.name}</p>
+              <br></br>
+              <TextareaValidator/>
 
         {/* <input
           type="text"
@@ -221,16 +225,25 @@ const DragDropFiles = (props) => {
 {/* 
         {props.afterUpload && props.afterUpload({ file, description })} */}
 
-        <div className="button-layout">
-          <button className="button" onClick={() => setFile(null)}>
-            Cancel
-          </button>
-          <button className="button" onClick={handleUpload}>
-            Upload
-          </button>
+              <div className="button-layout">
+                  <button className="button" onClick={() => setFile(null)}>
+                      Cancel
+                  </button>
+                  <button className="button" onClick={handleUpload}>
+                      Upload
+                  </button>
+              </div>
+          </div>
+      );
+  }
+  if (uploadSubmitted) {
+      return(
+        <div className="upload-confirm">
+            <h2>You have already uploaded a report.</h2>
         </div>
-      </div>
-    );
+
+      );
+  }
 
   return (
     <>

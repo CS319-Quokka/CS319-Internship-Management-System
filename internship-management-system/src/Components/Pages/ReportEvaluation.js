@@ -28,6 +28,9 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Check from '@mui/icons-material/Check';
 import { useLocation } from 'react-router-dom';
 import { UserContext } from '../UserContext';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
+import Stack from '@mui/material/Stack';
 
 
 
@@ -228,22 +231,17 @@ const getAllReports = async () => {
       reportIdList.push(info[i].id)
       getReportFile(reportIdList[i],allReports,i)
       getFeedbackFile(reportIdList[i],allFeedbacks)
-     
     }
 
-
-
     console.log("ids: ", reportIdList)
-
     
     //console.log("1:", reportFile)
     //getReportFile(reportIdList[1],allReports)
     //console.log("2:", reportFile)
 
-
     console.log("ALL REPOS:", allReports)
     console.log("ALL FEEDBCAKS:", allFeedbacks)
-    
+
     setReportHistory(allReports)
     setFeedbackHistory(allFeedbacks)
 
@@ -252,9 +250,6 @@ const getAllReports = async () => {
     //   fileName: report.fileName,
     //   description:report.reportDescription
     // }));
-   
-
-
   } catch (error) {
     console.log(error);
   }
@@ -328,6 +323,17 @@ const FileUpload = () => {
     setFeedbackId(event.target.value);
   };
 
+}
+function IconAlerts() {
+    return (
+        <div>
+            <Stack sx={{width: '100%'}} spacing={2}>
+                <Alert icon={<CheckIcon fontSize="inherit"/>} severity="success">
+                    Assessment scores saved!
+                </Alert>
+            </Stack>
+        </div>
+    );
 }
 function TextareaValidator() {
   const [italic, setItalic] = React.useState(false);
@@ -403,11 +409,16 @@ function TextareaValidator() {
     </FormControl>
   );
 }
-function FormDialog(props) {
-  const [open, setOpen] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
-  const [isSatisfactory, setIsSatisfactory] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(null);
+function FormDialogB(props) {
+    const [openB, setOpenB] = useState(false);
+    const [isClicked1, setIsClicked1] = useState(false);
+    const [buttonNameB, setButtonNameB] = useState("");
+    const [isClicked2, setIsClicked2] = useState(false);
+    const [partBstatus, setPartBstatus] = useState("Unsatisfactory");
+    const [isSatisfactoryB, setIsSatisfactoryB] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+
+
 
   useEffect(() => {
     const getInformation = async () => {
@@ -425,55 +436,140 @@ function FormDialog(props) {
     getInformation();
   }, []);
 
+    const handleClickOpenB = () => {
+        setOpenB(true);
+        props.setButtonClicked(true);
+        {console.log("Student id: ", props.studentId)}
+    };
+    const handleSatisfactoryClick = () => {
+        setIsSatisfactoryB(false);
+    };
 
-  const handleSatisfactoryClick = () => {
-    setIsSatisfactory(false);
-  };
-  const handleRevisionRequiredClick =  () => {
+    const handleCloseB = () => {
+        setOpenB(false);
+        props.setButtonClicked(false);
+    };
+    const handleSubmitB = () => {
+        setOpenB(false);
+    }
+    const handleRevisionRequiredClick = () => {
+        setIsSatisfactoryB(true);
+    };
+    return (
+
+        <div>
+            <Button variant="outlined" onClick={handleClickOpenB}>
+                Part B
+            </Button>
+            <Dialog fullWidth open={openB} onClose={handleCloseB}>
+                <DialogTitle>Grade Form</DialogTitle>
+                <DialogContent>
+                    <Typography sx={{fontWeight: 'bold'}}>Part B - Report</Typography>
+                    <Button
+                        variant={isSatisfactoryB ? 'outlined' : 'contained'}
+                        color="success"
+                        onClick={handleSatisfactoryClick}
+                        sx={{marginRight: '10px'}}
+                    > Satisfactory </Button>
+                    <Button
+                        variant={isSatisfactoryB ? 'contained' : 'outlined'}
+                        color="secondary"
+                        onClick={handleRevisionRequiredClick}
+                    >Revision Required</Button>
+                    {isSatisfactoryB && (
+                        <div>
+                            <Typography>Enter the due date for the resubmission.</Typography>
+                            <DateComponent/>
+                        </div>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseB}>Cancel</Button>
+                    <Button onClick={handleSubmitB}> Submit
+                    </Button>
+
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
+
+function FormDialogA(props) {
+  const [openA, setOpenA] = useState(false);
+  const [isClicked1, setIsClicked1] = useState(false);
+  const [isClicked2, setIsClicked2] = useState(false);
+  const [partAstatus, setPartAstatus] = useState("Unsatisfactory");
 
 
-    setIsSatisfactory(true);
-   
-  };
 
-  const handleIsClicked = () => {
-      setIsClicked(true);
+  useEffect(() => {
+    const getInformation = async () => {
+      const studentId = 3;
+      try {
+        const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
+        console.log("reports:", response.data.length);
+
+
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    getInformation();
+  }, []);
+
+  const handleIsClicked1 = () => {
+      setIsClicked1(true);
   }
+    const handleIsClicked2 = () => {
+        setIsClicked2(true);
+    }
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpenA = () => {
+    setOpenA(true);
     props.setButtonClicked(true);
     {console.log("Student id: ", props.studentId)}
   };
+  const handleCEFChange = (event) => {
+      const cefGrade = event.target.value;
+      const areButtonsClicked = isClicked1 && isClicked2; // Check if both buttons are clicked and stay on "Yes"
+      console.log("entered part A check")
+      if (cefGrade >= 7 && areButtonsClicked) {
+          setPartAstatus("Satisfactory");
+          console.log("part a success!")
+      } else {
+          setPartAstatus("Unsatisfactory");
+      }
+  };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseA = () => {
+    setOpenA(false);
     props.setButtonClicked(false);
   };
-  const handleSubmit = () => {
-      
+  const handleSubmitA = () => {
+
 
       console.log("Student id: ", props.studentId, "Deadline:", selectedDate)
       const reportData = {
         studentId: props.studentId,
         deadline: selectedDate
       };
-  
-    
+
+
       axios.post("http://localhost:8080/report", reportData)
         .then((response) => {
           console.log("Report created successfully");
           console.log( "report: ",response.data);
-    
-         
+
+
         })
         .catch((error) => {
           // Handle error
           console.error(error);
         });
 
-        setOpen(false);
-      
+        setOpenA(false);
+
   }
 
   const handleDateSelection = (date) => {
@@ -483,14 +579,11 @@ function FormDialog(props) {
   return (
 
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open Grade Form
+      <Button variant="outlined" onClick={handleClickOpenA}>
+        Part A
       </Button>
-      <Dialog fullWidth open={open} onClose={handleClose}>
+      <Dialog fullWidth open={openA} onClose={handleCloseA}>
         <DialogTitle>Grade Form</DialogTitle>
-        <DialogContentText sx ={{fontWeight: 'bold'}}>
-            Entering the grades for {props.studentFirstName} {props.studentLastName}
-        </DialogContentText>
         <DialogContent>
         
           <Typography sx ={{fontWeight: 'bold'}}>Part A - Work Place</Typography>
@@ -507,91 +600,25 @@ function FormDialog(props) {
           min: 0,
           max: 10,
           align: 'right',
-          style: { width: '5ch' },
+          style: { width: '5ch' }
           }}
+          onChange={handleCEFChange}
           />
           <Typography>Is the work done related to computer engineering?</Typography>
-          <Button variant="outlined" color="success"> Yes </Button>
-          <Button variant="outlined" color="error"> No </Button>
+          <Button variant={isClicked1 ? "contained" : "outlined"} color="success" onClick={() => setIsClicked1(true)}> Yes </Button>
+          <Button variant={isClicked1 ? "outlined" : "contained"} color="error" onClick={() => setIsClicked1(false)}> No </Button>
           <Typography>Is the supervisor a computer engineer or has a similar engineering background?</Typography>
-          <Button variant="outlined" color="success"> Yes </Button>
-          <Button variant="outlined" color="error"> No </Button>
+          <Button variant={isClicked2 ? "contained" : "outlined"} color="success" onClick={() => setIsClicked2(true)}> Yes </Button>
+          <Button variant={isClicked2 ? "outlined" : "contained"} color="error" onClick={() => setIsClicked2(false)}> No </Button>
+
           <hr></hr>
-          <Typography sx={{ fontWeight: 'bold' }}>Part B - Report</Typography>
-          <Button
-            variant={isSatisfactory ? 'outlined' : 'contained'}
-            color="success"
-            onClick={handleSatisfactoryClick}
-            sx={{ marginRight: '10px' }}
-          > Satisfactory </Button>
-          <Button
-            variant={isSatisfactory ? 'contained' : 'outlined'}
-            color="secondary"
-            onClick={handleRevisionRequiredClick}
-          >Revision Required</Button>
-          {isSatisfactory && (
-            <div>
-              <Typography>Enter the due date for the resubmission.</Typography>
-              <DateComponent onSelectDate={handleDateSelection}/>
-            </div>
-          )}
-          <hr></hr>
-          <Typography sx={{ fontWeight: 'bold' }}>Part C - Final version of the report</Typography>
-          <Typography>Assessment score of Evaluation of the Work </Typography>
-          <TextField
-          required
-          autoFocus
-          margin="dense"
-          id="name"
-          label="score"
-          type="number"
-          variant="standard"
-          inputProps={{
-          min: 0,
-          max: 10,
-          align: 'right',
-          style: { width: '6ch' },
-          }}
-          />
-          <Typography>Sum of the assessment scores of Evaluation of the Work </Typography>
-          <TextField
-          required
-          autoFocus
-          margin="dense"
-          id="name"
-          label="score"
-          type="number"
-          variant="standard"
-          inputProps={{
-          min: 0,
-          max: 60,
-          align: 'right',
-          style: { width: '6ch' },
-          }}
-          />
-          <Typography>The assessment score of Evaluation of the report  </Typography>
-          <TextField
-          required
-          autoFocus
-          margin="dense"
-          id="name"
-          label="score"
-          type="number"
-          variant="standard"
-          inputProps={{
-          min: 0,
-          max: 10,
-          align: 'right',
-          style: { width: '6ch' },
-          }}
-          />
 
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleCloseA}>Cancel</Button>
           <Button  onClick={() => {
         //    <Alert severity="success">Grade form is filled!</Alert>
-            handleSubmit();
+            handleSubmitA();
           }}
           >Submit</Button>
         </DialogActions>
@@ -599,13 +626,204 @@ function FormDialog(props) {
     </div>
   );
 }
+function FormDialogC(props){
+    const [openC, setOpenC] = useState(false);
+    const [input1, setInput1] = useState(0);
+    const [input2, setInput2] = useState(0);
+    const [input3, setInput3] = useState(0);
+    const [input4, setInput4] = useState(0);
+    const [input5, setInput5] = useState(0);
+    const [input6, setInput6] = useState(0);
+    const [input7, setInput7] = useState(0);
+    const [total, setTotal] = useState(0);
+
+
+    const handleChange = (event) => {
+        const { id, value } = event.target;
+        const intValue = parseInt(value, 10);
+        switch (id) {
+            case "input1":
+                setInput1(intValue);
+                break;
+            case "input2":
+                setInput2(intValue);
+                break;
+            case "input3":
+                setInput3(intValue);
+                break;
+            case "input4":
+                setInput4(intValue);
+                break;
+            case "input5":
+                setInput5(intValue);
+                break;
+            case "input6":
+                setInput6(intValue);
+                break;
+            case "input7":
+                setInput7(intValue);
+            default:
+                break;
+        }
+    };
+
+    useEffect(() => {
+        const sum = input1 + input2 + input3 + input4 + input5 + input6;
+        setTotal(sum);
+    }, [input1, input2, input3, input4, input5, input6 ]);
+
+/*
+    useEffect(() => {
+        const getInformation = async () => {
+        //    const studentId = 3;
+            try {
+                const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
+                console.log("reports:", response.data.length);
+
+
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getInformation();
+    }, []);
+*/
+
+    const handleClickOpenC = () => {
+        setOpenC(true);
+        props.setButtonClicked(true);
+        {console.log("Student id: ", props.studentId)}
+    };
+    const handleCloseC = () => {
+        setOpenC(false);
+        props.setButtonClicked(false);
+    };
+    const handleSubmitC = () => {
+        setOpenC(false);
+    }
+
+    return (
+
+        <div>
+            <Button variant="outlined" onClick={handleClickOpenC}>
+                Part C
+            </Button>
+            <Dialog fullWidth open={openC} onClose={handleCloseC}>
+                <DialogTitle>Grade Form</DialogTitle>
+                <DialogContent>
+                    <Typography sx={{fontWeight: 'bold'}}>Part C - Final version of the report</Typography>
+                    <Typography>(1) Able to perform work at the level expected from a summer training in the area of computer engineering. (this is the evaluation of all the work done in the summer training)</Typography>
+                    <Textarea placeholder="On what page(s) of the report is the evidence of this found?"> </Textarea>
+                    <TextField required autoFocus margin="dense" id="input1" label="(1)" type="number" variant="standard"
+                            inputProps={{
+                            min: 0,
+                            max: 10,
+                            align: 'right',
+                            style: { width: '5ch' }
+                            }}
+                           value={input1} onChange={handleChange}
+                    />
+                    <hr></hr>
+                    <Typography>(2) Solves complex engineering problems by applying principles of engineering, science, and mathematics.</Typography>
+                    <Textarea placeholder="On what page(s) of the report is the evidence of this found?"> </Textarea>
+                    <TextField required autoFocus margin="dense" id="input2" label="(2)" type="number" variant="standard"
+                               inputProps={{
+                                   min: 0,
+                                   max: 10,
+                                   align: 'right',
+                                   style: { width: '5ch' }
+                               }}
+                               value={input2} onChange={handleChange}
+                    />
+                    <hr></hr>
+                    <Typography>(3) Recognizes ethical and professional responsibilities in engineering situations.</Typography>
+                    <Textarea placeholder="On what page(s) of the report is the evidence of this found?"> </Textarea>
+                    <TextField required autoFocus margin="dense" id="input3" label="(3)" type="number" variant="standard"
+                               inputProps={{
+                                   min: 0,
+                                   max: 10,
+                                   align: 'right',
+                                   style: { width: '5ch' }
+                               }}
+                               value={input3} onChange={handleChange}
+                    />
+                    <hr></hr>
+                    <Typography>(4) Able to make informed judgments that consider the impact of engineering solutions in global, economic, environmental, and societal contexts. </Typography>
+                    <Textarea placeholder="On what page(s) of the report is the evidence of this found?"> </Textarea>
+                    <TextField required autoFocus margin="dense" id="input4" label="(4)" type="number" variant="standard"
+                               inputProps={{
+                                   min: 0,
+                                   max: 10,
+                                   align: 'right',
+                                   style: { width: '5ch' }
+                               }}
+                               value={input4} onChange={handleChange}
+                    />
+                    <hr></hr>
+                    <Typography>(5) Able to acquire new knowledge using appropriate learning strategy or strategies.  </Typography>
+                    <Textarea placeholder="On what page(s) of the report is the evidence of this found?"> </Textarea>
+                    <TextField required autoFocus margin="dense" id="input5" label="(5)" type="number" variant="standard"
+                               inputProps={{
+                                   min: 0,
+                                   max: 10,
+                                   align: 'right',
+                                   style: { width: '5ch' }
+                               }}
+                               value={input5} onChange={handleChange}
+                    />
+                    <hr></hr>
+                    <Typography>(6) Able to apply new knowledge as needed.  </Typography>
+                    <Textarea placeholder="On what page(s) of the report is the evidence of this found?"> </Textarea>
+                    <TextField required autoFocus margin="dense" id="input6" label="(6)" type="number" variant="standard"
+                               inputProps={{
+                                   min: 0,
+                                   max: 10,
+                                   align: 'right',
+                                   style: { width: '5ch' }
+                               }}
+                               value={input6} onChange={handleChange}
+                    />
+                    <Typography>Able to prepare reports with high standards in terms of content, organization, style and language (the Summer Training report itself is to be evaluated) </Typography>
+                    <Textarea placeholder="On what page(s) of the report is the counter evidence of this found?"> </Textarea>
+                    <TextField required autoFocus margin="dense" id="input7" label="input7" type="number" variant="standard"
+                               inputProps={{
+                                   min: 0,
+                                   max: 10,
+                                   align: 'right',
+                                   style: { width: '5ch' }
+                               }}
+                               value={input7} onChange={handleChange}
+                    />
+                    {/* /to-do: SATISFACTORY CONDITIONS */}
+
+                    <Typography>Assessment score of Evaluation of the Work: {input1}/10</Typography>
+                    {/* input1 >= 7*/}
+                    <Typography>Sum of the assessment scores of Evaluation of the Work: {total - input1}/50</Typography>
+                    {/* total-input1 >= 25*/}
+                    <Typography>The assessment score of Evaluation of the report: {input7}/10</Typography>
+                    {/* input7 >= 7*/}
+
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseC}>Cancel</Button>
+                    <Button  onClick={() => {
+                        //    <Alert severity="success">Grade form is filled!</Alert>
+                        handleSubmitC();
+                    }}
+                    >Submit</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
+}
 function DateComponent() {
     return (
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DatePicker label="Due Date" />
       </LocalizationProvider>
     );
-  }
+}
   class ReportEvaluation extends Component {
     constructor(props) {
       super(props);
@@ -621,7 +839,7 @@ function DateComponent() {
         currentComment: "",
         currentFile: null,
         fileData:null,
-        reportId:null
+        reportId:null,
       };
       this.downloadCurrent = this.downloadCurrent.bind(this);
     }
@@ -733,12 +951,12 @@ function DateComponent() {
       };
 
       console.log("uploaded a feedback")
-    
+
       axios.post("http://localhost:8080/feedback", feedbackData)
         .then((response) => {
           console.log("Feedback created successfully");
           console.log( "feedback: ",response.data);
-    
+
           const feedbackId = response.data;
           
     
@@ -769,16 +987,10 @@ function DateComponent() {
           // Handle error
           console.error(error);
         });
-      
-    };
-    
-  
-   
-    
 
-  
+    };
+
     render() {
-      
       return (
         <div className="reportevaluation">
           <div className="history">
@@ -829,13 +1041,31 @@ function DateComponent() {
             <Typography>To enter the student's grades, use the Grade Form</Typography>
             <FormDialog
               studentId = {this.state.studentId}
+            <Typography>Part A - Enter the Company Evaluation Form Assessment </Typography>
+            <FormDialogA
               studentFirstName={this.state.studentFirstName}
               studentLastName={this.state.studentLastName}
               setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
             />
+              <Typography>Part B - Enter the Report Assessment </Typography>
+              <FormDialogB
+               studentFirstName={this.state.studentFirstName}
+               studentLastName={this.state.studentLastName}
+               setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
+            />
+              <Typography>Part C - Enter the Overall Assessment </Typography>
+              <FormDialogC
+                  studentFirstName={this.state.studentFirstName}
+                  studentLastName={this.state.studentLastName}
+                  setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
+              />
+
+
+
             <div className="texteditor">
               <TextareaValidator />
             </div>
+
             <div className="annotatedupload">
               <h2>Upload annotated feedback here: </h2>
               <FileUploadIcon />
@@ -855,9 +1085,9 @@ function DateComponent() {
                 variant='contained'
                 color="success"
                 sx={{ marginRight: '10px' }}
-              > Send feedback </Button>
+                > Send feedback </Button>
               </div>
-            )}
+              )}
             </div>
           </div>
         </div>

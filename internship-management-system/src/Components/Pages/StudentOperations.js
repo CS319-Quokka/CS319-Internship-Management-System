@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component}  from 'react'
 import Dropzone from "../Dropzone";
 import "../Styles/FileSubmission.css"
 import DisplayList from './DisplayList';
@@ -9,59 +9,15 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { UserContext } from "../UserContext";
+
 
 const options = [
     'Reassign Instructor',
     'Upload Company Evaluation Form'
 ];
 const ITEM_HEIGHT = 48;
-function LongMenu() {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
-    return (
-        <div>
-            <IconButton
-                aria-label="more"
-                id="long-button"
-                aria-controls={open ? 'long-menu' : undefined}
-                aria-expanded={open ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
-            >
-                <MoreVertIcon />
-            </IconButton>
-            <Menu
-                id="long-menu"
-                MenuListProps={{
-                    'aria-labelledby': 'long-button',
-                }}
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                PaperProps={{
-                    style: {
-                        maxHeight: ITEM_HEIGHT * 4.5,
-                        overflow: 'auto',
-                        width: '30ch',
-                    },
-                }}
-            >
-                {options.map((option) => (
-                    <MenuItem key={option} onClick={handleClose}>
-                        {option}
-                    </MenuItem>
-                ))}
-            </Menu>
-        </div>
-    );
-}
 
 class StudentOperations extends Component{
 
@@ -76,18 +32,27 @@ class StudentOperations extends Component{
         this.handleCompanyForm = this.handleCompanyForm.bind(this);
         this.handleReassign = this.handleReassign.bind(this);
         this.handleClose = this.handleClose.bind(this);
-    }    
+    }
+
+    static contextType = UserContext;
+
     handleChoiceMenu(newControllerValue) {
         this.setState({ showChoices: newControllerValue });
     }
 
     handleReassign(){
-    this.setState({
+        this.setState({
         showReassign:true
     });
     this.setState({showChoices:false});
-    
-    }  
+    }
+    handleReassignAndSelectUser = (itemId) => {
+        const userId = this.context.userId;
+        console.log('Selected User ID:', userId);
+        this.handleReassign();
+       // this.selectUser(itemId);
+    };
+
     
     handleCompanyForm(){
         console.log("bastı");
@@ -95,33 +60,21 @@ class StudentOperations extends Component{
             showCompanyForm:true
         });
         this.setState({showChoices:false});
-        
-     } 
 
+     }
      handleClose(){
         this.setState({showReassign:false});
         this.setState({showCompanyForm:false});
       }
       render(){
-        const {showChoices} = this.state;
         const {showCompanyForm} = this.state;
         const {showReassign} = this.state;
         return(
             <div className='page'>
 
 
-                <DisplayList data={StudentData} displayFields={['name', 'class', 'form','grader'] } setControllerState={this.handleChoiceMenu} choice =
+                <DisplayList data={StudentData} displayFields={['name', 'class', 'form','grader'] } setControllerState={this.handleChoiceMenu} />
 
-
-                    {showChoices&& <div className="menu" id=  "choice-menu">
-                        <ul className="menu-contents">
-                            <li className="content"> <a href="#" onClick={this.handleReassign}>Reassign</a></li>
-                            <hr className="line"></hr>
-                            <li className = "content"><a href = "#" onClick={this.handleCompanyForm}>Company Form</a></li>
-                        </ul>
-                    </div>
-                    }/>
-                {/*<LongMenu/> */}
 
            {showReassign &&<Popup name = "Reassign" className="popup" handleClose={this.handleClose}>
           </Popup>}
