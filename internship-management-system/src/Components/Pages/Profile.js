@@ -63,7 +63,7 @@ function FormDialog(props) {
         const response = axios.patch(
             `http://localhost:8080/account/${props.id}`,
             formData,
-            )
+        )
         if (response === -3) {
             console.log("Confirmation password does not match new.");
         }
@@ -79,6 +79,7 @@ function FormDialog(props) {
         else if(response === 1){
             console.log("Successfully changed password!");
         }
+        setOpen(false);
     };
     return (
         <div>
@@ -210,7 +211,7 @@ class Profile extends Component {
     statushandler = (event) => {
 
         console.log("BASTI");
-     event.preventDefault()
+        event.preventDefault()
     }
 
 
@@ -220,92 +221,92 @@ class Profile extends Component {
 
     render() {
         const {userType} = this.state;
-            return ( 
-                <div className='page'>
+        return (
+            <div className='page'>
 
-                    <div className='container'>
-
-
-                        <div className='user-container'>
-                            <h1><strong>{this.state.firstName} {this.state.lastName}</strong></h1>
-                            <br></br>
-
-                           
-                            <img className='profilePic' src={pic} alt="Profile"/>
-                            <p><em>{this.state.userType}</em></p><br/>
-
-                            <FormDialog id = {this.props.userId} onConfirm={this.handleConfirm}/>
-                            <br></br>
-                        </div>
+                <div className='container'>
 
 
-                        <div className='right-containers'>
+                    <div className='user-container'>
+                        <h1><strong>{this.state.firstName} {this.state.lastName}</strong></h1>
+                        <br></br>
+
+
+                        <img className='profilePic' src={pic} alt="Profile"/>
+                        <p><em>{this.state.userType}</em></p><br/>
+
+                        <FormDialog id = {this.props.userId} onConfirm={this.handleConfirm}/>
+                        <br></br>
+                    </div>
+
+
+                    <div className='right-containers'>
 
                         <div className="info-container">
-                        <div className="row">
-                            <p className="label">Mail:</p>
-                            <p className="value">{this.state.mail}</p>
-                        </div>
-                        <hr />
+                            <div className="row">
+                                <p className="label">Mail:</p>
+                                <p className="value">{this.state.mail}</p>
+                            </div>
+                            <hr />
 
-                        <div className="row">
-                            <p className="label">Institute:</p>
-                            <p className="value">{this.state.university}</p>
-                        </div>
-                        <hr />
+                            <div className="row">
+                                <p className="label">Institute:</p>
+                                <p className="value">{this.state.university}</p>
+                            </div>
+                            <hr />
 
-                        <div className="row">
-                            <p className="label">Department:</p>
-                            <p className="value">{this.state.department}</p>
-                        </div>
-                       
+                            <div className="row">
+                                <p className="label">Department:</p>
+                                <p className="value">{this.state.department}</p>
+                            </div>
+
                         </div>
 
                         {userType === 'student' && (
                             <div className="additionalInfo">
-                            <div className="row">
-                                <p className="label">Course Taken:</p>
-                                <p className="value">{this.state.course}</p>
-                            </div>
-                            <hr />
+                                <div className="row">
+                                    <p className="label">Course Taken:</p>
+                                    <p className="value">{this.state.course}</p>
+                                </div>
+                                <hr />
 
-                            <div className="row">
-                                <p className="label">Instructor Mail:</p>
-                                <p className="value">
-                                <em>
-                                    <a href={`mailto:${this.state.instructorMail}`}>{this.state.instructorMail}</a>
-                                </em>
-                                </p>
-                            </div>
-                            <hr />
+                                <div className="row">
+                                    <p className="label">Instructor Mail:</p>
+                                    <p className="value">
+                                        <em>
+                                            <a href={`mailto:${this.state.instructorMail}`}>{this.state.instructorMail}</a>
+                                        </em>
+                                    </p>
+                                </div>
+                                <hr />
 
-                            <div className="row">
-                                <p className="label">Report Status:</p>
-                                <p className="value">{this.state.status}</p>
-                            </div>
+                                <div className="row">
+                                    <p className="label">Report Status:</p>
+                                    <p className="value">{this.state.status}</p>
+                                </div>
                             </div>
                         )}
 
                         {userType === 'instructor' && (
 
                             <div class = "additionalInfo">
-                            <div class="row">
-                            <p className="label"># of students:</p>
-                            <p className="value">{this.state.numOfStudents}</p>
+                                <div class="row">
+                                    <p className="label"># of students:</p>
+                                    <p className="value">{this.state.numOfStudents}</p>
+                                </div>
                             </div>
-                            </div>                                  
 
                         )}
-                               
-                        </div>
-                        
 
-                        
                     </div>
+
+
+
                 </div>
-            )
-        }
+            </div>
+        )
     }
+}
 {/*}*/}
 
 export default Profile
