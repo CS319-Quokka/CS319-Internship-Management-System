@@ -91,6 +91,7 @@ public class UserManagementService {
     }
 
     public Student addStudent(StudentAddRequest request){
+
         UserAccount account = accountService.getAccountById(request.getAccountId());
         if (account == null) {
             return null;
@@ -263,12 +264,15 @@ public class UserManagementService {
     public List<Student> getAllStudents(Optional<Long> userAccountId, Optional <Long> instructorId,
                                         Optional <Long> teachingAssistantId, Optional <String> department){
         if (userAccountId.isPresent() && department.isPresent()) {
+
             return null;
         }
         else if (userAccountId.isPresent()) { // get all students in a user account
+
             return studentRepository.findByUserAccountId(userAccountId.get());
         }
-        else if (department.isPresent() ) { // get all students in a department
+        else if (department.isPresent()) { // get all students in a department
+
             List<UserAccount> accountsInDepartment = accountService.getAllAccounts(department); // department.get() ??
             List<Student> studentsInDepartment = new ArrayList<Student>();
             for (UserAccount account : accountsInDepartment) {
@@ -277,13 +281,15 @@ public class UserManagementService {
             return studentsInDepartment;
         }
         else if (instructorId.isPresent()) { // get all students of an instructor
+
             return studentRepository.findByInstructorId(instructorId.get());
         }
         else if(teachingAssistantId.isPresent()){  // get all students of a teaching assistant
+
             return studentRepository.findByTeachingAssistantId(teachingAssistantId.get());
         }
 
-        return studentRepository.findAll(); // get all students
+        return studentRepository.findAll();
     }
 
     public List<TeachingAssistant> getAllTeachingAssistants(Optional<Long> userAccountId, Optional <String> department){

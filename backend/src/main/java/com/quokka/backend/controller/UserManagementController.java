@@ -38,7 +38,7 @@ public class UserManagementController {
     }
 
     @PostMapping("/student")
-    public Student addStudent(@RequestBody StudentAddRequest request){
+    public Student addStudent(StudentAddRequest request){
 
 
         return userManagementService.addStudent(request);
@@ -46,25 +46,25 @@ public class UserManagementController {
 
 
     @PostMapping("/teaching_assistant")
-    public TeachingAssistant addTeachingAssistant(@RequestBody TeachingAssistantAddRequest request){
+    public TeachingAssistant addTeachingAssistant(TeachingAssistantAddRequest request){
 
         return userManagementService.addTeachingAssistant(request);
     }
 
     @PostMapping("/instructor")
-    public Instructor addInstructor(@RequestBody InstructorAddRequest request){
+    public Instructor addInstructor(InstructorAddRequest request){
 
             return userManagementService.addInstructor(request);
     }
 
     @PostMapping("/summer_training_coordinator")
-    public SummerTrainingCoordinator addSummerTrainingCoordinator(@RequestBody SummerTrainingCoordinatorAddRequest request){
+    public SummerTrainingCoordinator addSummerTrainingCoordinator(SummerTrainingCoordinatorAddRequest request){
 
         return userManagementService.addSummerTrainingCoordinator(request);
     }
 
     @PostMapping("/administrative_assistant")
-    public AdministrativeAssistant addAdministrativeAssistant(@RequestBody AdministrativeAssistantAddRequest request){
+    public AdministrativeAssistant addAdministrativeAssistant(AdministrativeAssistantAddRequest request){
 
             return userManagementService.addAdministrativeAssistant(request);
     }

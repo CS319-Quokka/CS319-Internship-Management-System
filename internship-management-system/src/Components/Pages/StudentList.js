@@ -26,27 +26,19 @@ componentDidMount() {
 
 getAllStudents = async () =>{
 
-    console.log("ID",this.props.userId)
     const id = this.props.userId;
 
     const response = await axios.get(`http://localhost:8080/get_all_users/${id}`);
 
     const info = response.data[0]
-    console.log(info.id);
-
 
     const response2 = await axios.get(`http://localhost:8080/student?instructorId=${info.id}`);
 
     const studentInfo = response2.data;
-
-    console.log(studentInfo)
-
-    
-  
+    console.log(studentInfo.length);
      var name = [];
 
      for (var i = 0; i < studentInfo.length; i++) {
-      console.log(i, "th student: ", studentInfo[i].id);
     
       var fullName = studentInfo[i].userAccount.firstName + " " + studentInfo[i].userAccount.lastName;
       var studentType = studentInfo[i].role;
@@ -69,8 +61,6 @@ getAllStudents = async () =>{
         id:studentId
       });
     }
-    
-     console.log("list: ", name);
 
      this.setState({ studentNameList: name });
   
@@ -80,10 +70,8 @@ getAllStudents = async () =>{
   render() {
     const studentNameList = this.state.studentNameList;
     const history = this.props;
-    console.log("student list: ", studentNameList);
     return (
       <div className="student-list">
-        {console.log("list for students: ", studentNameList)}
         <DisplayList  data={studentNameList} displayFields={['name','class', 'status']} />
       </div>
     );
