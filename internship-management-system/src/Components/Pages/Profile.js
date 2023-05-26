@@ -56,9 +56,10 @@ function FormDialog(props) {
     const handleConfirm = () => {
 
         const formData = new FormData();
-        formData.append(oldPassword);
-        formData.append(newPassword);
-        formData.append(confirmPassword);
+        formData.append("oldPassword", oldPassword);
+        formData.append("newPassword", newPassword);
+        formData.append("newPassword2", confirmPassword);
+
         const response = axios.patch(
             `http://localhost:8080/account/${props.id}`,
             formData,

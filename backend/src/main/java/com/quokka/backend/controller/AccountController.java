@@ -104,7 +104,7 @@ public class AccountController {
     }
 
     @PatchMapping("/{id}")
-    public int changePassword(@PathVariable Long id, @RequestBody ChangePasswordRequest request){
+    public int changePassword(@PathVariable Long id, ChangePasswordRequest request){
 
         return accountService.changePassword(id, request);
     }
