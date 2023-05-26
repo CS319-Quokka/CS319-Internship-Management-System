@@ -33,8 +33,10 @@ useEffect( () => {
 
 
 function FormDialog(props) {
-    const [open, setOpen] = React.useState(false);
-    const [newPassword, setNewPassword] = React.useState("");
+    const [open, setOpen] = useState(false);
+    const [newPassword, setNewPassword] = useState("");
+    const [oldPassword, setOldPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -43,17 +45,40 @@ function FormDialog(props) {
     const handleClose = () => {
         setOpen(false);
     };
-
-    const handleConfirm = (newPassword, confirmPassword) => {
-        if (newPassword === confirmPassword) {
-            // TODO: Change password
-            console.log("Passwords match. Change password logic here.");
-        } else {
-            console.log("Passwords do not match.");
-            // TODO: Show an error message or take appropriate action
-        }
+    const handleNewPasswordChange = (event) => {
+        setNewPassword(event.target.value);
     };
 
+    const handleConfirmPasswordChange = (event) => {
+        setConfirmPassword(event.target.value);
+    };
+
+    const handleConfirm = () => {
+
+        const formData = new FormData();
+        formData.append(oldPassword);
+        formData.append(newPassword);
+        formData.append(confirmPassword);
+        const response = axios.patch(
+            `http://localhost:8080/account/${id}`,
+            formData,
+            )
+        if (response === -3) {
+            console.log("Confirmation password does not match new.");
+        }
+        else if (response === -2){
+            console.log("Account does not exist");
+        }
+        else if(response === -1){
+            console.log("Old password is not correct");
+        }
+        else if(response === 0){
+            console.log("New password cannot be the same as old password");
+        }
+        else if(response === 1){
+            console.log("Successfully changed password!");
+        }
+    };
     return (
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>
@@ -61,9 +86,6 @@ function FormDialog(props) {
             </Button>
             <Dialog open={open} onClose={handleClose}>
                 <DialogContent>
-                    <DialogContentText>
-
-                    </DialogContentText>
                     <TextField
                         autoFocus
                         required
@@ -73,6 +95,8 @@ function FormDialog(props) {
                         type="password"
                         fullWidth
                         variant="standard"
+                        value={oldPassword}
+                        onChange={(event) => setOldPassword(event.target.value)}
                     />
                     <TextField
                         autoFocus
@@ -83,8 +107,8 @@ function FormDialog(props) {
                         type="password"
                         fullWidth
                         variant="standard"
-                        value={props.newPassword}
-                        onChange={(event) => props.setState({ newPassword: event.target.value })}
+                        value={newPassword}
+                        onChange={handleNewPasswordChange}
 
 
                     />
@@ -97,8 +121,8 @@ function FormDialog(props) {
                         type="password"
                         fullWidth
                         variant="standard"
-                        value={props.confirmPassword}
-                        onChange={(event) => props.setState({ confirmPassword: event.target.value })}
+                        value={confirmPassword}
+                        onChange={handleConfirmPasswordChange}
 
                     />
                 </DialogContent>
@@ -130,7 +154,7 @@ class Profile extends Component {
             notification: "",
             instructor: "",
             instructorMail:"",
-            confirmPassword: "",
+
         }
     }
     componentDidMount() {
