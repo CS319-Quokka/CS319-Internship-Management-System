@@ -77,7 +77,7 @@ public class ReportService {
 
             newInternshipReport.setStudent(student.get());
         }
-        student.get().setStatus("Waiting for the student to upload the report");
+        student.get().setStatus("Waiting to upload report");
         student.get().setActiveReportId(newInternshipReport.getId());
         newInternshipReport.setId(request.getId());
         newInternshipReport.setDeadline(request.getDeadline());
@@ -218,7 +218,11 @@ public class ReportService {
             }
             reportFile.setId(request.getId());
             reportFileRepository.save(reportFile);
-            studentRepository.findById(request.getStudentId()).get().setStatus("Waiting for feedback");
+            Student student = studentRepository.findById(request.getStudentId()).get();
+            student.setStatus("Report is uploaded");
+            studentRepository.save(student);
+
+            System.out.println("Status: " + studentRepository.findById(request.getStudentId()).get().getStatus());
             return true;
         } catch (IOException e) {
 

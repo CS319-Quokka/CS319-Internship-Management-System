@@ -125,7 +125,7 @@ public class UserManagementService {
         student.setUserAccount(account);
         student.setInstructor(instructor);
         student.setTeachingAssistant(teachingAssistant);
-        student.setStatus("Waiting for upload"); // student.setStatus("Waiting for company evaluation form");
+        student.setStatus("Waiting for initial report"); // student.setStatus("Waiting for company evaluation form");
         return studentRepository.save(student);
     }
 
