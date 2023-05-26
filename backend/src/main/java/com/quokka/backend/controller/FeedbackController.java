@@ -1,12 +1,18 @@
 package com.quokka.backend.controller;
 
+import com.quokka.backend.Auth.FeedbackFileResponse;
+import com.quokka.backend.Auth.ReportFileResponse;
 import com.quokka.backend.models.Feedback;
 import com.quokka.backend.models.FeedbackFile;
+import com.quokka.backend.models.Report;
+import com.quokka.backend.models.ReportFile;
 import com.quokka.backend.request.FeedbackAddRequest;
 import com.quokka.backend.request.FeedbackFileAddRequest;
 import com.quokka.backend.request.FeedbackFileEditRequest;
 import com.quokka.backend.service.FeedbackService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
@@ -23,9 +29,37 @@ public class FeedbackController {
         this.feedbackService = feedbackService;
     }
 
-    @GetMapping("/{id}")
-    public Feedback getFeedback(@PathVariable Long id){
-        return feedbackService.getFeedback(id);
+    @GetMapping("/get_feedback_by_report/{reportId}")
+    public ResponseEntity<FeedbackFileResponse> getFeedback(@PathVariable("reportId") Long reportId){
+
+        FeedbackFileResponse response = new FeedbackFileResponse();
+
+
+
+        Feedback feedback = feedbackService.findByReportId(reportId);
+
+
+
+        FeedbackFile feedbackFile = null;
+
+        if(feedback != null){
+            feedbackFile = feedbackService.getFeedbackFileById(feedback.getId());
+
+        }
+
+
+        if(feedbackFile != null){
+            response.setFileData(feedbackFile.getFileData());
+            response.setFeedbackId(feedback.getId());
+            response.setFeedbackDescription(feedback.getFeedbackDescription());
+            response.setFileName(feedbackFile.getFileName());
+            return ResponseEntity.ok(response);
+        }
+
+        else {
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
     }
 
     @GetMapping
@@ -34,9 +68,9 @@ public class FeedbackController {
     }
 
     @PostMapping
-    public boolean addFeedback(@RequestBody FeedbackAddRequest request){
-
-        return feedbackService.addFeedback(request);
+    public ResponseEntity<Long> addFeedback(@RequestBody FeedbackAddRequest request) {
+        Long feedbackId = feedbackService.addFeedback(request);
+        return ResponseEntity.ok(feedbackId);
     }
 
     @DeleteMapping("/{id}")

@@ -2,9 +2,7 @@ package com.quokka.backend.controller;
 
 import com.quokka.backend.Auth.AuthResponse;
 import com.quokka.backend.Auth.ReportFileResponse;
-import com.quokka.backend.models.Report;
-import com.quokka.backend.models.ReportFile;
-import com.quokka.backend.models.UserAccount;
+import com.quokka.backend.models.*;
 import com.quokka.backend.request.*;
 import com.quokka.backend.service.FeedbackService;
 import com.quokka.backend.service.ReportService;
@@ -71,6 +69,7 @@ public class ReportController {
         Report report = reportService.getActiveReport(studentId);
         ReportFile reportFile = reportService.getReportFileWithReportId(report.getId());
 
+
         ReportFileResponse response = new ReportFileResponse();
         if (reportFile != null) {
 
@@ -126,7 +125,6 @@ public class ReportController {
         System.out.println("file:" + reportFile);
 
         if (reportFile != null) {
-
 
             response.setReportDescription(reportFile.getReportDescription());
             response.setFileData(reportFile.getFileData());

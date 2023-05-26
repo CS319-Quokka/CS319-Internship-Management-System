@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ReportFileRepository extends JpaRepository<ReportFile, Long>{
+    ReportFile findByReportId(Long reportId);
 }

@@ -79,7 +79,7 @@ const App = () => {
         {
           path: "evaluation",
           element: 
-          <ReportEvaluation />
+          <ReportEvaluation userId = {userId} />
         },
         {
           path: "statistics",

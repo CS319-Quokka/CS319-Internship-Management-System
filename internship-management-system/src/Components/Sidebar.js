@@ -17,12 +17,15 @@ class Sidebar extends Component{
     this.state = "Profile"
 }    
 
+handleLogout = (title) => {
+  window.location.href = "/";
+  console.log("LOGOUT");
+};
+
 
   render(){
 
-    const handleLogout = (title) => {
-      console.log("LOGOUT");
-    };
+    
 
     const { userType } = this.props;
     console.log("USER TYPE",userType);

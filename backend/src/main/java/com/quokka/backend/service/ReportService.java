@@ -154,14 +154,13 @@ public class ReportService {
 
     public ReportFile getReportFileWithReportId(Long id) {
 
-        for (ReportFile reportFile : reportFileRepository.findAll()) {
+        ReportFile reportFile = reportFileRepository.findByReportId(id);
 
-            if (reportFile.getReport().getId() == id) {
-
-                return reportFile;
-            }
+        if (reportFile != null) {
+            return reportFile;
+        } else {
+            throw new RuntimeException("ReportFile not found for report ID: " + id);
         }
-        return null;
     }
 
 

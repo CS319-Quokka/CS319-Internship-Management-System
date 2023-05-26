@@ -53,12 +53,13 @@ public class FeedbackService {
         return feedbackRepository.findAll();
     }
 
-    public boolean addFeedback(FeedbackAddRequest request){
+    public Long addFeedback(FeedbackAddRequest request){
 
         Feedback newFeedback = new Feedback();
         Optional<Report> report = reportRepository.findById(request.getReportId());
         if(!report.isPresent()){
 
+            System.out.println("REPORT NOT FOUND");
             newFeedback.setReport(null);
         }
         else {
@@ -74,6 +75,7 @@ public class FeedbackService {
         }
         else if(instructorOpt.isPresent()){
 
+            System.out.println("ınstructor FOUND");
             newFeedback.setSender(instructorOpt.get());
         }
         else{
@@ -90,10 +92,25 @@ public class FeedbackService {
             newFeedback.setFeedbackDescription(request.getFeedbackDescription());
         }
 
+        System.out.println("FEEDBACK UPLOAD ");
         newFeedback.setId(request.getId());
         newFeedback.setUploadDate(request.getUploadDate());
         feedbackRepository.save(newFeedback);
-        return true;
+        return newFeedback.getId();
+    }
+    public Feedback findByReportId(Long reportId) {
+        System.out.println("FEEDBACK ARANIYORR: " + reportId);
+
+
+        Optional<Feedback> feedback = feedbackRepository.findByReport_Id(reportId);
+
+        System.out.println("feedback: " + feedback.get());
+
+
+        if(!feedback.isPresent()){
+            return feedback.get();
+        }
+        return null;
     }
 
     public boolean removeAllFeedbacks(){
@@ -169,6 +186,7 @@ public class FeedbackService {
 
         try{
 
+            System.out.println("came to the feedback");
             FeedbackFile newFeedbackFile = new FeedbackFile();
             Optional<Feedback> feedbackOpt = feedbackRepository.findById(request.getFeedbackId());
             if(!feedbackOpt.isPresent()){

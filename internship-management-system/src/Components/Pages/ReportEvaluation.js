@@ -88,6 +88,7 @@ const [link,setLink] = useState("");
 const [links,setLinks] = useState([]);
 const [reportFile,setReportFile] = useState(null)
 const [reportHistory,setReportHistory] = useState([])
+const [feedbackHistory,setFeedbackHistory] = useState([])
 const userContext = useContext(UserContext);
 
 
@@ -151,8 +152,6 @@ const getReportFile = async (id, reports,index) => {
     const response = await axios.get(`http://localhost:8080/report/file/${id}`);
     const reportFile = response.data;
 
-
-
     
 
     reports.push({
@@ -168,6 +167,27 @@ const getReportFile = async (id, reports,index) => {
     links.push(link)
   } catch (error) {
     console.error("Failed to fetch report file: ", error);
+  }
+    
+};
+
+const getFeedbackFile = async (id, feedbacks) => {
+  try {
+
+    const response = await axios.get(`http://localhost:8080/feedback/get_feedback_by_report/${id}`);
+    const feedbackFile = response.data;
+    
+    console.log("feedback data:", feedbackFile)
+
+    feedbacks.push({
+      fileName: feedbackFile.fileName,
+      description:feedbackFile.reportDescription,
+      fileData:feedbackFile.fileData
+    });
+
+   
+  } catch (error) {
+    console.error("Failed to fetch feedback file: ", error);
   }
     
 };
@@ -188,11 +208,14 @@ const getAllReports = async () => {
 
     var allReports = [];
 
+    var allFeedbacks = [];
+
     //get every report except the last one (report history)
     for (var i = 0; i < info.length ; i++) {
       console.log(i, "th report: ", info[i].id);
       reportIdList.push(info[i].id)
       getReportFile(reportIdList[i],allReports,i)
+      getFeedbackFile(reportIdList[i],allFeedbacks)
      
     }
 
@@ -209,6 +232,7 @@ const getAllReports = async () => {
     console.log("ALL REPOS:", allReports)
     
     setReportHistory(allReports)
+    setFeedbackHistory(allFeedbacks)
 
     // const reports = allReports.map((report,index) => ({
     //   revisionCount: index + 1,
@@ -289,28 +313,7 @@ const FileUpload = () => {
   const handleFeedbackIdChange = (event) => {
     setFeedbackId(event.target.value);
   };
-  const handleUpload = () => {
-    const formData = new FormData();
-    formData.append('studentId', studentId);
-    formData.append('fileData', selectedFile);
-    formData.append('feedbackDescription', "asd");
-    formData.append('feedbackId', feedbackId);
-    axios.post("http://localhost:8080/feedback/file",
-        formData,
-        {
-            headers: {
-                "Content-Type": "multipart/form-data",
-            },
-        })  //????
-      .then((response) => {
-        console.log("success");
-        console.log(response.data);
-      })
-      .catch((error) => {
-        // Handle error
-        console.error(error);
-      });
-  };
+
 }
 function TextareaValidator() {
   const [italic, setItalic] = React.useState(false);
@@ -389,8 +392,6 @@ function TextareaValidator() {
 function FormDialog(props) {
   const [open, setOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
-  const [buttonName,setButtonName] = useState("");
-    
   const [isSatisfactory, setIsSatisfactory] = useState(false);
 
   useEffect(() => {
@@ -400,14 +401,7 @@ function FormDialog(props) {
         const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
         console.log("reports:", response.data.length);
 
-        const numOfReport = response.data.length;
-        if(numOfReport == 0){
-          setButtonName("Create Submission")
-        }
-
-        else{
-          setButtonName("Revision Required")
-        }
+       
       } catch (error) {
         console.error(error);
       }
@@ -491,7 +485,7 @@ function FormDialog(props) {
             variant={isSatisfactory ? 'contained' : 'outlined'}
             color="secondary"
             onClick={handleRevisionRequiredClick}
-          > {buttonName}</Button>
+          >Revision Required</Button>
           {isSatisfactory && (
             <div>
               <Typography>Enter the due date for the resubmission.</Typography>
@@ -582,7 +576,9 @@ function DateComponent() {
         isButtonClicked: false,
         currentReport: "",
         currentComment: "",
-        fileData:null
+        currentFile: null,
+        fileData:null,
+        reportId:null
       };
       this.downloadCurrent = this.downloadCurrent.bind(this);
     }
@@ -662,7 +658,8 @@ function DateComponent() {
         this.setState({
           currentReport: info2.fileName,
           currentComment: info2.reportDescription,
-          fileData:info2.fileData
+          fileData:info2.fileData,
+          reportId:info2.reportId
         }, () => {
           console.log("repo:",this.state.currentReport);
           console.log("commenti:",this.state.currentComment);
@@ -675,6 +672,63 @@ function DateComponent() {
         console.log(error);
       }
     };
+
+    handleFileChange = (event) => {
+      const file = event.target.files[0];
+      this.setState({currentFile:file})
+    };
+
+    sendFeedback = async (event) => {
+
+
+      event.preventDefault();
+      const feedbackData = {
+        senderId: this.props.userId,
+        reportId: this.state.reportId,
+        feedbackDescription: "asd",
+        uploadDate: new Date().toISOString(), // Set the appropriate date format
+      };
+    
+      axios.post("http://localhost:8080/feedback", feedbackData)
+        .then((response) => {
+          console.log("Feedback created successfully");
+          console.log( "feedback: ",response.data);
+    
+          const feedbackId = response.data;
+          
+    
+          const formData = new FormData();
+          formData.append('studentId', this.state.studentId);
+          console.log("student id:", this.state.studentId)
+          formData.append('fileData', this.state.currentFile);
+          console.log("file:", this.state.currentFile)
+          formData.append('feedbackDescription', "asd");
+          console.log("feedback id:",feedbackId)
+          formData.append('feedbackId', feedbackId);
+    
+          axios.post("http://localhost:8080/feedback/file", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          })
+            .then((response) => {
+              console.log("File uploaded successfully");
+              console.log(response.data);
+            })
+            .catch((error) => {
+              // Handle error
+              console.error(error);
+            });
+        })
+        .catch((error) => {
+          // Handle error
+          console.error(error);
+        });
+      
+    };
+    
+  
+   
     
 
   
@@ -738,10 +792,25 @@ function DateComponent() {
             <div className="annotatedupload">
               <h2>Upload annotated feedback here: </h2>
               <FileUploadIcon />
-              <Button variant="contained" component="label">
+              <Button variant="contained" hidden onChange={this.handleFileChange} component="label">
                 Upload File
                 <input type="file" hidden />
               </Button>
+              {this.state.currentFile && (
+              <div>
+                <h2>Selected File:</h2>
+                <p>{this.state.currentFile.name}</p>
+                <p>Size: {this.state.currentFile.size} bytes</p>
+                <p>Type: {this.state.currentFile.type}</p>
+                {/* Additional information or display logic */}
+                <Button
+                onClick={this.sendFeedback}
+                variant='contained'
+                color="success"
+                sx={{ marginRight: '10px' }}
+              > Send feedback </Button>
+              </div>
+            )}
             </div>
           </div>
         </div>

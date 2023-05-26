@@ -174,7 +174,6 @@ const DragDropFiles = (props) => {
 
     console.log("MESSAGE: ", props.message)
 
-    formData.append("reportDescription", "emreReport1"); // Replace reportDescription with the actual report description
     formData.append("studentId", userId); // Replace studentId with the actual student ID
     formData.append("reportId", reportId); // Replace reportId with the actual report ID
     formData.append("fileData", file);
