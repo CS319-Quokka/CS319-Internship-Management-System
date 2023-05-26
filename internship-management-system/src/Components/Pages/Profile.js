@@ -60,7 +60,7 @@ function FormDialog(props) {
         formData.append(newPassword);
         formData.append(confirmPassword);
         const response = axios.patch(
-            `http://localhost:8080/account/${id}`,
+            `http://localhost:8080/account/${props.id}`,
             formData,
             )
         if (response === -3) {
@@ -233,7 +233,7 @@ class Profile extends Component {
                             <img className='profilePic' src={pic} alt="Profile"/>
                             <p><em>{this.state.userType}</em></p><br/>
 
-                            <FormDialog onConfirm={this.handleConfirm}/>
+                            <FormDialog id = {this.props.userId} onConfirm={this.handleConfirm}/>
                             <br></br>
                         </div>
 
