@@ -407,6 +407,7 @@ function FormDialog(props) {
   const [open, setOpen] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [isSatisfactory, setIsSatisfactory] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
 
   useEffect(() => {
     const getInformation = async () => {
@@ -428,10 +429,13 @@ function FormDialog(props) {
   const handleSatisfactoryClick = () => {
     setIsSatisfactory(false);
   };
+  const handleRevisionRequiredClick =  () => {
 
-  const handleRevisionRequiredClick = () => {
+
     setIsSatisfactory(true);
+   
   };
+
   const handleIsClicked = () => {
       setIsClicked(true);
   }
@@ -447,9 +451,34 @@ function FormDialog(props) {
     props.setButtonClicked(false);
   };
   const handleSubmit = () => {
-      setOpen(false);
+      
+
+      console.log("Student id: ", props.studentId, "Deadline:", selectedDate)
+      const reportData = {
+        studentId: props.studentId,
+        deadline: selectedDate
+      };
+  
+    
+      axios.post("http://localhost:8080/report", reportData)
+        .then((response) => {
+          console.log("Report created successfully");
+          console.log( "report: ",response.data);
+    
+         
+        })
+        .catch((error) => {
+          // Handle error
+          console.error(error);
+        });
+
+        setOpen(false);
+      
   }
 
+  const handleDateSelection = (date) => {
+    setSelectedDate(date);
+  };
 
   return (
 
@@ -503,7 +532,7 @@ function FormDialog(props) {
           {isSatisfactory && (
             <div>
               <Typography>Enter the due date for the resubmission.</Typography>
-              <DateComponent />
+              <DateComponent onSelectDate={handleDateSelection}/>
             </div>
           )}
           <hr></hr>
@@ -798,6 +827,7 @@ function DateComponent() {
             </Typography>
             <Typography>To enter the student's grades, use the Grade Form</Typography>
             <FormDialog
+              studentId = {this.state.studentId}
               studentFirstName={this.state.studentFirstName}
               studentLastName={this.state.studentLastName}
               setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
