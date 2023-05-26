@@ -140,7 +140,6 @@ public class AccountService {
 
         UserAccount foundUser = accountOpt.get();
         foundUser.setPassword(request.getNewPassword());
-
         accountRepository.save(foundUser);
         return 1;
     }

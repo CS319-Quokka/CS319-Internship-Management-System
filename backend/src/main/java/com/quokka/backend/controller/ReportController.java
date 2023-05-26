@@ -140,18 +140,11 @@ public class ReportController {
 
     }
 
-
-
-
     @GetMapping("/file")
     public Stream<ReportFile> getAllReportFiles(){
 
         return reportService.getAllReportFiles();
     }
-
-
-
-
 
     @DeleteMapping
     public boolean removeAllReports(){
