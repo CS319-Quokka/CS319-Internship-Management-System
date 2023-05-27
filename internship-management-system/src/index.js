@@ -59,15 +59,15 @@ const App = () => {
         },
         {
           path: "studentnotifications",
-          element: <StudentNotifications />,
+          element: <StudentNotifications userId = {userId}/>, // new
         },
         {
           path: "instructornotifications",
-          element: <InstructorNotifications />,
+          element: <InstructorNotifications userId = {userId} />, // new
         },
         {
           path: "announcements",
-          element: <Announcements />,
+          element: <Announcements userId = {userId}/>, // new
         },
         {
           path: "reports",
