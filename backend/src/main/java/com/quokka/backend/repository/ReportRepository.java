@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface ReportRepository extends JpaRepository<Report,Long> {
-    Optional<List<Report>> findReportsByStudentId(Long studentId);
+    Optional<List<Report>> findByStudentId(Long studentId);
 
 }

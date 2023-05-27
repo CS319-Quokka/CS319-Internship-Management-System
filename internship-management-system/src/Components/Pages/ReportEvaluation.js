@@ -33,8 +33,6 @@ import CheckIcon from '@mui/icons-material/Check';
 import Stack from '@mui/material/Stack';
 
 
-
-
 const statusOptions = ["Submitted", 
                        "Assigned to Grader",
                        "Under Evaluation", 
@@ -211,7 +209,7 @@ const getAllReports = async () => {
   try {
     const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
     const info = response.data;
-    console.log("REPORTS: ", info);
+    console.log("REPORTS: ", info[0]);
 
 
     const response2 = await axios.get(`http://localhost:8080/report/file/active/${studentId}`);
@@ -614,7 +612,7 @@ function FormDialogB(props) {
                     {isSatisfactoryB && (
                         <div>
                             <Typography>Enter the due date for the resubmission.</Typography>
-                            <DateComponent/>
+                            <DateComponent selectedDate = {selectedDate} setSelectedDate = {handleDateSelection}/>
                         </div>
                     )}
                 </DialogContent>
@@ -820,12 +818,36 @@ function FormDialogC(props){
         </div>
     );
 }
-function DateComponent() {
-    return (
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker label="Due Date" />
-      </LocalizationProvider>
-    );
+function DateComponent(props) {
+  const [error, setError] = React.useState(null);
+
+  const handleDateChange = (date) => {
+    
+    if(date.isBefore(new Date(), 'day')){
+      setError('Selected date cannot be before today');
+  } else {
+      props.setSelectedDate(date);
+      setError(null);
+      console.log(date);
+  }
+    console.log(date); // you can see the selected date in the console
+};
+
+return (
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DatePicker 
+          label="Due Date" 
+          value={props.selectedDate}
+          onChange={handleDateChange}
+          renderInput={(params) => <TextField {...params} />}
+      />
+      {error && (
+          <Box sx={{ mt: 2 }}>
+              <Alert severity="error">{error}</Alert>
+          </Box>
+      )}
+  </LocalizationProvider>
+);
 }
   class ReportEvaluation extends Component {
     constructor(props) {

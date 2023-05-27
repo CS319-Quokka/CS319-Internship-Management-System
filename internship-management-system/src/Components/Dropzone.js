@@ -177,10 +177,15 @@ const DragDropFiles = (props) => {
 
     console.log("MESSAGE: ", props.message)
 
+    let uploadDate = new Date().toISOString();
+    console.log("DATE:", uploadDate)
+
     formData.append("studentId", userId); // Replace studentId with the actual student ID
     formData.append("reportId", reportId); // Replace reportId with the actual report ID
     formData.append("fileData", file);
     formData.append("reportDescription",props.message)
+    formData.append("uploadDate", uploadDate)
+
 
       try {
         const response = await axios.post(
@@ -199,7 +204,12 @@ const DragDropFiles = (props) => {
       } catch (error) {
         // Handle error
         console.log("fail");
-        console.error(error);
+        if (error.response) {
+          console.log('Error status', error.response.status);
+          console.log('Error details', error.response.data);
+      } else {
+          console.error(error);
+      }
       }
     }
   };
@@ -214,7 +224,7 @@ const DragDropFiles = (props) => {
               <h2>Uploading the following file:</h2>
               <p>{file.name}</p>
               <br></br>
-              <TextareaValidator/>
+              <TextareaValidator setMessage = {props.setMessage}/>
 
         {/* <input
           type="text"

@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
 @Data
 @Getter
 @Setter
@@ -16,5 +18,6 @@ public class ReportFileResponse {
     private String reportDescription;
     private Long reportId;
     private String fileName;
+    private Instant uploadDate;
 
 }

@@ -87,18 +87,14 @@ public class ReportService {
 
     public List<Report> getAllReportsByStudentId(Long studentId) {
 
-        System.out.println("1");
-        List<Report> reports = new ArrayList<Report>();
-        for (Report report : reportRepository.findAll()) {
+        Optional<List<Report>> reports = reportRepository.findByStudentId(studentId);
 
-            System.out.println("r: "+report);
-            if (report.getStudent().getId() == studentId) {
-
-                reports.add(report);
-            }
+        if(!reports.isPresent()){
+            return null;
         }
-        System.out.println("2 " + reports);
-        return reports;
+
+
+        return reports.get();
     }
 
     public boolean removeAllReports() {
@@ -165,15 +161,23 @@ public class ReportService {
 
     public Report getActiveReport(Long studentId) {
 
-        List<Report> reports = new ArrayList<Report>();
-        for (Report report : reportRepository.findAll()) {
 
-            if (report.getStudent().getId() == studentId) {
+        Optional<List<Report>> reports = reportRepository.findByStudentId(studentId);
 
-                reports.add(report);
-            }
+        System.out.println("buldu");
+
+        if(!reports.isPresent()){
+            return null;
         }
-        return reports.get(reports.size()-1);
+
+        if(reports.get().size() == 1){
+            return reports.get().get(0);
+        }
+
+        int lastIndex = reports.get().size()-1;
+        System.out.println("2:" +lastIndex);
+        System.out.println("3:" + (reports.get().get(lastIndex)));
+        return reports.get().get(lastIndex);
     }
 
 
@@ -185,15 +189,19 @@ public class ReportService {
 
     public boolean addReportFile(ReportFileAddRequest request){
 
+        System.out.println("add file: ");
         if (request == null) {
+
 
             return false;
         }
 
         try {
 
+            System.out.println("1: ");
             ReportFile reportFile = new ReportFile();
             Optional<Report> reportOpt = reportRepository.findById(request.getReportId());
+            System.out.println("2: ");
             if(!reportOpt.isPresent()){
 
                 reportFile.setReport(null);
@@ -202,6 +210,10 @@ public class ReportService {
 
                 reportFile.setReport(reportOpt.get());
                 reportFile.setReportDescription(request.getReportDescription());
+                System.out.println("here: ");
+                reportFile.setUploadDate(request.getUploadDate());
+                reportOpt.get().setUploadDate(request.getUploadDate());
+                System.out.println("ondan deil: ");
             }
 
             if(request.getFileData() == null){

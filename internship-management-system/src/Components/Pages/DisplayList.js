@@ -162,9 +162,9 @@ class DisplayList extends Component {
                     <li className="list-item">
 
                       <Link
-                          /*to = "/evaluation" onClick={this.selectUser(item.id)}
+                          to = "/evaluation" onClick={this.selectUser(item.id)}
 
-                           */ >
+                           >
                         <div className="row">
                             {displayFields.map((field, index) => (
                             <div className="value">{item[field]}</div>
