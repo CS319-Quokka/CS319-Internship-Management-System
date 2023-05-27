@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -135,6 +136,9 @@ public class AnnouncementService {
 
             System.out.println("Show announcements for instructor: " + instructor.getUserAccount().getLastName() );
 
+            announcements.addAll(announcementRepository.findBySenderRoleAndSenderId( instructor.getRole(),
+                                                                                     instructor.getId() ) );
+
             List<AdministrativeAssistant> administrativeAssistants =
                     userManagementService.getAllAdministrativeAssistants(Optional.empty(),
                             instructor.getUserAccount().getDepartment().describeConstable());
@@ -162,6 +166,8 @@ public class AnnouncementService {
                                                             coordinator.getId(),
                                                             instructor.getUserAccount().getDepartment() ));
             }
+
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
 
             return announcements;
         }
