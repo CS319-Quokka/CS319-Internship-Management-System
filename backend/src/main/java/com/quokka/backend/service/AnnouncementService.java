@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -125,6 +126,8 @@ public class AnnouncementService {
 
             }
 
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
+
             return announcements;
         }
         else if( userRole.get().equals("Instructor") ) {
@@ -134,6 +137,9 @@ public class AnnouncementService {
             }
 
             System.out.println("Show announcements for instructor: " + instructor.getUserAccount().getLastName() );
+
+            announcements.addAll(announcementRepository.findBySenderRoleAndSenderId( instructor.getRole(),
+                                                                                     instructor.getId() ) );
 
             List<AdministrativeAssistant> administrativeAssistants =
                     userManagementService.getAllAdministrativeAssistants(Optional.empty(),
@@ -163,6 +169,8 @@ public class AnnouncementService {
                                                             instructor.getUserAccount().getDepartment() ));
             }
 
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
+
             return announcements;
         }
         else if( userRole.get().equals("Teaching Assistant") ) {
@@ -171,6 +179,9 @@ public class AnnouncementService {
                 return null;
                 //throw new IllegalStateException("Teaching Assistant not found");
             }
+
+            announcements.addAll(announcementRepository.findBySenderRoleAndSenderId( teachingAssistant.getRole(),
+                    teachingAssistant.getId() ) );
 
             List<AdministrativeAssistant> administrativeAssistants =
                     userManagementService.getAllAdministrativeAssistants(Optional.empty(),
@@ -202,6 +213,7 @@ public class AnnouncementService {
                         teachingAssistant.getUserAccount().getDepartment() ) );
             }
 
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
             return announcements;
         }
         else if( userRole.get().equals("Administrative Assistant") ) {
@@ -241,6 +253,8 @@ public class AnnouncementService {
                         administrativeAssistant.getUserAccount().getDepartment() ) );
             }
 
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
+
             return announcements;
         }
         else if( userRole.get().equals("Summer Training Coordinator") ) {
@@ -277,6 +291,8 @@ public class AnnouncementService {
                         otherCoordinator.getId(),
                         coordinator.getUserAccount().getDepartment() ) );
             }
+
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
 
             return announcements;
         }
