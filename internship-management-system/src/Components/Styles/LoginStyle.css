@@ -8,7 +8,9 @@
   width: 25%;
   border-radius: 15px;
   left: 37.5%;
-  top: 20%; 
+  top: 20%;
+  box-shadow: 3px 6px 8px -6px black;
+
 
 }
 

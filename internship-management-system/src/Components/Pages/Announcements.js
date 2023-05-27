@@ -1,10 +1,9 @@
-import React, {Component, useState, handleChange, useEffect} from 'react'
-import axios from 'axios';
-import '../Styles/ReportEvaluation.css'
+import React, {Component} from 'react'
+import '../Styles/Notifications.css'
+import { AnnouncementData } from '../NotificationData'
+import {InstructorNotifData} from '../NotificationData'
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import DownloadIcon from '@mui/icons-material/Download'
 import Box from '@mui/joy/Box';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
@@ -16,16 +15,35 @@ import FormatBold from '@mui/icons-material/FormatBold';
 import FormatItalic from '@mui/icons-material/FormatItalic';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import Check from '@mui/icons-material/Check';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
+function AnnouncementList() {
+    return (
+        <ul>
+            {AnnouncementData.map(announcement => (
+                <li key={announcement.date}>
+                    <h2>From: {announcement.poster}</h2>
+                    <textarea readOnly>{announcement.message}</textarea>
+                    <h2>{announcement.date}</h2>
+                    <hr></hr>
+                </li>
+            ))}
+        </ul>
+    );
+}
 function TextareaValidator() {
     const [italic, setItalic] = React.useState(false);
     const [fontWeight, setFontWeight] = React.useState('normal');
     const [anchorEl, setAnchorEl] = React.useState(null);
     return (
         <FormControl>
-            <FormLabel>Feedback comments</FormLabel>
+            <FormLabel>New Announcement</FormLabel>
             <Textarea
-                placeholder="Type your feedback comments here..."
+                placeholder="Type your message here..."
                 minRows={3}
                 endDecorator={
                     <Box
@@ -79,7 +97,7 @@ function TextareaValidator() {
                         >
                             <FormatItalic />
                         </IconButton>
-                        <Button sx={{ ml: 'auto' }}>Send</Button>
+
                     </Box>
                 }
                 sx={{
@@ -91,44 +109,66 @@ function TextareaValidator() {
         </FormControl>
     );
 }
-const downloadReport = () => {
-    const link = document.createElement("a");
-    link.download = `report.txt`;
-    link.href = "./report.txt";
-    link.click();
+
+function FormDialog() {
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    return (
+        <div>
+            <Button variant="outlined" onClick={handleClickOpen}>
+                Make Announcement
+            </Button>
+            <Dialog open={open} onClose={handleClose}>
+                <DialogTitle>Announcement</DialogTitle>
+                <DialogContent>
+                    <TextareaValidator/>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>Post</Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
 }
-class TAfeedback extends TAfeedback{
+
+
+
+class Announcements extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            reportName: 'reportidk.txt',
-            studentComment: ':))))))))'
-        }
+        this.state ={}
     }
 
     render(){
         return(
-            <div className="page">
-                <div className="section">
+            <div className='maincontainer-notif'>
+                <div className='admin'>
+                    <h1>📢</h1>
 
-                    <p>The student's submission:</p>
-                    <IconButton aria-label="download" onClick={downloadReport}>
-                        <DownloadIcon/>
-                    </IconButton>
-                    <Button variant="text" onClick={downloadReport} style={{textTransform: 'none'}} size="large">{this.state.reportName}</Button>
-                    <Typography>Student's comments:</Typography>
-                    <textarea readOnly>{this.state.studentComment}</textarea>
+                    <br></br>
+                    <h1>ANNOUNCEMENTS <hr></hr> <FormDialog/> </h1>
 
+                    <br></br>
+                    <hr></hr>
+                    <div className='announcementList'>
+                        <AnnouncementList/>
+                    </div>
                 </div>
 
+
             </div>
-        )
 
-    }
-        
-
-    
+        )}
 
 }
 
-export default TAfeedback
+export default Announcements

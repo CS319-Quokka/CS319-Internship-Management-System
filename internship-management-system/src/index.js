@@ -19,10 +19,10 @@ import StudentOperations from "./Components/Pages/StudentOperations";
 import ManageUsers from "./Components/Pages/ManageUsers";
 import Sidebar from "./Components/Sidebar";
 import FAQ from "./Components/Pages/FAQ"
-import AdministrativeAssistantNotifications from "./Components/Pages/AdministrativeAssistantNotifications";
+import Announcements from "./Components/Pages/Announcements";
+import TeachingAssistantFeedback from "./Components/Pages/TeachingAssistantFeedback";
 import UserProvider , { UserContext } from './Components/UserContext';
 import NotFoundPage from "./Components/NotFoundPage";
-
 import "./App.css";
 //import { useNavigate } from "react-router-dom";
 
@@ -66,8 +66,8 @@ const App = () => {
           element: <InstructorNotifications />,
         },
         {
-          path: "adminassnotifications",
-          element: <AdministrativeAssistantNotifications />,
+          path: "announcements",
+          element: <Announcements />,
         },
         {
           path: "reports",
@@ -106,6 +106,10 @@ const App = () => {
         {
           path: 'faq',
           element: <FAQ />
+        },
+        {
+          path: 'teachingassistantfeedback',
+          element: <TeachingAssistantFeedback />
         },
         {
           path: "*",

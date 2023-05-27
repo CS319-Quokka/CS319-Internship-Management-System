@@ -179,11 +179,11 @@ class Profile extends Component {
         console.log(info);
         console.log("ROLE:",info.role);
 
-        if(info.role === "instructor"){
+        if(info.role === "Instructor"){
             console.log("grader");
         }
 
-        if(info.role === "student"){
+        if(info.role === "Student"){
             const instructorID =  info.instructor.userAccount.id;
             const response2 = await axios.get(`http://localhost:8080/account/get_account/${instructorID}`);
             const instructorInfo = response2.data;
@@ -223,23 +223,15 @@ class Profile extends Component {
         const {userType} = this.state;
         return (
             <div className='page'>
-
                 <div className='container'>
-
-
                     <div className='user-container'>
                         <h1><strong>{this.state.firstName} {this.state.lastName}</strong></h1>
                         <br></br>
-
-
                         <img className='profilePic' src={pic} alt="Profile"/>
                         <p><em>{this.state.userType}</em></p><br/>
-
                         <FormDialog id = {this.props.userId} onConfirm={this.handleConfirm}/>
                         <br></br>
                     </div>
-
-
                     <div className='right-containers'>
 
                         <div className="info-container">
@@ -262,7 +254,7 @@ class Profile extends Component {
 
                         </div>
 
-                        {userType === 'student' && (
+                        {userType === 'Student' && (
                             <div className="additionalInfo">
                                 <div className="row">
                                     <p className="label">Course Taken:</p>
@@ -287,7 +279,7 @@ class Profile extends Component {
                             </div>
                         )}
 
-                        {userType === 'instructor' && (
+                        {userType === 'Instructor' && (
 
                             <div class = "additionalInfo">
                                 <div class="row">
@@ -295,13 +287,8 @@ class Profile extends Component {
                                     <p className="value">{this.state.numOfStudents}</p>
                                 </div>
                             </div>
-
                         )}
-
                     </div>
-
-
-
                 </div>
             </div>
         )

@@ -46,6 +46,8 @@
   top:10%;
   width: 80%;
   left: 10%;
+  box-shadow: 3px 6px 8px -6px black;
+
 }
 .file-name{
   position: relative;
