@@ -1,23 +1,59 @@
 .page{
-    position: absolute;
     background-color: hwb(207 91% 0%);
     justify-content: center;
     align-items: center;
-    overflow: auto;
     height: 100vh;
     width: 85%;
     left: 15%;
 }
-.page .section{
-    width:40%;
-    left: 55%;
+.page .viewandfeedback{
+    width:70%;
+    left: 15%;
     height:75vh;
-    background-color: white;
     position: relative;
-    padding:1%;
     top: 15%;
     border-radius: 16px;
+    box-shadow: 3px 6px 8px -6px black;
+    background-color: white;
+
+}
+.page .viewreport{
+    position: relative;
+    width: 50%;
+    height: 100%;
     padding:2%;
+}
+.viewreport textarea{
+    position: relative;
+    width: 80%;
+    left: 5%;
+    color: rgb(10, 10, 10);
+    font-family: Arial, Helvetica, sans-serif;
+    height: 20%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    font-size: 1.7vh;
+    border-radius: 15px;
+    text-align: left;
+    resize: none;
+    align-items: center;
 
-
+}
+.annotated{
+    position: relative;
+    top: 20%;
+    height: 20vh;
+    border-radius: 16px;
+    width: 100%;
+    padding: 2%;
+    font-size: 2.2vh;
+}
+.tafeedback{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 50%;
+    padding: 2%;
 }

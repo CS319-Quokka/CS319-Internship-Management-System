@@ -20,6 +20,7 @@ class Sidebar extends Component{
 handleLogout = (title) => {
   window.location.href = "/";
   console.log("LOGOUT");
+  this.state = "Profile";
 };
 
 
