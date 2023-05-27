@@ -21,34 +21,23 @@ function InstructorOptionsList({ methods }) {
 
     const fetchInstructorOptions = async () => {
         try {
-            // Make an API call or database query to retrieve the options
-			console.log("methods.getValues:" , methods.getValues("department"));
+
             const response = await axios.get(`http://localhost:8080/instructor?department=${department}`); //link to the API
             const instructors = response.data;
 
-			console.log(instructors);
-
-			 // Now fetch each instructor's UserAccount data
 			 const instructorOptions = await Promise.all(instructors.map(async (instructor) => {
 				console.log("instructor.userAccount.id: ", instructor.userAccount.id);
 				const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${instructor.userAccount.id}`);
 				const account = accountResponse.data;
-	
+
 				return {
 					value: instructor.id,
 					label: `${account.firstName} ${account.lastName}`,
 				};
 			}));
-	
-			// Return the options as an array
+
 			return instructorOptions;
 
-
-            // // Return the options as an array
-            // return data.map((instructor) => ({
-            //     value: instructor.id,
-            //     label: instructor.name,
-            // }));
         } catch (error) {
             throw new Error('Failed to fetch instructors.');
         }
@@ -81,23 +70,21 @@ function TaOptionsList({ methods }) {
 
     const fetchTaOptions = async () => {
         try {
-			console.log("methods.getValues:" , methods.getValues("department"));
+
             const response = await axios.get(`http://localhost:8080/teaching_assistant?department=${department}`); //link to the API
             const teachingAssistants = response.data;
 
-			console.log(teachingAssistants);
-			// Now fetch each instructor's UserAccount data
 			const teachingAssistantOptions = await Promise.all(teachingAssistants.map(async (teachingAssistant) => {
-				console.log("teachingAssistant.userAccount.id: ", teachingAssistant.userAccount.id);
+
 				const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${teachingAssistant.userAccount.id}`);
 				const account = accountResponse.data;
-	
+
 				return {
 					value: teachingAssistant.id,
 					label: `${account.firstName} ${account.lastName}`,
 				};
 			}));
-	
+
 			// Return the options as an array
 			return teachingAssistantOptions;
 
@@ -193,25 +180,20 @@ function ManageUsersAdd(props) {
     const addAccountResponse = await axios.post("http://localhost:8080/account", formData);
     if ( addAccountResponse.data.email !== formData.email) {
     	console.log("account with this email already exists");
-		// TODO: already has an account add new user role to account 
+		// TODO: already has an account add new user role to account
     }
     else {
-      
-      	console.log(addAccountResponse.data); // Handle the response if needed
 
       	console.log("User Account created successfully.");
-
-	  	
     }
 
 	const accountResponse = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);
 
 	const userData = {
-        accountId: accountResponse.data.id
-        // courseCode: selectedCode,
-		// instructorId: methods.get
-		// teachingAssistantId: methods.get
-		// companyName: methods.get
+        accountId: accountResponse.data.id,
+        courseCode: selectedCode,
+		instructorId: methods.get,
+		teachingAssistantId: methods.get
 	};
 
     if(selectedValue === "Administrative Assistant"){
@@ -245,17 +227,22 @@ function ManageUsersAdd(props) {
 		console.log(addTeachingAssistantResponse.data); // Handle the response if needed
 		console.log("Teaching Assistant added successfully.");
 		}
-	
+
 	}
 	else if(selectedValue === "Student"){
 
-        const formData = new FormData();
+        var courseCode = "CS299";
+        if(selectedCode === "2"){
+            courseCode = "CS399";
+        }
 
-        formData.append("companyName", methods.getValues("companyName"));
-        formData.append("courseCode", selectedCode);
-        formData.append("accountId", addAccountResponse.data.id);
-        formData.append("instructorId", methods.getValues("instructorId"));
-        formData.append("teachingAssistantId", methods.getValues("teachingAssistantId"));
+        const formData = {
+
+            accountId: accountResponse.data.id,
+            instructorId: methods.getValues("instructorId"),
+            teachingAssistantId: methods.getValues("teachingAssistantId"),
+            courseCode: courseCode
+        }
 
         const addStudentResponse = await axios.post("http://localhost:8080/student", formData);
         if (addStudentResponse.data.role !== formData.role) {
@@ -362,7 +349,7 @@ function ManageUsersAdd(props) {
                 </div>
 
          </div>
-        {selectedValue == "Student" && 
+        {selectedValue == "Student" &&
 			<div>
 
             <label className="input-label">

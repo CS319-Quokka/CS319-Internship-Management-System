@@ -262,6 +262,74 @@ public class UserManagementService {
         return true;
     }
 
+    public boolean removeUserById(Long id){
+
+        Optional<Student> studentOpt = studentRepository.findById(id);
+        Optional<TeachingAssistant> teachingAssistantOpt = teachingAssistantRepository.findById(id);
+        Optional<Instructor> instructorOpt = instructorRepository.findById(id);
+        Optional<SummerTrainingCoordinator> summerTrainingCoordinatorOpt = summerTrainingCoordinatorRepository.findById(id);
+        Optional<AdministrativeAssistant> administrativeAssistantOpt = administrativeAssistantRepository.findById(id);
+        if(studentOpt.isPresent()){
+
+            UserAccount userAccount = getAccountByUserID(id);
+            List<User> users = getProfilesByAccountId(userAccount.getId());
+            removeStudentByID(id);
+            if(!(users.size() > 1)){
+
+                accountService.deleteAccount(userAccount.getId());
+            }
+            return true;
+
+        } else if(teachingAssistantOpt.isPresent()){
+
+            UserAccount userAccount = getAccountByUserID(id);
+            List<User> users = getProfilesByAccountId(userAccount.getId());
+            removeTeachingAssistantByID(id);
+            if(!(users.size() > 1)){
+
+                accountService.deleteAccount(userAccount.getId());
+            }
+            return true;
+
+        } else if(instructorOpt.isPresent()){
+
+            UserAccount userAccount = getAccountByUserID(id);
+            List<User> users = getProfilesByAccountId(userAccount.getId());
+            removeInstructorByID(id);
+            if(!(users.size() > 1)){
+
+                accountService.deleteAccount(userAccount.getId());
+            }
+            return true;
+
+        } else if(summerTrainingCoordinatorOpt.isPresent()){
+
+            UserAccount userAccount = getAccountByUserID(id);
+            List<User> users = getProfilesByAccountId(userAccount.getId());
+            removeSummerTrainingCoordinatorByID(id);
+            if(!(users.size() > 1)){
+
+                accountService.deleteAccount(userAccount.getId());
+            }
+            return true;
+
+        } else if(administrativeAssistantOpt.isPresent()){
+
+            UserAccount userAccount = getAccountByUserID(id);
+            List<User> users = getProfilesByAccountId(userAccount.getId());
+            removeAdministrativeAssistantByID(id);
+            if(!(users.size() > 1)){
+
+                accountService.deleteAccount(userAccount.getId());
+            }
+            return true;
+
+        } else {
+
+            return false;
+        }
+    }
+
     public List<Student> getAllStudents(Optional<Long> userAccountId, Optional <Long> instructorId,
                                         Optional <Long> teachingAssistantId, Optional <String> department){
         if (userAccountId.isPresent() && department.isPresent()) {

@@ -135,6 +135,12 @@ public class UserManagementController {
         return userManagementService.removeAllAdministrativeAssistants();
     }
 
+    @DeleteMapping("/user/{id}")
+    public boolean removeUserByID(@PathVariable Long id){
+
+        return userManagementService.removeUserById(id);
+    }
+
     @GetMapping("/student")
     public List<Student> getAllStudents(@RequestParam Optional<Long> accountId,
                                         @RequestParam Optional<Long> instructorId,
