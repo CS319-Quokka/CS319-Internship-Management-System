@@ -101,7 +101,7 @@ const App = () => {
         },
         {
           path: "manage",
-          element: <ManageUsers />,
+          element: <ManageUsers userId = {userId}/>,
         },
         {
           path: 'faq',

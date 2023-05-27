@@ -19,10 +19,9 @@ const ITEM_HEIGHT = 48;
 
 
 function LongMenu(props) {
-  const options = [
-    'Reassign Instructor',
-    'Upload Company Evaluation Form'
-  ];
+  
+
+  const options = props.options ? props.options : [];
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -34,17 +33,14 @@ function LongMenu(props) {
   };
   
 
-  const handleOptionClick = (index) => {
-    // console.log("HERE AS: ", props.functionalities)
-    // const functionality = props.functionalities[index];
-    // if (functionality) {
-    //   console.log("EXEC: ", functionality)
-    //   functionality();
-    // }
-  
-    // Perform the common handleClose functionality
+
+  const handleOptionClick = (action) => {
+    action();
+    console.log("GETTING WITH:",props.id)
+    props.setId(props.id)
     handleClose();
-  };
+};
+
   return (
       <div>
         <IconButton
@@ -74,8 +70,8 @@ function LongMenu(props) {
             }}
         >
           {options.map((option,index) => (
-              <MenuItem key={option} onClick={() => handleOptionClick(index)}>
-                {option}
+              <MenuItem key={index} onClick={() => handleOptionClick(option.action)}>
+                {option.name}
               </MenuItem>
           ))}
         </Menu>
@@ -122,8 +118,9 @@ class DisplayList extends Component {
   };
   selectUser = (id) => {
     return () => {  // Return a function that will be called on click
-      console.log("SELECT USER");
+      
       this.context.setUserIdValue(id);
+      console.log("SELECT USER: ",this.context.userId);
     };
   }
   
@@ -194,8 +191,8 @@ class DisplayList extends Component {
                             <div id="options">
                                 {/*
                                 <button onClick={() => this.handleOptions(index)} className="icon-button">{<SlIcons.SlOptionsVertical />}</button>
-*/}
-                                <LongMenu functionalities = {this.props.functionalities} options = {this.props.options}
+*/}              
+                                <LongMenu setId = {this.selectUser} id = {item.id} functionalities = {this.props.functionalities} options = {this.props.options}
                                   /*  content={}*/
                                 />
                                 {/*

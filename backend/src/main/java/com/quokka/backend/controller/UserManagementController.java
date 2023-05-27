@@ -21,10 +21,13 @@ public class UserManagementController {
         this.userManagementService = userManagementService;
     }
 
+
+
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         return userManagementService.getUserById(id);
     }
+
 
     @GetMapping("/get_all_users/{id}")
     public List<User> getProfilesByAccountId(@PathVariable Long id) {
@@ -36,6 +39,8 @@ public class UserManagementController {
         }
         return usersList;
     }
+
+
 
     @PostMapping("/student")
     public Student addStudent(@RequestBody StudentAddRequest request){

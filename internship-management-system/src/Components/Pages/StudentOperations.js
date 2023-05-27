@@ -36,7 +36,7 @@ class StudentOperations extends Component{
         this.setState({ showChoices: newControllerValue });
     }
 
-    handleReassign(){
+    handleReassign = () =>{
       
         this.setState({
         showReassign:true
@@ -51,7 +51,7 @@ class StudentOperations extends Component{
     // };
 
     
-    handleCompanyForm(){
+    handleCompanyForm= () =>{
         console.log("bastı");
         this.setState({
             showCompanyForm:true
@@ -64,8 +64,15 @@ class StudentOperations extends Component{
       }
 
       options = [
-        'Reassign Instructor',
-        'Upload Company Evaluation Form'
+
+        {
+          name: 'Reassign Instructor',
+          action: this.handleReassign
+        }, 
+        {
+          name: 'Upload Company Evaluation Form',
+          action:  this.handleCompanyForm
+        }
     ];
 
     functionalities = [
