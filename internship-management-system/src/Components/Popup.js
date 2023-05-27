@@ -1,10 +1,12 @@
-import React ,{useState, useEffect} from "react";
+import React ,{useState, useEffect, useContext} from "react";
 import "./Styles/Popup.css"
 import Button from '@mui/material/Button';
 import axios from 'axios';
+import { UserContext } from './UserContext';
 
 
 const Popup = (props) => {
+  const userContext = useContext(UserContext);
 
   const [selectedValue, setSelectedValue] = useState("");
   const [selectedCode, setSelectedCode] = useState("");
@@ -27,7 +29,7 @@ const Popup = (props) => {
   };
 
   
-    console.log("here")
+    console.log("CURRENT ID:",userContext.userId )
 /*
     let courseSelection = null;
     if (selectedValue === "Student") {

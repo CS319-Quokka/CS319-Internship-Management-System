@@ -89,11 +89,11 @@ const App = () => {
         },
         {
           path: "students",
-          element: <StudentList userId = {userId}/>,
+          element: <StudentList userId = {userId}  />,
         },
         {
           path: "forms",
-          element: <StudentOperations />,
+          element: <StudentOperations userId = {userId} />,
         },
         {
           path: "graders",
@@ -101,7 +101,7 @@ const App = () => {
         },
         {
           path: "manage",
-          element: <ManageUsers />,
+          element: <ManageUsers userId = {userId}/>,
         },
         {
           path: 'faq',

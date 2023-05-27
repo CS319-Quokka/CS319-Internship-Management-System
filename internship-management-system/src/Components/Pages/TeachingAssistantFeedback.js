@@ -99,7 +99,9 @@ class TeachingAssistantFeedback extends Component{
         super(props)
         this.state = {
             currentReport: "",
-            currentComment: ""
+            currentComment: "",
+            firstName: "",
+            lastName: ""
         };
         this.downloadCurrent = this.downloadCurrent.bind(this);
     }
@@ -107,14 +109,11 @@ class TeachingAssistantFeedback extends Component{
     static contextType = UserContext;
     componentDidMount() {
 
-        console.log("STUDENT IDDDD:",this.context.userId)
-        const id = this.context.userId
+        const id = 3
 
-        this.setState({studentId:id})
+        this.setState({studentId: id})
         this.getCurrentStudent(id);
         this.getActiveReport(id);
-
-        console.log("WORKS AGA. ", this.state.fileData)
     }
 
     downloadCurrent = () =>{
@@ -122,7 +121,6 @@ class TeachingAssistantFeedback extends Component{
         const fileData = this.state.fileData
         const fileName = this.state.currentReport
 
-        console.log("data: ", fileData)
         if (typeof fileData !== "string" || !(/^[A-Za-z0-9+/=]*$/g.test(fileData))) {
             console.error("Invalid base64 string");
             return;
@@ -142,7 +140,6 @@ class TeachingAssistantFeedback extends Component{
         link.setAttribute('download', fileName); // Use the right file extension here
         document.body.appendChild(link);
         link.click();
-
     }
 
 
@@ -154,7 +151,6 @@ class TeachingAssistantFeedback extends Component{
 
             const response2 = await axios.get(`http://localhost:8080/${id}`);
             const studentInfo = response2.data;
-            console.log("ACTIVE STUDENT: ", studentInfo);
 
             this.setState({
                 studentFirstName: studentInfo.userAccount.firstName,
@@ -170,22 +166,24 @@ class TeachingAssistantFeedback extends Component{
 
     }
     getActiveReport = async () => {
-        const id = 4;
+        const id = 3;
 
         try {
             const response2 = await axios.get(`http://localhost:8080/report/file/active/${id}`);
             const info2 = response2.data;
-            console.log("ACTIVE REPORT: ", info2);
+
+            const response3 = await axios.get(`http://localhost:8080/get_account_by_user_id/${id}`);
+            const info3 = response3.data;
 
             this.setState({
                 currentReport: info2.fileName,
                 currentComment: info2.reportDescription,
                 fileData:info2.fileData,
-                reportId:info2.reportId
+                reportId:info2.reportId,
+                firstName: info3.firstName,
+                lastName: info3.lastName
             }, () => {
-                console.log("repo:",this.state.currentReport);
-                console.log("commenti:",this.state.currentComment);
-                //console.log("commenti:",this.state.fileData);
+
             });
         } catch (error) {
             console.log(error);
@@ -253,7 +251,7 @@ class TeachingAssistantFeedback extends Component{
             <div className="page">
                 <div className="viewandfeedback">
                     <div className="viewreport">
-                        <b>Viewing the summer training report of {} {}</b>
+                        <b>Viewing the summer training report of {this.state.firstName} {this.state.lastName}</b>
                         <hr></hr>
                         <Typography>Student's current submission:
                             <IconButton aria-label="download" onClick={() => this.downloadCurrent()}>

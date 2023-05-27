@@ -63,7 +63,6 @@ public class ReportController {
         return reportService.getAllReportsByStudentId(studentId);
     }
 
-
     @GetMapping("/file/active/{studentId}")
     public ResponseEntity<ReportFileResponse> getActiveReport(@PathVariable("studentId") Long studentId){
 
@@ -78,7 +77,6 @@ public class ReportController {
             response.setFileData(reportFile.getFileData());
             response.setFileName(reportFile.getFileName());
             response.setReportId(reportFile.getReport().getId());
-
             return ResponseEntity.ok(response);
         }
         else {
@@ -113,8 +111,6 @@ public class ReportController {
         ReportFileResponse response = new ReportFileResponse();
 
         ReportFile reportFile = reportService.getReportFileWithReportId(id);
-
-        System.out.println("file:" + reportFile);
 
         if (reportFile != null) {
 

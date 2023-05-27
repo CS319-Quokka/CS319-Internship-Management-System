@@ -10,6 +10,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { UserContext } from "../UserContext";
+import axios from 'axios';
 
 
 const ITEM_HEIGHT = 48;
@@ -22,7 +23,8 @@ class StudentOperations extends Component{
         this.state = {
           showChoices:false,
           showReassign:false,
-          showCompanyForm:false
+          showCompanyForm:false,
+          studentData: []
         };
         this.handleChoiceMenu = this.handleChoiceMenu.bind(this);
         this.handleCompanyForm = this.handleCompanyForm.bind(this);
@@ -31,28 +33,64 @@ class StudentOperations extends Component{
     }
 
     static contextType = UserContext;
+    componentDidMount() {
+      this.getAllStudents();
+  }
+
+
+
+    getAllStudents = async () =>{
+
+      const currentResponse = await axios.get(`http://localhost:8080/account/get_account/${this.props.userId}`);
+      const department = currentResponse.data.department;
+  
+      const response = await axios.get(`http://localhost:8080/student?department=${department}`);
+      const info = response.data;
+  
+      console.log("STUDENTS:",info);
+
+
+      var students = [];
+
+       for (var i = 0; i < info.length; i++) {
+
+        var fullName = info[i].userAccount.firstName + " " + info[i].userAccount.lastName;
+        var instructor = info[i].instructor.userAccount.firstName + " " +  info[i].instructor.userAccount.lastName;
+        var courseCode = info[i].courseCode;
+        var form = "Not Uploaded";
+        if(info[i].companyEvaluationForm != null){
+          form = "Uploaded"
+        }
+        var studentId = info[i].id;
+
+
+        students.push({
+          name: fullName,
+          class: courseCode,
+          instructor: instructor,
+          form:form,
+          id:studentId
+        });
+      }
+      console.log("ALL STUDİS:",students)
+      this.setState({studentData:students})
+  }
+
 
     handleChoiceMenu(newControllerValue) {
         this.setState({ showChoices: newControllerValue });
     }
 
-    handleReassign(){
+    handleReassign = () =>{
       
         this.setState({
         showReassign:true
     });
-    console.log( "REASSS")
-    }
-    // handleReassignAndSelectUser = (itemId) => {
-    //     const userId = this.context.userId;
-    //     console.log('Selected User ID:', userId);
-    //     this.handleReassign();
-    //    // this.selectUser(itemId);
-    // };
 
+    }
+  
     
-    handleCompanyForm(){
-        console.log("bastı");
+    handleCompanyForm= () =>{
         this.setState({
             showCompanyForm:true
         });
@@ -64,8 +102,15 @@ class StudentOperations extends Component{
       }
 
       options = [
-        'Reassign Instructor',
-        'Upload Company Evaluation Form'
+
+        {
+          name: 'Reassign Instructor',
+          action: this.handleReassign
+        }, 
+        {
+          name: 'Upload Company Evaluation Form',
+          action:  this.handleCompanyForm
+        }
     ];
 
     functionalities = [
@@ -75,11 +120,12 @@ class StudentOperations extends Component{
       render(){
         const {showCompanyForm} = this.state;
         const {showReassign} = this.state;
+        const {studentData} = this.state;
         return(
             <div className='page'>
 
 
-                <DisplayList functionalities = {this.functionalities}  options = {this.options}  data={StudentData} displayFields={['name', 'class', 'form','grader'] } setControllerState={this.handleChoiceMenu} />
+                <DisplayList functionalities = {this.functionalities}  options = {this.options}  data={studentData} displayFields={['name', 'class', 'form','instructor'] } setControllerState={this.handleChoiceMenu} />
 
 
            {showReassign &&<Popup name = "Reassign" className="popup" handleClose={this.handleClose}>
