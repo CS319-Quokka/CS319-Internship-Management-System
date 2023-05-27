@@ -32,6 +32,7 @@ function LongMenu(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
 
   const handleOptionClick = (index) => {
     // console.log("HERE AS: ", props.functionalities)
