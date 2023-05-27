@@ -300,8 +300,6 @@ class InstructorNotifications extends Component {
   }
 
   render(){
-    // const announcementNameList = this.state.announcementNameList;
-    // const notificationNameList = this.state.notificationNameList;
     const {announcementNameList, notificationNameList} = this.state;
     return(
       <div className='maincontainer-notif'>
@@ -325,6 +323,7 @@ class InstructorNotifications extends Component {
           <br></br>
           <hr></hr>
           <div className='announcementList'>
+          {/* // TODO REMOVE sender and add date */}
             <NotificationList link = {"/instructornotifications"} data={notificationNameList} displayFields={['sender','title', 'content']}/>          
           </div>
         </div>
