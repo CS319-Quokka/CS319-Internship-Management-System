@@ -149,7 +149,7 @@ export const SidebarData = [
 
     {
       title: "Student List",
-      path: "/teachingassistantfeedback",
+      path: "/students",
       icon: <AiIcons.AiOutlineUser />,
       cName: "nav-text",
     },

@@ -89,7 +89,7 @@ const App = () => {
         },
         {
           path: "students",
-          element: <StudentList userId = {userId}/>,
+          element: <StudentList userId = {userId}  />,
         },
         {
           path: "forms",

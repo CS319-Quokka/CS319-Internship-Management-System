@@ -142,7 +142,6 @@ class TeachingAssistantFeedback extends Component{
         link.setAttribute('download', fileName); // Use the right file extension here
         document.body.appendChild(link);
         link.click();
-
     }
 
 

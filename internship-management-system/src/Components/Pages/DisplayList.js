@@ -11,13 +11,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 
-
-
-
 const ITEM_HEIGHT = 48;
-
-
-
 function LongMenu(props) {
   
 
@@ -173,10 +167,8 @@ class DisplayList extends Component {
                   <React.Fragment key={index}>
                     <li className="list-item">
 
-                      <Link
-                          to = {this.props.link} onClick={this.selectUser(item.id)}
+                      <Link to = {this.props.link} onClick={this.selectUser(item.id)} >
 
-                           >
                         <div className="row">
                             {displayFields.map((field, index) => (
                             <div className="value">{item[field]}</div>
