@@ -89,7 +89,7 @@
     border-width: 0 0 1px 0; /* Draw only bottom border */
     border-color: #CCC;
 }
-.admin h1{
+.maincontainer-notif h1{
     position: relative;
     margin-left: 0;
 }

@@ -201,6 +201,12 @@ public class UserManagementController {
             return userManagementService.getAdministrativeAssistantByID(id);
     }
 
+    @GetMapping("/get_account_by_user_id/{userId}")
+    public UserAccount getAccountByUserId(@PathVariable Long userId){
+
+        return userManagementService.getAccountByUserID(userId);
+    }
+
     @PutMapping("/student/{id}")
     public Student editStudentByID(@PathVariable Long id, @RequestBody StudentEditRequest request){
         return userManagementService.editStudentByID(id, request);

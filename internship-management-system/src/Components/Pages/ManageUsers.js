@@ -23,7 +23,6 @@ class ManageUsers extends Component {
       userData:[]
     };
 
-    
     this.handleMenu = this.handleMenu.bind(this);
     this.handleChoiceMenu = this.handleChoiceMenu.bind(this);
     this.handleNewUserClick = this.handleNewUserClick.bind(this);
@@ -56,7 +55,7 @@ class ManageUsers extends Component {
 
         const profileResponse = await axios.get(`http://localhost:8080/get_all_users/${currentId}`);
         const profilesInfo = profileResponse.data;
-       
+
 
         for(let j = 0 ; j < profilesInfo.length ; j++) {
             const profile = profilesInfo[j];
@@ -145,7 +144,7 @@ options = [
   {
     name: 'Remove User',
     action: this.handleRemove
-  }, 
+  },
   {
     name: 'Edit User',
     action: this.handleEdit
@@ -166,7 +165,7 @@ options = [
         {console.log(showChoices)}
         {console.log("USER LISTESI YETO:", userData)}
         
-        <DisplayList options = {this.options} data={userData} displayFields={['name', 'role', 'department'] }isAdd = {true} tag = "Manage Users:" setControllerState={this.handleChoiceMenu} choice = 
+        <DisplayList options = {this.options} data={userData} displayFields={['name', 'role', 'department'] }isAdd = {true} tag = "Manage Users:" setControllerState={this.handleChoiceMenu} choice =
         
 
           {showChoices&& <div className="menu" id=  "choice-menu">

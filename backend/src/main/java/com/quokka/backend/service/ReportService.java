@@ -164,8 +164,6 @@ public class ReportService {
 
         Optional<List<Report>> reports = reportRepository.findByStudentId(studentId);
 
-        System.out.println("buldu");
-
         if(!reports.isPresent()){
             return null;
         }
@@ -175,8 +173,6 @@ public class ReportService {
         }
 
         int lastIndex = reports.get().size()-1;
-        System.out.println("2:" +lastIndex);
-        System.out.println("3:" + (reports.get().get(lastIndex)));
         return reports.get().get(lastIndex);
     }
 
@@ -189,7 +185,6 @@ public class ReportService {
 
     public boolean addReportFile(ReportFileAddRequest request){
 
-        System.out.println("add file: ");
         if (request == null) {
 
 
@@ -198,10 +193,8 @@ public class ReportService {
 
         try {
 
-            System.out.println("1: ");
             ReportFile reportFile = new ReportFile();
             Optional<Report> reportOpt = reportRepository.findById(request.getReportId());
-            System.out.println("2: ");
             if(!reportOpt.isPresent()){
 
                 reportFile.setReport(null);
@@ -210,10 +203,8 @@ public class ReportService {
 
                 reportFile.setReport(reportOpt.get());
                 reportFile.setReportDescription(request.getReportDescription());
-                System.out.println("here: ");
                 reportFile.setUploadDate(request.getUploadDate());
                 reportOpt.get().setUploadDate(request.getUploadDate());
-                System.out.println("ondan deil: ");
             }
 
             if(request.getFileData() == null){
@@ -233,8 +224,6 @@ public class ReportService {
             Student student = studentRepository.findById(request.getStudentId()).get();
             student.setStatus("Report is uploaded");
             studentRepository.save(student);
-
-            System.out.println("Status: " + studentRepository.findById(request.getStudentId()).get().getStatus());
             return true;
         } catch (IOException e) {
 

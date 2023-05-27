@@ -414,6 +414,39 @@ public class UserManagementService {
         return administrativeAssistantRepository.findById(id).orElse(null);
     }
 
+    public UserAccount getAccountByUserID(Long id) {
+
+        Optional<Student> studentOpt = studentRepository.findById(id);
+        Optional<TeachingAssistant> teachingAssistantOpt = teachingAssistantRepository.findById(id);
+        Optional<Instructor> instructorOpt = instructorRepository.findById(id);
+        Optional<SummerTrainingCoordinator> summerTrainingCoordinatorOpt = summerTrainingCoordinatorRepository.findById(id);
+        Optional<AdministrativeAssistant> administrativeAssistantOpt = administrativeAssistantRepository.findById(id);
+        if(studentOpt.isPresent()){
+
+            return studentOpt.get().getUserAccount();
+        }
+        else if(teachingAssistantOpt.isPresent()){
+
+            return teachingAssistantOpt.get().getUserAccount();
+        }
+        else if(instructorOpt.isPresent()){
+
+            return instructorOpt.get().getUserAccount();
+        }
+        else if(summerTrainingCoordinatorOpt.isPresent()){
+
+            return summerTrainingCoordinatorOpt.get().getUserAccount();
+        }
+        else if(administrativeAssistantOpt.isPresent()){
+
+            return administrativeAssistantOpt.get().getUserAccount();
+        }
+        else{
+
+            return null;
+        }
+    }
+
     public Student editStudentByID(Long id, StudentEditRequest request) {
         Optional<Student> student = studentRepository.findById(id);
         if ( student.isPresent() ){
