@@ -94,6 +94,10 @@ class ManageUsers extends Component {
 
 
 
+options = [
+    'Remove User',
+    'Edit User'
+];
   render() {
     const { showMenu } = this.state;
     const { showPopup } = this.state;
@@ -106,7 +110,8 @@ class ManageUsers extends Component {
       <div className="maincontainer">
         
         {console.log(showChoices)}
-        <DisplayList data={UserData} displayFields={['name', 'role', 'department'] }isAdd = {true} tag = "Manage Users:" setControllerState={this.handleChoiceMenu} choice = 
+        
+        <DisplayList options = {this.options} data={UserData} displayFields={['name', 'role', 'department'] }isAdd = {true} tag = "Manage Users:" setControllerState={this.handleChoiceMenu} choice = 
         
 
           {showChoices&& <div className="menu" id=  "choice-menu">

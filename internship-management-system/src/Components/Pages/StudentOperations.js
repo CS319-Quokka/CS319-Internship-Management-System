@@ -1,4 +1,4 @@
-import React, {Component}  from 'react'
+import React, {Component} from 'react'
 import Dropzone from "../Dropzone";
 import "../Styles/FileSubmission.css"
 import DisplayList from './DisplayList';
@@ -12,10 +12,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { UserContext } from "../UserContext";
 
 
-const options = [
-    'Reassign Instructor',
-    'Upload Company Evaluation Form'
-];
 const ITEM_HEIGHT = 48;
 
 
@@ -41,17 +37,18 @@ class StudentOperations extends Component{
     }
 
     handleReassign(){
+      
         this.setState({
         showReassign:true
     });
-    this.setState({showChoices:false});
+    console.log( "REASSS")
     }
-    handleReassignAndSelectUser = (itemId) => {
-        const userId = this.context.userId;
-        console.log('Selected User ID:', userId);
-        this.handleReassign();
-       // this.selectUser(itemId);
-    };
+    // handleReassignAndSelectUser = (itemId) => {
+    //     const userId = this.context.userId;
+    //     console.log('Selected User ID:', userId);
+    //     this.handleReassign();
+    //    // this.selectUser(itemId);
+    // };
 
     
     handleCompanyForm(){
@@ -59,13 +56,22 @@ class StudentOperations extends Component{
         this.setState({
             showCompanyForm:true
         });
-        this.setState({showChoices:false});
 
      }
      handleClose(){
         this.setState({showReassign:false});
         this.setState({showCompanyForm:false});
       }
+
+      options = [
+        'Reassign Instructor',
+        'Upload Company Evaluation Form'
+    ];
+
+    functionalities = [
+      this.handleReassign,
+      this.handleCompanyForm
+    ]
       render(){
         const {showCompanyForm} = this.state;
         const {showReassign} = this.state;
@@ -73,7 +79,7 @@ class StudentOperations extends Component{
             <div className='page'>
 
 
-                <DisplayList data={StudentData} displayFields={['name', 'class', 'form','grader'] } setControllerState={this.handleChoiceMenu} />
+                <DisplayList functionalities = {this.functionalities}  options = {this.options}  data={StudentData} displayFields={['name', 'class', 'form','grader'] } setControllerState={this.handleChoiceMenu} />
 
 
            {showReassign &&<Popup name = "Reassign" className="popup" handleClose={this.handleClose}>

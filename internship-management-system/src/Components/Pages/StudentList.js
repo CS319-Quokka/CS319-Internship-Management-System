@@ -72,7 +72,7 @@ getAllStudents = async () =>{
     const history = this.props;
     return (
       <div className="student-list">
-        <DisplayList  data={studentNameList} displayFields={['name','class', 'status']} />
+        <DisplayList link = {"/evaluation"}  data={studentNameList} displayFields={['name','class', 'status']} />
       </div>
     );
   }
