@@ -48,8 +48,13 @@ public class NotificationService {
     // DONE
     public List<Notification> getAllNotifications(Optional<Long> userId) {
         if ( userId.isPresent() ) {
+            if (userManagementService.getUserById(userId.get()) == null) {
+                return null;
+            }
+            System.out.println("Notifications- User id: " + userId.get());
             return notificationRepository.findByUserId(userId.get());
         }
+
         return notificationRepository.findAll();
     }
 
