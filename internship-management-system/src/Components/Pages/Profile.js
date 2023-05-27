@@ -37,6 +37,7 @@ function FormDialog(props) {
     const [newPassword, setNewPassword] = useState("");
     const [oldPassword, setOldPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [changeStatus, setChangeStatus] = useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -44,6 +45,7 @@ function FormDialog(props) {
 
     const handleClose = () => {
         setOpen(false);
+        setChangeStatus("");
     };
     const handleNewPasswordChange = (event) => {
         setNewPassword(event.target.value);
@@ -53,33 +55,38 @@ function FormDialog(props) {
         setConfirmPassword(event.target.value);
     };
 
-    const handleConfirm = () => {
+    const handleConfirm = async () => {
 
         const formData = new FormData();
         formData.append("oldPassword", oldPassword);
         formData.append("newPassword", newPassword);
         formData.append("newPassword2", confirmPassword);
 
-        const response = axios.patch(
+        const response = await axios.patch(
             `http://localhost:8080/account/${props.id}`,
             formData,
         )
         if (response === -3) {
             console.log("Confirmation password does not match new.");
+            setChangeStatus("Confirmation password does not match new.");
         }
         else if (response === -2){
             console.log("Account does not exist");
+            setChangeStatus("")
         }
         else if(response === -1){
             console.log("Old password is not correct");
+            setChangeStatus("Old password is not correct");
         }
         else if(response === 0){
             console.log("New password cannot be the same as old password");
+            setChangeStatus("New password cannot be the same as the old password");
         }
         else if(response === 1){
             console.log("Successfully changed password!");
+            setChangeStatus("Successfully changed password!");
         }
-        setOpen(false);
+        //setOpen(false);
     };
     return (
         <div>
@@ -133,6 +140,9 @@ function FormDialog(props) {
                     <Button onClick={handleConfirm}>Confirm</Button>
                 </DialogActions>
             </Dialog>
+            {changeStatus && (
+                <p className="change-status-message">{changeStatus}</p>
+            )}
         </div>
     );
 }
@@ -303,6 +313,7 @@ class Profile extends Component {
 
 
                 </div>
+
             </div>
         )
     }
