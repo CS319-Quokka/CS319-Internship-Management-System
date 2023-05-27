@@ -93,7 +93,7 @@ const App = () => {
         },
         {
           path: "forms",
-          element: <StudentOperations />,
+          element: <StudentOperations userId = {userId} />,
         },
         {
           path: "graders",
