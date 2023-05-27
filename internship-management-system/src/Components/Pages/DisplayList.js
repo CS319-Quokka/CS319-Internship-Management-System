@@ -17,7 +17,13 @@ import MenuItem from "@mui/material/MenuItem";
 const ITEM_HEIGHT = 48;
 
 
+
 function LongMenu(props) {
+  const options = [
+    'Reassign Instructor',
+    'Upload Company Evaluation Form'
+  ];
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -28,12 +34,12 @@ function LongMenu(props) {
   };
 
   const handleOptionClick = (index) => {
-    console.log("HERE AS: ", props.functionalities)
-    const functionality = props.functionalities[index];
-    if (functionality) {
-      console.log("EXEC: ", functionality)
-      functionality();
-    }
+    // console.log("HERE AS: ", props.functionalities)
+    // const functionality = props.functionalities[index];
+    // if (functionality) {
+    //   console.log("EXEC: ", functionality)
+    //   functionality();
+    // }
   
     // Perform the common handleClose functionality
     handleClose();
@@ -66,7 +72,7 @@ function LongMenu(props) {
               },
             }}
         >
-          {props.options.map((option,index) => (
+          {options.map((option,index) => (
               <MenuItem key={option} onClick={() => handleOptionClick(index)}>
                 {option}
               </MenuItem>
