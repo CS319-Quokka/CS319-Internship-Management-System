@@ -14,11 +14,12 @@
     height:75vh;
     background-color: white;
     position: relative;
-    padding:1%;
     top: 15%;
     border-radius: 16px;
     padding:2%;
-    
+    box-shadow: 3px 6px 8px -6px black;
+
+
 
 }
 
@@ -31,7 +32,9 @@
     width: 40%;
     border-radius: 16px;
     padding: 1%;
-    
+    box-shadow: 3px 6px 8px -6px black;
+
+
 }
 .reportspage h1{
     font-size: 2.35vh;

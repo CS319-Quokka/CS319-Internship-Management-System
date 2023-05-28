@@ -9,59 +9,12 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { UserContext } from "../UserContext";
+import axios from 'axios';
 
-const options = [
-    'Reassign Instructor',
-    'Upload Company Evaluation Form'
-];
+
 const ITEM_HEIGHT = 48;
-function LongMenu() {
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
-    return (
-        <div>
-            <IconButton
-                aria-label="more"
-                id="long-button"
-                aria-controls={open ? 'long-menu' : undefined}
-                aria-expanded={open ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
-            >
-                <MoreVertIcon />
-            </IconButton>
-            <Menu
-                id="long-menu"
-                MenuListProps={{
-                    'aria-labelledby': 'long-button',
-                }}
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                PaperProps={{
-                    style: {
-                        maxHeight: ITEM_HEIGHT * 4.5,
-                        overflow: 'auto',
-                        width: '30ch',
-                    },
-                }}
-            >
-                {options.map((option) => (
-                    <MenuItem key={option} onClick={handleClose}>
-                        {option}
-                    </MenuItem>
-                ))}
-            </Menu>
-        </div>
-    );
-}
 
 class StudentOperations extends Component{
 
@@ -70,58 +23,110 @@ class StudentOperations extends Component{
         this.state = {
           showChoices:false,
           showReassign:false,
-          showCompanyForm:false
+          showCompanyForm:false,
+          studentData: []
         };
         this.handleChoiceMenu = this.handleChoiceMenu.bind(this);
         this.handleCompanyForm = this.handleCompanyForm.bind(this);
         this.handleReassign = this.handleReassign.bind(this);
         this.handleClose = this.handleClose.bind(this);
-    }    
+    }
+
+    static contextType = UserContext;
+    componentDidMount() {
+      this.getAllStudents();
+  }
+
+
+
+    getAllStudents = async () =>{
+
+      const currentResponse = await axios.get(`http://localhost:8080/account/get_account/${this.props.userId}`);
+      const department = currentResponse.data.department;
+  
+      const response = await axios.get(`http://localhost:8080/student?department=${department}`);
+      const info = response.data;
+  
+      console.log("STUDENTS:",info);
+
+
+      var students = [];
+
+       for (var i = 0; i < info.length; i++) {
+
+        var fullName = info[i].userAccount.firstName + " " + info[i].userAccount.lastName;
+        var instructor = info[i].instructor.userAccount.firstName + " " +  info[i].instructor.userAccount.lastName;
+        var courseCode = info[i].courseCode;
+        var form = "Not Uploaded";
+        if(info[i].companyEvaluationForm != null){
+          form = "Uploaded"
+        }
+        var studentId = info[i].id;
+
+
+        students.push({
+          name: fullName,
+          class: courseCode,
+          instructor: instructor,
+          form:form,
+          id:studentId
+        });
+      }
+      console.log("ALL STUDİS:",students)
+      this.setState({studentData:students})
+  }
+
+
     handleChoiceMenu(newControllerValue) {
         this.setState({ showChoices: newControllerValue });
     }
 
-    handleReassign(){
-    this.setState({
+    handleReassign = () =>{
+      
+        this.setState({
         showReassign:true
     });
-    this.setState({showChoices:false});
+
+    }
+  
     
-    }  
-    
-    handleCompanyForm(){
-        console.log("bastı");
+    handleCompanyForm= () =>{
         this.setState({
             showCompanyForm:true
         });
-        this.setState({showChoices:false});
-        
-     } 
 
+     }
      handleClose(){
         this.setState({showReassign:false});
         this.setState({showCompanyForm:false});
       }
+
+      options = [
+
+        {
+          name: 'Reassign Instructor',
+          action: this.handleReassign
+        }, 
+        {
+          name: 'Upload Company Evaluation Form',
+          action:  this.handleCompanyForm
+        }
+    ];
+
+    functionalities = [
+      this.handleReassign,
+      this.handleCompanyForm
+    ]
       render(){
-        const {showChoices} = this.state;
         const {showCompanyForm} = this.state;
         const {showReassign} = this.state;
+        const {studentData} = this.state;
         return(
             <div className='page'>
 
 
-                <DisplayList data={StudentData} displayFields={['name', 'class', 'form','grader'] } setControllerState={this.handleChoiceMenu} choice =
+                <DisplayList functionalities = {this.functionalities}  options = {this.options}  data={studentData} displayFields={['name', 'class', 'form','instructor'] } setControllerState={this.handleChoiceMenu} />
 
-
-                    {showChoices&& <div className="menu" id=  "choice-menu">
-                        <ul className="menu-contents">
-                            <li className="content"> <a href="#" onClick={this.handleReassign}>Reassign</a></li>
-                            <hr className="line"></hr>
-                            <li className = "content"><a href = "#" onClick={this.handleCompanyForm}>Company Form</a></li>
-                        </ul>
-                    </div>
-                    }/>
-                {/*<LongMenu/> */}
 
            {showReassign &&<Popup name = "Reassign" className="popup" handleClose={this.handleClose}>
           </Popup>}
@@ -137,7 +142,7 @@ class StudentOperations extends Component{
 
               </div>
 
-              <Dropzone className = "dropzone"/>
+              <Dropzone isCompanyForm = {true} className = "dropzone"/>
             </div>}
 
           

@@ -11,7 +11,6 @@ import { useEffect } from "react";
 
 class Sidebar extends Component{
 
-  
   constructor(props) {
     super(props)
     this.state = "Profile"
@@ -20,12 +19,10 @@ class Sidebar extends Component{
 handleLogout = (title) => {
   window.location.href = "/";
   console.log("LOGOUT");
+  this.state = "Profile";
 };
 
-
   render(){
-
-    
 
     const { userType } = this.props;
     console.log("USER TYPE",userType);

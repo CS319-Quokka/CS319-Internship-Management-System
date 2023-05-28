@@ -1,5 +1,6 @@
 package com.quokka.backend.models;
 
+import java.time.Instant;
 import java.util.Date;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class Report {
     @GeneratedValue
     private Long id;
 
-    private Date uploadDate;
+    private Instant uploadDate;
     private Date deadline;
 
     @ManyToOne

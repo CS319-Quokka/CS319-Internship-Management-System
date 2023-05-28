@@ -26,6 +26,8 @@ public class AccountController {
     private AccountService accountService;
     @Autowired
     private EmailSenderService emailSenderService;
+    @Autowired
+    private UserManagementService userManagementService;
 
     @PostMapping("/api/login")
     public ResponseEntity<AuthResponse> login(@RequestBody UserAccount userAccount) {
@@ -65,7 +67,6 @@ public class AccountController {
         emailSenderService.sendMail(userAccount.getEmail(), "Your password is: " + password,
                 "Internship Management System Password");
         return accountService.addUserAccount(userAccount);
-
     }
 
     @GetMapping
@@ -94,12 +95,39 @@ public class AccountController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAccount(@PathVariable Long id){
+
+        List<User> usersList = userManagementService.getProfilesByAccountId(id);
+        for(User user : usersList){
+
+            if(user.getRole().equals("Student")){
+
+                userManagementService.removeStudentByID(user.getId());
+            } else if(user.getRole().equals("Teaching Assistant")){
+
+                userManagementService.removeTeachingAssistantByID(user.getId());
+            } else if(user.getRole().equals("Instructor")){
+
+                userManagementService.removeInstructorByID(user.getId());
+            } else if(user.getRole().equals("Summer Training Coordinator")){
+
+                userManagementService.removeSummerTrainingCoordinatorByID(user.getId());
+            } else if(user.getRole().equals("Administrative Assistant")){
+
+                userManagementService.removeAdministrativeAssistantByID(user.getId());
+            }
+        }
         accountService.deleteAccount(id);
         return new ResponseEntity<>("Account deleted successfully", HttpStatus.OK);
     }
 
     @DeleteMapping
     public void deleteAllAccounts(){
+
+        userManagementService.removeAllStudents();
+        userManagementService.removeAllInstructors();
+        userManagementService.removeAllAdministrativeAssistants();
+        userManagementService.removeAllTeachingAssistants();
+        userManagementService.removeAllSummerTrainingCoordinators();
         accountService.deleteAllAccounts();
     }
 

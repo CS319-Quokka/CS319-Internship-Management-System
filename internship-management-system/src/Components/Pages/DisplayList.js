@@ -6,6 +6,73 @@ import * as IoIcons from "react-icons/io";
 import { withRouter } from 'react-router-dom';
 import "../Styles/List.css";
 import { UserContext } from "../UserContext";
+import IconButton from "@mui/material/IconButton";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+
+const ITEM_HEIGHT = 48;
+function LongMenu(props) {
+  
+
+  const options = props.options ? props.options : [];
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  
+
+
+  const handleOptionClick = (action) => {
+    action();
+    console.log("GETTING WITH:",props.id)
+    props.setId(props.id)
+    handleClose();
+};
+
+  return (
+      <div>
+        <IconButton
+            aria-label="more"
+            id="long-button"
+            aria-controls={open ? 'long-menu' : undefined}
+            aria-expanded={open ? 'true' : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
+        >
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+            id="long-menu"
+            MenuListProps={{
+              'aria-labelledby': 'long-button',
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              style: {
+                maxHeight: ITEM_HEIGHT * 4.5,
+                overflow: 'auto',
+                width: '30ch',
+              },
+            }}
+        >
+          {options.map((option,index) => (
+              <MenuItem key={index} onClick={() => handleOptionClick(option.action)}>
+                {option.name}
+              </MenuItem>
+          ))}
+        </Menu>
+      </div>
+  );
+}
+
 
 class DisplayList extends Component {
   constructor(props) {
@@ -17,7 +84,6 @@ class DisplayList extends Component {
       
     };
     this.handleOptions = this.handleOptions.bind(this);
-    
     this.handleReminder = this.handleReminder.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
   }
@@ -34,7 +100,6 @@ class DisplayList extends Component {
     } 
   }
 
-
   handleOptions = (index) => {
     if (this.state.showOptions === index) {
       this.setState({ showOptions: null });
@@ -47,8 +112,9 @@ class DisplayList extends Component {
   };
   selectUser = (id) => {
     return () => {  // Return a function that will be called on click
-      console.log("SELECT USER");
+      
       this.context.setUserIdValue(id);
+      console.log("SELECT USER: ",this.context.userId);
     };
   }
   
@@ -101,26 +167,32 @@ class DisplayList extends Component {
                   <React.Fragment key={index}>
                     <li className="list-item">
 
-                      <Link to = "/evaluation" onClick={this.selectUser(item.id)} >
+                      <Link to = {this.props.link} onClick={this.selectUser(item.id)} >
+
                         <div className="row">
                             {displayFields.map((field, index) => (
                             <div className="value">{item[field]}</div>
                             ))}
                       
 
-                          <div
-                            className="options"
-                          >
+                          <div className="options">
                             <div className="choices">
-                             
-                            <div id="reminder"> <button onClick={this.handleReminder} className="button">{<IoIcons.IoMdAlert />}</button></div>
-                            < div id="options"><button onClick={() => this.handleOptions(index)} className="icon-button">{<SlIcons.SlOptionsVertical />}</button>
-
+                                <div id="reminder">
+                                    <button onClick={this.handleReminder} className="button">{<IoIcons.IoMdAlert />}</button>
+                                </div>
+                            <div id="options">
+                                {/*
+                                <button onClick={() => this.handleOptions(index)} className="icon-button">{<SlIcons.SlOptionsVertical />}</button>
+*/}              
+                                <LongMenu setId = {this.selectUser} id = {item.id} functionalities = {this.props.functionalities} options = {this.props.options}
+                                  /*  content={}*/
+                                />
+                                {/*
                              {showOptions === index  && (
                                this.props.choice
                              
                             )}
-                            
+                            */}
                             </div>
                             </div>
                             

@@ -15,6 +15,8 @@
     margin-top: 5vh;
     left: 20%;
     overflow-y: auto;
+    box-shadow: 3px 6px 8px -6px black;
+
 }
 .notifications{
     background-color: white;
@@ -26,6 +28,8 @@
     margin-top: 5vh;
     left: 65%;
     overflow-y: auto;
+    box-shadow: 3px 6px 8px -6px black;
+
 }
 .admin{
     background-color: white;
@@ -38,6 +42,8 @@
     padding:2%;
     left: 30%;
     overflow-y: auto;
+    box-shadow: 3px 6px 8px -6px black;
+
 }
 .maincontainer-notif h1{
     font-size: 2.35vh;
@@ -62,10 +68,9 @@
     padding: 20px 20px;
     box-sizing: border-box;
     border: 2px solid #d2d2d2;
-    font-size: 1.7vh;
+    font-size: 2.2vh;
     border-radius: 15px;
     background-color:white;
-    font-size: 16px;
     text-align: left;
     resize: none;
     align-items: center;
@@ -84,7 +89,7 @@
     border-width: 0 0 1px 0; /* Draw only bottom border */
     border-color: #CCC;
 }
-.admin h1{
+.maincontainer-notif h1{
     position: relative;
     margin-left: 0;
 }

@@ -27,12 +27,12 @@ public class AccountService {
     }
 
     public UserAccount getAccountById(Long id){
+
         Optional<UserAccount> account = accountRepository.findById(id);
         if(!account.isPresent()){
-//            throw new IllegalStateException("No account found with id:" + id + "!");
+//          throw new IllegalStateException("No account found with id:" + id + "!");
             return null;
         }
-
         return account.get();
     }
 
@@ -47,7 +47,7 @@ public class AccountService {
 
 
 
-    public UserAccount addUserAccount( UserAccount userAccount) {
+    public UserAccount addUserAccount(UserAccount userAccount) {
         Optional<UserAccount> account = accountRepository.findByEmail(userAccount.getEmail());
         if (account.isPresent()){
             return null;

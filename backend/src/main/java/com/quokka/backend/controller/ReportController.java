@@ -1,6 +1,8 @@
 package com.quokka.backend.controller;
 
 import com.quokka.backend.Auth.AuthResponse;
+import com.quokka.backend.Auth.CompanyFormResponse;
+import com.quokka.backend.Auth.FeedbackFileResponse;
 import com.quokka.backend.Auth.ReportFileResponse;
 import com.quokka.backend.models.*;
 import com.quokka.backend.request.*;
@@ -11,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.http.HttpHeaders;
 import java.util.Date;
@@ -52,6 +55,52 @@ public class ReportController {
         return false;
     }
 
+    @PostMapping("/company_form")
+    public boolean addCompanyForm(CompanyFormAddRequest request){
+
+        System.out.println("company 1");
+        //se if the company form was correctly saved to the repository and return the response
+        boolean success = reportService.addCompanyForm(request);
+
+        if(success){
+            return true;
+        }
+
+        return false;
+
+    }
+
+    @GetMapping("/get_company_form/{id}")
+    public ResponseEntity<?> getCompanyFormById(@PathVariable("id") Long id){
+
+        CompanyForm cef = reportService.getCompanyFormById(id);
+        if (cef == null) {
+            return ResponseEntity.ok("No cef available for this student");
+        }
+
+        CompanyFormResponse response = new CompanyFormResponse();
+        response.setFileData(cef.getFormData());
+        response.setFileName(cef.getFormName());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/get_company_form_by_student/{studentId}")
+    public ResponseEntity<?> getCompanyFormByStudentId(@PathVariable("studentId") Long studentId){
+
+        CompanyForm cef = reportService.getCompanyFormByStudentId(studentId);
+        if (cef == null) {
+            return ResponseEntity.ok("No cef available for this student");
+        }
+
+        CompanyFormResponse response = new CompanyFormResponse();
+        response.setFileData(cef.getFormData());
+        response.setFileName(cef.getFormName());
+
+        return ResponseEntity.ok(response);
+    }
+
+
     @GetMapping("/status/{studentID}")
     public String checkReportStatus(@PathVariable Long studentID){
         return reportService.checkReportStatus(studentID);
@@ -62,7 +111,6 @@ public class ReportController {
 
         return reportService.getAllReportsByStudentId(studentId);
     }
-
 
     @GetMapping("/file/active/{studentId}")
     public ResponseEntity<ReportFileResponse> getActiveReport(@PathVariable("studentId") Long studentId){
@@ -78,7 +126,6 @@ public class ReportController {
             response.setFileData(reportFile.getFileData());
             response.setFileName(reportFile.getFileName());
             response.setReportId(reportFile.getReport().getId());
-
             return ResponseEntity.ok(response);
         }
         else {
@@ -113,8 +160,6 @@ public class ReportController {
         ReportFileResponse response = new ReportFileResponse();
 
         ReportFile reportFile = reportService.getReportFileWithReportId(id);
-
-        System.out.println("file:" + reportFile);
 
         if (reportFile != null) {
 

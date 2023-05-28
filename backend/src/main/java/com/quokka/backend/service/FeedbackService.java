@@ -44,7 +44,7 @@ public class FeedbackService {
         Optional<Feedback> feedback = feedbackRepository.findById(ID);
         if(!feedback.isPresent()){
 
-            throw new IllegalStateException("No feedback is found!");
+            return null;
         }
         return feedback.get();
     }
@@ -52,6 +52,15 @@ public class FeedbackService {
     public List<Feedback> getAllFeedback(){
 
         return feedbackRepository.findAll();
+    }
+
+    public String getFeedbackDescription(Long reportId){
+        Feedback feedback = findByReportId(reportId);
+        if(feedback == null){
+            return "";
+        }
+        return feedback.getFeedbackDescription();
+
     }
 
     public Long addFeedback(FeedbackAddRequest request){
@@ -105,10 +114,6 @@ public class FeedbackService {
 
 
         Optional<Feedback> feedback = feedbackRepository.findByReportId(reportId);
-
-
-
-        System.out.println("feedback: " + feedback.get());
 
 
         if(feedback.isPresent()){
@@ -224,7 +229,7 @@ public class FeedbackService {
 
             newFeedbackFile.setId(request.getId());
             newFeedbackFile.setFeedbackDescription(request.getFeedbackDescription());
-            studentRepository.findById(request.getStudentId()).get().setStatus("Feedback is given");
+            studentRepository.findById(request.getStudentId()).get().setStatus("Revision required");
             feedbackFileRepository.save(newFeedbackFile);
             return true;
         }

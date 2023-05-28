@@ -7,40 +7,37 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.time.Instant;
-import java.util.Date;
 
 @Entity
 @Table
 @Getter
 @Setter
-public class ReportFile implements MultipartFile {
+public class CompanyForm implements MultipartFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String reportDescription;
-    private String fileName;
-    private Instant uploadDate;
-
     @Lob
     @JsonBackReference
     @Column(columnDefinition = "LONGBLOB")
-    private byte[] fileData;
+    private byte[] formData;
 
     @OneToOne
-    @JoinColumn(name = "report_id", nullable = false)
+    @JoinColumn(name = "student_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    Report report;
+    Student student;
 
+
+    private String formName;
 
     @Override
     public String getName() {
-        return fileName;
+        return formName;
     }
 
     @Override
@@ -60,14 +57,12 @@ public class ReportFile implements MultipartFile {
 
     @Override
     public long getSize() {
-
-        return fileData.length;
+        return formData.length;
     }
 
     @Override
     public byte[] getBytes() throws IOException {
-
-        return fileData;
+        return formData;
     }
 
     @Override

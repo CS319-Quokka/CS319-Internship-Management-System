@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @RequestMapping("/announcement")
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 public class AnnouncementController {
 
     private AnnouncementService announcementService;

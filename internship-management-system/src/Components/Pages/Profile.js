@@ -3,6 +3,7 @@ import '../Styles/Profile.css'
 import pic from "../Images/quokka.png";
 import axios from "axios";
 import Button from '@mui/material/Button';
+import { Alert, AlertTitle } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -37,7 +38,11 @@ function FormDialog(props) {
     const [newPassword, setNewPassword] = useState("");
     const [oldPassword, setOldPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [changeStatus, setChangeStatus] = useState("");
+
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -45,7 +50,6 @@ function FormDialog(props) {
 
     const handleClose = () => {
         setOpen(false);
-        setChangeStatus("");
     };
     const handleNewPasswordChange = (event) => {
         setNewPassword(event.target.value);
@@ -55,39 +59,53 @@ function FormDialog(props) {
         setConfirmPassword(event.target.value);
     };
 
-    const handleConfirm = async () => {
+    useEffect(() => {
+        // Auto-hide the alerts after a few seconds
+        const timer = setTimeout(() => {
+            setShowErrorAlert(false);
+            setShowSuccessAlert(false);
+        }, 5000);
 
+        return () => clearTimeout(timer);
+    }, [showErrorAlert, showSuccessAlert]);
+
+    const handleConfirm = async () => {
         const formData = new FormData();
         formData.append("oldPassword", oldPassword);
         formData.append("newPassword", newPassword);
         formData.append("newPassword2", confirmPassword);
 
-        const response = await axios.patch(
-            `http://localhost:8080/account/${props.id}`,
-            formData,
-        )
-        if (response === -3) {
-            console.log("Confirmation password does not match new.");
-            setChangeStatus("Confirmation password does not match new.");
+        try {
+            const response = await axios.patch(
+                `http://localhost:8080/account/${props.id}`,
+                formData
+            );
+
+            const responseData = response.data; // Get the response data
+
+            if (responseData === -3) {
+                setErrorMessage("Passwords do not match");
+                setShowErrorAlert(true);
+            } else if (responseData === -2) {
+                setErrorMessage("Account does not exist");
+                setShowErrorAlert(true);
+            } else if (responseData === -1) {
+                setErrorMessage("Old password is not correct");
+                setShowErrorAlert(true);
+            } else if (responseData === 0) {
+                setErrorMessage("New password cannot be the same as the old password");
+                setShowErrorAlert(true);
+            } else if (responseData === 1) {
+                setSuccessMessage("Successfully changed password!");
+                setShowSuccessAlert(true);
+            }
+
+            setOpen(false);
+        } catch (error) {
+            console.log("Error:", error);
         }
-        else if (response === -2){
-            console.log("Account does not exist");
-            setChangeStatus("")
-        }
-        else if(response === -1){
-            console.log("Old password is not correct");
-            setChangeStatus("Old password is not correct");
-        }
-        else if(response === 0){
-            console.log("New password cannot be the same as old password");
-            setChangeStatus("New password cannot be the same as the old password");
-        }
-        else if(response === 1){
-            console.log("Successfully changed password!");
-            setChangeStatus("Successfully changed password!");
-        }
-        //setOpen(false);
     };
+
     return (
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>
@@ -140,10 +158,26 @@ function FormDialog(props) {
                     <Button onClick={handleConfirm}>Confirm</Button>
                 </DialogActions>
             </Dialog>
-            {changeStatus && (
-                <p className="change-status-message">{changeStatus}</p>
-            )}
+            <div id="alertcontainer">
+                <Alert
+                    severity="error"
+                    onClose={() => setShowErrorAlert(false)}
+                    sx={{ display: showErrorAlert ? 'filled' : 'none' }}
+                >
+                    <AlertTitle>Error</AlertTitle>
+                    {errorMessage}
+                </Alert>
+                <Alert
+                    severity="success"
+                    onClose={() => setShowSuccessAlert(false)}
+                    sx={{ display: showSuccessAlert ? 'filled' : 'none' }}
+                >
+                    <AlertTitle>Success</AlertTitle>
+                    {successMessage}
+                </Alert>
+            </div>
         </div>
+
     );
 }
 
@@ -189,11 +223,11 @@ class Profile extends Component {
         console.log(info);
         console.log("ROLE:",info.role);
 
-        if(info.role === "instructor"){
+        if(info.role === "Instructor"){
             console.log("grader");
         }
 
-        if(info.role === "student"){
+        if(info.role === "Student"){
             const instructorID =  info.instructor.userAccount.id;
             const response2 = await axios.get(`http://localhost:8080/account/get_account/${instructorID}`);
             const instructorInfo = response2.data;
@@ -233,23 +267,15 @@ class Profile extends Component {
         const {userType} = this.state;
         return (
             <div className='page'>
-
                 <div className='container'>
-
-
                     <div className='user-container'>
                         <h1><strong>{this.state.firstName} {this.state.lastName}</strong></h1>
                         <br></br>
-
-
                         <img className='profilePic' src={pic} alt="Profile"/>
                         <p><em>{this.state.userType}</em></p><br/>
-
-                        <FormDialog id = {this.props.userId} onConfirm={this.handleConfirm}/>
+                        <FormDialog id = {this.props.userId} />
                         <br></br>
                     </div>
-
-
                     <div className='right-containers'>
 
                         <div className="info-container">
@@ -272,7 +298,7 @@ class Profile extends Component {
 
                         </div>
 
-                        {userType === 'student' && (
+                        {userType === 'Student' && (
                             <div className="additionalInfo">
                                 <div className="row">
                                     <p className="label">Course Taken:</p>
@@ -297,7 +323,7 @@ class Profile extends Component {
                             </div>
                         )}
 
-                        {userType === 'instructor' && (
+                        {userType === 'Instructor' && (
 
                             <div class = "additionalInfo">
                                 <div class="row">
@@ -305,15 +331,9 @@ class Profile extends Component {
                                     <p className="value">{this.state.numOfStudents}</p>
                                 </div>
                             </div>
-
                         )}
-
                     </div>
-
-
-
                 </div>
-
             </div>
         )
     }

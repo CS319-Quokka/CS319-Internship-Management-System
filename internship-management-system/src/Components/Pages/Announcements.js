@@ -20,29 +20,33 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import axios from 'axios';
 
-function AnnouncementList() {
+function AnnouncementList(props) {
     return (
-        <ul>
-            {AnnouncementData.map(announcement => (
-                <li key={announcement.date}>
-                    <h2>From: {announcement.poster}</h2>
-                    <textarea readOnly>{announcement.message}</textarea>
-                    <h2>{announcement.date}</h2>
-                    <hr></hr>
-                </li>
-            ))}
-        </ul>
+      <ul>
+        {props.data.map(announcement => (
+          <li key={announcement.content}>
+            <h2>From: {announcement.sender}</h2>
+            <textarea readOnly>{announcement.content}</textarea>
+            <h2>this should be date: {announcement.title}</h2>
+            <hr></hr>
+          </li>
+        ))}
+      </ul>
     );
-}
-function TextareaValidator() {
+  }
+function TextareaValidator(props) {
     const [italic, setItalic] = React.useState(false);
     const [fontWeight, setFontWeight] = React.useState('normal');
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const { value, onChange } = props;
     return (
         <FormControl>
             <FormLabel>New Announcement</FormLabel>
             <Textarea
+                value={value}
+                onChange={onChange}
                 placeholder="Type your message here..."
                 minRows={3}
                 endDecorator={
@@ -110,8 +114,9 @@ function TextareaValidator() {
     );
 }
 
-function FormDialog() {
+function FormDialog({userId, handlePost}) {
     const [open, setOpen] = React.useState(false);
+    const [text, setText] = React.useState('');
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -121,6 +126,14 @@ function FormDialog() {
         setOpen(false);
     };
 
+    const handleSubmit = () => {
+        // Close the dialog
+        setOpen(false);
+    
+        // Call the handlePost function that was passed as a prop
+        handlePost(text);
+      };
+
     return (
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>
@@ -129,11 +142,11 @@ function FormDialog() {
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Announcement</DialogTitle>
                 <DialogContent>
-                    <TextareaValidator/>
+                    <TextareaValidator value={text} onChange={(e) => setText(e.target.value)}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Post</Button>
+                    <Button onClick={handleSubmit}>Post</Button>
                 </DialogActions>
             </Dialog>
         </div>
@@ -142,25 +155,89 @@ function FormDialog() {
 
 
 
-class AdminAssNotifications extends Component {
+class Announcements extends Component {
     constructor(props) {
         super(props)
-        this.state ={}
+
+        this.state = {
+            announcementNameList:[],
+        }
+    }
+
+    handlePost = async (text) => {
+        const id = this.props.userId;
+    
+        const response1 = await axios.get(`http://localhost:8080/get_all_users/${id}`);
+    
+        const senderId = response1.data[0].id
+    
+        // Make the post request to your API
+        try {
+          await axios.post(`http://localhost:8080/announcement/made/Administrative Assistant/${senderId}/CS`, {
+            title: 'Announcement post deneme 1',
+            content: text,
+            // Add other necessary fields here...
+          });
+          // Refresh the list of announcements...
+          this.getAllAnnouncements();
+        } catch (error) {
+          console.error('Error creating announcement:', error);
+        }
+    };
+
+    componentDidMount() {
+        this.getAllAnnouncements();
+    }
+
+    getAllAnnouncements = async () =>{
+
+        const id = this.props.userId; // this is account id !!!
+    
+        const response1 = await axios.get(`http://localhost:8080/get_all_users/${id}`);
+    
+        const info = response1.data[0]
+
+        const userRole = info.role;
+    
+        const response = await axios.get(`http://localhost:8080/announcement?userRole=${userRole}&userId=${info.id}`);
+        console.log(response.data); 
+    
+        const announcementInfo = response.data;
+        console.log(announcementInfo.length);
+    
+        var announ = [];
+    
+         for (var i = 0; i < announcementInfo.length; i++) {
+          
+          var senderInfo = announcementInfo[i].sender.userAccount.firstName + " " + announcementInfo[i].sender.userAccount.lastName;
+          var titleInfo = announcementInfo[i].title;
+          var contentInfo = announcementInfo[i].content;
+          
+          announ.push({
+            sender: senderInfo,
+            title: titleInfo,
+            content: contentInfo,
+          });
+        }
+    
+         this.setState({ announcementNameList: announ });
+      
     }
 
     render(){
+        const {announcementNameList} = this.state;
         return(
             <div className='maincontainer-notif'>
                 <div className='admin'>
                     <h1>📢</h1>
 
                     <br></br>
-                    <h1>ANNOUNCEMENTS <hr></hr> <FormDialog/> </h1>
+                    <h1>ANNOUNCEMENTS <hr></hr> <FormDialog userId={this.props.userId} handlePost={this.handlePost}/> </h1>
 
                     <br></br>
                     <hr></hr>
                     <div className='announcementList'>
-                        <AnnouncementList/>
+                        <AnnouncementList link = {"/announcements"} data={announcementNameList} displayFields={['sender','title', 'content']}/>
                     </div>
                 </div>
 
@@ -171,4 +248,4 @@ class AdminAssNotifications extends Component {
 
 }
 
-export default AdminAssNotifications
+export default Announcements

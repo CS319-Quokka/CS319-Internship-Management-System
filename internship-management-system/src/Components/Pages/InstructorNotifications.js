@@ -21,29 +21,30 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import axios from 'axios';
 
-function AnnouncementList() {
+function AnnouncementList(props) {
   return (
     <ul>
-      {AnnouncementData.map(announcement => (
-        <li key={announcement.date}>
-          <h2>From: {announcement.poster}</h2>
-          <textarea readOnly>{announcement.message}</textarea>
-          <h2>{announcement.date}</h2>
+      {props.data.map(announcement => (
+        <li key={announcement.content}>
+          <h2>From: {announcement.sender}</h2>
+          <textarea readOnly>{announcement.content}</textarea>
+          <h2>this should be date: {announcement.title}</h2>
           <hr></hr>
         </li>
       ))}
     </ul>
   );
 }
-function NotificationList(){
+function NotificationList(props) {
   return (
     <ul>
-      {InstructorNotifData.map(notification => (
-        <li key={notification.date}>
-          <h2>From: {notification.sender}</h2>
-          <textarea readOnly>{notification.message}</textarea>
-          <h2>{notification.date}</h2>
+      {props.data.map(notification => (
+        <li key={notification.content}>
+          <h2>{notification.title}</h2>
+          <textarea readOnly>{notification.content}</textarea>
+          <h2>this should be date: {notification.title}</h2>
           <hr></hr>
         </li>
       ))}
@@ -51,14 +52,17 @@ function NotificationList(){
   );
 }
 
-function TextareaValidator() {
+function TextareaValidator(props) {
   const [italic, setItalic] = React.useState(false);
   const [fontWeight, setFontWeight] = React.useState('normal');
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const { value, onChange } = props;
   return (
     <FormControl>
       <FormLabel>New Announcement</FormLabel>
       <Textarea
+        value={value}
+        onChange={onChange}
         placeholder="Type your message here..."
         minRows={3}
         endDecorator={
@@ -126,8 +130,9 @@ function TextareaValidator() {
   );
 }
 
-function FormDialog() {
+function FormDialog({userId, handlePost}) {
   const [open, setOpen] = React.useState(false);
+  const [text, setText] = React.useState('');
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -137,6 +142,38 @@ function FormDialog() {
     setOpen(false);
   };
 
+  const handleSubmit = () => {
+    // Close the dialog
+    setOpen(false);
+
+    // Call the handlePost function that was passed as a prop
+    handlePost(text);
+  };
+
+  // const handlePost = async () => {
+  //   // Close the dialog
+  //   setOpen(false);
+
+  //   const id = userId; // this is account id !!!
+
+  //   const response1 = await axios.get(`http://localhost:8080/get_all_users/${id}`);
+
+  //   const senderId = response1.data[0].id
+
+  //   // Make the post request to your API
+  //   try {
+  //     await axios.post(`http://localhost:8080/announcement/made/Instructor/${senderId}/Students`, {
+  //       title: 'Announcement post deneme 1',
+  //       content: text,
+  //       // Add other necessary fields here...
+  //     });
+  //     // Refresh the list of announcements...
+  //     // this.getAllAnnouncements(); // TODO
+  //   } catch (error) {
+  //     console.error('Error creating announcement:', error);
+  //   }
+  // };
+
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
@@ -145,11 +182,11 @@ function FormDialog() {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Announcement</DialogTitle>
         <DialogContent>
-          <TextareaValidator/>
+          <TextareaValidator value={text} onChange={(e) => setText(e.target.value)}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Post</Button>
+          <Button onClick={handleSubmit}>Post</Button>
         </DialogActions>
       </Dialog>
     </div>
@@ -161,22 +198,121 @@ function FormDialog() {
 class InstructorNotifications extends Component {
   constructor(props) {
     super(props)
-    this.state ={}
+    
+    this.state = {
+      announcementNameList:[],
+      notificationNameList:[]
+    }
+  }
+
+  handlePost = async (text) => {
+    const id = this.props.userId;
+
+    const response1 = await axios.get(`http://localhost:8080/get_all_users/${id}`);
+
+    const senderId = response1.data[0].id
+
+    // Make the post request to your API
+    try {
+      await axios.post(`http://localhost:8080/announcement/made/Instructor/${senderId}/Instructors`, {
+        title: 'Announcement post deneme 1',
+        content: text,
+        // Add other necessary fields here...
+      });
+      // Refresh the list of announcements...
+      this.getAllAnnouncements();
+    } catch (error) {
+      console.error('Error creating announcement:', error);
+    }
+  };
+
+  componentDidMount() {
+    this.getAllAnnouncements();
+    this.getAllNotifications();
+  }
+
+  getAllAnnouncements = async () =>{
+
+    const id = this.props.userId; // this is account id !!!
+
+    const response1 = await axios.get(`http://localhost:8080/get_all_users/${id}`);
+
+    const info = response1.data[0]
+
+    const response = await axios.get(`http://localhost:8080/announcement?userRole=Instructor&userId=${info.id}`);
+    console.log(response.data); 
+
+    const announcementInfo = response.data;
+    console.log(announcementInfo.length);
+
+    var announ = [];
+
+     for (var i = 0; i < announcementInfo.length; i++) {
+      
+      var senderInfo = announcementInfo[i].sender.userAccount.firstName + " " + announcementInfo[i].sender.userAccount.lastName;
+      var titleInfo = announcementInfo[i].title;
+      var contentInfo = announcementInfo[i].content;
+      
+      announ.push({
+        sender: senderInfo,
+        title: titleInfo,
+        content: contentInfo,
+      });
+    }
+
+     this.setState({ announcementNameList: announ });
+  
+  }
+
+
+  getAllNotifications = async () =>{
+
+    const id = this.props.userId;
+    console.log("account id: ",id);
+    const response1 = await axios.get(`http://localhost:8080/get_all_users/${id}`);
+
+    const info = response1.data[0];
+    console.log("user id: ",info.id);
+
+    const response = await axios.get(`http://localhost:8080/notification?userId=${info.id}`);
+
+    const notificationInfo = response.data;
+    console.log("notificationList: " ,notificationInfo);
+    console.log(notificationInfo.length);
+
+    var notif = [];
+
+     for (var i = (notificationInfo.length - 1); i > -1; i--) {
+      
+      // var senderInfo = notificationInfo[i].sender.userAccount.firstName + " " + notificationInfo[i].sender.userAccount.lastName;
+      var titleInfo = notificationInfo[i].title;
+      var contentInfo = notificationInfo[i].content;
+      
+      notif.push({
+        // sender: senderInfo,
+        title: titleInfo,
+        content: contentInfo,
+      });
+    }
+
+    this.setState({ notificationNameList: notif });
+  
   }
 
   render(){
+    const {announcementNameList, notificationNameList} = this.state;
     return(
       <div className='maincontainer-notif'>
         <div className='announcements'>
           <h1>📢</h1>
     
           <br></br>
-          <h1>ANNOUNCEMENTS <hr></hr> <FormDialog/> </h1>
+          <h1>ANNOUNCEMENTS <hr></hr> <FormDialog userId={this.props.userId} handlePost={this.handlePost}/> </h1>
          
           <br></br>
           <hr></hr>
           <div className='announcementList'>
-            <AnnouncementList/>
+            <AnnouncementList link = {"/instructornotifications"} data={announcementNameList} displayFields={['sender','title', 'content']}/>
           </div>
         </div>
 
@@ -187,7 +323,8 @@ class InstructorNotifications extends Component {
           <br></br>
           <hr></hr>
           <div className='announcementList'>
-            <NotificationList/>          
+          {/* // TODO REMOVE sender and add date */}
+            <NotificationList link = {"/instructornotifications"} data={notificationNameList} displayFields={['sender','title', 'content']}/>          
           </div>
         </div>
 

@@ -95,7 +95,7 @@ export const SidebarData = [
     
     {
       title: "Notifications",
-      path: "/adminassnotifications",
+      path: "/announcements",
       icon: <IoIcons.IoIosNotificationsOutline />,
       cName: "nav-text",
     },
@@ -142,7 +142,7 @@ export const SidebarData = [
     
     {
       title: "Notifications",
-      path: "/instructornotifications",
+      path: "/announcements",
       icon: <IoIcons.IoIosNotificationsOutline />,
       cName: "nav-text",
     },
@@ -172,7 +172,7 @@ export const SidebarData = [
     
     {
       title: "Notifications",
-      path: "/instructornotifications",
+      path: "/announcements",
       icon: <IoIcons.IoIosNotificationsOutline />,
       cName: "nav-text",
     },

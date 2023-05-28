@@ -12,12 +12,9 @@ import java.time.Instant;
 @Data
 @Getter
 @Setter
-public class ReportFileResponse {
+public class CompanyFormResponse {
 
     byte[] fileData;
-    private String reportDescription;
-    private Long reportId;
     private String fileName;
-    private Instant uploadDate;
 
 }

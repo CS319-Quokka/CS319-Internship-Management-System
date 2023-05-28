@@ -21,10 +21,13 @@ public class UserManagementController {
         this.userManagementService = userManagementService;
     }
 
+
+
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         return userManagementService.getUserById(id);
     }
+
 
     @GetMapping("/get_all_users/{id}")
     public List<User> getProfilesByAccountId(@PathVariable Long id) {
@@ -37,9 +40,10 @@ public class UserManagementController {
         return usersList;
     }
 
+
+
     @PostMapping("/student")
     public Student addStudent(@RequestBody StudentAddRequest request){
-
 
         return userManagementService.addStudent(request);
     }
@@ -131,6 +135,12 @@ public class UserManagementController {
         return userManagementService.removeAllAdministrativeAssistants();
     }
 
+    @DeleteMapping("/user/{id}")
+    public boolean removeUserByID(@PathVariable Long id){
+
+        return userManagementService.removeUserById(id);
+    }
+
     @GetMapping("/student")
     public List<Student> getAllStudents(@RequestParam Optional<Long> accountId,
                                         @RequestParam Optional<Long> instructorId,
@@ -195,6 +205,12 @@ public class UserManagementController {
     public AdministrativeAssistant getAdministrativeAssistant(@PathVariable Long id){
 
             return userManagementService.getAdministrativeAssistantByID(id);
+    }
+
+    @GetMapping("/get_account_by_user_id/{userId}")
+    public UserAccount getAccountByUserId(@PathVariable Long userId){
+
+        return userManagementService.getAccountByUserID(userId);
     }
 
     @PutMapping("/student/{id}")

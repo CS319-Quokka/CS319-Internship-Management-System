@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import { UserData } from "../UserData";
 import DisplayList from "./DisplayList";
 import "../Styles/ManageUsers.css"
+import axios from 'axios';
 import ManageUsersAdd from "./ManageUsersAdd";
 import Popup from "../Popup"
 import ManageUsersEdit from "./ManageUsersEdit";
 import ManageUsersRemove from "./ManageUsersRemove";
+import { UserContext } from "../UserContext";
 
 class ManageUsers extends Component {
   constructor(props) {
@@ -17,7 +19,8 @@ class ManageUsers extends Component {
       showChoices:false,
       showEdit:false,
       selectedCode: "",
-      selectedRole:""
+      selectedRole:"",
+      userData:[]
     };
 
     this.handleMenu = this.handleMenu.bind(this);
@@ -28,19 +31,61 @@ class ManageUsers extends Component {
     this.handleEdit = this.handleEdit.bind(this);
     this.handleSelected= this.handleSelected.bind(this);
   }
-  
+  static contextType = UserContext;
 
-  handleRemove(){
-    console.log(this.showRemove)
-    this.setState({
-      showRemove:true,
-      selectedUser: UserData
-    });
-    this.setState({showChoices:false});
-    
+  componentDidMount() {
+    this.getAllUsers()
   }
 
-  handleEdit(){
+  getAllUsers = async () => {
+    const currentResponse = await axios.get(`http://localhost:8080/account/get_account/${this.props.userId}`);
+    const department = currentResponse.data.department;
+
+    const response = await axios.get(`http://localhost:8080/account?department=${department}`);
+    const info = response.data;
+
+    var users = [];
+
+    for (let i = 0; i < info.length; i++) {
+        const user = info[i];
+        const fullName = `${user.firstName} ${user.lastName}`;
+        const currentId = user.id;
+
+        const profileResponse = await axios.get(`http://localhost:8080/get_all_users/${currentId}`);
+        const profilesInfo = profileResponse.data;
+
+
+        for(let j = 0 ; j < profilesInfo.length ; j++) {
+            const profile = profilesInfo[j];
+            const userId = profile.id
+
+            users.push({
+                name: fullName,
+                department: department,
+                role: profile.role,
+                id:userId
+            });
+        }
+    }
+
+    this.setState({userData:users})
+}
+
+  handleRemove = () =>{
+
+    const userId = 152; //userId will be replaced
+    const response = axios.delete(`http://localhost:8080/user/${userId}`);
+    if(response){
+
+      console.log("User has been removed successfully");
+    }
+    else{
+
+      console.log("User cannot been removed");
+    }
+  }
+
+  handleEdit = () => {
     this.setState({
       showEdit:true,
       selectedUser: UserData
@@ -58,8 +103,7 @@ class ManageUsers extends Component {
 
   
   handleSelected= (role,code) => {
-    console.log("code is: ",code )
-    console.log("role is: ",role )
+
     var selectedCode = "";
 
     if(code == 1){
@@ -69,13 +113,11 @@ class ManageUsers extends Component {
       selectedCode = "CS399"
     }
     this.setState({selectedCode:selectedCode});
-   
   };
 
 
 
   handleMenu(){
-    console.log(this.showMenu)
     this.setState(prevState => ({
       showMenu: !prevState.showMenu
     }));
@@ -94,19 +136,29 @@ class ManageUsers extends Component {
 
 
 
+options = [
+  {
+    name: 'Remove User',
+    action: this.handleRemove
+  },
+  {
+    name: 'Edit User',
+    action: this.handleEdit
+  }
+];
   render() {
     const { showMenu } = this.state;
     const { showPopup } = this.state;
     const {showRemove} = this.state;
     const {showEdit} = this.state;
     const {showChoices} = this.state;
+    const {userData} = this.state;
     const { handleSelected} = this;
     return (
       
       <div className="maincontainer">
         
-        {console.log(showChoices)}
-        <DisplayList data={UserData} displayFields={['name', 'role', 'department'] }isAdd = {true} tag = "Manage Users:" setControllerState={this.handleChoiceMenu} choice = 
+        <DisplayList options = {this.options} data={userData} displayFields={['name', 'role', 'department'] }isAdd = {true} tag = "Manage Users:" setControllerState={this.handleChoiceMenu} choice =
         
 
           {showChoices&& <div className="menu" id=  "choice-menu">
@@ -119,7 +171,6 @@ class ManageUsers extends Component {
         }/>
         <div className="add">
           <button onClick={this.handleMenu} className = "button" id = "add-button" >+</button>
-        {console.log(showMenu)}
         {showMenu && (
           <div className="menu">
             <ul className="menu-contents">

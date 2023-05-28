@@ -19,8 +19,10 @@ import StudentOperations from "./Components/Pages/StudentOperations";
 import ManageUsers from "./Components/Pages/ManageUsers";
 import Sidebar from "./Components/Sidebar";
 import FAQ from "./Components/Pages/FAQ"
-import AdminAssNotifications from "./Components/Pages/AdminAssNotifications";
-import  UserProvider , { UserContext } from './Components/UserContext';
+import Announcements from "./Components/Pages/Announcements";
+import TeachingAssistantFeedback from "./Components/Pages/TeachingAssistantFeedback";
+import UserProvider , { UserContext } from './Components/UserContext';
+import NotFoundPage from "./Components/NotFoundPage";
 import "./App.css";
 //import { useNavigate } from "react-router-dom";
 
@@ -57,19 +59,19 @@ const App = () => {
         },
         {
           path: "studentnotifications",
-          element: <StudentNotifications />,
+          element: <StudentNotifications userId = {userId}/>, // new
         },
         {
           path: "instructornotifications",
-          element: <InstructorNotifications />,
+          element: <InstructorNotifications userId = {userId} />, // new
         },
         {
-          path: "adminassnotifications",
-          element: <AdminAssNotifications />,
+          path: "announcements",
+          element: <Announcements userId = {userId}/>, // new
         },
         {
           path: "reports",
-          element: <Reports />,
+          element: <Reports userId = {userId} />,
         },
 
         {
@@ -87,11 +89,11 @@ const App = () => {
         },
         {
           path: "students",
-          element: <StudentList userId = {userId}/>,
+          element: <StudentList userId = {userId}  />,
         },
         {
           path: "forms",
-          element: <StudentOperations />,
+          element: <StudentOperations userId = {userId} />,
         },
         {
           path: "graders",
@@ -99,12 +101,20 @@ const App = () => {
         },
         {
           path: "manage",
-          element: <ManageUsers />,
+          element: <ManageUsers userId = {userId}/>,
         },
         {
           path: 'faq',
           element: <FAQ />
-        }
+        },
+        {
+          path: 'teachingassistantfeedback',
+          element: <TeachingAssistantFeedback />
+        },
+        {
+          path: "*",
+          element: <NotFoundPage />,
+        },
       ],
     },
    

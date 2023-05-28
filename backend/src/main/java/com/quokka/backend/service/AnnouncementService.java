@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,16 +26,16 @@ public class AnnouncementService {
 
     public Announcement addAnnouncement(String senderRole, Long senderId, String audience, AnnouncementAddRequest request) {
         User sender = null;
-        if (senderRole.equals("instructor")) {
+        if (senderRole.equals("Instructor")) {
             sender = userManagementService.getInstructorByID(senderId);
         }
-        else if (senderRole.equals("TA")) {
+        else if (senderRole.equals("Teaching Assistant")) {
             sender = userManagementService.getTeachingAssistantByID(senderId);
         }
-        else if (senderRole.equals("administrative-assistant")) {
+        else if (senderRole.equals("Administrative Assistant")) {
             sender = userManagementService.getAdministrativeAssistantByID(senderId);
         }
-        else if (senderRole.equals("coordinator")) {
+        else if (senderRole.equals("Summer Training Coordinator")) {
             sender = userManagementService.getSummerTrainingCoordinatorByID(senderId);
         }
 //        else if (senderRole.equals("admin")) { // TODO: admin ??
@@ -42,7 +43,7 @@ public class AnnouncementService {
 //        }
 
         if (sender == null) {
-            throw new IllegalStateException("Sender for the announcement not found");
+            return null;
         }
 
         Announcement announcement = new Announcement();
@@ -75,10 +76,11 @@ public class AnnouncementService {
 
         List<Announcement> announcements= new ArrayList<Announcement>();
 
-        if(userRole.get().equals("student") ) {
+        if(userRole.get().equals("Student") ) {
             Student student = userManagementService.getStudentByID(userId.get());
             if (student == null) {
-                throw new IllegalStateException("Student not found");
+//                throw new IllegalStateException("Student not found");
+                return null;
             }
 
             System.out.println("Show announcements for student: " + student.getUserAccount().getLastName() );
@@ -95,18 +97,18 @@ public class AnnouncementService {
 
             if (instructor != null) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(instructor.getRole(),
-                                                            instructor.getId(), "students"));
+                                                            instructor.getId(), "Students"));
             }
 
             if(teachingAssistant != null) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
-                                        teachingAssistant.getRole(), teachingAssistant.getId(), "students"));
+                                        teachingAssistant.getRole(), teachingAssistant.getId(), "Students"));
             }
 
             for (AdministrativeAssistant administrativeAssistant : administrativeAssistants) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         administrativeAssistant.getRole(),
-                        administrativeAssistant.getId(), "students"));
+                        administrativeAssistant.getId(), "Students"));
 
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         administrativeAssistant.getRole(),
@@ -116,7 +118,7 @@ public class AnnouncementService {
             for (SummerTrainingCoordinator coordinator : coordinators) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         coordinator.getRole(),
-                        coordinator.getId(), "students"));
+                        coordinator.getId(), "Students"));
 
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         coordinator.getRole(),
@@ -124,15 +126,20 @@ public class AnnouncementService {
 
             }
 
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
+
             return announcements;
         }
-        else if( userRole.get().equals("instructor") ) {
+        else if( userRole.get().equals("Instructor") ) {
             Instructor instructor = userManagementService.getInstructorByID(userId.get());
             if (instructor == null) {
-                throw new IllegalStateException("Instructor not found");
+                return null;
             }
 
             System.out.println("Show announcements for instructor: " + instructor.getUserAccount().getLastName() );
+
+            announcements.addAll(announcementRepository.findBySenderRoleAndSenderId( instructor.getRole(),
+                                                                                     instructor.getId() ) );
 
             List<AdministrativeAssistant> administrativeAssistants =
                     userManagementService.getAllAdministrativeAssistants(Optional.empty(),
@@ -145,7 +152,7 @@ public class AnnouncementService {
             for (AdministrativeAssistant administrativeAssistant : administrativeAssistants) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                                                             administrativeAssistant.getRole(),
-                                                            administrativeAssistant.getId(), "instructors"));
+                                                            administrativeAssistant.getId(), "Instructors"));
 
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                                                             administrativeAssistant.getRole(),
@@ -155,20 +162,26 @@ public class AnnouncementService {
             for (SummerTrainingCoordinator coordinator : coordinators) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                                                             coordinator.getRole(),
-                                                            coordinator.getId(), "instructors"));
+                                                            coordinator.getId(), "Instructors"));
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                                                             coordinator.getRole(),
                                                             coordinator.getId(),
                                                             instructor.getUserAccount().getDepartment() ));
             }
 
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
+
             return announcements;
         }
-        else if( userRole.get().equals("TA") ) {
+        else if( userRole.get().equals("Teaching Assistant") ) {
             TeachingAssistant teachingAssistant = userManagementService.getTeachingAssistantByID(userId.get());
             if (teachingAssistant == null) {
-                throw new IllegalStateException("Teaching Assistant not found");
+                return null;
+                //throw new IllegalStateException("Teaching Assistant not found");
             }
+
+            announcements.addAll(announcementRepository.findBySenderRoleAndSenderId( teachingAssistant.getRole(),
+                    teachingAssistant.getId() ) );
 
             List<AdministrativeAssistant> administrativeAssistants =
                     userManagementService.getAllAdministrativeAssistants(Optional.empty(),
@@ -181,7 +194,7 @@ public class AnnouncementService {
             for (AdministrativeAssistant administrativeAssistant : administrativeAssistants) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         administrativeAssistant.getRole(),
-                        administrativeAssistant.getId(), "TAs"));
+                        administrativeAssistant.getId(), "Teaching Assistants"));
 
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         administrativeAssistant.getRole(),
@@ -192,7 +205,7 @@ public class AnnouncementService {
             for (SummerTrainingCoordinator coordinator : coordinators) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         coordinator.getRole(),
-                        coordinator.getId(), "TAs"));
+                        coordinator.getId(), "Teaching Assistants"));
 
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         coordinator.getRole(),
@@ -200,12 +213,14 @@ public class AnnouncementService {
                         teachingAssistant.getUserAccount().getDepartment() ) );
             }
 
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
             return announcements;
         }
-        else if( userRole.get().equals("administrative-assistant") ) {
+        else if( userRole.get().equals("Administrative Assistant") ) {
             AdministrativeAssistant administrativeAssistant = userManagementService.getAdministrativeAssistantByID(userId.get());
             if (administrativeAssistant == null) {
-                throw new IllegalStateException("Administrative Assistant not found");
+//                throw new IllegalStateException("Administrative Assistant not found");
+                return null;
             }
 
             // Announcements that are sent by this administrative assistant are also included in the list.
@@ -220,7 +235,7 @@ public class AnnouncementService {
             for (AdministrativeAssistant otherAdministrativeAssistant : administrativeAssistants) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         otherAdministrativeAssistant.getRole(),
-                        otherAdministrativeAssistant.getId(), "AAs"));
+                        otherAdministrativeAssistant.getId(), "Administrative Assistants"));
 
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         otherAdministrativeAssistant.getRole(),
@@ -230,7 +245,7 @@ public class AnnouncementService {
             for (SummerTrainingCoordinator coordinator : coordinators) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         coordinator.getRole(),
-                        coordinator.getId(), "AAs"));
+                        coordinator.getId(), "Administrative Assistants"));
 
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         coordinator.getRole(),
@@ -238,12 +253,15 @@ public class AnnouncementService {
                         administrativeAssistant.getUserAccount().getDepartment() ) );
             }
 
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
+
             return announcements;
         }
-        else if( userRole.get().equals("coordinator") ) {
+        else if( userRole.get().equals("Summer Training Coordinator") ) {
             SummerTrainingCoordinator coordinator = userManagementService.getSummerTrainingCoordinatorByID(userId.get());
             if (coordinator == null) {
-                throw new IllegalStateException("Coordinator not found");
+//                throw new IllegalStateException("Coordinator not found");
+                return null;
             }
 
             // Announcements that are sent by this coordinator are also included in the list !!!
@@ -256,7 +274,7 @@ public class AnnouncementService {
             for (AdministrativeAssistant administrativeAssistant : administrativeAssistants) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         administrativeAssistant.getRole(),
-                        administrativeAssistant.getId(), "STCs"));
+                        administrativeAssistant.getId(), "Summer Training Coordinators"));
 
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         administrativeAssistant.getRole(),
@@ -266,13 +284,15 @@ public class AnnouncementService {
             for (SummerTrainingCoordinator otherCoordinator : coordinators) {
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         otherCoordinator.getRole(),
-                        otherCoordinator.getId(), "STCs"));
+                        otherCoordinator.getId(), "Summer Training Coordinators"));
 
                 announcements.addAll(announcementRepository.findBySenderRoleAndSenderIdAndAudience(
                         otherCoordinator.getRole(),
                         otherCoordinator.getId(),
                         coordinator.getUserAccount().getDepartment() ) );
             }
+
+            announcements.sort(Comparator.comparing(Announcement::getId).reversed());
 
             return announcements;
         }

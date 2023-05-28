@@ -1,4 +1,4 @@
-import React, { useState, useRef ,  useEffect } from "react";
+import React, { useState, useRef ,  useEffect,useContext } from "react";
 import axios from "axios";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
@@ -12,6 +12,7 @@ import MenuItem from "@mui/joy/MenuItem";
 import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Check from "@mui/icons-material/Check";
 import FormatItalic from "@mui/icons-material/FormatItalic";
+import { UserContext } from './UserContext';
 
 
 function FileUpload(props) {
@@ -19,8 +20,8 @@ function FileUpload(props) {
 
   return (
     <div>
-      
-      <DragDropFiles id = {props.id} message={message} setMessage={setMessage} />
+
+      <DragDropFiles isCompanyForm = {props.isCompanyForm} id = {props.id} message={message} setMessage={setMessage} />
     </div>
   );
 }
@@ -42,6 +43,7 @@ function TextareaValidator(props) {
         <Textarea
             placeholder="Type your message here..."
             minRows={3}
+            required
             onChange={handleMessageChange}
             endDecorator={
               <Box
@@ -114,6 +116,9 @@ const DragDropFiles = (props) => {
   const [userId, setId] = useState("");
   //const [description, setDescription] = useState("");
   const inputRef = useRef();
+  const [uploadSubmitted, setUploadSubmitted] = useState(false); // Track upload status
+  const userContext = useContext(UserContext);
+
 
   const handleSelectFile = (event) => {
 
@@ -141,10 +146,13 @@ const DragDropFiles = (props) => {
     const getInformation = async () => {
 
       try {
+
+        console.log("COMPANY:" ,props.isCompanyForm)
         const response = await axios.get(`http://localhost:8080/get_all_users/${props.id}`);
         const info = response.data[0];
         // Process the received data as needed
         console.log(info.id);
+        
         setId(info.id)
       } catch (error) {
         console.error(error);
@@ -153,7 +161,68 @@ const DragDropFiles = (props) => {
 
     getInformation();
   }, [props.id]);
-  const handleUpload = async (event) => {
+
+
+  //separate the uploads: company form or report
+  const handleUpload = (event) => {
+    if (props.isCompanyForm) {
+      handleCompanyFormUpload(event);
+    } else {
+      handleReportUpload(event);
+    }
+  }
+
+
+  //administrative assistant will upload the company form for a student
+  const handleCompanyFormUpload = async (event) =>{
+
+    event.preventDefault();
+
+
+    console.log("file: ", file)
+    
+    console.log("CORES STUDENT:", userContext.userId)
+    const studentId = userContext.userId;
+
+    if (file) {
+
+
+    const formData = new FormData();
+
+    formData.append("studentId", studentId); 
+    formData.append("fileData", file);
+
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/report/company_form",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        // Handle success response
+        console.log("success");
+          setUploadSubmitted(true);
+          console.log(response.data);
+      } catch (error) {
+        // Handle error
+        console.log("fail");
+        if (error.response) {
+          console.log('Error status', error.response.status);
+          console.log('Error details', error.response.data);
+      } else {
+          console.error(error);
+      }
+      }
+    }
+
+  }
+
+  //upload a internship report
+  const handleReportUpload = async (event) => {
     event.preventDefault();
 
 
@@ -174,10 +243,15 @@ const DragDropFiles = (props) => {
 
     console.log("MESSAGE: ", props.message)
 
+    let uploadDate = new Date().toISOString();
+    console.log("DATE:", uploadDate)
+
     formData.append("studentId", userId); // Replace studentId with the actual student ID
     formData.append("reportId", reportId); // Replace reportId with the actual report ID
     formData.append("fileData", file);
     formData.append("reportDescription",props.message)
+    formData.append("uploadDate", uploadDate)
+
 
       try {
         const response = await axios.post(
@@ -191,11 +265,17 @@ const DragDropFiles = (props) => {
         );
         // Handle success response
         console.log("success");
-        console.log(response.data);
+          setUploadSubmitted(true);
+          console.log(response.data);
       } catch (error) {
         // Handle error
         console.log("fail");
-        console.error(error);
+        if (error.response) {
+          console.log('Error status', error.response.status);
+          console.log('Error details', error.response.data);
+      } else {
+          console.error(error);
+      }
       }
     }
   };
@@ -204,13 +284,20 @@ const DragDropFiles = (props) => {
   //   setDescription(event.target.value);
   // };
 
-  if (file)
-    return (
-      <div className="upload-confirm">
-        <h2>Uploading the following file:</h2>
-        <p>{file.name}</p>
-        <br></br>
-        <TextareaValidator message={props.message} setMessage={props.setMessage} />
+  if (file && !uploadSubmitted) {
+      return (
+          <div className="upload-confirm">
+              <h2>Uploading the following file:</h2>
+              <p>{file.name}</p>
+              <br></br>
+              {!props.isCompanyForm &&
+                <TextareaValidator setMessage = {props.setMessage}/>
+              }
+              {props.isCompanyForm &&
+               <h2>For the student:</h2>
+
+              }
+            
 
         {/* <input
           type="text"
@@ -221,16 +308,25 @@ const DragDropFiles = (props) => {
 {/* 
         {props.afterUpload && props.afterUpload({ file, description })} */}
 
-        <div className="button-layout">
-          <button className="button" onClick={() => setFile(null)}>
-            Cancel
-          </button>
-          <button className="button" onClick={handleUpload}>
-            Upload
-          </button>
+              <div className="button-layout">
+                  <button className="button" onClick={() => setFile(null)}>
+                      Cancel
+                  </button>
+                  <button className="button" onClick={handleUpload}>
+                      Upload
+                  </button>
+              </div>
+          </div>
+      );
+  }
+  if (uploadSubmitted) {
+      return(
+        <div className="upload-confirm">
+            <h2>You have already uploaded a report.</h2>
         </div>
-      </div>
-    );
+
+      );
+  }
 
   return (
     <>
