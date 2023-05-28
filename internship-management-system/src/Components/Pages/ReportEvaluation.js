@@ -41,44 +41,6 @@ const statusOptions = ["Submitted",
                        "Unsatisfactory",
                        "Pending Company Form Approval",
                                                            ]
-    /*
-    {value: 'submitted', label: 'Submitted'},
-    {value: 'assigned', label: 'Assigned'},
-    {value: 'under_evaluation', label: 'Under Evaluation'},
-    {value: 'under_revision', label: 'Under Revision'},
-    {value: 'satisfactory', label: 'Satisfactory'},
-    {value: 'unsatisfactory', label: 'Unsatisfactory'}
-    */
-const revisionHistory = [
-    {
-        revisionCount: "1",
-        prevFileName: "DenizSunReportRevision1.pdf",
-        prevStatus: "Unsatisfactory. Waiting for revision.",
-        prevFeedback: "Your report is insufficient. Try to emphasize your experiences and (...) \n\nUpload a revised version.",
-        annotatedFeedback: "DenizSunFeedback1.pdf",
-        studentComment: "I barely uploaded on time. :) "
-
-    },
-    {
-        revisionCount: "2",
-        prevFileName:"DenizSunReportRevision2.pdf",
-        prevStatus: "Unsatisfactory. Waiting for revision.",
-        prevFeedback: "Better but fix the format.",
-        annotatedFeedback: "DenizSunFeedback2.pdf",
-        studentComment: "I hope this is better."
-
-    },
-    {
-        revisionCount: "3",
-        prevFileName:"DenizSunReportRevision3.pdf",
-        prevStatus: "Unsatisfactory. Waiting for revision.",
-        prevFeedback: "Nice :)",
-        annotatedFeedback: "DenizSunFeedback3.pdf",
-        studentComment: "I have fixed the format. Please check again."
-
-    }
-]
-
 
 
 function RevisionList() {
@@ -133,7 +95,6 @@ const downloadAnnotated = (fileData,fileName) => {
 
 
 useEffect(() => {
-  console.log("BUNUN IDSI: ",userContext.userId)
   setStudentId(userContext.userId);
 }, [userContext.userId]);
 
@@ -171,6 +132,7 @@ const getReportFile = async (id, reports, index) => {
     const reportFile = response.data;
 
     const feedback = await getFeedbackFile(id);
+    const feedbackDesc = await getFeedbackDescription(id)
 
     reports.push({
       revisionCount: index + 1,
@@ -178,7 +140,8 @@ const getReportFile = async (id, reports, index) => {
       description: reportFile.reportDescription,
       fileData: reportFile.fileData,
       feedbackData: feedback ? feedback.fileData : null,
-      feedbackName: feedback ? feedback.fileName : null
+      feedbackName: feedback ? feedback.fileName : null,
+      feedbackDescription: feedbackDesc
     });
 
     createDownloadUrl(reportFile.fileData, reportFile.fileName);
@@ -186,6 +149,21 @@ const getReportFile = async (id, reports, index) => {
     links.push(link);
   } catch (error) {
     console.error("Failed to fetch report file: ", error);
+  }
+};
+
+const getFeedbackDescription = async (id) => {
+  try {
+    const response = await axios.get(`http://localhost:8080/feedback/description/${id}`);
+    const feedback = response.data;
+
+    console.log("FEEDBACK DESC: ",feedback)
+
+
+    return feedback;
+  } catch (error) {
+    console.error("Failed to fetch feedback: ", error);
+    throw error;
   }
 };
 
@@ -224,7 +202,7 @@ const getAllReports = async () => {
     var allFeedbacks = [];
 
     //get every report except the last one (report history)
-    for (var i = 0; i < info.length ; i++) {
+    for (var i = 0; i < info.length -1 ; i++) {
       console.log(i, "th report: ", info[i].id);
       reportIdList.push(info[i].id)
       getReportFile(reportIdList[i],allReports,i)
@@ -232,22 +210,12 @@ const getAllReports = async () => {
     }
 
     console.log("ids: ", reportIdList)
-    
-    //console.log("1:", reportFile)
-    //getReportFile(reportIdList[1],allReports)
-    //console.log("2:", reportFile)
 
     console.log("ALL REPOS:", allReports)
     console.log("ALL FEEDBCAKS:", allFeedbacks)
 
     setReportHistory(allReports)
     setFeedbackHistory(allFeedbacks)
-
-    // const reports = allReports.map((report,index) => ({
-    //   revisionCount: index + 1,
-    //   fileName: report.fileName,
-    //   description:report.reportDescription
-    // }));
   } catch (error) {
     console.log(error);
   }
@@ -275,13 +243,21 @@ const getAllReports = async () => {
                         <br></br>
                         <p>Overall progress: {}</p>
                         <b><br></br>Your feedback for this submission</b>
-                        <textarea readOnly>{}</textarea>
+                       <textarea readOnly>{revision.feedbackDescription}</textarea>
                         <b>Your annotated feedback for this submission<br></br></b>
-                        <IconButton aria-label="download" onClick={downloadAnnotated(revision.feedbackData,revision.feedbackName)}>
-                            <DownloadIcon/>
-                        </IconButton>
-                        <Button variant="text" onClick={downloadAnnotated(revision.feedbackData,revision.feedbackName)} style={{textTransform: 'none'}} size="large">Feedback</Button>
+                        {!(revision.feedbackData) &&
+                        <p>Not available</p>
+                        }
 
+                        {revision.feedbackData &&
+                            <div>
+                                <IconButton aria-label="download" onClick={downloadAnnotated(revision.feedbackData,revision.feedbackName)}>
+                                <DownloadIcon/>
+                                </IconButton>
+                                <Button variant="text" onClick={downloadAnnotated(revision.feedbackData,revision.feedbackName)} style={{textTransform: 'none'}} size="large">{revision.feedbackName}</Button>
+                            </div>
+                        }
+                 
                     </li>
                 </div>
             ))}
@@ -290,14 +266,6 @@ const getAllReports = async () => {
 }
 
 
-
-const downloadAnnotated = () => {
-    const link = document.createElement("a");
-    //the "download.txt" will be replaced by the link name. (this.state = {annotatedFeedback}) is the file needed.
-    link.download = `${this.state.studentFirstName}${this.state.studentLastName}annotatedFeedback.txt`;
-    link.href = "./annotated.txt";
-    link.click();
-};
 const downloadCEF = () => {
     const link = document.createElement("a");
     link.download = `companyevaluationform.txt`;
@@ -333,16 +301,38 @@ function IconAlerts() {
         </div>
     );
 }
-function TextareaValidator() {
+function TextareaValidator(props) {
   const [italic, setItalic] = React.useState(false);
   const [fontWeight, setFontWeight] = React.useState('normal');
   const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const sendFeedbackComment = async (event) => {
+    event.preventDefault();
+
+    console.log("SENDING A FEEDBACK:", props.message)
+      const feedbackData = {
+        senderId: props.userId,
+        reportId: props.reportId,
+        feedbackDescription: props.message,
+        uploadDate: new Date().toISOString(), // Set the appropriate date format
+      };
+
+      axios.post("http://localhost:8080/feedback", feedbackData)
+      
+  };
+
+  const handleMessageChange = (event) => {
+    props.setMessage(event.target.value);
+};
+
+  
   return (
     <FormControl>
       <FormLabel>Feedback comments</FormLabel>
       <Textarea
         placeholder="Type your feedback comments here..."
         minRows={3}
+        onChange={handleMessageChange}
         endDecorator={
         <Box
           sx={{
@@ -395,7 +385,7 @@ function TextareaValidator() {
           >
             <FormatItalic />
           </IconButton>
-          <Button sx={{ ml: 'auto' }}>Send</Button>
+          <Button onClick = {sendFeedbackComment} sx={{ ml: 'auto' }}>Send</Button>
         </Box>
         }
         sx={{
@@ -865,8 +855,10 @@ return (
         currentFile: null,
         fileData:null,
         reportId:null,
+        message: ""
       };
       this.downloadCurrent = this.downloadCurrent.bind(this);
+      this.setMessage = this.setMessage.bind(this);
     }
 
     static contextType = UserContext;
@@ -880,6 +872,10 @@ return (
       this.getActiveReport(id);
 
       console.log("WORKS AGA. ", this.state.fileData)
+  }
+
+  setMessage(message){
+    this.setState({message:message})
   }
   
   downloadCurrent = () =>{
@@ -971,7 +967,7 @@ return (
       const feedbackData = {
         senderId: this.props.userId,
         reportId: this.state.reportId,
-        feedbackDescription: "asd",
+        feedbackDescription: this.state.message,
         uploadDate: new Date().toISOString(), // Set the appropriate date format
       };
 
@@ -1089,7 +1085,7 @@ return (
 
 
             <div className="texteditor">
-              <TextareaValidator />
+              <TextareaValidator setMessage = {this.setMessage} message = {this.state.message} userId = {this.props.userId}  reportId = {this.state.reportId}/>
             </div>
 
             <div className="annotatedupload">

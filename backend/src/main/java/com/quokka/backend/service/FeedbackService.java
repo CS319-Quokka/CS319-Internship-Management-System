@@ -54,6 +54,15 @@ public class FeedbackService {
         return feedbackRepository.findAll();
     }
 
+    public String getFeedbackDescription(Long reportId){
+        Feedback feedback = findByReportId(reportId);
+        if(feedback == null){
+            return "";
+        }
+        return feedback.getFeedbackDescription();
+
+    }
+
     public Long addFeedback(FeedbackAddRequest request){
 
         Feedback newFeedback = new Feedback();

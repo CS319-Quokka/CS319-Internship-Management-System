@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.http.HttpHeaders;
 import java.util.Date;
@@ -50,6 +51,13 @@ public class ReportController {
             return reportService.addReport(request);
         }
         return false;
+    }
+
+    @PostMapping("/company_form")
+    public boolean addCompanyForm(@RequestParam("file") MultipartFile file, @RequestParam("studentId") Long studentId){
+
+        return true;
+
     }
 
     @GetMapping("/status/{studentID}")

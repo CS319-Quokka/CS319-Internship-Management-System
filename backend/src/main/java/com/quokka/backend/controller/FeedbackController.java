@@ -30,44 +30,28 @@ public class FeedbackController {
     }
 
     @GetMapping("/get_feedback_by_report/{reportId}")
-    public ResponseEntity<FeedbackFileResponse> getFeedback(@PathVariable("reportId") Long reportId){
-
-        FeedbackFileResponse response = new FeedbackFileResponse();
-
-
-
+    public ResponseEntity<?> getFeedback(@PathVariable("reportId") Long reportId) {
         Feedback feedback = feedbackService.findByReportId(reportId);
 
-
-        System.out.println("feedback found: " + feedback);
-
-
-        FeedbackFile feedbackFile = null;
-
-        if(feedback != null){
-            System.out.println("feedback is  not null"  + feedback);
-
-            System.out.println("feedback id: "  + feedback.getId());
-
-            feedbackFile = feedbackService.getFeedbackFileByFeedbackId(feedback.getId());
-
+        if (feedback == null) {
+            return ResponseEntity.ok("No feedback available for this report");
         }
 
+        FeedbackFile feedbackFile = feedbackService.getFeedbackFileByFeedbackId(feedback.getId());
 
-        if(feedbackFile != null){
-            System.out.println("feedback file is not  null" );
-            response.setFileData(feedbackFile.getFileData());
-            response.setFeedbackId(feedback.getId());
-            response.setFeedbackDescription(feedback.getFeedbackDescription());
-            response.setFileName(feedbackFile.getFileName());
-            return ResponseEntity.ok(response);
+        if (feedbackFile == null) {
+            return ResponseEntity.ok("No feedback file available for this feedback");
         }
 
-        else {
+        FeedbackFileResponse response = new FeedbackFileResponse();
+        response.setFileData(feedbackFile.getFileData());
+        response.setFeedbackId(feedback.getId());
+        response.setFeedbackDescription(feedback.getFeedbackDescription());
+        response.setFileName(feedbackFile.getFileName());
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-        }
+        return ResponseEntity.ok(response);
     }
+
 
     @GetMapping
     public List<Feedback> getAllFeedback(){
@@ -110,6 +94,11 @@ public class FeedbackController {
         return feedbackService.getFeedbackFileById(id);
     }
 
+    @GetMapping("/description/{reportId}")
+    public String getFeedbackDescription(@PathVariable Long reportId){
+        return feedbackService.getFeedbackDescription(reportId);
+
+    }
     @GetMapping("/file")
     public List<FeedbackFile> getAllFeedbackFiles(){
 

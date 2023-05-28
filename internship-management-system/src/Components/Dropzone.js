@@ -20,7 +20,7 @@ function FileUpload(props) {
   return (
     <div>
 
-      <DragDropFiles id = {props.id} message={message} setMessage={setMessage} />
+      <DragDropFiles isCompanyForm = {props.isCompanyForm} id = {props.id} message={message} setMessage={setMessage} />
     </div>
   );
 }
@@ -144,10 +144,13 @@ const DragDropFiles = (props) => {
     const getInformation = async () => {
 
       try {
+
+        console.log("COMPANY:" ,props.isCompanyForm)
         const response = await axios.get(`http://localhost:8080/get_all_users/${props.id}`);
         const info = response.data[0];
         // Process the received data as needed
         console.log(info.id);
+        
         setId(info.id)
       } catch (error) {
         console.error(error);
@@ -156,7 +159,65 @@ const DragDropFiles = (props) => {
 
     getInformation();
   }, [props.id]);
-  const handleUpload = async (event) => {
+
+
+  //separate the uploads: company form or report
+  const handleUpload = (event) => {
+    if (props.isCompanyForm) {
+      handleCompanyFormUpload(event);
+    } else {
+      handleReportUpload(event);
+    }
+  }
+
+
+  //administrative assistant will upload the company form for a student
+  const handleCompanyFormUpload = async (event) =>{
+
+    event.preventDefault();
+
+
+    console.log("file: ", file)
+
+    if (file) {
+
+
+    const formData = new FormData();
+
+     formData.append("fileName", userId); 
+    formData.append("fileData", file);
+
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/report/file",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        // Handle success response
+        console.log("success");
+          setUploadSubmitted(true);
+          console.log(response.data);
+      } catch (error) {
+        // Handle error
+        console.log("fail");
+        if (error.response) {
+          console.log('Error status', error.response.status);
+          console.log('Error details', error.response.data);
+      } else {
+          console.error(error);
+      }
+      }
+    }
+
+  }
+
+  //upload a internship report
+  const handleReportUpload = async (event) => {
     event.preventDefault();
 
 
@@ -224,7 +285,14 @@ const DragDropFiles = (props) => {
               <h2>Uploading the following file:</h2>
               <p>{file.name}</p>
               <br></br>
-              <TextareaValidator setMessage = {props.setMessage}/>
+              {!props.isCompanyForm &&
+                <TextareaValidator setMessage = {props.setMessage}/>
+              }
+              {props.isCompanyForm &&
+               <h2>For the student:</h2>
+
+              }
+            
 
         {/* <input
           type="text"

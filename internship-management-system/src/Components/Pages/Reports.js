@@ -20,7 +20,29 @@ function RevisionList(props) {
 
     const [reportHistory,setReportHistory] = useState([])
     const [studentId,setStudentId] = useState(null);
+    const [link,setLink] = useState("");
+    const [links,setLinks] = useState([]);
 
+
+    const createDownloadUrl = (fileData,fileName) =>{
+      // Create a Blob object from the file data
+    
+      console.log("HERE DOWNLOAD")
+      const blob = new Blob([fileData]);
+    
+      // Create a URL for the blob object
+      const url = URL.createObjectURL(blob);
+    
+       // Create a temporary link element
+       const newLink = document.createElement('a');
+       newLink.href = url;
+       newLink.download = fileName;
+    
+       console.log("here:",newLink)
+       setLink(newLink)
+       links.push(newLink)
+    
+    }
 
     const downloadPrevious = (fileData, fileName) => {
         return () => {
@@ -46,38 +68,82 @@ function RevisionList(props) {
           const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
           const info = response.data;
       
+          console.log("HIST:", info)
           const response2 = await axios.get(`http://localhost:8080/report/file/active/${studentId}`);
           const info2 = response2.data;
       
-          const reportIdList = info.slice(0, -1).map((report) => report.id);
-          const allReports = await Promise.all(reportIdList.map((id, index) => getReportFile(id, index)));
+          var reportIdList = [];
+          var allReports = [];
+          for (var i = 0; i < info.length -1 ; i++) {
+            console.log(i, "th report: ", info[i].id);
+            reportIdList.push(info[i].id)
+            getReportFile(reportIdList[i],allReports,i)
+          }
+          console.log("ALLLL:", allReports)
+          setReportHistory(allReports)
       
-          setReportHistory(allReports);
+      
+         // setReportHistory(allReports);
         } catch (error) {
           console.log(error);
         }
       };
       
-      const getReportFile = async (id, index) => {
+      const getReportFile = async (id, reports, index) => {
         try {
           const response = await axios.get(`http://localhost:8080/report/file/${id}`);
           const reportFile = response.data;
+          
+          console.log("HERE RAPO", reportFile)
+          let feedback = null;
+          let feedbackDescription = "";
+          const reportId = reportFile.reportId
+          console.log("idi:",reportId)
+          if (reportId) {
+            console.log("GIRDI")
+            feedbackDescription = await getFeedbackDescription(reportId)
+            console.log("HERE AS THE: ", feedbackDescription)
+
+            feedback = await getFeedbackFile(reportId);
+            console.log("FFEDBACK:  ", feedback)
+            
+
+          }
       
-          const feedback = await getFeedbackFile(id);
-      
-          return {
+          reports.push({
             revisionCount: index + 1,
             fileName: reportFile.fileName,
             description: reportFile.reportDescription,
             fileData: reportFile.fileData,
             feedbackData: feedback && feedback.fileData ? feedback.fileData : null,
             feedbackName: feedback && feedback.fileName ? feedback.fileName : null,
-          };
+            feedbackDescription: feedbackDescription
+          });
+
+          createDownloadUrl(reportFile.fileData, reportFile.fileName);
+          links.push(link);
         } catch (error) {
           console.error("Failed to fetch report file: ", error);
           return null;
         }
       };
+      
+
+      const getFeedbackDescription = async (id) => {
+        try {
+          const response = await axios.get(`http://localhost:8080/feedback/description/${id}`);
+          const feedback = response.data;
+
+          console.log("FEEDBACK DESC: ",feedback)
+      
+      
+          return feedback;
+        } catch (error) {
+          console.error("Failed to fetch feedback: ", error);
+          throw error;
+        }
+      };
+      
       
       
       const getFeedbackFile = async (id) => {
@@ -137,11 +203,12 @@ function RevisionList(props) {
         }
       }, [studentId]);
       
-   
+      console.log("ALL OF IT:" , reportHistory)
       return (
+        
         <ul>
-          {reportHistory.map((revision) => (
-            <div className="prevreport" key={revision.revisionCount}>
+          {reportHistory.map((revision,index) => (
+            <div className="prevreport" key={index}>
               <li>
                 <hr />
                 <h2>◾Revision: {revision.revisionCount}</h2>
@@ -178,26 +245,34 @@ function RevisionList(props) {
                   <br />
                   Instructor's feedback for this submission
                 </b>
-                <textarea readOnly>{/* Add instructor feedback here */}</textarea>
+                <textarea readOnly>{revision.feedbackDescription}</textarea>
                 <b>Instructor's annotated feedback for this submission</b>
-                <IconButton
-                  aria-label="download"
-                  onClick={
-                    downloadAnnotated(revision.feedbackData, revision.feedbackName)
-                  }
-                >
-                  <DownloadIcon />
-                </IconButton>
-                <Button
-                  variant="text"
-                  onClick={
-                    downloadAnnotated(revision.feedbackData, revision.feedbackName)
-                  }
-                  style={{ textTransform: "none" }}
-                  size="large"
-                >
-                  {revision.feedbackName}
-                </Button>
+                {!revision.feedbackData &&
+                <p>Not available</p>
+                }
+
+                {revision.feedbackData &&
+                <div>
+                     <IconButton
+                     aria-label="download"
+                     onClick={
+                       downloadAnnotated(revision.feedbackData, revision.feedbackName)
+                     }
+                   >
+                     <DownloadIcon />
+                   </IconButton>
+                   <Button
+                     variant="text"
+                     onClick={
+                       downloadAnnotated(revision.feedbackData, revision.feedbackName)
+                     }
+                     style={{ textTransform: "none" }}
+                     size="large"
+                   >
+                     {revision.feedbackName}
+                   </Button></div>
+                }
+               
               </li>
             </div>
           ))}
@@ -213,7 +288,7 @@ class ReportsStudents extends Component {
             lastName: "",
             course: "",
             userType: "",
-            feedbackB:".",
+            feedbackDescription:"",
             annotatedFeedback: "",
             overallStatus: statusOptions[2],
             partAstatus: statusOptions[4],
@@ -269,6 +344,11 @@ class ReportsStudents extends Component {
         const info2 = response2.data;
 
         const feedback = await this.getFeedbackFile(info2.reportId);
+
+        const feedbackDescription = await this.getFeedbackDescription(info2.reportId)
+        console.log("FI: ",feedbackDescription)
+       
+        console.log("desci: ", feedbackDescription)
         this.setState({
           currentReport: info2.fileName,
           currentComment: info2.reportDescription,
@@ -276,6 +356,7 @@ class ReportsStudents extends Component {
           reportId:info2.reportId,
           feedbackData: feedback && feedback.fileData ? feedback.fileData : null,
           feedbackName: feedback && feedback.fileName ? feedback.fileName : null,
+          feedbackDescription: feedbackDescription
         });
   
     
@@ -295,6 +376,23 @@ class ReportsStudents extends Component {
         throw error;
       }
     };
+
+    
+    getFeedbackDescription = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:8080/feedback/description/${id}`);
+        const feedback = response.data;
+
+        console.log("FEEDBACK DESC: ",feedback)
+    
+    
+        return feedback;
+      } catch (error) {
+        console.error("Failed to fetch feedback: ", error);
+        throw error;
+      }
+    };
+    
 
     downloadCurrent = () =>{
 
@@ -382,17 +480,25 @@ class ReportsStudents extends Component {
                     <hr></hr>  
                     <b>Part B ~ Report</b>
                     <p>Feedback on your report: </p>
-                    <textarea readOnly>{this.state.feedbackB}</textarea>
+                    <textarea value={this.state.feedbackDescription} />
                     <hr></hr>
                    <b>Part C ~ Final version of the report</b>
                    <p>Overall Status: {this.state.overallStatus} </p>
                     <b><br></br>Instructor's annotated feedback</b>
                     <br></br>
-                    <IconButton onClick={() => this.downloadAnnotated()} aria-label="download">
+                    {this.state.feedbackData &&
+                    <div>
+                      <IconButton onClick={() => this.downloadAnnotated()} aria-label="download">
                         <DownloadIcon />
                     </IconButton>
                     <Button onClick={() => this.downloadAnnotated()} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.feedbackName}</Button>
-                </div>                  
+               
+                      </div>
+                    }
+                    {!this.state.feedbackData && 
+                    <p>Not available</p>
+                    } 
+                     </div>                  
             </div>
     );
    }       

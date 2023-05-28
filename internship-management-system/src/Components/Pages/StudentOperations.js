@@ -142,7 +142,7 @@ class StudentOperations extends Component{
 
               </div>
 
-              <Dropzone className = "dropzone"/>
+              <Dropzone isCompanyForm = {true} className = "dropzone"/>
             </div>}
 
           

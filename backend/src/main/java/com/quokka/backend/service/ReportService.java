@@ -1,21 +1,23 @@
 package com.quokka.backend.service;
 
 import com.quokka.backend.controller.FeedbackController;
+import com.quokka.backend.models.CompanyForm;
 import com.quokka.backend.models.Report;
 import com.quokka.backend.models.ReportFile;
 import com.quokka.backend.models.Student;
-import com.quokka.backend.repository.FeedbackRepository;
-import com.quokka.backend.repository.ReportFileRepository;
-import com.quokka.backend.repository.ReportRepository;
-import com.quokka.backend.repository.StudentRepository;
+import com.quokka.backend.repository.*;
 import com.quokka.backend.request.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
 import java.util.*;
 import java.io.IOException;
 import java.util.stream.Stream;
 
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
@@ -27,14 +29,18 @@ public class ReportService {
     private StudentRepository studentRepository;
     private FeedbackRepository feedbackRepository;
 
+    private CompanyFormRepository companyFormRepository;
+
     @Autowired
     public ReportService(ReportRepository reportRepository, ReportFileRepository reportFileRepository,
-                         StudentRepository studentRepository, FeedbackRepository feedbackRepository) {
+                         StudentRepository studentRepository, CompanyFormRepository companyFormRepository,
+                         FeedbackRepository feedbackRepository) {
 
         this.feedbackRepository = feedbackRepository;
         this.reportFileRepository = reportFileRepository;
         this.reportRepository = reportRepository;
         this.studentRepository = studentRepository;
+        this.companyFormRepository = companyFormRepository;
     }
 
     public Report getReportWithID(Long ID) {
@@ -56,6 +62,34 @@ public class ReportService {
 
         return studentRepository.findById(StudentID).get().getStatus();
     }
+
+    public ResponseEntity addCompanyForm(MultipartFile file, Long studentId){
+        try {
+            // Get the file and save it somewhere
+            byte[] bytes = file.getBytes();
+            String name = file.getOriginalFilename();
+
+            // Get the user and update the profile picture path
+            Optional<Student> student = studentRepository.findById(studentId);
+
+            if(!student.isPresent()){
+                ResponseEntity.status(500).body("Student not found!");
+            }
+
+            CompanyForm companyForm = new CompanyForm();
+            companyForm.setFormData(bytes);
+            companyForm.setFormName(name);
+            companyForm.setStudentId(studentId);
+
+            companyFormRepository.save(companyForm);
+
+            return ResponseEntity.ok("Company form uploaded successfully: " + file.getOriginalFilename());
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Failed to upload file: " + e.getMessage());
+        }
+    }
+
+
 
     public boolean addReport(ReportAddRequest request) {
 
