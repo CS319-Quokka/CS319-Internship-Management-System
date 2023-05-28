@@ -3,6 +3,7 @@ import '../Styles/Profile.css'
 import pic from "../Images/quokka.png";
 import axios from "axios";
 import Button from '@mui/material/Button';
+import { Alert, AlertTitle } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -38,6 +39,11 @@ function FormDialog(props) {
     const [oldPassword, setOldPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -53,34 +59,53 @@ function FormDialog(props) {
         setConfirmPassword(event.target.value);
     };
 
-    const handleConfirm = () => {
+    useEffect(() => {
+        // Auto-hide the alerts after a few seconds
+        const timer = setTimeout(() => {
+            setShowErrorAlert(false);
+            setShowSuccessAlert(false);
+        }, 5000);
 
+        return () => clearTimeout(timer);
+    }, [showErrorAlert, showSuccessAlert]);
+
+    const handleConfirm = async () => {
         const formData = new FormData();
         formData.append("oldPassword", oldPassword);
         formData.append("newPassword", newPassword);
         formData.append("newPassword2", confirmPassword);
 
-        const response = axios.patch(
-            `http://localhost:8080/account/${props.id}`,
-            formData,
-        )
-        if (response === -3) {
-            console.log("Confirmation password does not match new.");
+        try {
+            const response = await axios.patch(
+                `http://localhost:8080/account/${props.id}`,
+                formData
+            );
+
+            const responseData = response.data; // Get the response data
+
+            if (responseData === -3) {
+                setErrorMessage("Passwords do not match");
+                setShowErrorAlert(true);
+            } else if (responseData === -2) {
+                setErrorMessage("Account does not exist");
+                setShowErrorAlert(true);
+            } else if (responseData === -1) {
+                setErrorMessage("Old password is not correct");
+                setShowErrorAlert(true);
+            } else if (responseData === 0) {
+                setErrorMessage("New password cannot be the same as the old password");
+                setShowErrorAlert(true);
+            } else if (responseData === 1) {
+                setSuccessMessage("Successfully changed password!");
+                setShowSuccessAlert(true);
+            }
+
+            setOpen(false);
+        } catch (error) {
+            console.log("Error:", error);
         }
-        else if (response === -2){
-            console.log("Account does not exist");
-        }
-        else if(response === -1){
-            console.log("Old password is not correct");
-        }
-        else if(response === 0){
-            console.log("New password cannot be the same as old password");
-        }
-        else if(response === 1){
-            console.log("Successfully changed password!");
-        }
-        setOpen(false);
     };
+
     return (
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>
@@ -133,7 +158,26 @@ function FormDialog(props) {
                     <Button onClick={handleConfirm}>Confirm</Button>
                 </DialogActions>
             </Dialog>
+            <div id="alertcontainer">
+                <Alert
+                    severity="error"
+                    onClose={() => setShowErrorAlert(false)}
+                    sx={{ display: showErrorAlert ? 'filled' : 'none' }}
+                >
+                    <AlertTitle>Error</AlertTitle>
+                    {errorMessage}
+                </Alert>
+                <Alert
+                    severity="success"
+                    onClose={() => setShowSuccessAlert(false)}
+                    sx={{ display: showSuccessAlert ? 'filled' : 'none' }}
+                >
+                    <AlertTitle>Success</AlertTitle>
+                    {successMessage}
+                </Alert>
+            </div>
         </div>
+
     );
 }
 
@@ -229,7 +273,7 @@ class Profile extends Component {
                         <br></br>
                         <img className='profilePic' src={pic} alt="Profile"/>
                         <p><em>{this.state.userType}</em></p><br/>
-                        <FormDialog id = {this.props.userId} onConfirm={this.handleConfirm}/>
+                        <FormDialog id = {this.props.userId} />
                         <br></br>
                     </div>
                     <div className='right-containers'>

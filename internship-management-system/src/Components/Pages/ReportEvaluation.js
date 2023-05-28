@@ -777,7 +777,7 @@ function FormDialogC(props){
                     />
                     <Typography>Able to prepare reports with high standards in terms of content, organization, style and language (the Summer Training report itself is to be evaluated) </Typography>
                     <Textarea placeholder="On what page(s) of the report is the counter evidence of this found?"> </Textarea>
-                    <TextField required autoFocus margin="dense" id="input7" label="input7" type="number" variant="standard"
+                    <TextField required autoFocus margin="dense" id="input7" label="(7)" type="number" variant="standard"
                                inputProps={{
                                    min: 0,
                                    max: 10,
@@ -905,26 +905,17 @@ return (
     link.click();
     
   }
-  
-
 
     getCurrentStudent = async (id) => {
-
       const {studentId} = this.state;
       try {
-       
         const response2 = await axios.get(`http://localhost:8080/${id}`);
         const studentInfo = response2.data;
-        console.log("ACTIVE STUDENT: ", studentInfo);
-
         this.setState({
           studentFirstName: studentInfo.userAccount.firstName,
           studentLastName: studentInfo.userAccount.lastName,
           course: studentInfo.courseCode,
-
         })
-  
-    
       } catch (error) {
         console.log(error);
       }
@@ -935,21 +926,13 @@ return (
        
         const response2 = await axios.get(`http://localhost:8080/report/file/active/${id}`);
         const info2 = response2.data;
-        console.log("ACTIVE REPORT: ", info2);
-
         this.setState({
           currentReport: info2.fileName,
           currentComment: info2.reportDescription,
           fileData:info2.fileData,
           reportId:info2.reportId
-        }, () => {
-          console.log("repo:",this.state.currentReport);
-          console.log("commenti:",this.state.currentComment);
-          //console.log("commenti:",this.state.fileData);
-          
         });
-  
-    
+
       } catch (error) {
         console.log(error);
       }
@@ -961,8 +944,6 @@ return (
     };
 
     sendFeedback = async (event) => {
-
-
       event.preventDefault();
       const feedbackData = {
         senderId: this.props.userId,
@@ -1081,9 +1062,6 @@ return (
                   studentLastName={this.state.studentLastName}
                   setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
               />
-
-
-
             <div className="texteditor">
               <TextareaValidator setMessage = {this.setMessage} message = {this.state.message} userId = {this.props.userId}  reportId = {this.state.reportId}/>
             </div>

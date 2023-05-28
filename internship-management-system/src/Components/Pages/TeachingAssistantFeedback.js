@@ -19,16 +19,23 @@ import Check from '@mui/icons-material/Check';
 import {UserContext} from "../UserContext";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 
-function TextareaValidator() {
+function TextareaValidator(props) {
     const [italic, setItalic] = React.useState(false);
     const [fontWeight, setFontWeight] = React.useState('normal');
     const [anchorEl, setAnchorEl] = React.useState(null);
+
+    const handleMessageChange = (event) => {
+        props.setMessage(event.target.value);
+        console.log(props.message);
+    };
+
     return (
         <FormControl>
             <FormLabel>Feedback comments</FormLabel>
             <Textarea
                 placeholder="Type your feedback comments here..."
                 minRows={3}
+                onChange={handleMessageChange}
                 endDecorator={
                     <Box
                         sx={{
