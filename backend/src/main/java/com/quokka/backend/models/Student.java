@@ -29,6 +29,5 @@ public class Student extends User{
     @JoinColumn(name = "teaching_assistant") // TODO: make this teaching_assistant_id
     private TeachingAssistant teachingAssistant;
 
-    private File companyEvaluationForm; // ToDo: request değişecek
-    //private boolean isCompanyEvaluationFormArrived;
+
 }

@@ -109,7 +109,6 @@ useEffect(() => {
 const createDownloadUrl = (fileData,fileName) =>{
   // Create a Blob object from the file data
 
-  console.log("HERE DOWNLOAD")
   const blob = new Blob([fileData]);
 
   // Create a URL for the blob object
@@ -172,7 +171,6 @@ const getFeedbackFile = async (id) => {
     const response = await axios.get(`http://localhost:8080/feedback/get_feedback_by_report/${id}`);
     const feedbackFile = response.data;
 
-    console.log("feedback data:", feedbackFile);
 
     return feedbackFile;
   } catch (error) {
@@ -266,12 +264,6 @@ const getAllReports = async () => {
 }
 
 
-const downloadCEF = () => {
-    const link = document.createElement("a");
-    link.download = `companyevaluationform.txt`;
-    link.href = "./companyevaluationform.txt";
-    link.click();
-}
 const FileUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [studentId, setStudentId] = useState('');
@@ -309,7 +301,6 @@ function TextareaValidator(props) {
   const sendFeedbackComment = async (event) => {
     event.preventDefault();
 
-    console.log("SENDING A FEEDBACK:", props.message)
       const feedbackData = {
         senderId: props.userId,
         reportId: props.reportId,
@@ -411,7 +402,6 @@ function FormDialogA(props) {
       const studentId = 3;
       try {
         const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
-        console.log("reports:", response.data.length);
 
 
       } catch (error) {
@@ -531,7 +521,6 @@ function FormDialogB(props) {
         axios.post("http://localhost:8080/report", reportData)
             .then((response) => {
                 console.log("Report created successfully");
-                console.log( "report: ",response.data);
 
 
             })
@@ -550,7 +539,6 @@ function FormDialogB(props) {
             const studentId = 3;
             try {
                 const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
-                console.log("reports:", response.data.length);
 
 
             } catch (error) {
@@ -663,23 +651,7 @@ function FormDialogC(props){
         setTotal(sum);
     }, [input1, input2, input3, input4, input5, input6 ]);
 
-/*
-    useEffect(() => {
-        const getInformation = async () => {
-        //    const studentId = 3;
-            try {
-                const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
-                console.log("reports:", response.data.length);
 
-
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        getInformation();
-    }, []);
-*/
 
     const handleClickOpenC = () => {
         setOpenC(true);
@@ -852,6 +824,8 @@ return (
         isButtonClicked: false,
         currentReport: "",
         currentComment: "",
+        companyFormData:null,
+        companyFormName:"",
         currentFile: null,
         fileData:null,
         reportId:null,
@@ -864,14 +838,12 @@ return (
     static contextType = UserContext;
     componentDidMount() {
      
-      console.log("STUDENT IDDDD:",this.context.userId)
       const id = this.context.userId
 
       this.setState({studentId:id})
       this.getCurrentStudent(id);
       this.getActiveReport(id);
 
-      console.log("WORKS AGA. ", this.state.fileData)
   }
 
   setMessage(message){
@@ -883,7 +855,6 @@ return (
     const fileData = this.state.fileData
     const fileName = this.state.currentReport
 
-    console.log("data: ", fileData)
     if (typeof fileData !== "string" || !(/^[A-Za-z0-9+/=]*$/g.test(fileData))) {
       console.error("Invalid base64 string");
       return;
@@ -911,10 +882,17 @@ return (
       try {
         const response2 = await axios.get(`http://localhost:8080/${id}`);
         const studentInfo = response2.data;
+
+
+        const cefResponse = await axios.get(`http://localhost:8080/report/get_company_form_by_student/${id}`);
+        const cefInfo = cefResponse.data;
+
         this.setState({
           studentFirstName: studentInfo.userAccount.firstName,
           studentLastName: studentInfo.userAccount.lastName,
           course: studentInfo.courseCode,
+          companyFormData: cefInfo.fileData,
+          companyFormName:cefInfo.fileName
         })
       } catch (error) {
         console.log(error);
@@ -957,7 +935,6 @@ return (
       axios.post("http://localhost:8080/feedback", feedbackData)
         .then((response) => {
           console.log("Feedback created successfully");
-          console.log( "feedback: ",response.data);
 
           const feedbackId = response.data;
           
@@ -991,6 +968,32 @@ return (
         });
 
     };
+    
+ downloadCEF = () => {
+  const fileData = this.state.companyFormData
+  const fileName = this.state.companyFormName;
+
+  if (typeof fileData !== "string" || !(/^[A-Za-z0-9+/=]*$/g.test(fileData))) {
+    console.error("Invalid base64 string");
+    return;
+  }
+
+  const byteCharacters = atob(fileData);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray]);
+  
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download',fileName ); // the right file extension 
+  document.body.appendChild(link);
+  link.click();
+ 
+}
 
     render() {
       return (
@@ -1027,19 +1030,30 @@ return (
               <textarea readOnly value={this.state.currentComment || ''}></textarea>
               <hr></hr>
               <h1>REPORT ASSESSMENT</h1>
+              <br></br>
             </div>
             <Typography>
-              {
-                <Button
-                  onClick={downloadCEF}
-                  variant="text"
-                  style={{ textTransform: "none" }}
-                  size="large"
-                >
-                  Click here
-                </Button>
-              } to download the student's company evaluation form.
+
+              {this.state.companyFormData &&
+               <div>
+               {
+                 <Button
+                   onClick={() => this.downloadCEF()}
+                   variant="text"
+                   style={{ textTransform: "none" }}
+                   size="large"
+                 >
+                   Click here
+                 </Button>
+               } to download the student's company evaluation form.</div>
+              }
+             {!this.state.companyFormData &&
+             <p>Company form for this student is not uploaded yet.</p>
+             }
             </Typography>
+            {this.state.companyFormData &&
+            <div>
+
             <Typography>To enter the student's grades, use the Grade Form</Typography>
             <Typography>Part A - Enter the Company Evaluation Form Assessment </Typography>
             <FormDialogA
@@ -1048,6 +1062,10 @@ return (
               studentLastName={this.state.studentLastName}
               setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
             />
+
+            </div>
+            }
+           
               <Typography>Part B - Enter the Report Assessment </Typography>
               <FormDialogB
                   studentId = {this.state.studentId}

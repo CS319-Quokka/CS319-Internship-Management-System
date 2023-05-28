@@ -1,6 +1,8 @@
 package com.quokka.backend.controller;
 
 import com.quokka.backend.Auth.AuthResponse;
+import com.quokka.backend.Auth.CompanyFormResponse;
+import com.quokka.backend.Auth.FeedbackFileResponse;
 import com.quokka.backend.Auth.ReportFileResponse;
 import com.quokka.backend.models.*;
 import com.quokka.backend.request.*;
@@ -54,11 +56,50 @@ public class ReportController {
     }
 
     @PostMapping("/company_form")
-    public boolean addCompanyForm(@RequestParam("file") MultipartFile file, @RequestParam("studentId") Long studentId){
+    public boolean addCompanyForm(CompanyFormAddRequest request){
 
-        return true;
+        System.out.println("company 1");
+        //se if the company form was correctly saved to the repository and return the response
+        boolean success = reportService.addCompanyForm(request);
+
+        if(success){
+            return true;
+        }
+
+        return false;
 
     }
+
+    @GetMapping("/get_company_form/{id}")
+    public ResponseEntity<?> getCompanyFormById(@PathVariable("id") Long id){
+
+        CompanyForm cef = reportService.getCompanyFormById(id);
+        if (cef == null) {
+            return ResponseEntity.ok("No cef available for this student");
+        }
+
+        CompanyFormResponse response = new CompanyFormResponse();
+        response.setFileData(cef.getFormData());
+        response.setFileName(cef.getFormName());
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/get_company_form_by_student/{studentId}")
+    public ResponseEntity<?> getCompanyFormByStudentId(@PathVariable("studentId") Long studentId){
+
+        CompanyForm cef = reportService.getCompanyFormByStudentId(studentId);
+        if (cef == null) {
+            return ResponseEntity.ok("No cef available for this student");
+        }
+
+        CompanyFormResponse response = new CompanyFormResponse();
+        response.setFileData(cef.getFormData());
+        response.setFileName(cef.getFormName());
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/status/{studentID}")
     public String checkReportStatus(@PathVariable Long studentID){

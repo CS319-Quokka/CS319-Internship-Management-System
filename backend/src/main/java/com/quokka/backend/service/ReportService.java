@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.stream.Stream;
 
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -63,7 +64,50 @@ public class ReportService {
         return studentRepository.findById(StudentID).get().getStatus();
     }
 
-    public ResponseEntity addCompanyForm(MultipartFile file, Long studentId){
+    public CompanyForm getCompanyFormById(Long id){
+
+        Optional<CompanyForm> form = companyFormRepository.findById(id);
+
+        if(!form.isPresent()){
+            return null;
+        }
+
+        return form.get();
+    }
+
+
+    public CompanyForm getCompanyFormByStudentId(Long studentId){
+
+
+        Optional<Student> student = studentRepository.findById(studentId);
+
+        //there is no student with the given id
+        if(!student.isPresent()){
+            return null;
+        }
+
+
+        Optional<CompanyForm> form = companyFormRepository.findByStudentId(studentId);
+
+        //there is no form for the given student
+        if(!form.isPresent()){
+            return null;
+        }
+
+        return form.get();
+
+
+    }
+
+
+
+    public boolean addCompanyForm(CompanyFormAddRequest request){
+
+        //get the file and student id from the request
+        MultipartFile file = request.getFileData();
+        Long studentId = request.getStudentId();
+
+        System.out.println("Company 2: "+ file + " id:" + studentId);
         try {
             // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
@@ -72,20 +116,40 @@ public class ReportService {
             // Get the user and update the profile picture path
             Optional<Student> student = studentRepository.findById(studentId);
 
+            CompanyForm companyForm = new CompanyForm();
             if(!student.isPresent()){
-                ResponseEntity.status(500).body("Student not found!");
+
+                System.out.println("student yok");
+                companyForm.setFormData(null);
+                return false;
             }
 
-            CompanyForm companyForm = new CompanyForm();
-            companyForm.setFormData(bytes);
-            companyForm.setFormName(name);
-            companyForm.setStudentId(studentId);
+            if(request.getFileData() == null){
 
-            companyFormRepository.save(companyForm);
+                System.out.println("file yok");
+                companyForm.setFormName(null);
+                companyForm.setFormData(null);
+                return false;
+            }
 
-            return ResponseEntity.ok("Company form uploaded successfully: " + file.getOriginalFilename());
+
+            //save the company form to the repository
+            else{
+                System.out.println("eklendi");
+                companyForm.setFormData(bytes);
+                companyForm.setFormName(name);
+                companyForm.setStudent(student.get());
+                System.out.println("COMPANY FORM IS:"+ companyForm.getName() + "id:" +
+                        companyForm.getStudent().getId());
+                companyFormRepository.save(companyForm);
+                System.out.println("repo yok");
+                return true;
+            }
+
+
         } catch (IOException e) {
-            return ResponseEntity.status(500).body("Failed to upload file: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         }
     }
 

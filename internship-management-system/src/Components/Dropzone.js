@@ -1,4 +1,4 @@
-import React, { useState, useRef ,  useEffect } from "react";
+import React, { useState, useRef ,  useEffect,useContext } from "react";
 import axios from "axios";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
@@ -12,6 +12,7 @@ import MenuItem from "@mui/joy/MenuItem";
 import ListItemDecorator from "@mui/joy/ListItemDecorator";
 import Check from "@mui/icons-material/Check";
 import FormatItalic from "@mui/icons-material/FormatItalic";
+import { UserContext } from './UserContext';
 
 
 function FileUpload(props) {
@@ -116,6 +117,7 @@ const DragDropFiles = (props) => {
   //const [description, setDescription] = useState("");
   const inputRef = useRef();
   const [uploadSubmitted, setUploadSubmitted] = useState(false); // Track upload status
+  const userContext = useContext(UserContext);
 
 
   const handleSelectFile = (event) => {
@@ -178,19 +180,22 @@ const DragDropFiles = (props) => {
 
 
     console.log("file: ", file)
+    
+    console.log("CORES STUDENT:", userContext.userId)
+    const studentId = userContext.userId;
 
     if (file) {
 
 
     const formData = new FormData();
 
-     formData.append("fileName", userId); 
+    formData.append("studentId", studentId); 
     formData.append("fileData", file);
 
 
       try {
         const response = await axios.post(
-          "http://localhost:8080/report/file",
+          "http://localhost:8080/report/company_form",
           formData,
           {
             headers: {
