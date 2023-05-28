@@ -5,11 +5,13 @@ import com.quokka.backend.repository.*;
 import com.quokka.backend.request.FeedbackAddRequest;
 import com.quokka.backend.request.FeedbackFileAddRequest;
 import com.quokka.backend.request.FeedbackFileEditRequest;
+import com.quokka.backend.request.NotificationAddRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,12 +26,15 @@ public class FeedbackService {
     private FeedbackFileRepository feedbackFileRepository;
     private StudentRepository studentRepository;
 
+    private NotificationService notificationService;
+
     @Autowired
     public FeedbackService(FeedbackRepository feedbackRepository, ReportService reportService,
                            TeachingAssistantRepository teachingAssistantRepository,
                            InstructorRepository instructorRepository,
                            FeedbackFileRepository feedbackFileRepository,
-                           StudentRepository studentRepository){
+                           StudentRepository studentRepository,
+                           NotificationService notificationService){
 
         this.feedbackRepository = feedbackRepository;
         this.reportService = reportService;
@@ -37,6 +42,7 @@ public class FeedbackService {
         this.instructorRepository = instructorRepository;
         this.feedbackFileRepository = feedbackFileRepository;
         this.studentRepository = studentRepository;
+        this.notificationService = notificationService;
     }
 
     public Feedback getFeedback(Long ID){
@@ -231,6 +237,15 @@ public class FeedbackService {
             newFeedbackFile.setFeedbackDescription(request.getFeedbackDescription());
             studentRepository.findById(request.getStudentId()).get().setStatus("Revision required");
             feedbackFileRepository.save(newFeedbackFile);
+
+            NotificationAddRequest notificationAddRequest = new NotificationAddRequest();
+            notificationAddRequest.setContent("New feedback is given by " + newFeedbackFile.getFeedback().getSender().getUserAccount().getFirstName() +
+                    " " + newFeedbackFile.getFeedback().getSender().getUserAccount().getLastName() + " for your report.");
+            notificationAddRequest.setTitle("New feedback is given!");
+            notificationAddRequest.setDate(new Date());
+
+
+            notificationService.addNotification(request.getStudentId(),notificationAddRequest);
             return true;
         }
         catch (IOException e){
