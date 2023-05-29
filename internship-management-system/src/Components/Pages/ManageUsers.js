@@ -7,7 +7,7 @@ import ManageUsersAdd from "./ManageUsersAdd";
 import Popup from "../Popup"
 import ManageUsersEdit from "./ManageUsersEdit";
 import ManageUsersRemove from "./ManageUsersRemove";
-import { UserContext } from "../UserContext";
+import userContext, { UserContext } from "../UserContext";
 
 class ManageUsers extends Component {
   constructor(props) {
@@ -73,16 +73,8 @@ class ManageUsers extends Component {
 
   handleRemove = () =>{
 
-    const userId = 152; //userId will be replaced
+    const userId = this.context.userId;
     const response = axios.delete(`http://localhost:8080/user/${userId}`);
-    if(response){
-
-      console.log("User has been removed successfully");
-    }
-    else{
-
-      console.log("User cannot been removed");
-    }
   }
 
   handleEdit = () => {
