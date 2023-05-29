@@ -1,9 +1,6 @@
 package com.quokka.backend.controller;
 
-import com.quokka.backend.Auth.AuthResponse;
-import com.quokka.backend.Auth.CompanyFormResponse;
-import com.quokka.backend.Auth.FeedbackFileResponse;
-import com.quokka.backend.Auth.ReportFileResponse;
+import com.quokka.backend.Auth.*;
 import com.quokka.backend.models.*;
 import com.quokka.backend.request.*;
 import com.quokka.backend.service.FeedbackService;
@@ -121,6 +118,23 @@ public class ReportController {
 
         return ResponseEntity.ok(reports);
     }
+
+    @GetMapping("/deadline/active/{studentId}")
+    public ResponseEntity<?> getCurrentDeadline(@PathVariable("studentId") Long studentId){
+        Report report = reportService.getActiveReport(studentId);
+
+        if(report == null){
+            return ResponseEntity.ok("No submission open for this student");
+        }
+
+        DeadlineResponse response = new DeadlineResponse();
+
+        // Assuming that getDeadline() returns the deadline for the report
+        response.setDeadline(report.getDeadline());
+
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/file/active/{studentId}")
     public ResponseEntity<?> getActiveReport(@PathVariable("studentId") Long studentId){

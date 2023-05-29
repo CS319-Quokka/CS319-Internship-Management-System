@@ -18,6 +18,18 @@ class StudentList extends Component {
     componentDidMount() {
         this.getAllStudents();
     }
+    getDeadline = async (studentId) => {
+      try {
+        const response = await axios.get(`http://localhost:8080/report/deadline/active/${studentId}`);
+        const deadline = response.data.deadline; // Or response.data if the returned deadline is direct.
+        console.log("Deadline:", deadline);
+        return deadline;
+      } catch (error) {
+        console.error(error);
+        return null; // return null or any default value when an error occurred
+      }
+    };
+    
     getAllStudents = async () =>{
 
         const id = this.props.userId;
@@ -42,18 +54,21 @@ class StudentList extends Component {
           var companyForm = studentInfo[i].companyEvaluationForm;
           var studentId = studentInfo[i].id
           var deadline = "";
+          let readableDeadline = "Not Applicable"
+
 
           try {
-            const response2 = await axios.get(`http://localhost:8080/report/file/active/${studentId}`);
-            const info2 = response2.data;
-            console.log("ACTIVE:", info2)
-          
-            if(info2 == "No submission open for this student"){
-              deadline = "Not Assigned"
+            const deadlineResponse = await this.getDeadline(studentId);
+            
+            if(deadlineResponse != null && (studentStatus ==  "Waiting to upload report") ){
+              let deadline = new Date(deadlineResponse);
+              readableDeadline = deadline.toLocaleString();
+
             }
+            
           
           } catch(error) {
-            console.error('Failed to fetch data: ', error);
+            console.error('Failed to fetch data for deadline: ', error);
           }
           
 
@@ -67,7 +82,7 @@ class StudentList extends Component {
             status: studentStatus,
             form: companyForm,
             id:studentId,
-            deadline:deadline
+            deadline:readableDeadline
           });
         }
 

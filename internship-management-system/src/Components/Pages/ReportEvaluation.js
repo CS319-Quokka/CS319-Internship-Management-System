@@ -191,12 +191,10 @@ const getAllReports = async () => {
 
     const response2 = await axios.get(`http://localhost:8080/report/file/active/${studentId}`);
     const info2 = response2.data;
-    console.log("ACTIVE REPORT: ", info2);
 
-    const response3 = await axios.get(`http://localhost:8080/get_all_users/${studentId}`);
-    const info3 = response3.data[0];
-    console.log("CUR STUDI: ", info3.status);
-    setStatus(info3.status)
+    const response3 = await axios.get(`http://localhost:8080/student/${studentId}/get_all_status`);
+    const info3 = response3.data;
+    setStatus(info3.statusB)
 
 
     var reportIdList = [];
@@ -212,9 +210,8 @@ const getAllReports = async () => {
       getReportFile(reportIdList[i],allReports,i)
     }
 
-    console.log("STATTTTuuuus:", info3.status)
 
-    if(info3.status == "Feedback Given"){
+    if(info3.statusB == "Feedback Given"){
       var index = info.length-1;
       reportIdList.push(info[index].id)
       getReportFile(reportIdList[index],allReports,index)
@@ -1264,8 +1261,8 @@ setSentFeedback = (status) =>{
            
               
               <FormDialogB
-                  partBstatus = {this.state.status}
-                  studentId = {this.state.studentId}
+               partBstatus = {this.state.status}
+               studentId = {this.state.studentId}
                studentFirstName={this.state.studentFirstName}
                studentLastName={this.state.studentLastName}
                setButtonClicked={(value) => this.setState({ isButtonClicked: value })}

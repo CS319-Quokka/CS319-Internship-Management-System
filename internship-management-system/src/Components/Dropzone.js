@@ -371,13 +371,21 @@ const DragDropFiles = (props) => {
    console.log("state:", studentState)
     return(
         <div className="upload-confirm">
-            <h2>You have uploaded a report.</h2>
+          {studentState != "Waiting for report deadline" &&
+             <h2>You have uploaded a report.</h2>
+          }
+          {
+            studentState == "Waiting for report deadline" &&
+            <h2>Submission is not open.</h2>
+
+          }
+           
         </div>
 
       );
   }
 
-  if ((!props.isUsersSheet) && (props.isCompanyForm) && (uploadSubmitted || (formUploaded == true))) {
+  if ((!props.isUsersSheet) && (props.isCompanyForm)  && (uploadSubmitted || (formUploaded == true))) {
     console.log("EX 2")
     return(
       <div className="upload-confirm">
