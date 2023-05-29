@@ -20,8 +20,7 @@ function FileUpload(props) {
 
   return (
     <div>
-
-      <DragDropFiles isCompanyForm = {props.isCompanyForm} id = {props.id} message={message} setMessage={setMessage} />
+      <DragDropFiles  isCompanyForm = {props.isCompanyForm} id = {props.id} message={message} setMessage={setMessage} />
     </div>
   );
 }
@@ -119,6 +118,8 @@ const DragDropFiles = (props) => {
   const [uploadSubmitted, setUploadSubmitted] = useState(false); // Track upload status
   const userContext = useContext(UserContext);
   const [studentState,setStatus] = useState("");
+  const [formUploaded,setFormUploaded] = useState(false);
+  const [fullName,setFullName] = useState("");
 
 
   const handleSelectFile = (event) => {
@@ -129,7 +130,6 @@ const DragDropFiles = (props) => {
   };
 
   const handleDropFile = (event) => {
-    console.log("HERE2")
     event.preventDefault();
     event.stopPropagation();
 
@@ -148,13 +148,25 @@ const DragDropFiles = (props) => {
 
       try {
 
-        console.log("COMPANY:" ,props.isCompanyForm)
-        const response = await axios.get(`http://localhost:8080/get_all_users/${props.id}`);
-        const info = response.data[0];
+        console.log("SEARCH WITH ID:", props.id)
+        const response = await axios.get(`http://localhost:8080/${props.id}`);
+        const info = response.data;
         // Process the received data as needed
-        console.log("INFOOOOO:", info.status);
         setStatus(info.status)
 
+        console.log("INFO PLS:", info)
+
+        const fullName = info.userAccount.firstName + " " + info.userAccount.lastName;
+        setFullName(fullName);
+
+        //check if the company form is uploaded for the corresponding student
+        const cefResponse = await axios.get(`http://localhost:8080/report/get_company_form_by_student/${props.id}`);
+        const cefInfo = cefResponse.data;
+        
+
+        if(cefInfo.fileData != null){
+          setFormUploaded(true);
+        }
         
         setId(info.id)
       } catch (error) {
@@ -181,10 +193,6 @@ const DragDropFiles = (props) => {
 
     event.preventDefault();
 
-
-    console.log("file: ", file)
-    
-    console.log("CORES STUDENT:", userContext.userId)
     const studentId = userContext.userId;
 
     if (file) {
@@ -229,26 +237,18 @@ const DragDropFiles = (props) => {
     event.preventDefault();
 
 
-    console.log("file: ", file)
 
     if (file) {
 
 
     const formData = new FormData();
 
-    console.log(file.name);
-    console.log("id: " , userId);
 
     const response1 = await axios.get(`http://localhost:8080/report/students_all_reports/${userId}`);
 
-    console.log("repo id:", response1.data);
     const reportId = response1.data[response1.data.length - 1].id;
 
-    console.log("MESSAGE: ", props.message)
-
     let uploadDate = new Date().toISOString();
-    console.log("DATE:", uploadDate)
-
     formData.append("studentId", userId); // Replace studentId with the actual student ID
     formData.append("reportId", reportId); // Replace reportId with the actual report ID
     formData.append("fileData", file);
@@ -283,10 +283,6 @@ const DragDropFiles = (props) => {
     }
   };
 
-  // const handleDescriptionChange = (event) => {
-  //   setDescription(event.target.value);
-  // };
-
   if (file && !uploadSubmitted) {
       return (
           <div className="upload-confirm">
@@ -297,19 +293,15 @@ const DragDropFiles = (props) => {
                 <TextareaValidator setMessage = {props.setMessage}/>
               }
               {props.isCompanyForm &&
+              <div>
                <h2>For the student:</h2>
+
+                <em>{fullName}</em>
+               </div>
+               
 
               }
             
-
-        {/* <input
-          type="text"
-          value={description}
-          onChange={handleDescriptionChange}
-          placeholder="Description"
-        /> */}
-{/* 
-        {props.afterUpload && props.afterUpload({ file, description })} */}
 
               <div className="button-layout">
                   <button className="button" onClick={() => setFile(null)}>
@@ -322,14 +314,23 @@ const DragDropFiles = (props) => {
           </div>
       );
   }
-  if (uploadSubmitted || !(studentState == "Waiting to upload report" ||  studentState == "Waiting for initial report")) {
-      return(
+  if ((!props.isCompanyForm) && (uploadSubmitted || !(studentState == "Waiting to upload report" ||  studentState == "Waiting for initial report"))) {
+    return(
         <div className="upload-confirm">
             <h2>You have already uploaded a report.</h2>
         </div>
 
       );
   }
+
+  if ((props.isCompanyForm) && (uploadSubmitted || (formUploaded == true))) {
+    return(
+      <div className="upload-confirm">
+          <h2>You have already uploaded a report.</h2>
+      </div>
+
+    );
+}
 
   return (
     <>
@@ -347,12 +348,6 @@ const DragDropFiles = (props) => {
           accept="application/pdf, .doc, .docx"
           ref={inputRef}
         />
-        {/* <input
-          type="text"
-          value={description}
-          onChange={handleDescriptionChange}
-          placeholder="Description"
-        /> */}
         <button className="button" onClick={() => inputRef.current.click()}>
           Select File
         </button>
