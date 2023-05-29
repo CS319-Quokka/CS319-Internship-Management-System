@@ -200,12 +200,12 @@ public class ReportService {
 
         if (!reportRepository.existsById(reportID)) {
 
-            throw new IllegalStateException("No report is found!");
+            return false;
         }
 
         if (getReportWithID(reportID).getDeadline().after(date)) {
 
-            throw new IllegalStateException("It is passed the deadline!");
+            return false;
         }
         return true;
     }
@@ -247,7 +247,7 @@ public class ReportService {
         if (reportFile != null) {
             return reportFile;
         } else {
-            throw new RuntimeException("ReportFile not found for report ID: " + id);
+            return null;
         }
     }
 
