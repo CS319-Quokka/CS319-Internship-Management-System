@@ -244,9 +244,11 @@ const getAllReports = async () => {
           </div>
           }
           {console.log("AA:", reportHistory)}
-            {reportHistory.map((revision,index) => (
+            {reportHistory
+            .sort((a, b) => a.revisionCount - b.revisionCount) 
+            .map((revision,index) => (
                 <div className="prevreport">
-                    <li key={index}>
+                    <li key={revision.revisionCount}>
                         <hr></hr>
                         <h2>Revision : {revision.revisionCount}</h2>
                         <p>The student's submission for this revision:</p>
@@ -429,7 +431,7 @@ function FormDialogA(props) {
   const [openA, setOpenA] = useState(false);
   const [isClicked1, setIsClicked1] = useState(false);
   const [isClicked2, setIsClicked2] = useState(false);
-  const [partAstatus, setPartAstatus] = useState("Unsatisfactory");
+  const [partA,setPartA] = useState("Undetermined")
 
 
 
@@ -450,10 +452,10 @@ function FormDialogA(props) {
       const areButtonsClicked = isClicked1 && isClicked2; // Check if both buttons are clicked and stay on "Yes"
       console.log("entered part A check")
       if (cefGrade >= 7 && areButtonsClicked) {
-          setPartAstatus("Satisfactory");
+          setPartA("Satisfactory");
           console.log("part a success!")
       } else {
-          setPartAstatus("Unsatisfactory");
+          setPartA("Unsatisfactory");
           console.log("UNSATIS")
       }
   };
@@ -463,6 +465,7 @@ function FormDialogA(props) {
     props.setButtonClicked(false);
   };
  const handleSubmitA = () => {
+     props.setPartAstatus(partA)
      setOpenA(false);
      // save CEF grades.
  }
@@ -470,9 +473,15 @@ function FormDialogA(props) {
   return (
 
     <div>
-      <Button variant="outlined" onClick={handleClickOpenA}>
-        Part A
-      </Button>
+      {props.partAstatus == "Undetermined" &&
+      <div>
+         <Button variant="outlined" onClick={handleClickOpenA}>
+          Part A
+        </Button>
+
+      </div>
+      }
+     
       <Dialog fullWidth open={openA} onClose={handleCloseA}>
         <DialogTitle>Grade Form</DialogTitle>
         <DialogContent>
@@ -890,7 +899,8 @@ return (
         fileData:null,
         reportId:null,
         message: "",
-        feedbackSent:false
+        feedbackSent:false,
+        partAstatus: "Undetermined"
       };
       this.downloadCurrent = this.downloadCurrent.bind(this);
       this.setMessage = this.setMessage.bind(this);
@@ -907,6 +917,9 @@ return (
 
   }
 
+  setPartAstatus = (status) =>{
+    this.setState({partAstatus:status})
+  }
   setMessage(message){
     this.setState({message:message})
   }
@@ -1142,8 +1155,21 @@ setSentFeedback = (status) =>{
             <div>
 
             <Typography>To enter the student's grades, use the Grade Form</Typography>
-            <Typography>Part A - Enter the Company Evaluation Form Assessment </Typography>
+            {this.state.partAstatus == "Undetermined" &&
+              <Typography>Part A - Enter the Company Evaluation Form Assessment </Typography>
+            } 
+             {this.state.partAstatus != "Undetermined" &&
+              
+              <div>
+                <br></br>
+                <Typography>Part A is {this.state.partAstatus}</Typography>
+                <br></br>
+              </div>
+            } 
+            
             <FormDialogA
+              partAstatus = {this.state.partAstatus}
+              setPartAstatus = {this.setPartAstatus}
               studentId = {this.state.studentId}
               studentFirstName={this.state.studentFirstName}
               studentLastName={this.state.studentLastName}

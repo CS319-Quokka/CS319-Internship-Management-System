@@ -350,12 +350,6 @@ function ManageUsersAdd(props) {
                     </label>
 
 
-
-                    {/* {isFormSubmitted && !formState.isValid && (
-            <div className="error-message">Please fill out all fields.</div>
-          )} */}
-
-
                     <div className="add-user">
 
                         <div className="role">

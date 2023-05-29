@@ -192,7 +192,9 @@ function RevisionList(props) {
             <h4>No report history available</h4>
           </div>
           }
-          {reportHistory.map((revision,index) => (
+          {reportHistory
+          .sort((a, b) => a.revisionCount - b.revisionCount) 
+          .map((revision,index) => (
             <div className="prevreport" key={index}>
               <li>
                 <hr />
