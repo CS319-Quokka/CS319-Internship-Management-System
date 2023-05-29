@@ -500,6 +500,29 @@ function FormDialogB(props) {
         setSelectedDate(date);
     };
 
+    
+    useEffect(() => {
+      const fetchReports = async () => {
+        if (props.studentId) {
+          try {
+            const response = await axios.get(`http://localhost:8080/report/students_all_reports/${props.studentId}`);
+            const info = response.data;
+            if(info.length == 0){
+              setButtonName("Ask for initial report")
+            }
+            else{
+              setButtonName("Revision Required")
+            }
+          } catch (error) {
+            console.error('Failed to fetch reports: ', error);
+          }
+        }
+      };
+    
+      fetchReports();
+    }, [props.studentId]);
+    
+    
     const handleSubmitB = async() => {
 
 
@@ -591,7 +614,7 @@ function FormDialogB(props) {
                         variant={isSatisfactoryB ? 'contained':  'outlined'}
                         color="secondary"
                         onClick={handleRevisionRequiredClick}
-                    >Revision Required</Button>
+                    >{buttonName}</Button>
                     {!isSatisfactoryB && (
                         <div>
                             <Typography>Enter the due date for the resubmission.</Typography>
