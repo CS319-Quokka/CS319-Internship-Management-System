@@ -91,6 +91,36 @@ public class UserManagementService {
         return returnList;
     }
 
+    public Student reassignStudent(Long id, StudentReassignRequest request){
+
+        if(request == null){
+
+            return null;
+        }
+
+        if(request.getNewInstructorId() == null){
+
+            return null;
+        }
+
+        Optional<Student> studentOpt = studentRepository.findById(id);
+        if(!(studentOpt.isPresent())){
+
+            return null;
+        }
+
+        Optional<Instructor> instructorOpt = instructorRepository.findById(request.getNewInstructorId());
+        if(!(instructorOpt.isPresent())){
+
+            return null;
+        }
+
+        Student student = studentOpt.get();
+        student.setInstructor(instructorOpt.get());
+        studentRepository.save(student);
+        return student;
+    }
+
     public Student addStudent(StudentAddRequest request){
 
 

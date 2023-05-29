@@ -1,10 +1,11 @@
 import React, {useContext, useEffect, useState} from "react";
+import { UserContext } from "../UserContext";
 import { useForm, FormProvider } from "react-hook-form";
 import Popup from "../Popup"
 import "../Styles/Popup.css"
 import Button from '@mui/material/Button';
-import {UserContext} from "../UserContext";
 import axios from "axios";
+import {Alert, AlertTitle} from "@mui/material";
 
 
 
@@ -13,16 +14,21 @@ function InstructorOptionsList({ methods }) {
 
     const department = methods.watch("department");
 
+    const { userId } = useContext(UserContext);
+
     useEffect(() => {
-        fetchInstructorOptions()
+        fetchInstructorOptions(userId)
             .then((options) => setInstructorOptions(options))
             .catch((error) => console.log(error));
     }, [department]);
 
-    const fetchInstructorOptions = async () => {
+    const fetchInstructorOptions = async (userId) => {
         try {
 
-            const response = await axios.get(`http://localhost:8080/instructor?department=${department}`); //link to the API
+            const studentResponse = await axios.get(`http://localhost:8080/student/${userId}`);
+            const department = studentResponse.data.userAccount.department;
+
+            const response = await axios.get(`http://localhost:8080/instructor?department=${department}`);
             const instructors = response.data;
 
             const instructorOptions = await Promise.all(instructors.map(async (instructor) => {
@@ -46,8 +52,8 @@ function InstructorOptionsList({ methods }) {
     return (
         <label className="input-label">
             <h3 className="input-tag" id="instructor-tag">Instructor:</h3>
-            <select className="select-menu" id="selector">
-                <option value="0">Select instructor</option>
+            <select className="select-menu" id="selector" {...methods.register("instructorId")}>
+                <option value="0">select instructor</option>
                 {instructorOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
                 ))}
@@ -56,14 +62,29 @@ function InstructorOptionsList({ methods }) {
     );
 }
 
-
-const handleReassign = () => {
-
-}
-
 function ReassignInstructor(props) {
+
     const methods = useForm();
-    const [selectedValue, setSelectedValue] = useState("");
+    const { userId } = useContext(UserContext);
+
+    const handleReassignStudent = async () => {
+
+        const newInstructorId = +(methods.getValues("instructorId"));
+        const formData = {
+
+            "newInstructorId": newInstructorId
+        }
+
+        const response = await axios.patch(`http://localhost:8080/reassign/${userId}`, formData);
+
+        if(response.data.instructor.id !== formData.newInstructorId){
+
+            console.log("student couldn't be reassigned");
+
+        } else {
+            console.log("student reassigned");
+        }
+    }
 
 
     return (
@@ -77,20 +98,14 @@ function ReassignInstructor(props) {
                     {/*  <h1>{props.user}</h1>
                         */}
                     <h1>Student's current instructor</h1>
-
-
                     <h1>Choose the new instructor </h1>
                     <InstructorOptionsList methods={methods} />
                 </form>
-
             </FormProvider>
-
-
+            <div className="add-button">
+                <Button variant="outlined" onClick={handleReassignStudent}>Reassign Student</Button>
+            </div>
         </div>
-
-
-
-
     );
 }
 export default ReassignInstructor;
