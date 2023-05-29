@@ -20,11 +20,13 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.multipart.MultipartFile;
 
-
+/**
+ * Service for report related operations
+ */
 @Service
 public class ReportService {
 
-
+    //
     private ReportRepository reportRepository;
     private ReportFileRepository reportFileRepository;
     private StudentRepository studentRepository;

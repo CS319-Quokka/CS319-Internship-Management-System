@@ -19,6 +19,7 @@ import java.util.Date;
 @Setter
 public class ReportFile implements MultipartFile {
 
+    //auto generates id's
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -27,11 +28,13 @@ public class ReportFile implements MultipartFile {
     private String fileName;
     private Instant uploadDate;
 
+    //Holds the file data as a byte array
     @Lob
     @JsonBackReference
     @Column(columnDefinition = "LONGBLOB")
     private byte[] fileData;
 
+    //maps to the report with report_id
     @OneToOne
     @JoinColumn(name = "report_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

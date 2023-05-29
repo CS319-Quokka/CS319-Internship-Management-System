@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository to handle the feedback entity
+ */
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback,Long> {
 

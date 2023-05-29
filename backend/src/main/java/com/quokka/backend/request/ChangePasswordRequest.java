@@ -2,6 +2,9 @@ package com.quokka.backend.request;
 
 import lombok.Data;
 
+/**
+ * Request to change the password
+ */
 @Data
 public class ChangePasswordRequest {
 

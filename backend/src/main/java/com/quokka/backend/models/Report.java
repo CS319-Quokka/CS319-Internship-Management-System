@@ -8,13 +8,16 @@ import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-
+/**
+ * Class to represent the report entity
+ */
 @Entity
 @Table
 @Getter
 @Setter
 public class Report {
 
+    //auto generates id's
     @Id
     @GeneratedValue
     private Long id;
@@ -22,6 +25,7 @@ public class Report {
     private Instant uploadDate;
     private Date deadline;
 
+    //maps to the grade form with grade_form_id
     @ManyToOne
     @JoinColumn(name = "student_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository to handle the administrative assistant entity
+ */
 @Repository
 public interface AdministrativeAssistantRepository extends JpaRepository<AdministrativeAssistant, Long> {
     List<AdministrativeAssistant> findByUserAccountId(Long userAccountId);

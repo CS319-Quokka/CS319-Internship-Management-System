@@ -10,7 +10,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-
+/**
+ * Class to represent the teaching assistant entity
+ */
 @Entity
 @Table
 @Getter

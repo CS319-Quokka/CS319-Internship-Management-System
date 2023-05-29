@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository to handle the instructor entity
+ */
 @Repository
 public interface InstructorRepository extends JpaRepository<Instructor, Long> {
 

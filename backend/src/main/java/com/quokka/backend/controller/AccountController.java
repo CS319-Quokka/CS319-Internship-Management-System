@@ -28,6 +28,9 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/account")
 @CrossOrigin(origins = "http://localhost:3000")
+/**
+ * This class is responsible for handling the requests that are related to account operations coming from the frontend
+ */
 public class AccountController {
 
     @Autowired
@@ -37,6 +40,11 @@ public class AccountController {
     @Autowired
     private UserManagementService userManagementService;
 
+    /**
+     * This method is responsible for handling the request that is related to log in the system
+     * @param userAccount
+     * @return
+     */
     @PostMapping("/api/login")
     public ResponseEntity<AuthResponse> login(@RequestBody UserAccount userAccount) {
 
@@ -63,6 +71,11 @@ public class AccountController {
         }
     }
 
+    /**
+     * This method is responsible for handling the request that is related to sign up the system
+     * @param file to have the users and accounts from file
+     * @return
+     */
     @PostMapping("/addAccounts")
     public ResponseEntity<String> addAccounts(@RequestParam("file") MultipartFile file) {
         try {
@@ -79,6 +92,7 @@ public class AccountController {
                     continue;
                 }
 
+                // Get the cells to create the userAccount and users based on their roles
                 Cell emailCell = currentRow.getCell(0);
                 Cell firstNameCell = currentRow.getCell(1);
                 Cell lastNameCell = currentRow.getCell(2);
@@ -89,13 +103,14 @@ public class AccountController {
                 Cell instructorIdCell = currentRow.getCell(7);
                 Cell teachingAssistantIdCell = currentRow.getCell(8);
 
+                //Creating account
                 UserAccount userAccount = new UserAccount();
                 userAccount.setEmail(emailCell.getStringCellValue());
                 userAccount.setFirstName(firstNameCell.getStringCellValue());
                 userAccount.setLastName(lastNameCell.getStringCellValue());
                 userAccount.setDepartment(departmentCell.getStringCellValue());
 
-                // Generate password
+                // Generate password which is built from 15 random characters
                 String password = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 15);
 
                 // Set the generated password to the userAccount
@@ -104,6 +119,7 @@ public class AccountController {
                         "Internship Management System Password");
                 accountService.addUserAccount(userAccount);
 
+                // Creating user based on their roles
                 if (roleCell.getStringCellValue().equals("Student")) {
                     StudentAddRequest studentAddRequest = new StudentAddRequest();
 
@@ -139,7 +155,11 @@ public class AccountController {
     }
 
 
-
+    /**
+     * This method is responsible for giving random passwords to the users and sending them to their emails
+     * @param userAccount
+     * @return
+     */
     @PostMapping
     public UserAccount addAccount(@RequestBody UserAccount userAccount){
 
@@ -147,6 +167,8 @@ public class AccountController {
 
         // Set the generated password to the userAccount
         userAccount.setPassword(password);
+
+        // Send the password to the user's email
         emailSenderService.sendMail(userAccount.getEmail(), "Your password is: " + password,
                 "Internship Management System Password");
         return accountService.addUserAccount(userAccount);
@@ -216,7 +238,7 @@ public class AccountController {
 
     @PatchMapping("/{id}")
     public int changePassword(@PathVariable Long id, ChangePasswordRequest request){
-
+        
         return accountService.changePassword(id, request);
     }
 }

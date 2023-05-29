@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository to handle the report entity
+ */
 @Repository
 public interface ReportRepository extends JpaRepository<Report,Long> {
     Optional<List<Report>> findByStudentId(Long studentId);

@@ -6,6 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.Instant;
 import java.util.Date;
 
+/**
+ * Request to add a report file
+ */
 @Data
 public class ReportFileAddRequest {
 

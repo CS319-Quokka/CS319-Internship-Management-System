@@ -21,6 +21,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * This class is responsible for handling all the requests coming from the frontend related to reports.
+ */
 @RestController
 @RequestMapping("/report")
 @CrossOrigin
@@ -60,7 +63,7 @@ public class ReportController {
     public boolean addCompanyForm(CompanyFormAddRequest request){
 
         System.out.println("company 1");
-        //se if the company form was correctly saved to the repository and return the response
+        //To see if the company form was correctly saved to the repository and return the response
         boolean success = reportService.addCompanyForm(request);
 
         if(success){

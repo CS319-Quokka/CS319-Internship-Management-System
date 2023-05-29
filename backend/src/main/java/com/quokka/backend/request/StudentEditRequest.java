@@ -2,6 +2,9 @@ package com.quokka.backend.request;
 
 import lombok.Data;
 
+/**
+ * Request to edit a student
+ */
 @Data
 public class StudentEditRequest {
     

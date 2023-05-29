@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Repository to handle the summer training coordinator entity
+ */
 @Repository
 public interface SummerTrainingCoordinatorRepository extends JpaRepository<SummerTrainingCoordinator, Long> {
     List<SummerTrainingCoordinator> findByUserAccountId(Long userAccountId);

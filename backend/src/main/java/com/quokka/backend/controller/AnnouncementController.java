@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class is responsible for handling all the requests coming from the frontend related to announcements.
+ */
 @RequestMapping("/announcement")
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")

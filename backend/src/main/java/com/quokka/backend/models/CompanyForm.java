@@ -12,6 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * Class to represent the company form entity
+ */
 @Entity
 @Table
 @Getter
@@ -22,11 +25,13 @@ public class CompanyForm implements MultipartFile {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    //Holds the form data as a byte array
     @Lob
     @JsonBackReference
     @Column(columnDefinition = "LONGBLOB")
     private byte[] formData;
 
+    //maps to the student with student_id
     @OneToOne
     @JoinColumn(name = "student_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)

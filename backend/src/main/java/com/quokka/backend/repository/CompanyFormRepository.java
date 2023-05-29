@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * Repository to handle the company form entity
+ */
 @Repository
 public interface CompanyFormRepository extends JpaRepository<CompanyForm, Long> {
 

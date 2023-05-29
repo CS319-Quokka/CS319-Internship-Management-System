@@ -6,8 +6,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
+/**
+ * Class to represent the company entity
+ */
 @Entity
 @Table
 @Getter
@@ -15,6 +16,7 @@ import lombok.Setter;
 public class Company {
     private String name;
 
+    //maps to the company with company_id
     @OneToMany
     @JoinColumn(name = "company_id")
     private List<Student> studentList;

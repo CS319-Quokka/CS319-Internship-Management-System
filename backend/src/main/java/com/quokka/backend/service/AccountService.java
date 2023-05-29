@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for account related operations
+ */
 @Getter
 @Setter
 @Service
 public class AccountService {
 
+    //To access the methods of repository
     private final AccountRepository accountRepository;
 
     @Autowired
@@ -27,10 +31,9 @@ public class AccountService {
     }
 
     public UserAccount getAccountById(Long id){
-
+        //trying to fetch the account. If it is not present, return null
         Optional<UserAccount> account = accountRepository.findById(id);
         if(!account.isPresent()){
-//          throw new IllegalStateException("No account found with id:" + id + "!");
             return null;
         }
         return account.get();
@@ -44,8 +47,6 @@ public class AccountService {
 
         return account.get();
     }
-
-
 
     public UserAccount addUserAccount(UserAccount userAccount) {
         Optional<UserAccount> account = accountRepository.findByEmail(userAccount.getEmail());
@@ -63,6 +64,12 @@ public class AccountService {
         return accountRepository.findByEmail(mail).get();
     }
 
+    /**
+     * Checks if the credentials are valid
+     * @param email
+     * @param password
+     * @return true if the credentials are valid, false otherwise
+     */
     public boolean checkCredentials(String email, String password){
 
         boolean isValid = false;
@@ -77,6 +84,7 @@ public class AccountService {
     }
 
     public List<UserAccount> getAllAccounts(Optional<String> department){
+        //if department is given with optional parameter, return specific. If not, return all
         if (department.isEmpty()){
             return accountRepository.findAll();
         }
@@ -84,23 +92,25 @@ public class AccountService {
     }
 
     public UserAccount editAccount( Long id, UserAccount userAccount)  {
+        //trying to fetch the account. If it is not present, throw exception
         Optional<UserAccount> account = accountRepository.findById(id);
         if (!account.isPresent()){
-            throw new IllegalStateException("No account found with id:" + id + "!");
+            //throw new IllegalStateException("No account found with id:" + id + "!");
+            return null;
         }
+        //if the account is present, update it
         UserAccount foundUser = account.get();
         foundUser.setDepartment(userAccount.getDepartment());
         foundUser.setEmail(userAccount.getEmail());
         foundUser.setFirstName(userAccount.getFirstName());
         foundUser.setLastName(userAccount.getLastName());
-        //foundUser.setProfiles(userAccount.getProfiles());
-        //foundUser.setUsers(userAccount.getUsers());
         foundUser.setPassword(userAccount.getPassword());
         foundUser.setProfilePic(userAccount.getProfilePic());
 
         return accountRepository.save(foundUser);
 
     }
+
 
     public void deleteAccount(Long id) {
         Optional<UserAccount> account = accountRepository.findById(id);
@@ -115,6 +125,12 @@ public class AccountService {
         System.out.println("All accounts deleted!");
     }
 
+    /**
+     * Changes the password of the user using changePasswordRequest
+     * @param id
+     * @param request
+     * @return different inputs to display different messages
+     */
     public int changePassword(Long id, ChangePasswordRequest request){
 
         if(request.getNewPassword().equals("") || request.getNewPassword2().equals("")){

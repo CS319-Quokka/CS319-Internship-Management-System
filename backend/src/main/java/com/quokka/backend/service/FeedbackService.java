@@ -15,9 +15,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for feedback related operations
+ */
 @Service
 public class FeedbackService {
 
+    //To access the methods of JPARepository
     private FeedbackRepository feedbackRepository;
 
     private ReportService reportService;
@@ -46,7 +50,7 @@ public class FeedbackService {
     }
 
     public Feedback getFeedback(Long ID){
-
+        //checks whether the feedback is present or not after trying to fetch it
         Optional<Feedback> feedback = feedbackRepository.findById(ID);
         if(!feedback.isPresent()){
 
@@ -91,7 +95,6 @@ public class FeedbackService {
         }
         else if(instructorOpt.isPresent()){
 
-            System.out.println("ınstructor FOUND");
             newFeedback.setSender(instructorOpt.get());
         }
         else{
@@ -108,16 +111,18 @@ public class FeedbackService {
             newFeedback.setFeedbackDescription(request.getFeedbackDescription());
         }
 
-        System.out.println("FEEDBACK UPLOAD ");
+        //Feedback uploading to database
         studentRepository.findById(request.getStudentId()).get().setStatus("Feedback Given");
         newFeedback.setId(request.getId());
         newFeedback.setUploadDate(request.getUploadDate());
         feedbackRepository.save(newFeedback);
         return newFeedback.getId();
     }
+
+
     public Feedback findByReportId(Long reportId) {
 
-        System.out.println("FEEDBACK ARANIYORR: " + reportId);
+
 
 
         Optional<Feedback> feedback = feedbackRepository.findByReportId(reportId);
@@ -209,8 +214,6 @@ public class FeedbackService {
         }
 
         try{
-
-            System.out.println("came to the feedback");
             FeedbackFile newFeedbackFile = new FeedbackFile();
             Optional<Feedback> feedbackOpt = feedbackRepository.findById(request.getFeedbackId());
             if(!feedbackOpt.isPresent()){

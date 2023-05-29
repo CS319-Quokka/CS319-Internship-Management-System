@@ -9,6 +9,9 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 
+/**
+ * Request to add an announcement
+ */
 @Data
 public class AnnouncementAddRequest {
 

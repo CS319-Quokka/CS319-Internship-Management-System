@@ -9,6 +9,9 @@ import lombok.Setter;
 
 import java.time.Instant;
 
+/**
+ * Class to represent the response of the company form functionality
+ */
 @Data
 @Getter
 @Setter

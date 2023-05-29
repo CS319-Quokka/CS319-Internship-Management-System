@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * This class is responsible for handling all the requests coming from the frontend related to feedback.
+ */
 @RestController
 @RequestMapping("/feedback")
 @CrossOrigin

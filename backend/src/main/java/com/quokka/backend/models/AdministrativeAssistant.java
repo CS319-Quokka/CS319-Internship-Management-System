@@ -1,7 +1,5 @@
 package com.quokka.backend.models;
 
-import java.util.List;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,6 +9,6 @@ import lombok.Setter;
 @Table
 @Getter
 @Setter
-public class AdministrativeAssistant extends Admin {
+public class AdministrativeAssistant extends User {
 
 }

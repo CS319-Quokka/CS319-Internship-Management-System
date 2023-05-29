@@ -11,10 +11,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for notification related operations
+ */
 @Service
 public class NotificationService {
 
+    //To access the methods of JPARepository
     private NotificationRepository notificationRepository;
+
+    //To access the methods of UserManagementService
     private UserManagementService userManagementService;
 
     @Autowired
@@ -40,12 +46,10 @@ public class NotificationService {
         return notificationRepository.save(notification);
     }
 
-    // DONE
     public Notification getNotificationById(Long id) {
         return notificationRepository.findById(id).orElseThrow(() -> new NotificationNotFoundException(id));
     }
 
-    // DONE
     public List<Notification> getAllNotifications(Optional<Long> userId) {
         if ( userId.isPresent() ) {
             if (userManagementService.getUserById(userId.get()) == null) {
@@ -58,7 +62,7 @@ public class NotificationService {
         return notificationRepository.findAll();
     }
 
-    // TODO
+
     public Notification updateNotification(Notification newNotification, Long id) {
         return notificationRepository.findById(id).map(notification -> {
             notification.setTitle(newNotification.getTitle());

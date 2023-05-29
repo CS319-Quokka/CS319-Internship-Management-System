@@ -9,7 +9,9 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-
+/**
+ * Class to represent the summer training coordinator entity
+ */
 @Entity
 @Table
 @Getter

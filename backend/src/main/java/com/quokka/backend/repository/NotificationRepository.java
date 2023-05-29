@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Repository to handle the notification entity
+ */
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
     List<Notification> findByUserId(Long userId);

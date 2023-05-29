@@ -15,10 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
+/**
+ * Service for user related operations
+ */
 @Service
 public class UserManagementService {
 
+    //To access the methods of AccountService
     private AccountService accountService;
 
     private  StudentRepository studentRepository;
@@ -43,10 +46,7 @@ public class UserManagementService {
         this.administrativeAssistantRepository = administrativeAssistantRepository;
     }
 
-    // TODO: Use this in AnnouncementService
     public User getUserById(Long userId) {
-
-        // TODO: most of the time we will get the Student. ??
 
         Optional<Student> student = studentRepository.findById(userId);
         if (student.isPresent()) {
@@ -72,8 +72,6 @@ public class UserManagementService {
         if (administrativeAssistant.isPresent()) {
             return administrativeAssistant.get();
         }
-
-        // TODO: Add Admin case
 
         return null;
     }
@@ -595,7 +593,7 @@ public class UserManagementService {
             return null;
     }
     public SummerTrainingCoordinator editSummerTrainingCoordinatorByID(Long id, SummerTrainingCoordinatorEditRequest request) {
-
+        //trying to fetch with optional
         Optional<SummerTrainingCoordinator> summerTrainingCoordinator =
                 summerTrainingCoordinatorRepository.findById(id);
         if(!summerTrainingCoordinator.isPresent()){

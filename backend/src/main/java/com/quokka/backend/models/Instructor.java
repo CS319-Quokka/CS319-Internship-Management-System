@@ -7,8 +7,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-
-
+/**
+ * Class to represent the instructor entity
+ */
 @Entity
 @Table
 @Getter

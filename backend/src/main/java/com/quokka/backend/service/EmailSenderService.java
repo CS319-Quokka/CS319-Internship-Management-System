@@ -5,8 +5,12 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for account related operations
+ */
 @Service
 public class EmailSenderService {
+    //To send emails, we need to use JavaMailSender
     @Autowired
     private JavaMailSender javaMailSender;
 

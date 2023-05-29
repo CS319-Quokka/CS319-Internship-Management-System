@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
+/**
+ * Repository to handle the announcement entity
+ */
 public interface AnnouncementRepository extends JpaRepository<Announcement, Long> {
 
     List<Announcement> findBySenderRoleAndSenderId(String senderRole, Long senderId);

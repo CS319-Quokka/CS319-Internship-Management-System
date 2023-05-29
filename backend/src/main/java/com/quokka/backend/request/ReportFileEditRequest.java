@@ -3,6 +3,9 @@ package com.quokka.backend.request;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Request to edit a report file
+ */
 @Data
 public class ReportFileEditRequest {
 

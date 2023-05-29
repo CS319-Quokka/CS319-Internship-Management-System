@@ -12,10 +12,15 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service for announcement related operations
+ */
 @Service
 public class AnnouncementService {
+    //To modify the user
     private UserManagementService userManagementService;
 
+    //To access the methods of JPARepository
     private AnnouncementRepository announcementRepository;
 
     @Autowired
@@ -24,6 +29,14 @@ public class AnnouncementService {
         this.userManagementService = userManagementService;
     }
 
+    /**
+     * Adds announcement to the database
+     * @param senderRole determines which user is sending the announcement
+     * @param senderId to fetch the user from the database
+     * @param audience determines which users should see the announcement
+     * @param request contains the announcement information
+     * @return
+     */
     public Announcement addAnnouncement(String senderRole, Long senderId, String audience, AnnouncementAddRequest request) {
         User sender = null;
         if (senderRole.equals("Instructor")) {
@@ -38,14 +51,12 @@ public class AnnouncementService {
         else if (senderRole.equals("Summer Training Coordinator")) {
             sender = userManagementService.getSummerTrainingCoordinatorByID(senderId);
         }
-//        else if (senderRole.equals("admin")) { // TODO: admin ??
-//            sender = userManagementService.getAdminByID(senderId);
-//        }
 
         if (sender == null) {
             return null;
         }
 
+        //Sets the announcement information
         Announcement announcement = new Announcement();
 
         announcement.setTitle(request.getTitle());
@@ -55,7 +66,7 @@ public class AnnouncementService {
         announcement.setSenderRole(senderRole);
         announcement.setSender(sender);
         announcement.setAudience(audience);
-        // "CS" -> CS deparment, "IE" -> IE department etc.
+        // "CS" -> CS department, "IE" -> IE department etc.
 
         return announcementRepository.save(announcement);
     }
@@ -65,10 +76,15 @@ public class AnnouncementService {
     }
 
 
-    // TODO: remove duplicate codes
+    /**
+     * Gets all announcements from the database
+     * @param userRole to access the path
+     * @param userId to access the user
+     * @return
+     */
     public List<Announcement> getAllAnnouncements(Optional<String> userRole, Optional<Long> userId) {
         if ( !(userRole.isPresent() && userId.isPresent() ) ) {
-            System.out.println("optional parameter userRole or userId is not present");
+            System.out.println("Optional parameter userRole or userId is not present");
             return null;
         }
 
@@ -79,12 +95,12 @@ public class AnnouncementService {
         if(userRole.get().equals("Student") ) {
             Student student = userManagementService.getStudentByID(userId.get());
             if (student == null) {
-//                throw new IllegalStateException("Student not found");
                 return null;
             }
 
             System.out.println("Show announcements for student: " + student.getUserAccount().getLastName() );
 
+            //Setting the data for the student to locale variables
             Instructor instructor = student.getInstructor();
             TeachingAssistant teachingAssistant = student.getTeachingAssistant();
             List<AdministrativeAssistant> administrativeAssistants =
@@ -260,7 +276,6 @@ public class AnnouncementService {
         else if( userRole.get().equals("Summer Training Coordinator") ) {
             SummerTrainingCoordinator coordinator = userManagementService.getSummerTrainingCoordinatorByID(userId.get());
             if (coordinator == null) {
-//                throw new IllegalStateException("Coordinator not found");
                 return null;
             }
 
@@ -296,14 +311,19 @@ public class AnnouncementService {
 
             return announcements;
         }
-//        else if( userRole.get().equals("admin")) { // TODO: admin ??
-//
-//        }
 
         return null;
     }
 
+    /**
+     * Gets all announcements made by a specific user
+     * @param senderRole
+     * @param senderId
+     * @param audience
+     * @return list of announcements that are made by a specific user
+     */
     public List<Announcement> getAllMadeAnnouncements(String senderRole, Long senderId, Optional<String> audience) {
+        //checks whether the optional exists or not
         if (audience.isPresent()) {
             return announcementRepository.findBySenderRoleAndSenderIdAndAudience(senderRole, senderId, audience.get());
         }
