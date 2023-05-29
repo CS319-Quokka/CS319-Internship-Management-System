@@ -52,6 +52,7 @@ const [links,setLinks] = useState([]);
 const [reportFile,setReportFile] = useState(null)
 const [reportHistory,setReportHistory] = useState([])
 const [feedbackHistory,setFeedbackHistory] = useState([])
+const [status,setStatus] = useState("");
 const userContext = useContext(UserContext);
 
 
@@ -192,6 +193,11 @@ const getAllReports = async () => {
     const info2 = response2.data;
     console.log("ACTIVE REPORT: ", info2);
 
+    const response3 = await axios.get(`http://localhost:8080/get_all_users/${studentId}`);
+    const info3 = response3.data[0];
+    console.log("CUR STUDI: ", info3.status);
+    setStatus(info3.status)
+
 
     var reportIdList = [];
 
@@ -200,13 +206,20 @@ const getAllReports = async () => {
     var allFeedbacks = [];
 
     //get every report except the last one (report history)
-    for (var i = 0; i < info.length -1 ; i++) {
+    for (var i = 0; i < info.length -1; i++) {
       console.log(i, "th report: ", info[i].id);
       reportIdList.push(info[i].id)
       getReportFile(reportIdList[i],allReports,i)
-      getFeedbackFile(reportIdList[i],allFeedbacks)
     }
 
+    console.log("STATTTTuuuus:", info3.status)
+
+    if(info3.status == "Feedback Given"){
+      var index = info.length-1;
+      reportIdList.push(info[index].id)
+      getReportFile(reportIdList[index],allReports,index)
+
+    }
     console.log("ids: ", reportIdList)
 
     console.log("ALL REPOS:", allReports)
@@ -221,12 +234,21 @@ const getAllReports = async () => {
 
 
     return (
+      
         <ul>
-          {console.log("AAA:",reportHistory)}
-          {console.log("BBB:",feedbackHistory[0])}
-            {reportHistory.map((revision,index) => (
+          {reportHistory.length == 0 &&
+          <div>
+            <br></br>
+            <h4><em>There is no history available</em></h4>
+            
+          </div>
+          }
+          {console.log("AA:", reportHistory)}
+            {reportHistory
+            .sort((a, b) => a.revisionCount - b.revisionCount) 
+            .map((revision,index) => (
                 <div className="prevreport">
-                    <li key={index}>
+                    <li key={revision.revisionCount}>
                         <hr></hr>
                         <h2>Revision : {revision.revisionCount}</h2>
                         <p>The student's submission for this revision:</p>
@@ -300,17 +322,26 @@ function TextareaValidator(props) {
 
   const sendFeedbackComment = async (event) => {
     event.preventDefault();
+    console.log("SENDING FC")
 
       const feedbackData = {
         senderId: props.userId,
+        studentId:props.studentId,
         reportId: props.reportId,
         feedbackDescription: props.message,
         uploadDate: new Date().toISOString(), // Set the appropriate date format
       };
 
       axios.post("http://localhost:8080/feedback", feedbackData)
-      
-  };
+      .then((response) => {
+        console.log(response);
+        props.setSentFeedback(true)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+};
+
 
   const handleMessageChange = (event) => {
     props.setMessage(event.target.value);
@@ -319,6 +350,10 @@ function TextareaValidator(props) {
   
   return (
     <FormControl>
+      {!props.feedbackSent &&
+
+      <div>
+        
       <FormLabel>Feedback comments</FormLabel>
       <Textarea
         placeholder="Type your feedback comments here..."
@@ -385,6 +420,9 @@ function TextareaValidator(props) {
           fontStyle: italic ? 'italic' : 'initial',
         }}
       />
+
+      </div>
+      }
     </FormControl>
   );
 }
@@ -393,24 +431,9 @@ function FormDialogA(props) {
   const [openA, setOpenA] = useState(false);
   const [isClicked1, setIsClicked1] = useState(false);
   const [isClicked2, setIsClicked2] = useState(false);
-  const [partAstatus, setPartAstatus] = useState("Unsatisfactory");
+  const [partA,setPartA] = useState("Undetermined")
 
 
-
-  useEffect(() => {
-    const getInformation = async () => {
-      const studentId = 3;
-      try {
-        const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
-
-
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getInformation();
-  }, []);
 
   const handleIsClicked1 = () => {
       setIsClicked1(true);
@@ -429,10 +452,11 @@ function FormDialogA(props) {
       const areButtonsClicked = isClicked1 && isClicked2; // Check if both buttons are clicked and stay on "Yes"
       console.log("entered part A check")
       if (cefGrade >= 7 && areButtonsClicked) {
-          setPartAstatus("Satisfactory");
+          setPartA("Satisfactory");
           console.log("part a success!")
       } else {
-          setPartAstatus("Unsatisfactory");
+          setPartA("Unsatisfactory");
+          console.log("UNSATIS")
       }
   };
 
@@ -441,6 +465,7 @@ function FormDialogA(props) {
     props.setButtonClicked(false);
   };
  const handleSubmitA = () => {
+     props.setPartAstatus(partA)
      setOpenA(false);
      // save CEF grades.
  }
@@ -448,9 +473,15 @@ function FormDialogA(props) {
   return (
 
     <div>
-      <Button variant="outlined" onClick={handleClickOpenA}>
-        Part A
-      </Button>
+      {props.partAstatus == "Undetermined" &&
+      <div>
+         <Button variant="outlined" onClick={handleClickOpenA}>
+          Part A
+        </Button>
+
+      </div>
+      }
+     
       <Dialog fullWidth open={openA} onClose={handleCloseA}>
         <DialogTitle>Grade Form</DialogTitle>
         <DialogContent>
@@ -503,13 +534,39 @@ function FormDialogB(props) {
     const [partBstatus, setPartBstatus] = useState("Unsatisfactory");
     const [isSatisfactoryB, setIsSatisfactoryB] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
+    const [buttonName,setButtonName] = useState("");
 
     const handleDateSelection = (date) => {
         setSelectedDate(date);
     };
 
-    const handleSubmitB = () => {
+    
+    useEffect(() => {
+      const fetchReports = async () => {
+        if (props.studentId) {
+          try {
+            const response = await axios.get(`http://localhost:8080/report/students_all_reports/${props.studentId}`);
+            const info = response.data;
+            if(info.length == 0){
+              setButtonName("Ask for initial report")
+            }
+            else{
+              setButtonName("Revision Required")
+            }
+          } catch (error) {
+            console.error('Failed to fetch reports: ', error);
+          }
+        }
+      };
+    
+      fetchReports();
+    }, [props.studentId]);
+    
+    
+    const handleSubmitB = async() => {
 
+
+      if(isSatisfactoryB){
 
         console.log("Student id: ", props.studentId, "Deadline:", selectedDate)
         const reportData = {
@@ -529,25 +586,36 @@ function FormDialogB(props) {
                 console.error(error);
             });
 
+      }
+
+      else{
+        let newStatus = "Satisfactory";
+        console.log("status: ", newStatus)
+
+        let url = `http://localhost:8080/student/${props.studentId}/status`;
+
+        try {
+            const response = await axios.put(url, newStatus,{
+              headers: {
+                'Content-Type': 'text/plain'
+            }
+            });
+
+            // Handle response data here
+            console.log('Success:', response.data);
+        } catch (error) {
+            // Handle errors here
+            console.log('Error:', error);
+        }
+            //change the state to satis
+      }
+  
+
         setOpenB(false);
 
     }
 
 
-    useEffect(() => {
-        const getInformation = async () => {
-            const studentId = 3;
-            try {
-                const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
-
-
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        getInformation();
-    }, []);
 
     const handleClickOpenB = () => {
         setOpenB(true);
@@ -577,19 +645,19 @@ function FormDialogB(props) {
                 <DialogContent>
                     <Typography sx={{fontWeight: 'bold'}}>Part B - Report</Typography>
                     <Button
-                        variant={isSatisfactoryB ? 'outlined' : 'contained'}
+                        variant={isSatisfactoryB ?  'outlined':'contained' }
                         color="success"
                         onClick={handleSatisfactoryClick}
                         sx={{marginRight: '10px'}}
                     > Satisfactory </Button>
                     <Button
-                        variant={isSatisfactoryB ? 'contained' : 'outlined'}
+                        variant={isSatisfactoryB ?  'contained':'outlined'}
                         color="secondary"
                         onClick={handleRevisionRequiredClick}
-                    >Revision Required</Button>
+                    >{buttonName}</Button>
                     {isSatisfactoryB && (
                         <div>
-                            <Typography>Enter the due date for the resubmission.</Typography>
+                            <Typography>Enter the due date for the submission.</Typography>
                             <DateComponent selectedDate = {selectedDate} setSelectedDate = {handleDateSelection}/>
                         </div>
                     )}
@@ -824,12 +892,15 @@ return (
         isButtonClicked: false,
         currentReport: "",
         currentComment: "",
+        status:"",
         companyFormData:null,
         companyFormName:"",
         currentFile: null,
         fileData:null,
         reportId:null,
-        message: ""
+        message: "",
+        feedbackSent:false,
+        partAstatus: "Undetermined"
       };
       this.downloadCurrent = this.downloadCurrent.bind(this);
       this.setMessage = this.setMessage.bind(this);
@@ -846,6 +917,9 @@ return (
 
   }
 
+  setPartAstatus = (status) =>{
+    this.setState({partAstatus:status})
+  }
   setMessage(message){
     this.setState({message:message})
   }
@@ -887,12 +961,15 @@ return (
         const cefResponse = await axios.get(`http://localhost:8080/report/get_company_form_by_student/${id}`);
         const cefInfo = cefResponse.data;
 
+        console.log("STUUU:", studentInfo.status)
+
         this.setState({
           studentFirstName: studentInfo.userAccount.firstName,
           studentLastName: studentInfo.userAccount.lastName,
           course: studentInfo.courseCode,
           companyFormData: cefInfo.fileData,
-          companyFormName:cefInfo.fileName
+          companyFormName:cefInfo.fileName,
+          status: studentInfo.status
         })
       } catch (error) {
         console.log(error);
@@ -925,6 +1002,7 @@ return (
       event.preventDefault();
       const feedbackData = {
         senderId: this.props.userId,
+        studentId:this.state.studentId,
         reportId: this.state.reportId,
         feedbackDescription: this.state.message,
         uploadDate: new Date().toISOString(), // Set the appropriate date format
@@ -955,6 +1033,7 @@ return (
           })
             .then((response) => {
               console.log("File uploaded successfully");
+              this.setSentFeedback({feedbackSent:true})
               console.log(response.data);
             })
             .catch((error) => {
@@ -969,6 +1048,10 @@ return (
 
     };
     
+setSentFeedback = (status) =>{
+  console.log("changint the feedback stat")
+  this.setState({feedbackSent:status})
+}
  downloadCEF = () => {
   const fileData = this.state.companyFormData
   const fileName = this.state.companyFormName;
@@ -1015,6 +1098,10 @@ return (
             <div className="information">
               <h1>The student's current submission for {this.state.course}</h1>
               <br></br>
+              {
+                (this.state.status == "Report Uploaded" &&  !this.state.feedbackSent)&&
+                <div>
+
               <IconButton  onClick={() => this.downloadCurrent()} aria-label="download">
                 <DownloadIcon />
               </IconButton>
@@ -1028,6 +1115,19 @@ return (
               </Button>
               <Typography>Student's comments:</Typography>
               <textarea readOnly value={this.state.currentComment || ''}></textarea>
+
+                </div>
+
+              }
+              
+              {
+                 (this.state.status != "Report Uploaded"  || this.state.feedbackSent) && 
+                 <div>
+                  <br></br>
+                  <h4><em>There is no active report for the student</em></h4>
+                 </div>
+                
+              }
               <hr></hr>
               <h1>REPORT ASSESSMENT</h1>
               <br></br>
@@ -1055,8 +1155,21 @@ return (
             <div>
 
             <Typography>To enter the student's grades, use the Grade Form</Typography>
-            <Typography>Part A - Enter the Company Evaluation Form Assessment </Typography>
+            {this.state.partAstatus == "Undetermined" &&
+              <Typography>Part A - Enter the Company Evaluation Form Assessment </Typography>
+            } 
+             {this.state.partAstatus != "Undetermined" &&
+              
+              <div>
+                <br></br>
+                <Typography>Part A is {this.state.partAstatus}</Typography>
+                <br></br>
+              </div>
+            } 
+            
             <FormDialogA
+              partAstatus = {this.state.partAstatus}
+              setPartAstatus = {this.setPartAstatus}
               studentId = {this.state.studentId}
               studentFirstName={this.state.studentFirstName}
               studentLastName={this.state.studentLastName}
@@ -1080,8 +1193,13 @@ return (
                   studentLastName={this.state.studentLastName}
                   setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
               />
+
+
+                {this.state.status == "Report Uploaded" &&  (!this.state.feedbackSent) &&
+                <div>
+
             <div className="texteditor">
-              <TextareaValidator setMessage = {this.setMessage} message = {this.state.message} userId = {this.props.userId}  reportId = {this.state.reportId}/>
+              <TextareaValidator feedbackSent = {this.state.feedbackSent} setSentFeedback = {this.setSentFeedback} setMessage = {this.setMessage} message = {this.state.message} studentId = {this.state.studentId} userId = {this.props.userId}  reportId = {this.state.reportId}/>
             </div>
 
             <div className="annotatedupload">
@@ -1107,6 +1225,11 @@ return (
               </div>
               )}
             </div>
+
+
+                </div>
+                }
+          
           </div>
         </div>
       );

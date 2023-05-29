@@ -10,8 +10,8 @@ function AnnouncementList(props) {
       {props.data.map(announcement => (
         <li key={announcement.content}>
           <h2>From: {announcement.sender}</h2>
-          <textarea readOnly>{announcement.content}</textarea>
-          <h2>this should be date: {announcement.title}</h2>
+          <textarea readOnly value={announcement.content}></textarea>
+          <h2>Date: {announcement.date}</h2>
           <hr></hr>
         </li>
       ))}
@@ -25,7 +25,7 @@ function NotificationList(props) {
         <li key={notification.content}>
           <h2>{notification.title}</h2>
           <textarea readOnly>{notification.content}</textarea>
-          <h2>this should be date: {notification.title}</h2>
+          <h2>Date: {notification.date}</h2>
           <hr></hr>
         </li>
       ))}
@@ -69,11 +69,13 @@ class StudentNotifications extends Component {
       var senderInfo = announcementInfo[i].sender.userAccount.firstName + " " + announcementInfo[i].sender.userAccount.lastName;
       var titleInfo = announcementInfo[i].title;
       var contentInfo = announcementInfo[i].content;
+      var dateInfo = announcementInfo[i].date;
       
       announ.push({
         sender: senderInfo,
         title: titleInfo,
         content: contentInfo,
+        date: dateInfo,
       });
     }
 
@@ -101,14 +103,15 @@ class StudentNotifications extends Component {
 
      for (var i = (notificationInfo.length - 1); i > -1; i--) {
       
-      // var senderInfo = notificationInfo[i].sender.userAccount.firstName + " " + notificationInfo[i].sender.userAccount.lastName;
       var titleInfo = notificationInfo[i].title;
       var contentInfo = notificationInfo[i].content;
+      var dateInfo = notificationInfo[i].date;
       
       notif.push({
         // sender: senderInfo,
         title: titleInfo,
         content: contentInfo,
+        date: dateInfo,
       });
     }
 
@@ -127,7 +130,7 @@ class StudentNotifications extends Component {
           <br></br>
           <hr></hr>
           <div className='announcementList'>
-            <AnnouncementList link = {"/studentnotifications"} data={announcementNameList} displayFields={['sender','title', 'content']} />          
+            <AnnouncementList link = {"/studentnotifications"} data={announcementNameList} displayFields={['sender','date', 'content']} />          
           </div>
         </div>
 
@@ -139,7 +142,7 @@ class StudentNotifications extends Component {
           <hr></hr>
           <div className='announcementList'>
           {/* TODO REMOVE sender and add date */}
-            <NotificationList link = {"/studentnotifications"} data={notificationNameList} displayFields={['sender','title', 'content']}/>          
+            <NotificationList link = {"/studentnotifications"} data={notificationNameList} displayFields={['date','title', 'content']}/>          
           </div>
         </div>
 

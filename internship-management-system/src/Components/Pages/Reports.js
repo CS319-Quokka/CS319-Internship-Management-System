@@ -41,7 +41,6 @@ function RevisionList(props) {
        console.log("here:",newLink)
        setLink(newLink)
        links.push(newLink)
-    
     }
 
     const downloadPrevious = (fileData, fileName) => {
@@ -94,22 +93,13 @@ function RevisionList(props) {
           const response = await axios.get(`http://localhost:8080/report/file/${id}`);
           const reportFile = response.data;
           
-          console.log("HERE RAPO", reportFile)
           let feedback = null;
           let feedbackDescription = "";
           const reportId = reportFile.reportId
-          console.log("idi:",reportId)
           if (reportId) {
-            console.log("GIRDI")
             feedbackDescription = await getFeedbackDescription(reportId)
-            console.log("HERE AS THE: ", feedbackDescription)
-
             feedback = await getFeedbackFile(reportId);
-            console.log("FFEDBACK:  ", feedback)
-            
-
           }
-      
           reports.push({
             revisionCount: index + 1,
             fileName: reportFile.fileName,
@@ -127,16 +117,11 @@ function RevisionList(props) {
           return null;
         }
       };
-      
 
       const getFeedbackDescription = async (id) => {
         try {
           const response = await axios.get(`http://localhost:8080/feedback/description/${id}`);
           const feedback = response.data;
-
-          console.log("FEEDBACK DESC: ",feedback)
-      
-      
           return feedback;
         } catch (error) {
           console.error("Failed to fetch feedback: ", error);
@@ -150,15 +135,12 @@ function RevisionList(props) {
         try {
           const response = await axios.get(`http://localhost:8080/feedback/get_feedback_by_report/${id}`);
           const feedbackFile = response.data;
-      
-      
           return feedbackFile;
         } catch (error) {
           console.error("Failed to fetch feedback file: ", error);
           throw error;
         }
       };
-      
 
       const downloadAnnotated = (fileData,fileName) => {
         return () => {
@@ -202,12 +184,17 @@ function RevisionList(props) {
           getAllReports();
         }
       }, [studentId]);
-      
-      console.log("ALL OF IT:" , reportHistory)
       return (
-        
         <ul>
-          {reportHistory.map((revision,index) => (
+          {reportHistory.length == 0 && 
+          <div>
+            <br></br>
+            <h4>No report history available</h4>
+          </div>
+          }
+          {reportHistory
+          .sort((a, b) => a.revisionCount - b.revisionCount) 
+          .map((revision,index) => (
             <div className="prevreport" key={index}>
               <li>
                 <hr />
@@ -215,21 +202,15 @@ function RevisionList(props) {
                 <p>The report you submitted for this revision:</p>
                 <IconButton
                   aria-label="download"
-                  onClick={
-                    downloadPrevious(revision.fileData, revision.fileName)
-                  }
-                >
-                  <DownloadIcon />
+                  onClick={ downloadPrevious(revision.fileData, revision.fileName) }
+                  > <DownloadIcon />
                 </IconButton>
                 <Button
                   variant="text"
-                  onClick={
-                    downloadPrevious(revision.fileData, revision.fileName)
-                  }
+                  onClick={ downloadPrevious(revision.fileData, revision.fileName) }
                   style={{ textTransform: "none" }}
                   size="large"
-                >
-                  {revision.fileName}
+                  > {revision.fileName}
                 </Button>
       
                 <Typography>Your comments:</Typography>
@@ -255,22 +236,17 @@ function RevisionList(props) {
                 <div>
                      <IconButton
                      aria-label="download"
-                     onClick={
-                       downloadAnnotated(revision.feedbackData, revision.feedbackName)
-                     }
-                   >
-                     <DownloadIcon />
+                     onClick={ downloadAnnotated(revision.feedbackData, revision.feedbackName) }
+                     > <DownloadIcon />
                    </IconButton>
                    <Button
                      variant="text"
-                     onClick={
-                       downloadAnnotated(revision.feedbackData, revision.feedbackName)
-                     }
+                     onClick={ downloadAnnotated(revision.feedbackData, revision.feedbackName) }
                      style={{ textTransform: "none" }}
                      size="large"
-                   >
-                     {revision.feedbackName}
-                   </Button></div>
+                     > {revision.feedbackName}
+                   </Button>
+                </div>
                 }
                
               </li>
@@ -296,7 +272,8 @@ class ReportsStudents extends Component {
             currentComment: "",
             fileData:null,
             reportId:null,
-            studentId:null
+            studentId:null,
+            status:""
 
         }
     }
@@ -307,21 +284,17 @@ class ReportsStudents extends Component {
           const id1 = this.props.userId; 
           const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${id1}`);
           const userAccount = accountResponse.data;
-    
-          console.log("inst:", userAccount);
-    
+
           const response = await axios.get(`http://localhost:8080/get_all_users/${id1}`);
           const info = response.data[0];
-    
           const id = info.id;
-
 
           this.setState({
             firstName: userAccount.firstName,
             lastName: userAccount.lastName,
             userType: info.role,
             course: info.courseCode,
-
+            status:info.status
           })
     
           this.setState({ studentId: id });
@@ -333,22 +306,15 @@ class ReportsStudents extends Component {
     
       fetchData();
     }
-    
 
-    
-    
     getActiveReport = async (id) => {
       try {
        
         const response2 = await axios.get(`http://localhost:8080/report/file/active/${id}`);
         const info2 = response2.data;
-
         const feedback = await this.getFeedbackFile(info2.reportId);
-
         const feedbackDescription = await this.getFeedbackDescription(info2.reportId)
-        console.log("FI: ",feedbackDescription)
-       
-        console.log("desci: ", feedbackDescription)
+
         this.setState({
           currentReport: info2.fileName,
           currentComment: info2.reportDescription,
@@ -368,8 +334,7 @@ class ReportsStudents extends Component {
       try {
         const response = await axios.get(`http://localhost:8080/feedback/get_feedback_by_report/${id}`);
         const feedbackFile = response.data;
-    
-    
+
         return feedbackFile;
       } catch (error) {
         console.error("Failed to fetch feedback file: ", error);
@@ -377,33 +342,24 @@ class ReportsStudents extends Component {
       }
     };
 
-    
     getFeedbackDescription = async (id) => {
       try {
         const response = await axios.get(`http://localhost:8080/feedback/description/${id}`);
         const feedback = response.data;
 
-        console.log("FEEDBACK DESC: ",feedback)
-    
-    
         return feedback;
       } catch (error) {
         console.error("Failed to fetch feedback: ", error);
         throw error;
       }
     };
-    
-
     downloadCurrent = () =>{
-
       const fileData = this.state.fileData
       const fileName = this.state.currentReport
-  
       if (typeof fileData !== "string" || !(/^[A-Za-z0-9+/=]*$/g.test(fileData))) {
         console.error("Invalid base64 string");
         return;
       }
-    
       const byteCharacters = atob(fileData);
       const byteNumbers = new Array(byteCharacters.length);
       for (let i = 0; i < byteCharacters.length; i++) {
@@ -418,14 +374,12 @@ class ReportsStudents extends Component {
       link.setAttribute('download', fileName); // Use the right file extension here
       document.body.appendChild(link);
       link.click();
-      
     }
 
     downloadAnnotated= () =>{
 
       const fileData = this.state.feedbackData
       const fileName = this.state.feedbackName
-  
       if (typeof fileData !== "string" || !(/^[A-Za-z0-9+/=]*$/g.test(fileData))) {
         console.error("Invalid base64 string");
         return;
@@ -438,30 +392,25 @@ class ReportsStudents extends Component {
       }
       const byteArray = new Uint8Array(byteNumbers);
       const blob = new Blob([byteArray]);
-      
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', fileName); // Use the right file extension here
       document.body.appendChild(link);
       link.click();
-      
     }
-    
    render(){
     return (
-        
         <div className='reportspage' >
               <div className="history">
                   <div className="information">
                       <h1><strong>{this.state.firstName} {this.state.lastName}   ( {this.state.userType} ) </strong> </h1>
                       <hr></hr>
                   </div>
-
-                   <div className="prevlist">
+                  <div className="prevlist">
                        <h1>Uploaded Reports History</h1>
                        <RevisionList id = {this.props.userId}/>
-                   </div>
+                  </div>
                 </div>
                 <div className="reportstatus">
                     <div className="information">
@@ -475,12 +424,33 @@ class ReportsStudents extends Component {
                     <Button onClick={() => this.downloadCurrent()} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.currentReport}</Button>
 
                     <hr></hr>   
-                    <b>Part A ~ Work Place</b>
-                    <p >Status: {this.state.partAstatus}</p>
-                    <hr></hr>  
+                    
                     <b>Part B ~ Report</b>
-                    <p>Feedback on your report: </p>
-                    <textarea value={this.state.feedbackDescription} />
+                    {this.state.status === ("Revision Required" || "Waiting to upload report") &&
+                      <div>
+                         <p>Feedback on your report: </p>
+                        <textarea value={this.state.feedbackDescription} />
+
+                      </div>
+                    }
+
+                    {this.state.status === ("Satisfactory") &&
+                      <div>
+                        <br></br>
+                         <p><em>You have completed part B successfully 🎉</em> </p>
+                         <br></br>
+
+                      </div>
+                    }
+                   
+                   {this.state.status === ("Failed") &&
+                      <div>
+                        <br></br>
+                         <p><em>Your report process ended with failure 💀</em> </p>
+                         <br></br>
+
+                      </div>
+                    }
                     <hr></hr>
                    <b>Part C ~ Final version of the report</b>
                    <p>Overall Status: {this.state.overallStatus} </p>
@@ -492,7 +462,6 @@ class ReportsStudents extends Component {
                         <DownloadIcon />
                     </IconButton>
                     <Button onClick={() => this.downloadAnnotated()} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.feedbackName}</Button>
-               
                       </div>
                     }
                     {!this.state.feedbackData && 

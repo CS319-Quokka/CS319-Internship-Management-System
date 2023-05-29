@@ -107,7 +107,6 @@ public class ReportService {
         MultipartFile file = request.getFileData();
         Long studentId = request.getStudentId();
 
-        System.out.println("Company 2: "+ file + " id:" + studentId);
         try {
             // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
@@ -119,14 +118,12 @@ public class ReportService {
             CompanyForm companyForm = new CompanyForm();
             if(!student.isPresent()){
 
-                System.out.println("student yok");
                 companyForm.setFormData(null);
                 return false;
             }
 
             if(request.getFileData() == null){
 
-                System.out.println("file yok");
                 companyForm.setFormName(null);
                 companyForm.setFormData(null);
                 return false;
@@ -135,14 +132,10 @@ public class ReportService {
 
             //save the company form to the repository
             else{
-                System.out.println("eklendi");
                 companyForm.setFormData(bytes);
                 companyForm.setFormName(name);
                 companyForm.setStudent(student.get());
-                System.out.println("COMPANY FORM IS:"+ companyForm.getName() + "id:" +
-                        companyForm.getStudent().getId());
                 companyFormRepository.save(companyForm);
-                System.out.println("repo yok");
                 return true;
             }
 
@@ -262,7 +255,8 @@ public class ReportService {
 
         Optional<List<Report>> reports = reportRepository.findByStudentId(studentId);
 
-        if(!reports.isPresent()){
+
+        if(reports.get().size() == 0){
             return null;
         }
 
@@ -320,7 +314,7 @@ public class ReportService {
             reportFile.setId(request.getId());
             reportFileRepository.save(reportFile);
             Student student = studentRepository.findById(request.getStudentId()).get();
-            student.setStatus("Report is uploaded");
+            student.setStatus("Report Uploaded");
             studentRepository.save(student);
             return true;
         } catch (IOException e) {

@@ -117,7 +117,17 @@ public class AccountService {
 
     public int changePassword(Long id, ChangePasswordRequest request){
 
+        if(request.getNewPassword().equals("") || request.getNewPassword2().equals("")){
+
+            return -5;
+        }
+
         if(!(request.getNewPassword().equals(request.getNewPassword2()))){
+
+            return -4;
+        }
+
+        if(request.getNewPassword().length() < 4){
 
             return -3;
         }

@@ -2,19 +2,65 @@ import React, { Component } from "react";
 import { UserData } from "../UserData";
 import DisplayList from "./DisplayList";
 import "../Styles/ManageUsers.css"
+import Dropzone from "../Dropzone";
+import "../Styles/FileSubmission.css"
 import axios from 'axios';
 import ManageUsersAdd from "./ManageUsersAdd";
 import Popup from "../Popup"
-import ManageUsersEdit from "./ManageUsersEdit";
 import ManageUsersRemove from "./ManageUsersRemove";
-import { UserContext } from "../UserContext";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import Button from "@mui/material/Button";
+import userContext, { UserContext } from "../UserContext";
 
+function AlertDialog(props) {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleConfirm = () => {
+    props.handleRemove();
+    setOpen(false);
+  }
+  return (
+      <div>
+        <Button onClick={handleClickOpen}></Button>
+        <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">
+            {"Remove this user?"}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              All information of this user will be removed from the system.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleConfirm} autoFocus> Confirm </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+  );
+}
 class ManageUsers extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showMenu: false,
       showPopup:false,
+      showSheetPopup:false,
       showRemove:false,
       showChoices:false,
       showEdit:false,
@@ -30,6 +76,9 @@ class ManageUsers extends Component {
     this.handleRemove = this.handleRemove.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleSelected= this.handleSelected.bind(this);
+    this.handleDataSheetClick = this.handleDataSheetClick.bind(this);
+    this.handleSheetClose = this.handleSheetClose.bind(this);
+
   }
   static contextType = UserContext;
 
@@ -73,7 +122,7 @@ class ManageUsers extends Component {
 
   handleRemove = () =>{
 
-    const userId = 152; //userId will be replaced
+    const userId = this.context.userId;
     const response = axios.delete(`http://localhost:8080/user/${userId}`);
     if(response){
 
@@ -101,6 +150,14 @@ class ManageUsers extends Component {
     this.setState({showMenu:false});
   }
 
+  handleDataSheetClick(){
+    this.setState({
+      showSheetPopup:true
+    });
+    this.setState({showMenu:false});
+
+  }
+
   
   handleSelected= (role,code) => {
 
@@ -123,6 +180,9 @@ class ManageUsers extends Component {
     }));
   }
 
+  handleSheetClose(){
+    this.setState({ showSheetPopup: false });
+  };
   
   handleChoiceMenu(newControllerValue) {
     this.setState({ showChoices: newControllerValue });
@@ -140,32 +200,25 @@ options = [
   {
     name: 'Remove User',
     action: this.handleRemove
-  },
-  {
-    name: 'Edit User',
-    action: this.handleEdit
   }
 ];
   render() {
     const { showMenu } = this.state;
     const { showPopup } = this.state;
     const {showRemove} = this.state;
-    const {showEdit} = this.state;
     const {showChoices} = this.state;
     const {userData} = this.state;
+    const {showSheetPopup} = this.state;
     const { handleSelected} = this;
     return (
       
       <div className="maincontainer">
-        
+
         <DisplayList options = {this.options} data={userData} displayFields={['name', 'role', 'department'] }isAdd = {true} tag = "Manage Users:" setControllerState={this.handleChoiceMenu} choice =
-        
 
           {showChoices&& <div className="menu" id=  "choice-menu">
           <ul className="menu-contents">
-            <li className="content"> <a href="#" onClick={this.handleEdit}>Edit User</a></li>
-            <hr className="line"></hr>
-            <li className = "content"><a href = "#" onClick={this.handleRemove}>Remove User</a></li>
+            <li className = "content" id="removeSelect"><a href = "#" onClick={this.handleRemove}>Remove User</a></li>
           </ul>
         </div>
         }/>
@@ -182,18 +235,30 @@ options = [
         )}
 
         
-        {showPopup &&<Popup name = "Add" className="popup" handleSelected= {handleSelected} handleClose={this.handleClose} isAdd = {true} tag = "Manage Users:" contents = {<ManageUsersAdd/>}>
-          </Popup>}
+        {showPopup && <Popup name = "Add" className="popup" handleSelected= {handleSelected} handleClose={this.handleClose} isAdd = {true} tag = "Manage Users:" contents = {<ManageUsersAdd/>}>
+        </Popup>}
+
+        {showSheetPopup && <Popup name = "Add Data Sheet" className="popup" handleClose={this.handleSheetClose} tag = "Manage Users:"
+         contents = {<Dropzone isCompanyForm = {true} className = "dropzone"/>}  >
+        </Popup>}
+
         </div>
         <div className="remove">
+          {showRemove && (
+              <AlertDialog handleRemove={this.handleRemove} />
+          )}
+        </div>
+
+
+        {/*
+        <div className="edit">
+        {showEdit&&<Popup name = "Edit" className="popup" handleClose={this.handleClose} tag = "Manage Users:" contents = {<ManageUsersEdit user={this.state.selectedUser} />}>
         {showRemove&&<Popup name = "Remove" className="popup" handleClose={this.handleClose} tag = "Manage Users:"
                             contents = {<ManageUsersRemove user={this.state.selectedUser} />}>
          </Popup>}
         </div>
-        <div className="edit">
-        {showEdit&&<Popup name = "Edit" className="popup" handleClose={this.handleClose} tag = "Manage Users:" contents = {<ManageUsersEdit user={this.state.selectedUser} />}>
-         </Popup>}
-        </div>
+        */}
+
       </div>
     );
   }

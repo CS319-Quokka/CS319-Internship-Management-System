@@ -50,9 +50,9 @@
     height: auto;
     margin-top: 2%;
     background: #fff;
-    border-radius: 4px;
+    border-radius: 15px;
     padding: 20px;
-    border: 1px solid #999;
+    box-shadow: 3px 6px 8px -6px black;
     overflow: auto;
     
   }
@@ -95,9 +95,9 @@
     max-height: 70vh;
     margin-top: 2%;
     background: #fff;
-    border-radius: 4px;
+    border-radius: 15px;
     padding: 20px;
-    border: 1px solid #999;
+    box-shadow: 3px 6px 8px -6px black;
     overflow: auto;
   }
 .buttoncontainer{

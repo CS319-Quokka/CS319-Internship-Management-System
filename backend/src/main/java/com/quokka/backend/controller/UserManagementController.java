@@ -40,7 +40,11 @@ public class UserManagementController {
         return usersList;
     }
 
+    @PatchMapping("/reassign/{id}")
+    public Student reassignStudent(@PathVariable Long id, @RequestBody StudentReassignRequest request) {
 
+        return userManagementService.reassignStudent(id, request);
+    }
 
     @PostMapping("/student")
     public Student addStudent(@RequestBody StudentAddRequest request){
@@ -48,6 +52,10 @@ public class UserManagementController {
         return userManagementService.addStudent(request);
     }
 
+    @PutMapping("student/{id}/status")
+    public Student updateStatus(@PathVariable("id") Long studentId, @RequestBody String status) {
+        return userManagementService.updateStatus(studentId, status);
+    }
 
     @PostMapping("/teaching_assistant")
     public TeachingAssistant addTeachingAssistant(@RequestBody TeachingAssistantAddRequest request){

@@ -53,13 +53,7 @@ export const SidebarData = [
       cName: "nav-text",
     },
   
-    {
-      title: "Report Evaluation",
-      path: "/evaluation",
-      icon : <AiIcons.AiOutlineUpload />,
-      cName: "nav-text",
-  
-    },
+   
     {
       title: "Notifications",
       path: "/instructornotifications",

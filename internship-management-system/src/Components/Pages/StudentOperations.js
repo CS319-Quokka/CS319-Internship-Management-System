@@ -11,10 +11,9 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { UserContext } from "../UserContext";
 import axios from 'axios';
-
-
-const ITEM_HEIGHT = 48;
-
+import ManageUsersRemove from "./ManageUsersRemove";
+import ReassignInstructor from "./ReassignInstructor";
+import {UserData} from "../UserData";
 
 class StudentOperations extends Component{
 
@@ -24,7 +23,8 @@ class StudentOperations extends Component{
           showChoices:false,
           showReassign:false,
           showCompanyForm:false,
-          studentData: []
+          studentData: [],
+          formUploaded:false,
         };
         this.handleChoiceMenu = this.handleChoiceMenu.bind(this);
         this.handleCompanyForm = this.handleCompanyForm.bind(this);
@@ -47,7 +47,6 @@ class StudentOperations extends Component{
       const response = await axios.get(`http://localhost:8080/student?department=${department}`);
       const info = response.data;
   
-      console.log("STUDENTS:",info);
 
 
       var students = [];
@@ -57,8 +56,13 @@ class StudentOperations extends Component{
         var fullName = info[i].userAccount.firstName + " " + info[i].userAccount.lastName;
         var instructor = info[i].instructor.userAccount.firstName + " " +  info[i].instructor.userAccount.lastName;
         var courseCode = info[i].courseCode;
+
+        const companyResponse = await axios.get(`http://localhost:8080/report/get_company_form_by_student/${info[i].id}`);
+        const formInfo = companyResponse.data;
+
+
         var form = "Not Uploaded";
-        if(info[i].companyEvaluationForm != null){
+        if(formInfo.fileData != null){
           form = "Uploaded"
         }
         var studentId = info[i].id;
@@ -72,7 +76,6 @@ class StudentOperations extends Component{
           id:studentId
         });
       }
-      console.log("ALL STUDİS:",students)
       this.setState({studentData:students})
   }
 
@@ -82,7 +85,7 @@ class StudentOperations extends Component{
     }
 
     handleReassign = () =>{
-      
+   //     selectedUser: UserData;
         this.setState({
         showReassign:true
     });
@@ -121,6 +124,7 @@ class StudentOperations extends Component{
         const {showCompanyForm} = this.state;
         const {showReassign} = this.state;
         const {studentData} = this.state;
+        const {handleSelected} = this;
         return(
             <div className='page'>
 
@@ -128,21 +132,26 @@ class StudentOperations extends Component{
                 <DisplayList functionalities = {this.functionalities}  options = {this.options}  data={studentData} displayFields={['name', 'class', 'form','instructor'] } setControllerState={this.handleChoiceMenu} />
 
 
-           {showReassign &&<Popup name = "Reassign" className="popup" handleClose={this.handleClose}>
+           {showReassign &&<Popup name = "Reassign" className="popup" handleClose={this.handleClose}
+                           tag="Reassign Instructor" contents = {<ReassignInstructor user={ this.state.selectedUser} /> } >
           </Popup>}
-          
+
 
           <div className='company-forms'>
           {showCompanyForm &&
-          <Popup name = "Upload Company Form" className="popup" tag = "Student Operations:" handleClose={this.handleClose} contents =
+          <Popup name = "Upload Company Form" className="popup" tag = "Student Operations:" handleClose={this.handleClose} 
+          heading = {
+            <div className='uploadmessage'>
+            <h1> ❗ CONFIDENTIAL ❗</h1>
+            <br></br>
+
+            </div>
+
+          }
+          contents =
             {<div className='uploads'>
-              <div className='uploadmessage'>
-                      <h1> ❗ CONFIDENTIAL ❗</h1>
-                      <br></br>
-
-              </div>
-
-              <Dropzone isCompanyForm = {true} className = "dropzone"/>
+             
+              <Dropzone id = {this.context.userId} isCompanyForm = {true} className = "dropzone"/>
             </div>}
 
           
@@ -150,21 +159,6 @@ class StudentOperations extends Component{
 
           </div>
           
-                
-                
-                {/* <div className='uploads'>
-                    <div className='uploadmessage'>
-                            <h1> ❗ CONFIDENTIAL ❗</h1>
-                            <br></br>
-                        
-                    </div>
-              
-                    <Dropzone afterUpload = 
-                    {<div className="actions">
-                    
-                   </div>} 
-                    />
-                </div> */}
                 
             </div>
          

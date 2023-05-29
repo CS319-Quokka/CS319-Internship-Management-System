@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.http.HttpHeaders;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Stream;
@@ -107,31 +108,41 @@ public class ReportController {
     }
 
     @GetMapping("/students_all_reports/{studentId}")
-    public List<Report> getAllReportsByStudentId(@PathVariable("studentId") Long studentId){
+    public ResponseEntity<List<Report>> getAllReportsByStudentId(@PathVariable("studentId") Long studentId){
 
-        return reportService.getAllReportsByStudentId(studentId);
+        List<Report> reports = reportService.getAllReportsByStudentId(studentId);
+
+        if (reports == null) {
+            reports = new ArrayList<>();
+        }
+
+        return ResponseEntity.ok(reports);
     }
 
     @GetMapping("/file/active/{studentId}")
-    public ResponseEntity<ReportFileResponse> getActiveReport(@PathVariable("studentId") Long studentId){
+    public ResponseEntity<?> getActiveReport(@PathVariable("studentId") Long studentId){
 
         Report report = reportService.getActiveReport(studentId);
+
+        if(report == null){
+            return ResponseEntity.ok("No submission open for this student");
+
+        }
         ReportFile reportFile = reportService.getReportFileWithReportId(report.getId());
 
-
         ReportFileResponse response = new ReportFileResponse();
-        if (reportFile != null) {
 
-            response.setReportDescription(reportFile.getReportDescription());
-            response.setFileData(reportFile.getFileData());
-            response.setFileName(reportFile.getFileName());
-            response.setReportId(reportFile.getReport().getId());
-            return ResponseEntity.ok(response);
-        }
-        else {
+        if(reportFile == null){
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            return ResponseEntity.ok("No active report file available for this student");
         }
+
+        response.setReportDescription(reportFile.getReportDescription());
+        response.setFileData(reportFile.getFileData());
+        response.setFileName(reportFile.getFileName());
+        response.setReportId(reportFile.getReport().getId());
+        return ResponseEntity.ok(response);
+
     }
 
 

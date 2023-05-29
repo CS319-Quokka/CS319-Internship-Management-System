@@ -83,8 +83,15 @@ function FormDialog(props) {
 
             const responseData = response.data; // Get the response data
 
-            if (responseData === -3) {
+            if(responseData === -5){
+                setErrorMessage("New password cannot be empty");
+                setShowErrorAlert(true);
+            } else if(responseData === -4){
                 setErrorMessage("Passwords do not match");
+                setShowErrorAlert(true);
+            } else if (responseData === -3) {
+                setErrorMessage("Your password length must be at least 4");
+                setErrorMessage("Your password length must be at least 4");
                 setShowErrorAlert(true);
             } else if (responseData === -2) {
                 setErrorMessage("Account does not exist");
@@ -225,6 +232,14 @@ class Profile extends Component {
 
         if(info.role === "Instructor"){
             console.log("grader");
+
+            const response2 = await axios.get(`http://localhost:8080/student?instructorId=${id}`);
+            const noOfStudents = response2.data.length;
+
+            this.setState({
+
+                numOfStudents: noOfStudents
+            })
         }
 
         if(info.role === "Student"){
@@ -233,12 +248,14 @@ class Profile extends Component {
             const instructorInfo = response2.data;
             console.log("response2:",instructorInfo);
             console.log("account:",userAccount.name);
+            console.log("INFO STAT:", info.status)
             const instructorName = instructorInfo.firstName + " " + instructorInfo.lastName ;
 
             this.setState({
                 course: info.courseCode,
                 instructor: instructorName,
-                instructorMail:instructorInfo.email
+                instructorMail:instructorInfo.email,
+                status: info.status
             })
         }
 

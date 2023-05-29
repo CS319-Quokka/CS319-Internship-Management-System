@@ -61,17 +61,10 @@ const Popup = (props) => {
       </div>
       <div className="window">
 
+      {props.heading}
+      {props.contents}
 
-
-
-        <span className="buttons">
-           {props.contents}
-        {props.button}
-
-       
-       
-        </span>
-        
+     
       </div>
     </div>
   );

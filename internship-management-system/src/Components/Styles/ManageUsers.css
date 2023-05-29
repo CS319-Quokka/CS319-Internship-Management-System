@@ -57,6 +57,10 @@
   border: 1px solid black;
   z-index: 1;
 }
+#removeselect{
+  width: 40%;
+
+}
 /* 
 .choice-menu {
   position: absolute;

@@ -41,6 +41,21 @@ class StudentList extends Component {
           var studentStatus = studentInfo[i].status;
           var companyForm = studentInfo[i].companyEvaluationForm;
           var studentId = studentInfo[i].id
+          var deadline = "";
+
+          try {
+            const response2 = await axios.get(`http://localhost:8080/report/file/active/${studentId}`);
+            const info2 = response2.data;
+            console.log("ACTIVE:", info2)
+          
+            if(info2 == "No submission open for this student"){
+              deadline = "Not Assigned"
+            }
+          
+          } catch(error) {
+            console.error('Failed to fetch data: ', error);
+          }
+          
 
 
           name.push({
@@ -51,7 +66,8 @@ class StudentList extends Component {
             department: department,
             status: studentStatus,
             form: companyForm,
-            id:studentId
+            id:studentId,
+            deadline:deadline
           });
         }
 
@@ -71,7 +87,7 @@ class StudentList extends Component {
     const history = this.props;
     return (
       <div className="student-list">
-        <DisplayList link = {this.state.linkName}  data={studentNameList} displayFields={['name','class', 'status']} />
+        <DisplayList link = {this.state.linkName}  data={studentNameList} displayFields={['name','class', 'status', 'deadline']} />
       </div>
     );
   }
