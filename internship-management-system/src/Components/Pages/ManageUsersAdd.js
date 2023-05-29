@@ -46,7 +46,7 @@ function InstructorOptionsList({ methods }) {
     return (
         <label className="input-label">
             <h3 className="input-tag" id="instructor-tag">Instructor:</h3>
-            <select className="select-menu" id="selector">
+            <select className="select-menu" id="selector" {...methods.register("instructorId")}>
                 <option value="0">Select instructor</option>
                 {instructorOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
@@ -101,7 +101,7 @@ function TaOptionsList({ methods }) {
     return (
         <label className="input-label">
             <h3 className="input-tag" id="ta-tag">Teaching Assistant:</h3>
-            <select className="select-menu" id="selector">
+            <select className="select-menu" id="selector" {...methods.register("teachingAssistantId")}>
                 <option value="0">Select TA</option>
                 {TaOptions.map((option) => (
                     <option key={option.value} value={option.value}>{option.label}</option>
@@ -231,10 +231,14 @@ function ManageUsersAdd(props) {
 	}
 	else if(selectedValue === "Student"){
 
-        var courseCode = "CS299";
+        var courseCode = methods.getValues("department") + "299";
         if(selectedCode === "2"){
-            courseCode = "CS399";
+            courseCode = methods.getValues("department") + "399";
         }
+
+        console.log("INSTRUCTOR:", methods.getValues("instructor"))
+
+    
 
         const formData = {
 
