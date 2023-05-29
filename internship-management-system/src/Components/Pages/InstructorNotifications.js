@@ -30,7 +30,7 @@ function AnnouncementList(props) {
         <li key={announcement.content}>
           <h2>From: {announcement.sender}</h2>
           <textarea readOnly>{announcement.content}</textarea>
-          <h2>this should be date: {announcement.title}</h2>
+          <h2>Date: {announcement.date}</h2>
           <hr></hr>
         </li>
       ))}
@@ -44,7 +44,7 @@ function NotificationList(props) {
         <li key={notification.content}>
           <h2>{notification.title}</h2>
           <textarea readOnly>{notification.content}</textarea>
-          <h2>this should be date: {notification.title}</h2>
+          <h2>Date: {notification.date}</h2>
           <hr></hr>
         </li>
       ))}
@@ -210,13 +210,16 @@ class InstructorNotifications extends Component {
 
     const response1 = await axios.get(`http://localhost:8080/get_all_users/${id}`);
 
-    const senderId = response1.data[0].id
+    const senderId = response1.data[0].id;
+
+    let uploadDate = new Date().toISOString();
 
     // Make the post request to your API
     try {
       await axios.post(`http://localhost:8080/announcement/made/Instructor/${senderId}/Instructors`, {
         title: 'Announcement post deneme 1',
         content: text,
+        date: uploadDate, 
         // Add other necessary fields here...
       });
       // Refresh the list of announcements...
@@ -252,11 +255,13 @@ class InstructorNotifications extends Component {
       var senderInfo = announcementInfo[i].sender.userAccount.firstName + " " + announcementInfo[i].sender.userAccount.lastName;
       var titleInfo = announcementInfo[i].title;
       var contentInfo = announcementInfo[i].content;
+      var dateInfo = announcementInfo[i].date;
       
       announ.push({
         sender: senderInfo,
         title: titleInfo,
         content: contentInfo,
+        date: dateInfo,
       });
     }
 
@@ -284,14 +289,14 @@ class InstructorNotifications extends Component {
 
      for (var i = (notificationInfo.length - 1); i > -1; i--) {
       
-      // var senderInfo = notificationInfo[i].sender.userAccount.firstName + " " + notificationInfo[i].sender.userAccount.lastName;
       var titleInfo = notificationInfo[i].title;
       var contentInfo = notificationInfo[i].content;
+      var dateInfo = notificationInfo[i].date;
       
       notif.push({
-        // sender: senderInfo,
         title: titleInfo,
         content: contentInfo,
+        date: dateInfo,
       });
     }
 
