@@ -7,8 +7,6 @@ import axios from "axios";
 import Typography from "@mui/material/Typography";
 import {Alert, AlertTitle} from "@mui/material";
 
-
-
 function InstructorOptionsList({ methods }) {
     const [instructorOptions, setInstructorOptions] = useState([]);
 
@@ -27,7 +25,6 @@ function InstructorOptionsList({ methods }) {
             const instructors = response.data;
 
             const instructorOptions = await Promise.all(instructors.map(async (instructor) => {
-                console.log("instructor.userAccount.id: ", instructor.userAccount.id);
                 const accountResponse = await axios.get(`http://localhost:8080/account/get_account/${instructor.userAccount.id}`);
                 const account = accountResponse.data;
 
@@ -56,7 +53,6 @@ function InstructorOptionsList({ methods }) {
         </label>
     );
 }
-
 
 function TaOptionsList({ methods }) {
     const [TaOptions, setTaOptions] = useState([]);
@@ -193,14 +189,10 @@ function ManageUsersAdd(props) {
 
         const addAccountResponse = await axios.post("http://localhost:8080/account", formData);
         if ( addAccountResponse.data.email !== formData.email) {
-            setErrorMessage("Account with this email already exists.");
+            setErrorMessage("Account with this email already exists. Created new user with no role.");
             setShowErrorAlert(true);
-            // TODO: already has an account add new user role to account
         }
-        else {
-            setSuccessMessage("User Account created successfully.");
-            setShowSuccessAlert(true);
-        }
+
 
         const accountResponse = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);
 
@@ -219,7 +211,6 @@ function ManageUsersAdd(props) {
                 setShowErrorAlert(true);
             }
             else {
-                console.log(addAdministrativeAssistantResponse.data); // Handle the response if needed
                 setSuccessMessage("Administrative Assistant added successfully.");
                 setShowSuccessAlert(true);
             }
@@ -232,7 +223,6 @@ function ManageUsersAdd(props) {
                 setShowErrorAlert(true);
             }
             else {
-                console.log(addInstructorResponse.data); // Handle the response if needed
                 setSuccessMessage("Instructor added successfully.");
                 setShowSuccessAlert(true);
             }
@@ -244,7 +234,6 @@ function ManageUsersAdd(props) {
                 setShowErrorAlert(true);
             }
             else {
-                console.log(addTeachingAssistantResponse.data); // Handle the response if needed
                 setSuccessMessage("Teaching Assistant added successfully.");
                 setShowSuccessAlert(true);
             }
@@ -263,16 +252,12 @@ function ManageUsersAdd(props) {
                 courseCode: courseCode
             }
 
-
             const addStudentResponse = await axios.post("http://localhost:8080/student", formData);
-            console.log("addStudentResponse.data.courseCode: ", addStudentResponse.courseCode)
-            console.log("formData.courseCode: ", formData.courseCode)
             if (addStudentResponse.data.courseCode !== formData.courseCode) {
                 setErrorMessage("Error: Student not added.");
                 setShowErrorAlert(true);
             }
             else {
-                console.log(addStudentResponse.data);
                 setSuccessMessage("Student added successfully.");
                 setShowSuccessAlert(true);
             }
@@ -284,7 +269,6 @@ function ManageUsersAdd(props) {
                 setShowErrorAlert(true);
             }
             else {
-                console.log(addSummerTrainingCoordinatorResponse.data); // Handle the response if needed
                 setSuccessMessage("Summer Training Coordinator added successfully.");
                 setShowSuccessAlert(true);
             }
@@ -293,11 +277,8 @@ function ManageUsersAdd(props) {
             setErrorMessage("Error: Invalid role. User will be added without a role.");
             setShowErrorAlert(true);
         }
-
-
         // Reset the form
         methods.reset();
-
     };
 
     const handleOperation = (data) => {
@@ -306,12 +287,7 @@ function ManageUsersAdd(props) {
     };
 
     return (
-
         <div className="add-user">
-
-
-            {/* {console.log("ROLE: ",props.role )}
-      {console.log("COURSE CODE: ",props.code )} */}
             <FormProvider {...methods}>
                 <form >
                     <h1  >Enter the information of the user to be added</h1>
@@ -348,7 +324,6 @@ function ManageUsersAdd(props) {
                             {...methods.register("department", { required: true })}
                         />
                     </label>
-
 
                     <div className="add-user">
 
@@ -404,13 +379,9 @@ function ManageUsersAdd(props) {
                     {successMessage}
                 </Alert>
             </div>
-
-
         </div>
-
     );
 }
-
 export default ManageUsersAdd;
 
 

@@ -1,11 +1,15 @@
 package com.quokka.backend.controller;
 
+import com.quokka.backend.Auth.StatusResponse;
 import com.quokka.backend.exception.*;
 import com.quokka.backend.models.*;
 import com.quokka.backend.request.*;
 import com.quokka.backend.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,6 +62,37 @@ public class UserManagementController {
     public Student updateStatus(@PathVariable("id") Long studentId, @RequestBody String status) {
         return userManagementService.updateStatus(studentId, status);
     }
+
+    @PutMapping("student/{id}/statusA")
+    public Student updatePartAStatus(@PathVariable("id") Long studentId, @RequestBody String status) {
+        return userManagementService.updatePartAStatus(studentId, status);
+    }
+
+    @PutMapping("student/{id}/statusC")
+    public Student updatePartCStatus(@PathVariable("id") Long studentId, @RequestBody String status) {
+        return userManagementService.updatePartCStatus(studentId, status);
+    }
+
+    @GetMapping("student/{id}/get_all_status")
+    public ResponseEntity<StatusResponse> getAllStatus(@PathVariable("id") Long studentId){
+        try {
+            Student student = userManagementService.getStudentByID(studentId);
+            if(student == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Student not found");
+            }
+
+            StatusResponse response = new StatusResponse();
+            response.setStatusA(student.getPartAStatus());
+            response.setStatusB(student.getStatus());
+            response.setStatusC(student.getPartCStatus());
+
+            return ResponseEntity.ok(response);
+        } catch(Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "A server error occurred");
+        }
+    }
+
+
 
     @PostMapping("/teaching_assistant")
     public TeachingAssistant addTeachingAssistant(@RequestBody TeachingAssistantAddRequest request){

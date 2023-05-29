@@ -157,6 +157,8 @@ public class UserManagementService {
         student.setInstructor(instructor);
         student.setTeachingAssistant(teachingAssistant);
         student.setStatus("Waiting for report deadline"); // student.setStatus("Waiting for company evaluation form");
+        student.setPartAStatus("Undetermined");
+        student.setPartCStatus("Undetermined");
         return studentRepository.save(student);
     }
 
@@ -168,6 +170,27 @@ public class UserManagementService {
 
         System.out.println("here as stat change2");
         student.setStatus(status);
+
+        return student;
+    }
+
+    @Transactional
+    public Student updatePartAStatus(Long studentId, String status) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalStateException("Student with id " + studentId + " does not exist"));
+
+
+        student.setPartAStatus(status);
+
+        return student;
+    }
+
+    @Transactional
+    public Student updatePartCStatus(Long studentId, String status) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalStateException("Student with id " + studentId + " does not exist"));
+
+        student.setPartCStatus(status);
 
         return student;
     }
