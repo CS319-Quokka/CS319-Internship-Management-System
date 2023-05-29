@@ -331,7 +331,7 @@ const DragDropFiles = (props) => {
               <h2>Uploading the following file:</h2>
               <p>{file.name}</p>
               <br></br>
-              {!props.isCompanyForm &&
+              {!props.isUsersSheet &&!props.isCompanyForm &&
                 <TextareaValidator setMessage = {props.setMessage}/>
               }
               {props.isCompanyForm &&
