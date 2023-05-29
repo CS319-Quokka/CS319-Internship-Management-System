@@ -212,6 +212,7 @@ const getAllReports = async () => {
 
 
     if(info3.statusB == "Feedback Given"){
+      console.log("GIVEN FEEDBACK" )
       var index = info.length-1;
       reportIdList.push(info[index].id)
       getReportFile(reportIdList[index],allReports,index)
@@ -462,7 +463,11 @@ function FormDialogA(props) {
     props.setButtonClicked(false);
   };
  const handleSubmitA = () => {
+    if(partA != "Undetermined"){
+      
      props.setPartAstatus(partA)
+
+    }
      setOpenA(false);
      // save CEF grades.
  }

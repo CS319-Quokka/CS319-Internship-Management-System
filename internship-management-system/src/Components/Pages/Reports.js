@@ -426,13 +426,11 @@ class ReportsStudents extends Component {
                     <hr></hr>   
                     
                     <b>Part B ~ Report</b>
-                    {this.state.status === ("Revision Required" || "Waiting to upload report") &&
                       <div>
                          <p>Feedback on your report: </p>
                         <textarea value={this.state.feedbackDescription} />
 
                       </div>
-                    }
 
                     {this.state.status === ("Satisfactory") &&
                       <div>
