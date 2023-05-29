@@ -4,6 +4,7 @@ import com.quokka.backend.models.Announcement;
 import com.quokka.backend.request.AnnouncementAddRequest;
 import com.quokka.backend.service.AnnouncementService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +29,15 @@ public class AnnouncementController {
     }
 
     @GetMapping("/{id}")
-    public Announcement getAnnouncementById(@PathVariable Long id) {
-        return announcementService.getAnnouncementById(id);
+    public ResponseEntity<?> getAnnouncementById(@PathVariable Long id) {
+        Announcement announcement = announcementService.getAnnouncementById(id);
+
+        if (announcement == null) {
+            return ResponseEntity.ok("Announcement not found");
+        }
+
+        return ResponseEntity.ok(announcement);
+
     }
 
     @GetMapping

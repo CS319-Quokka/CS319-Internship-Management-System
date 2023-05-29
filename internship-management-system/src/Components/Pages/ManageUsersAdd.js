@@ -195,7 +195,6 @@ function ManageUsersAdd(props) {
     if ( addAccountResponse.data.email !== formData.email) {
         setErrorMessage("Account with this email already exists.");
         setShowErrorAlert(true);
-		// TODO: already has an account add new user role to account
     }
     else {
         setSuccessMessage("User Account created successfully.");

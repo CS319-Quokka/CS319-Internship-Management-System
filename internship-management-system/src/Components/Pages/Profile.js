@@ -91,6 +91,7 @@ function FormDialog(props) {
                 setShowErrorAlert(true);
             } else if (responseData === -3) {
                 setErrorMessage("Your password length must be at least 4");
+                setErrorMessage("Your password length must be at least 4");
                 setShowErrorAlert(true);
             } else if (responseData === -2) {
                 setErrorMessage("Account does not exist");
@@ -231,6 +232,14 @@ class Profile extends Component {
 
         if(info.role === "Instructor"){
             console.log("grader");
+
+            const response2 = await axios.get(`http://localhost:8080/student?instructorId=${id}`);
+            const noOfStudents = response2.data.length;
+
+            this.setState({
+
+                numOfStudents: noOfStudents
+            })
         }
 
         if(info.role === "Student"){

@@ -29,7 +29,7 @@ function AnnouncementList(props) {
       {props.data.map(announcement => (
         <li key={announcement.content}>
           <h2>From: {announcement.sender}</h2>
-          <textarea readOnly>{announcement.content}</textarea>
+          <textarea readOnly value={announcement.content}></textarea>
           <h2>Date: {announcement.date}</h2>
           <hr></hr>
         </li>
@@ -43,7 +43,7 @@ function NotificationList(props) {
       {props.data.map(notification => (
         <li key={notification.content}>
           <h2>{notification.title}</h2>
-          <textarea readOnly>{notification.content}</textarea>
+          <textarea readOnly value={notification.content}></textarea>
           <h2>Date: {notification.date}</h2>
           <hr></hr>
         </li>
