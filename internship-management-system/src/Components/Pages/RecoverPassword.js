@@ -7,12 +7,12 @@ class RecoverPassword extends Component {
     constructor(props) {
       super(props);
       this.state = {
-        alertMessage: ":D",
+        alertMessage: "",
       };
       this.setAlertMessage = this.setAlertMessage.bind(this);
     }
-  
-    
+
+
   
     setAlertMessage(message) {
       this.setState({ alertMessage: message });

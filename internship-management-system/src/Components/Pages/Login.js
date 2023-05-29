@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import '../Styles/LoginStyle.css';
 import logo from '../Images/bilko.png';
 
@@ -7,8 +7,7 @@ import { Link, Redirect } from 'react-router-dom';
 import Popup from "../Popup";
 import FAQ from "./FAQ";
 import axios from "axios";
-
-import { useEffect,useState } from 'react';
+import RecoverPassword from "./RecoverPassword";
 import { get } from 'react-hook-form';
 
 class Login extends Component {
@@ -21,11 +20,15 @@ class Login extends Component {
             showFAQ: false,
             redirectToProfile: false,
             errorMessage: "",
-            userType: ""
+            userType: "",
+            showErrorAlert: false,
+
         };
         this.handleClose = this.handleClose.bind(this);
         this.handleFAQ = this.handleFAQ.bind(this);
+        this.handleRecoverPassword= this.handleRecoverPassword.bind(this);
     }
+
 
     emailhandler = (event) => {
         this.setState({
@@ -42,6 +45,7 @@ class Login extends Component {
     handleClose(){
         this.setState({
             showFAQ:false,
+            showRecoverPassword:false,
         });
     }
 
@@ -50,27 +54,23 @@ class Login extends Component {
             showFAQ:true,
         });
     }
-
-    handleSubmit = async (event) => {
+    handleRecoverPassword(){
+        this.setState({
+            showRecoverPassword:true,
+        });
+    }
+      handleSubmit = async (event) => {
         event.preventDefault();
-
         try {
             const response = await axios.post('http://localhost:8080/account/api/login', {
                 email: this.state.email,
                 password: this.state.password,
             });
-
             localStorage.setItem('token', response.data.token);
-
             const id = response.data.id;
             const response2 = await axios.get(`http://localhost:8080/get_all_users/${id}`);
-
-           
             //get the role of the body, we will assign a sidebar according to this role
-
-
             const role = response2.data[0].role;
-
             this.props.onLogin(role, id); // call onLogin prop
         } catch (error) {
             if (error?.response?.status === 401) {
@@ -87,8 +87,7 @@ class Login extends Component {
 
     render() {
         const { showFAQ, errorMessage } = this.state;
-
-
+        const { showRecoverPassword } = this.state;
 
         return (
             <div className="loginpage">
@@ -114,10 +113,16 @@ class Login extends Component {
                             <input type="submit" value="Login" />
                         </form>
                         <div className="error-message">{errorMessage}</div>
-                        <button id='link-button' onClick={this.handleFAQ}><ins>For questions and information:</ins></button>
+                        <button id='link-button' onClick={this.handleFAQ}><ins>For questions and information: FAQ</ins></button>
                         {showFAQ && (
                             <Popup name="FAQ" className="popup" handleClose={this.handleClose} isFAQ={true} contents={<FAQ />} />
                         )}
+
+                        <button id='link-button' onClick={this.handleRecoverPassword}><ins>Forgot your password? Click here!</ins></button>
+                        {showRecoverPassword && (
+                            <Popup name="Recover Password" className="popup" handleClose={this.handleClose} isPasswordRecovery={true} contents={<RecoverPassword />} />
+                        )}
+
                     </div>
                 </div>
             </div>

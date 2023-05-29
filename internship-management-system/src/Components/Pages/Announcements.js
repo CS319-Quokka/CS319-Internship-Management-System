@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, useEffect, useState} from 'react'
 import '../Styles/Notifications.css'
 import { AnnouncementData } from '../NotificationData'
 import {InstructorNotifData} from '../NotificationData'
@@ -21,6 +21,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
+import {Alert, AlertTitle} from "@mui/material";
 
 function AnnouncementList(props) {
     return (
@@ -40,6 +41,8 @@ function TextareaValidator(props) {
     const [italic, setItalic] = React.useState(false);
     const [fontWeight, setFontWeight] = React.useState('normal');
     const [anchorEl, setAnchorEl] = React.useState(null);
+
+
     const { value, onChange } = props;
     return (
         <FormControl>
@@ -111,12 +114,25 @@ function TextareaValidator(props) {
                 }}
             />
         </FormControl>
+
     );
 }
 
 function FormDialog({userId, handlePost}) {
     const [open, setOpen] = React.useState(false);
     const [text, setText] = React.useState('');
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+
+    useEffect(() => {
+        // Auto-hide the alerts after a few seconds
+        const timer = setTimeout(() => {
+            setShowSuccessAlert(false);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [showSuccessAlert]);
+
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -132,6 +148,8 @@ function FormDialog({userId, handlePost}) {
     
         // Call the handlePost function that was passed as a prop
         handlePost(text);
+        setSuccessMessage("Announcement posted!");
+        setShowSuccessAlert(true);
       };
 
     return (
@@ -149,6 +167,17 @@ function FormDialog({userId, handlePost}) {
                     <Button onClick={handleSubmit}>Post</Button>
                 </DialogActions>
             </Dialog>
+            <div id="alertcontainer">
+
+                <Alert
+                    severity="success"
+                    onClose={() => setShowSuccessAlert(false)}
+                    sx={{ display: showSuccessAlert ? 'filled' : 'none' }}
+                >
+                    <AlertTitle>Success</AlertTitle>
+                    {successMessage}
+                </Alert>
+            </div>
         </div>
     );
 }

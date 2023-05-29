@@ -11,10 +11,9 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { UserContext } from "../UserContext";
 import axios from 'axios';
-
-
-const ITEM_HEIGHT = 48;
-
+import ManageUsersRemove from "./ManageUsersRemove";
+import ReassignInstructor from "./ReassignInstructor";
+import {UserData} from "../UserData";
 
 class StudentOperations extends Component{
 
@@ -86,7 +85,7 @@ class StudentOperations extends Component{
     }
 
     handleReassign = () =>{
-      
+   //     selectedUser: UserData;
         this.setState({
         showReassign:true
     });
@@ -125,6 +124,7 @@ class StudentOperations extends Component{
         const {showCompanyForm} = this.state;
         const {showReassign} = this.state;
         const {studentData} = this.state;
+        const {handleSelected} = this;
         return(
             <div className='page'>
 
@@ -132,9 +132,10 @@ class StudentOperations extends Component{
                 <DisplayList functionalities = {this.functionalities}  options = {this.options}  data={studentData} displayFields={['name', 'class', 'form','instructor'] } setControllerState={this.handleChoiceMenu} />
 
 
-           {showReassign &&<Popup name = "Reassign" className="popup" handleClose={this.handleClose}>
+           {showReassign &&<Popup name = "Reassign" className="popup" handleClose={this.handleClose}
+                           tag="Reassign Instructor" contents = {<ReassignInstructor user={ this.state.selectedUser} /> } >
           </Popup>}
-          
+
 
           <div className='company-forms'>
           {showCompanyForm &&

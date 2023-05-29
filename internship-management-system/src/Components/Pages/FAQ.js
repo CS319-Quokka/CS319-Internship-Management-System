@@ -32,7 +32,7 @@ const QandA = [
     ];
 
 
-function faqList() {
+function faqList(props) {
     return (
       <ul>
         {QandA.map(info => (
@@ -56,10 +56,10 @@ class FAQ extends Component {
 
                 <div className="FAQpage">
                     <div className="questionsContainer">
-                        <div className="questions">
 
+    <h1>hi</h1>
                             <faqList/>
-                        </div>
+
                     
 
 

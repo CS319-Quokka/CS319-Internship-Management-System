@@ -63,7 +63,8 @@ const handleReassign = () => {
 
 function ReassignInstructor(props) {
     const methods = useForm();
-    const contextType = UserContext;
+    const [selectedValue, setSelectedValue] = useState("");
+
 
     return (
 

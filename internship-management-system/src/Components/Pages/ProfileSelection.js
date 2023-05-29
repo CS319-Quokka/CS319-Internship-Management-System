@@ -1,4 +1,4 @@
-import react, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import '../Styles/ProfileSelection.css'
 const userTypes = ["student",
                             "instructor",
@@ -15,7 +15,7 @@ function ProfileSelection() {
   };
 
   const handleUserTypeSubmit = () => {
-    fetch('/profile-selection', {
+    fetch('/profileselection', {
       method: 'POST',
       headers: {
    //     'Content-Type': 'application/x-www-form-urlencoded'

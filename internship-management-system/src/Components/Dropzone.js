@@ -20,7 +20,8 @@ function FileUpload(props) {
 
   return (
     <div>
-      <DragDropFiles  isCompanyForm = {props.isCompanyForm} id = {props.id} message={message} setMessage={setMessage} />
+
+      <DragDropFiles isCompanyForm = {props.isCompanyForm} id = {props.id} message={message} setMessage={setMessage} />
     </div>
   );
 }
@@ -118,35 +119,37 @@ const DragDropFiles = (props) => {
   const [uploadSubmitted, setUploadSubmitted] = useState(false); // Track upload status
   const userContext = useContext(UserContext);
   const [studentState,setStatus] = useState("");
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+
   const [formUploaded,setFormUploaded] = useState(false);
   const [fullName,setFullName] = useState("");
 
 
-  const handleSelectFile = (event) => {
-
+    const handleSelectFile = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    
   };
 
   const handleDropFile = (event) => {
     event.preventDefault();
     event.stopPropagation();
-
     setFile(event.dataTransfer.files[0]);
   };
 
   const changeHandler = (event) => {
-
     event.preventDefault();
     setFile(event.target.files[0])
-    
   }
 
   useEffect(() => {
     const getInformation = async () => {
 
       try {
+        const response = await axios.get(`http://localhost:8080/get_all_users/${props.id}`);
+        const info = response.data[0];
 
         console.log("SEARCH WITH ID:", props.id)
         const response = await axios.get(`http://localhost:8080/${props.id}`);
@@ -162,20 +165,30 @@ const DragDropFiles = (props) => {
         //check if the company form is uploaded for the corresponding student
         const cefResponse = await axios.get(`http://localhost:8080/report/get_company_form_by_student/${props.id}`);
         const cefInfo = cefResponse.data;
-        
+
 
         if(cefInfo.fileData != null){
           setFormUploaded(true);
         }
-        
+
         setId(info.id)
       } catch (error) {
         console.error(error);
       }
     };
-
     getInformation();
   }, [props.id]);
+
+    useEffect(() => {
+        // Auto-hide the alerts after a few seconds
+        const timer = setTimeout(() => {
+            setShowErrorAlert(false);
+            setShowSuccessAlert(false);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [showErrorAlert, showSuccessAlert]);
+
 
 
   //separate the uploads: company form or report
@@ -186,24 +199,14 @@ const DragDropFiles = (props) => {
       handleReportUpload(event);
     }
   }
-
-
   //administrative assistant will upload the company form for a student
   const handleCompanyFormUpload = async (event) =>{
-
     event.preventDefault();
-
     const studentId = userContext.userId;
-
     if (file) {
-
-
     const formData = new FormData();
-
     formData.append("studentId", studentId); 
     formData.append("fileData", file);
-
-
       try {
         const response = await axios.post(
           "http://localhost:8080/report/company_form",
@@ -232,29 +235,23 @@ const DragDropFiles = (props) => {
 
   }
 
-  //upload a internship report
+  //upload an internship report
   const handleReportUpload = async (event) => {
+
     event.preventDefault();
 
 
-
     if (file) {
-
-
     const formData = new FormData();
-
-
     const response1 = await axios.get(`http://localhost:8080/report/students_all_reports/${userId}`);
-
     const reportId = response1.data[response1.data.length - 1].id;
-
     let uploadDate = new Date().toISOString();
+
     formData.append("studentId", userId); // Replace studentId with the actual student ID
     formData.append("reportId", reportId); // Replace reportId with the actual report ID
     formData.append("fileData", file);
     formData.append("reportDescription",props.message)
     formData.append("uploadDate", uploadDate)
-
 
       try {
         const response = await axios.post(
@@ -267,17 +264,18 @@ const DragDropFiles = (props) => {
           }
         );
         // Handle success response
-        console.log("success");
           setUploadSubmitted(true);
-          console.log(response.data);
+          setSuccessMessage("Report successfully uploaded.");
+          setShowSuccessAlert(true);
       } catch (error) {
-        // Handle error
-        console.log("fail");
+
         if (error.response) {
-          console.log('Error status', error.response.status);
-          console.log('Error details', error.response.data);
+          setErrorMessage("Error status: " + error.response.status + "\nError details: " + error.response.data);
+          setShowErrorAlert(true);
+
       } else {
-          console.error(error);
+            setErrorMessage("An error occurred :(");
+            setShowErrorAlert(true);
       }
       }
     }
@@ -298,10 +296,10 @@ const DragDropFiles = (props) => {
 
                 <em>{fullName}</em>
                </div>
-               
+
 
               }
-            
+
 
               <div className="button-layout">
                   <button className="button" onClick={() => setFile(null)}>

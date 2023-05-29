@@ -5,6 +5,7 @@ import "../Styles/Popup.css"
 import Button from '@mui/material/Button';
 import axios from "axios";
 import Typography from "@mui/material/Typography";
+import {Alert, AlertTitle} from "@mui/material";
 
 
 
@@ -155,9 +156,24 @@ function ManageUsersAdd(props) {
   const [selectedValue, setSelectedValue] = useState("");
   const [selectedCode, setSelectedCode] = useState("");
 
-  const handleSelectChange = (event) => {
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
+    const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
+
+
+    const handleSelectChange = (event) => {
     setSelectedValue(event.target.value);
   };
+    useEffect(() => {
+        // Auto-hide the alerts after a few seconds
+        const timer = setTimeout(() => {
+            setShowErrorAlert(false);
+            setShowSuccessAlert(false);
+        }, 5000);
+
+        return () => clearTimeout(timer);
+    }, [showErrorAlert, showSuccessAlert]);
 
   //IF SELECTED CODE IS 1 IT IS CS299, IF SELECTED CODE IS 2 IT IS CS399
   const handleSelectedCode = (event) => {
@@ -176,10 +192,14 @@ function ManageUsersAdd(props) {
     };
 
     const addAccountResponse = await axios.post("http://localhost:8080/account", formData);
-    if ( addAccountResponse.data === null) {
-
-		const addAccountResponse2 = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);
-        addAccountResponse.data.id = addAccountResponse2.data.id;
+    if ( addAccountResponse.data.email !== formData.email) {
+        setErrorMessage("Account with this email already exists.");
+        setShowErrorAlert(true);
+		// TODO: already has an account add new user role to account
+    }
+    else {
+        setSuccessMessage("User Account created successfully.");
+        setShowSuccessAlert(true);
     }
 
 	const accountResponse = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);
@@ -195,46 +215,46 @@ function ManageUsersAdd(props) {
 		const addAdministrativeAssistantResponse = await axios.post("http://localhost:8080/administrative_assistant", userData);
 		// TODO
 		if ( addAdministrativeAssistantResponse.data.role !== formData.role) {
-		console.log("Error: Administrative Assistant not added");
+            setErrorMessage("Error: Administrative Assistant not added.");
+            setShowErrorAlert(true);
 		}
 		else {
-		console.log(addAdministrativeAssistantResponse.data); // Handle the response if needed
-		console.log("Administrative Assistant added successfully.");
+		    console.log(addAdministrativeAssistantResponse.data); // Handle the response if needed
+            setSuccessMessage("Administrative Assistant added successfully.");
+            setShowSuccessAlert(true);
 		}
 	}
 	else if(selectedValue === "Instructor"){
 		const addInstructorResponse = await axios.post("http://localhost:8080/instructor", userData);
 
 		if ( addInstructorResponse.data.role !== formData.role) {
-		console.log("Error: Instructor not added");
+            setErrorMessage("Error: Instructor not added.");
+            setShowErrorAlert(true);
 		}
 		else {
 		console.log(addInstructorResponse.data); // Handle the response if needed
-		console.log("Instructor added successfully.");
+            setSuccessMessage("Instructor added successfully.");
+            setShowSuccessAlert(true);
 		}
 	}
 	else if(selectedValue === "Teaching Assistant"){
 		const addTeachingAssistantResponse = await axios.post("http://localhost:8080/teaching_assistant", userData);
 		if ( addTeachingAssistantResponse.data.role !== formData.role) {
-		console.log("Error: Teaching Assistant not added");
+            setErrorMessage("Error: Teaching Assistant not added.");
+            setShowErrorAlert(true);
 		}
 		else {
 		console.log(addTeachingAssistantResponse.data); // Handle the response if needed
-		console.log("Teaching Assistant added successfully.");
+            setSuccessMessage("Teaching Assistant added successfully.");
+            setShowSuccessAlert(true);
 		}
 
 	}
 	else if(selectedValue === "Student"){
-
         var courseCode = methods.getValues("department") + "299";
         if(selectedCode === "2"){
             courseCode = methods.getValues("department") + "399";
         }
-
-        console.log("INSTRUCTOR:", methods.getValues("instructor"))
-
-    
-
         const formData = {
 
             accountId: accountResponse.data.id,
@@ -245,25 +265,30 @@ function ManageUsersAdd(props) {
 
         const addStudentResponse = await axios.post("http://localhost:8080/student", formData);
         if (addStudentResponse.data.role !== formData.role) {
-            console.log("Error: Student not added");
+            setErrorMessage("Error: Student not added.");
+            setShowErrorAlert(true);
         }
         else {
             console.log(addStudentResponse.data);
-            console.log("Student added successfully.");
+            setSuccessMessage("Student added successfully.");
+            setShowSuccessAlert(true);
         }
     }
 	else if(selectedValue === "Summer Training Coordinator"){
 		const addSummerTrainingCoordinatorResponse = await axios.post("http://localhost:8080/summer_training_coordinator", userData);
 		if ( addSummerTrainingCoordinatorResponse.data.role !== formData.role) {
-		console.log("Error: Summer Training Coordinator not added");
+            setErrorMessage("Error: Summer Training Coordinator not added.");
+            setShowErrorAlert(true);
 		}
 		else {
 		console.log(addSummerTrainingCoordinatorResponse.data); // Handle the response if needed
-		console.log("Summer Training Coordinator added successfully.");
+            setSuccessMessage("Summer Training Coordinator added successfully.");
+            setShowSuccessAlert(true);
 		}
 	}
 	else{
-		console.log("Error: Invalid role");
+        setErrorMessage("Error: Invalid role. User will be added without a role.");
+        setShowErrorAlert(true);
 	}
 
 
@@ -276,12 +301,6 @@ function ManageUsersAdd(props) {
     console.log("add");
     console.log(data)
   };
-
-
-
-
-
-
 
   return (
 
@@ -348,17 +367,15 @@ function ManageUsersAdd(props) {
                 </div>
 
          </div>
-        {selectedValue == "Student" &&
+        {selectedValue === "Student" &&
 			<div>
-
             <label className="input-label">
                   <h3 className="input-tag" id="course-tag">Course:</h3>
                   <select className="select-menu" id = "selector" value = {selectedCode} onChange={handleSelectedCode}>
-                <option value="0">Select course</option>
-                <option value="1">{methods.getValues("department")}299</option>
-                <option value="2">{methods.getValues("department")}399</option>
-              </select>
-
+                    <option value="0">Select course</option>
+                    <option value="1">{methods.getValues("department")}299</option>
+                    <option value="2">{methods.getValues("department")}399</option>
+                  </select>
             </label>
                 <InstructorOptionsList methods={methods} />
                 <TaOptionsList methods={methods} />
@@ -371,6 +388,24 @@ function ManageUsersAdd(props) {
       </FormProvider>
         <div className="add-button">
             <Button variant="outlined" onClick={handleAddUser}>ADD USER</Button>
+        </div>
+        <div id="alertcontainer">
+            <Alert
+                severity="error"
+                onClose={() => setShowErrorAlert(false)}
+                sx={{ display: showErrorAlert ? 'filled' : 'none' }}
+            >
+                <AlertTitle>Error</AlertTitle>
+                {errorMessage}
+            </Alert>
+            <Alert
+                severity="success"
+                onClose={() => setShowSuccessAlert(false)}
+                sx={{ display: showSuccessAlert ? 'filled' : 'none' }}
+            >
+                <AlertTitle>Success</AlertTitle>
+                {successMessage}
+            </Alert>
         </div>
 
 
