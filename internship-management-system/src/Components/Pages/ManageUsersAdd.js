@@ -418,28 +418,3 @@ export default ManageUsersAdd;
 
 
 
-
-  {/* <ManageUsersAdd/> */}
-{/* <FormProvider {...methods}>
-            <form>
-        <label className="input-label">
-          <h3 className="input-tag">First Name:</h3>
-          <input className="input-box" type="text" />
-        </label>
-        <label className="input-label">
-        <h3 className="input-tag">Last Name:</h3>
-          <input  className="input-box" type="text" />
-        </label>
-        <label className="input-label">
-        <h3 className="input-tag">Email:</h3>
-
-          <input className="input-box" type="email" />
-        </label>
-        <label className="input-label">
-        <h3 className="input-tag">Department:</h3>
-
-          <input  className="input-box" type="department" />
-        </label>
-        {courseSelection}
-      </form>
-      </FormProvider> */}
