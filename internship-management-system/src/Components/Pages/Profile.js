@@ -83,8 +83,14 @@ function FormDialog(props) {
 
             const responseData = response.data; // Get the response data
 
-            if (responseData === -3) {
+            if(responseData === -5){
+                setErrorMessage("New password cannot be empty");
+                setShowErrorAlert(true);
+            } else if(responseData === -4){
                 setErrorMessage("Passwords do not match");
+                setShowErrorAlert(true);
+            } else if (responseData === -3) {
+                setErrorMessage("Your password length must be at least 4");
                 setShowErrorAlert(true);
             } else if (responseData === -2) {
                 setErrorMessage("Account does not exist");

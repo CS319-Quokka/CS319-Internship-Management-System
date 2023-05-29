@@ -165,8 +165,6 @@ function ManageUsersAdd(props) {
   };
 
   const handleAddUser = async () => {
-    console.log("selectedValue:",selectedValue);
-    console.log("selectedCode:",selectedCode);
 
     const formData = {
         firstName: methods.getValues("firstName"),
@@ -178,13 +176,10 @@ function ManageUsersAdd(props) {
     };
 
     const addAccountResponse = await axios.post("http://localhost:8080/account", formData);
-    if ( addAccountResponse.data.email !== formData.email) {
-    	console.log("account with this email already exists");
-		// TODO: already has an account add new user role to account
-    }
-    else {
+    if ( addAccountResponse.data === null) {
 
-      	console.log("User Account created successfully.");
+		const addAccountResponse2 = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);
+        addAccountResponse.data.id = addAccountResponse2.data.id;
     }
 
 	const accountResponse = await axios.get(`http://localhost:8080/account/get_account_by_email/${formData.email}`);

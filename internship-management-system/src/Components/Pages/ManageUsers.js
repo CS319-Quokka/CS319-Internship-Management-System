@@ -5,7 +5,6 @@ import "../Styles/ManageUsers.css"
 import axios from 'axios';
 import ManageUsersAdd from "./ManageUsersAdd";
 import Popup from "../Popup"
-import ManageUsersEdit from "./ManageUsersEdit";
 import ManageUsersRemove from "./ManageUsersRemove";
 import userContext, { UserContext } from "../UserContext";
 
@@ -180,10 +179,6 @@ options = [
         <div className="remove">
         {showRemove&&<Popup name = "Remove" className="popup" handleClose={this.handleClose} tag = "Manage Users:"
                             contents = {<ManageUsersRemove user={this.state.selectedUser} />}>
-         </Popup>}
-        </div>
-        <div className="edit">
-        {showEdit&&<Popup name = "Edit" className="popup" handleClose={this.handleClose} tag = "Manage Users:" contents = {<ManageUsersEdit user={this.state.selectedUser} />}>
          </Popup>}
         </div>
       </div>
