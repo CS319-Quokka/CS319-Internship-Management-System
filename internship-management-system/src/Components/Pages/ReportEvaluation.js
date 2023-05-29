@@ -331,8 +331,15 @@ function TextareaValidator(props) {
       };
 
       axios.post("http://localhost:8080/feedback", feedbackData)
-      
-  };
+      .then((response) => {
+        console.log(response);
+        props.setSentFeedback(true)
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+};
+
 
   const handleMessageChange = (event) => {
     props.setMessage(event.target.value);
@@ -341,6 +348,10 @@ function TextareaValidator(props) {
   
   return (
     <FormControl>
+      {!props.feedbackSent &&
+
+      <div>
+        
       <FormLabel>Feedback comments</FormLabel>
       <Textarea
         placeholder="Type your feedback comments here..."
@@ -407,6 +418,9 @@ function TextareaValidator(props) {
           fontStyle: italic ? 'italic' : 'initial',
         }}
       />
+
+      </div>
+      }
     </FormControl>
   );
 }
@@ -875,7 +889,8 @@ return (
         currentFile: null,
         fileData:null,
         reportId:null,
-        message: ""
+        message: "",
+        feedbackSent:false
       };
       this.downloadCurrent = this.downloadCurrent.bind(this);
       this.setMessage = this.setMessage.bind(this);
@@ -1005,6 +1020,7 @@ return (
           })
             .then((response) => {
               console.log("File uploaded successfully");
+              this.setSentFeedback({feedbackSent:true})
               console.log(response.data);
             })
             .catch((error) => {
@@ -1019,6 +1035,10 @@ return (
 
     };
     
+setSentFeedback = (status) =>{
+  console.log("changint the feedback stat")
+  this.setState({feedbackSent:status})
+}
  downloadCEF = () => {
   const fileData = this.state.companyFormData
   const fileName = this.state.companyFormName;
@@ -1066,7 +1086,7 @@ return (
               <h1>The student's current submission for {this.state.course}</h1>
               <br></br>
               {
-                this.state.status == "Report Uploaded" && 
+                (this.state.status == "Report Uploaded" &&  !this.state.feedbackSent)&&
                 <div>
 
               <IconButton  onClick={() => this.downloadCurrent()} aria-label="download">
@@ -1088,7 +1108,7 @@ return (
               }
               
               {
-                 this.state.status != "Report Uploaded" && 
+                 (this.state.status != "Report Uploaded"  || this.state.feedbackSent) && 
                  <div>
                   <br></br>
                   <h4><em>There is no active report for the student</em></h4>
@@ -1149,11 +1169,11 @@ return (
               />
 
 
-                {this.state.status == "Report Uploaded" && 
+                {this.state.status == "Report Uploaded" &&  (!this.state.feedbackSent) &&
                 <div>
 
             <div className="texteditor">
-              <TextareaValidator setMessage = {this.setMessage} message = {this.state.message} studentId = {this.state.studentId} userId = {this.props.userId}  reportId = {this.state.reportId}/>
+              <TextareaValidator feedbackSent = {this.state.feedbackSent} setSentFeedback = {this.setSentFeedback} setMessage = {this.setMessage} message = {this.state.message} studentId = {this.state.studentId} userId = {this.props.userId}  reportId = {this.state.reportId}/>
             </div>
 
             <div className="annotatedupload">
