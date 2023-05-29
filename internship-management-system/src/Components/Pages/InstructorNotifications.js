@@ -194,7 +194,6 @@ function FormDialog({userId, handlePost}) {
 }
 
   
-
 class InstructorNotifications extends Component {
   constructor(props) {
     super(props)
@@ -212,11 +211,15 @@ class InstructorNotifications extends Component {
 
     const senderId = response1.data[0].id;
 
+    const senderRole = response1.data[0].role;
+
+    const senderDepartment = response1.data[0].userAccount.department;
+
     let uploadDate = new Date().toISOString();
 
     // Make the post request to your API
     try {
-      await axios.post(`http://localhost:8080/announcement/made/Instructor/${senderId}/Instructors`, {
+      await axios.post(`http://localhost:8080/announcement/made/${senderRole}/${senderId}/Students`, {
         title: 'Announcement post deneme 1',
         content: text,
         date: uploadDate, 
@@ -242,7 +245,9 @@ class InstructorNotifications extends Component {
 
     const info = response1.data[0]
 
-    const response = await axios.get(`http://localhost:8080/announcement?userRole=Instructor&userId=${info.id}`);
+    const rolee = info.role;
+
+    const response = await axios.get(`http://localhost:8080/announcement?userRole=${rolee}&userId=${info.id}`);
     console.log(response.data); 
 
     const announcementInfo = response.data;

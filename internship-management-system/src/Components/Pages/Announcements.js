@@ -171,11 +171,15 @@ class Announcements extends Component {
     
         const senderId = response1.data[0].id
 
+        const senderDepartment = response1.data[0].userAccount.department;
+
+        const senderRole = response1.data[0].role;
+
         let uploadDate = new Date().toISOString();
     
         // Make the post request to your API
         try {
-          await axios.post(`http://localhost:8080/announcement/made/Administrative Assistant/${senderId}/CS`, {
+          await axios.post(`http://localhost:8080/announcement/made/${senderRole}/${senderId}/${senderDepartment}`, {
             title: 'Announcement post deneme 1',
             content: text,
             date: uploadDate,

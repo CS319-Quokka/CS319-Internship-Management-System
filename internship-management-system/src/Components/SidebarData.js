@@ -136,7 +136,7 @@ export const SidebarData = [
     
     {
       title: "Notifications",
-      path: "/announcements",
+      path: "/instructornotifications",
       icon: <IoIcons.IoIosNotificationsOutline />,
       cName: "nav-text",
     },
