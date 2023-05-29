@@ -257,13 +257,13 @@ const getAllReports = async () => {
                         </IconButton>
                         <Button variant="text" onClick={downloadPrevious(revision.fileData,revision.fileName)} style={{textTransform: 'none'}} size="large">{revision.fileName}</Button>
                         <Typography>Student's comments:</Typography>
-                        <textarea readOnly>{revision.description}</textarea>
+                        <textarea readOnly value={revision.description}></textarea>
 
                         <b><br></br>◾The grade distribution of this submission◾</b>
                         <br></br>
                         <p>Overall progress: {}</p>
                         <b><br></br>Your feedback for this submission</b>
-                       <textarea readOnly>{revision.feedbackDescription}</textarea>
+                       <textarea readOnly value={revision.feedbackDescription}></textarea>
                         <b>Your annotated feedback for this submission<br></br></b>
                         {!(revision.feedbackData) &&
                         <p>Not available</p>
@@ -637,9 +637,12 @@ function FormDialogB(props) {
     return (
 
         <div>
-            <Button variant="outlined" onClick={handleClickOpenB}>
-                Part B
+          {props.partBstatus != "Satisfactory" &&
+             <Button variant="outlined" onClick={handleClickOpenB}>
+             Part B
             </Button>
+          }
+           
             <Dialog fullWidth open={openB} onClose={handleCloseB}>
                 <DialogTitle>Grade Form</DialogTitle>
                 <DialogContent>
@@ -731,15 +734,26 @@ function FormDialogC(props){
         props.setButtonClicked(false);
     };
     const handleSubmitC = () => {
+        if(input1 >= 7 && total-input1 >= 25 && input7 >= 7 ){
+          console.log("SATIS C")
+          props.setPartCstatus("Satisfactory")
+        }
+        else{
+          console.log("UNSATIS C")
+          props.setPartCstatus("Unsatifactory")
+        }
         setOpenC(false);
     }
 
     return (
 
         <div>
-            <Button variant="outlined" onClick={handleClickOpenC}>
-                Part C
-            </Button>
+          {props.partCstatus == "Undetermined" &&
+          <Button variant="outlined" onClick={handleClickOpenC}>
+          Part C
+         </Button>
+          }
+            
             <Dialog fullWidth open={openC} onClose={handleCloseC}>
                 <DialogTitle>Grade Form</DialogTitle>
                 <DialogContent>
@@ -900,7 +914,8 @@ return (
         reportId:null,
         message: "",
         feedbackSent:false,
-        partAstatus: "Undetermined"
+        partAstatus:"",
+        partCstatus:""
       };
       this.downloadCurrent = this.downloadCurrent.bind(this);
       this.setMessage = this.setMessage.bind(this);
@@ -914,12 +929,67 @@ return (
       this.setState({studentId:id})
       this.getCurrentStudent(id);
       this.getActiveReport(id);
+      this.getAllStatus(id);
 
   }
 
-  setPartAstatus = (status) =>{
-    this.setState({partAstatus:status})
+  getAllStatus = async (studentId) => {
+    try {
+        const response = await axios.get(`http://localhost:8080/student/${studentId}/get_all_status`);
+
+        if (response.status === 200) {
+            const statusResponse = response.data;
+
+            // set all the states from the backend
+            this.setState({
+              partAstatus: statusResponse.statusA,
+              status: statusResponse.statusB,
+              partCstatus: statusResponse.statusC,
+            });
+        } else {
+            console.error("Error fetching status.");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+  setPartAstatus = async(status) => {
+    try {
+        const response = await axios.put(`http://localhost:8080/student/${this.state.studentId}/statusA`, status, {
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        });
+
+        if (response.status === 200) {
+            this.setState({ partAstatus: status });
+        } else {
+            console.error("Error updating status");
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+setPartCstatus = async(status) => {
+  try {
+      const response = await axios.put(`http://localhost:8080/student/${this.state.studentId}/statusC`, status, {
+          headers: {
+              'Content-Type': 'text/plain'
+          }
+      });
+
+      if (response.status === 200) {
+          this.setState({ partCstatus: status });
+      } else {
+          console.error("Error updating status");
+      }
+  } catch (error) {
+      console.error(error);
   }
+}
+
   setMessage(message){
     this.setState({message:message})
   }
@@ -1049,7 +1119,6 @@ return (
     };
     
 setSentFeedback = (status) =>{
-  console.log("changint the feedback stat")
   this.setState({feedbackSent:status})
 }
  downloadCEF = () => {
@@ -1079,6 +1148,7 @@ setSentFeedback = (status) =>{
 }
 
     render() {
+      console.log("PARTA:", this.state.partAstatus , "PARTB:" , this.state.status , "PARTC:", this.state.partCstatus)
       return (
         <div className="reportevaluation">
           <div className="history">
@@ -1178,16 +1248,43 @@ setSentFeedback = (status) =>{
 
             </div>
             }
+
+            {this.state.status != "Satisfactory" &&
+             <Typography>Part B - Enter the Report Assessment </Typography>
+            }
+
+            {this.state.status == "Satisfactory" &&
+              <div>
+              <br></br>
+              <Typography>Part B is SATISFACTORY</Typography>
+              <br></br>
+            </div>
+            }
            
-              <Typography>Part B - Enter the Report Assessment </Typography>
+           
+              
               <FormDialogB
+                  partBstatus = {this.state.status}
                   studentId = {this.state.studentId}
                studentFirstName={this.state.studentFirstName}
                studentLastName={this.state.studentLastName}
                setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
             />
-              <Typography>Part C - Enter the Overall Assessment </Typography>
+            {this.state.partCstatus == "Undetermined" &&
+             <Typography>Part C - Enter the Overall Assessment </Typography>
+            }
+            
+            {this.state.partCstatus != "Undetermined" &&
+               <div>
+               <br></br>
+               <Typography>Part C is {this.state.partCstatus}</Typography>
+               <br></br>
+             </div>
+            }
+             
               <FormDialogC
+                  partCstatus = {this.state.partCstatus}
+                  setPartCstatus = {this.setPartCstatus}
                   studentId = {this.state.studentId}
                   studentFirstName={this.state.studentFirstName}
                   studentLastName={this.state.studentLastName}

@@ -22,6 +22,8 @@ public class Student extends User{
     private String companyName;
     private Date deadline;
     private String status;
+    private String partAStatus;
+    private String partCStatus;
     private Long activeReportId;
 
     //maps to the reports with report_id
