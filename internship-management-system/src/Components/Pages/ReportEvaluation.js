@@ -463,6 +463,7 @@ function FormDialogA(props) {
     props.setButtonClicked(false);
   };
  const handleSubmitA = () => {
+  console.log("PRESSING:", partA)
     if(partA != "Undetermined"){
       
      props.setPartAstatus(partA)
@@ -1032,8 +1033,6 @@ setPartCstatus = async(status) => {
 
         const cefResponse = await axios.get(`http://localhost:8080/report/get_company_form_by_student/${id}`);
         const cefInfo = cefResponse.data;
-
-        console.log("STUUU:", studentInfo.status)
 
         this.setState({
           studentFirstName: studentInfo.userAccount.firstName,

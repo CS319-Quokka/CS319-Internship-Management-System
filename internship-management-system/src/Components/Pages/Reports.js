@@ -92,13 +92,16 @@ function RevisionList(props) {
         try {
           const response = await axios.get(`http://localhost:8080/report/file/${id}`);
           const reportFile = response.data;
-          
+          console.log("FILE FOR:", reportFile)
           let feedback = null;
           let feedbackDescription = "";
           const reportId = reportFile.reportId
           if (reportId) {
+            
             feedbackDescription = await getFeedbackDescription(reportId)
+            console.log("FEEDBACK DESC FOR " , index ,feedbackDescription )
             feedback = await getFeedbackFile(reportId);
+            console.log("FEEDBACK FOR " , index ,feedback )
           }
           reports.push({
             revisionCount: index + 1,
@@ -214,7 +217,7 @@ function RevisionList(props) {
                 </Button>
       
                 <Typography>Your comments:</Typography>
-                <textarea readOnly>{revision.description}</textarea>
+                <textarea readOnly value ={revision.description}></textarea>
       
                 <b>
                   <br />
@@ -226,7 +229,7 @@ function RevisionList(props) {
                   <br />
                   Instructor's feedback for this submission
                 </b>
-                <textarea readOnly>{revision.feedbackDescription}</textarea>
+                <textarea readOnly value = {revision.feedbackDescription}></textarea>
                 <b>Instructor's annotated feedback for this submission</b>
                 {!revision.feedbackData &&
                 <p>Not available</p>
