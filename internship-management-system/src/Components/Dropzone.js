@@ -148,8 +148,6 @@ const DragDropFiles = (props) => {
     const getInformation = async () => {
 
       try {
-        const response = await axios.get(`http://localhost:8080/get_all_users/${props.id}`);
-        const info = response.data[0];
 
         console.log("SEARCH WITH ID:", props.id)
         const response = await axios.get(`http://localhost:8080/${props.id}`);
@@ -176,18 +174,18 @@ const DragDropFiles = (props) => {
         console.error(error);
       }
     };
-    getInformation();
-  }, [props.id]);
+      if (props.id) {
+          getInformation();
+      }
 
-    useEffect(() => {
-        // Auto-hide the alerts after a few seconds
-        const timer = setTimeout(() => {
-            setShowErrorAlert(false);
-            setShowSuccessAlert(false);
-        }, 5000);
+      // Auto-hide the alerts after a few seconds
+      const timer = setTimeout(() => {
+          setShowErrorAlert(false);
+          setShowSuccessAlert(false);
+      }, 5000);
 
-        return () => clearTimeout(timer);
-    }, [showErrorAlert, showSuccessAlert]);
+      return () => clearTimeout(timer);
+  }, [props.id, showErrorAlert, showSuccessAlert]);
 
 
 
