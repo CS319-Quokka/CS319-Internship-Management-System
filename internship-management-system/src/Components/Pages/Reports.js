@@ -302,7 +302,8 @@ class ReportsStudents extends Component {
             currentComment: "",
             fileData:null,
             reportId:null,
-            studentId:null
+            studentId:null,
+            status:""
 
         }
     }
@@ -327,6 +328,7 @@ class ReportsStudents extends Component {
             lastName: userAccount.lastName,
             userType: info.role,
             course: info.courseCode,
+            status:info.status
 
           })
     
@@ -483,8 +485,31 @@ class ReportsStudents extends Component {
                     <hr></hr>   
                     
                     <b>Part B ~ Report</b>
-                    <p>Feedback on your report: </p>
-                    <textarea value={this.state.feedbackDescription} />
+                    {this.state.status == ("Revision Required" || "Waiting to upload report") &&
+                      <div>
+                         <p>Feedback on your report: </p>
+                        <textarea value={this.state.feedbackDescription} />
+
+                      </div>
+                    }
+
+                    {this.state.status == ("Satisfactory") &&
+                      <div>
+                        <br></br>
+                         <p><em>You have completed part B successfully 🎉</em> </p>
+                         <br></br>
+
+                      </div>
+                    }
+                   
+                   {this.state.status == ("Failed") &&
+                      <div>
+                        <br></br>
+                         <p><em>Your report process ended with failure 💀</em> </p>
+                         <br></br>
+
+                      </div>
+                    }
                     <hr></hr>
                    <b>Part C ~ Final version of the report</b>
                    <p>Overall Status: {this.state.overallStatus} </p>

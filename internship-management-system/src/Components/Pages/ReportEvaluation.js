@@ -222,8 +222,13 @@ const getAllReports = async () => {
 
     return (
         <ul>
-          {console.log("AAA:",reportHistory)}
-          {console.log("BBB:",feedbackHistory[0])}
+          {reportHistory.length == 0 &&
+          <div>
+            <br></br>
+            <h4><em>There is no history available</em></h4>
+            
+          </div>
+          }
             {reportHistory.map((revision,index) => (
                 <div className="prevreport">
                     <li key={index}>
@@ -397,21 +402,6 @@ function FormDialogA(props) {
 
 
 
-  useEffect(() => {
-    const getInformation = async () => {
-      const studentId = 3;
-      try {
-        const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
-
-
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getInformation();
-  }, []);
-
   const handleIsClicked1 = () => {
       setIsClicked1(true);
   }
@@ -433,6 +423,7 @@ function FormDialogA(props) {
           console.log("part a success!")
       } else {
           setPartAstatus("Unsatisfactory");
+          console.log("UNSATIS")
       }
   };
 
@@ -503,6 +494,7 @@ function FormDialogB(props) {
     const [partBstatus, setPartBstatus] = useState("Unsatisfactory");
     const [isSatisfactoryB, setIsSatisfactoryB] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
+    const [buttonName,setButtonName] = useState("");
 
     const handleDateSelection = (date) => {
         setSelectedDate(date);
@@ -561,20 +553,6 @@ function FormDialogB(props) {
     }
 
 
-    useEffect(() => {
-        const getInformation = async () => {
-            const studentId = 3;
-            try {
-                const response = await axios.get(`http://localhost:8080/report/students_all_reports/${studentId}`);
-
-
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        getInformation();
-    }, []);
 
     const handleClickOpenB = () => {
         setOpenB(true);
@@ -851,6 +829,7 @@ return (
         isButtonClicked: false,
         currentReport: "",
         currentComment: "",
+        status:"",
         companyFormData:null,
         companyFormName:"",
         currentFile: null,
@@ -914,12 +893,15 @@ return (
         const cefResponse = await axios.get(`http://localhost:8080/report/get_company_form_by_student/${id}`);
         const cefInfo = cefResponse.data;
 
+        console.log("STUUU:", studentInfo.status)
+
         this.setState({
           studentFirstName: studentInfo.userAccount.firstName,
           studentLastName: studentInfo.userAccount.lastName,
           course: studentInfo.courseCode,
           companyFormData: cefInfo.fileData,
-          companyFormName:cefInfo.fileName
+          companyFormName:cefInfo.fileName,
+          status: studentInfo.status
         })
       } catch (error) {
         console.log(error);
@@ -1042,6 +1024,10 @@ return (
             <div className="information">
               <h1>The student's current submission for {this.state.course}</h1>
               <br></br>
+              {
+                this.state.status == "Report Uploaded" && 
+                <div>
+
               <IconButton  onClick={() => this.downloadCurrent()} aria-label="download">
                 <DownloadIcon />
               </IconButton>
@@ -1055,6 +1041,19 @@ return (
               </Button>
               <Typography>Student's comments:</Typography>
               <textarea readOnly value={this.state.currentComment || ''}></textarea>
+
+                </div>
+
+              }
+              
+              {
+                 this.state.status != "Report Uploaded" && 
+                 <div>
+                  <br></br>
+                  <h4><em>There is no active report for the student</em></h4>
+                 </div>
+                
+              }
               <hr></hr>
               <h1>REPORT ASSESSMENT</h1>
               <br></br>
@@ -1107,6 +1106,11 @@ return (
                   studentLastName={this.state.studentLastName}
                   setButtonClicked={(value) => this.setState({ isButtonClicked: value })}
               />
+
+
+                {this.state.status == "Report Uploaded" && 
+                <div>
+
             <div className="texteditor">
               <TextareaValidator setMessage = {this.setMessage} message = {this.state.message} userId = {this.props.userId}  reportId = {this.state.reportId}/>
             </div>
@@ -1134,6 +1138,11 @@ return (
               </div>
               )}
             </div>
+
+
+                </div>
+                }
+          
           </div>
         </div>
       );

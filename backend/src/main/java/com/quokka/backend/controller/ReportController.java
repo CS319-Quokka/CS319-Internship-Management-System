@@ -113,25 +113,29 @@ public class ReportController {
     }
 
     @GetMapping("/file/active/{studentId}")
-    public ResponseEntity<ReportFileResponse> getActiveReport(@PathVariable("studentId") Long studentId){
+    public ResponseEntity<?> getActiveReport(@PathVariable("studentId") Long studentId){
 
         Report report = reportService.getActiveReport(studentId);
+
+        if(report == null){
+            return ResponseEntity.ok("No submission open for this student");
+
+        }
         ReportFile reportFile = reportService.getReportFileWithReportId(report.getId());
 
-
         ReportFileResponse response = new ReportFileResponse();
-        if (reportFile != null) {
 
-            response.setReportDescription(reportFile.getReportDescription());
-            response.setFileData(reportFile.getFileData());
-            response.setFileName(reportFile.getFileName());
-            response.setReportId(reportFile.getReport().getId());
-            return ResponseEntity.ok(response);
-        }
-        else {
+        if(reportFile == null){
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            return ResponseEntity.ok("No active report file available for this student");
         }
+
+        response.setReportDescription(reportFile.getReportDescription());
+        response.setFileData(reportFile.getFileData());
+        response.setFileName(reportFile.getFileName());
+        response.setReportId(reportFile.getReport().getId());
+        return ResponseEntity.ok(response);
+
     }
 
 
