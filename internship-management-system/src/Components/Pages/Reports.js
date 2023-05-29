@@ -207,6 +207,12 @@ function RevisionList(props) {
       return (
         
         <ul>
+          {reportHistory.length == 0 && 
+          <div>
+            <br></br>
+            <h4>No report history available</h4>
+          </div>
+          }
           {reportHistory.map((revision,index) => (
             <div className="prevreport" key={index}>
               <li>
@@ -475,9 +481,7 @@ class ReportsStudents extends Component {
                     <Button onClick={() => this.downloadCurrent()} variant="text" style={{textTransform: 'none'}}  size="large">{this.state.currentReport}</Button>
 
                     <hr></hr>   
-                    <b>Part A ~ Work Place</b>
-                    <p >Status: {this.state.partAstatus}</p>
-                    <hr></hr>  
+                    
                     <b>Part B ~ Report</b>
                     <p>Feedback on your report: </p>
                     <textarea value={this.state.feedbackDescription} />

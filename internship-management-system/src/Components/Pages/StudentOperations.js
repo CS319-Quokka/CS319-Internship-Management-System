@@ -57,8 +57,15 @@ class StudentOperations extends Component{
         var fullName = info[i].userAccount.firstName + " " + info[i].userAccount.lastName;
         var instructor = info[i].instructor.userAccount.firstName + " " +  info[i].instructor.userAccount.lastName;
         var courseCode = info[i].courseCode;
+
+        const companyResponse = await axios.get(`http://localhost:8080/report/get_company_form_by_student/${info[i].id}`);
+        const formInfo = companyResponse.data;
+
+        console.log("COMPANY FORM:  ", formInfo)
+
         var form = "Not Uploaded";
-        if(info[i].companyEvaluationForm != null){
+        console.log( "STUDENT, ", fullName ,":", info[i])
+        if(formInfo.fileData != null){
           form = "Uploaded"
         }
         var studentId = info[i].id;

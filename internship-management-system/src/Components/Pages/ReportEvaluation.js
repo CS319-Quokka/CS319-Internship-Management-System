@@ -508,8 +508,10 @@ function FormDialogB(props) {
         setSelectedDate(date);
     };
 
-    const handleSubmitB = () => {
+    const handleSubmitB = async() => {
 
+
+      if(!isSatisfactoryB){
 
         console.log("Student id: ", props.studentId, "Deadline:", selectedDate)
         const reportData = {
@@ -528,6 +530,31 @@ function FormDialogB(props) {
                 // Handle error
                 console.error(error);
             });
+
+      }
+
+      else{
+        let newStatus = "Satisfactory";
+        console.log("status: ", newStatus)
+
+        let url = `http://localhost:8080/student/${props.studentId}/status`;
+
+        try {
+            const response = await axios.put(url, newStatus,{
+              headers: {
+                'Content-Type': 'text/plain'
+            }
+            });
+
+            // Handle response data here
+            console.log('Success:', response.data);
+        } catch (error) {
+            // Handle errors here
+            console.log('Error:', error);
+        }
+            //change the state to satis
+      }
+  
 
         setOpenB(false);
 
@@ -555,7 +582,7 @@ function FormDialogB(props) {
         {console.log("Student id: ", props.studentId)}
     };
     const handleSatisfactoryClick = () => {
-        setIsSatisfactoryB(false);
+        setIsSatisfactoryB(true);
     };
 
     const handleCloseB = () => {
@@ -564,7 +591,7 @@ function FormDialogB(props) {
     };
 
     const handleRevisionRequiredClick = () => {
-        setIsSatisfactoryB(true);
+        setIsSatisfactoryB(false);
     };
     return (
 
@@ -577,17 +604,17 @@ function FormDialogB(props) {
                 <DialogContent>
                     <Typography sx={{fontWeight: 'bold'}}>Part B - Report</Typography>
                     <Button
-                        variant={isSatisfactoryB ? 'outlined' : 'contained'}
+                        variant={isSatisfactoryB ? 'contained': 'outlined' }
                         color="success"
                         onClick={handleSatisfactoryClick}
                         sx={{marginRight: '10px'}}
                     > Satisfactory </Button>
                     <Button
-                        variant={isSatisfactoryB ? 'contained' : 'outlined'}
+                        variant={isSatisfactoryB ? 'contained':  'outlined'}
                         color="secondary"
                         onClick={handleRevisionRequiredClick}
                     >Revision Required</Button>
-                    {isSatisfactoryB && (
+                    {!isSatisfactoryB && (
                         <div>
                             <Typography>Enter the due date for the resubmission.</Typography>
                             <DateComponent selectedDate = {selectedDate} setSelectedDate = {handleDateSelection}/>

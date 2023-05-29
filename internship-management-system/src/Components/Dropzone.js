@@ -118,6 +118,7 @@ const DragDropFiles = (props) => {
   const inputRef = useRef();
   const [uploadSubmitted, setUploadSubmitted] = useState(false); // Track upload status
   const userContext = useContext(UserContext);
+  const [studentState,setStatus] = useState("");
 
 
   const handleSelectFile = (event) => {
@@ -151,7 +152,9 @@ const DragDropFiles = (props) => {
         const response = await axios.get(`http://localhost:8080/get_all_users/${props.id}`);
         const info = response.data[0];
         // Process the received data as needed
-        console.log(info.id);
+        console.log("INFOOOOO:", info.status);
+        setStatus(info.status)
+
         
         setId(info.id)
       } catch (error) {
@@ -319,7 +322,7 @@ const DragDropFiles = (props) => {
           </div>
       );
   }
-  if (uploadSubmitted) {
+  if (uploadSubmitted || !(studentState == "Waiting to upload report" ||  studentState == "Waiting for initial report")) {
       return(
         <div className="upload-confirm">
             <h2>You have already uploaded a report.</h2>

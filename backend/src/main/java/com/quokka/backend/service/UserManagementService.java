@@ -4,6 +4,7 @@ import com.quokka.backend.exception.*;
 import com.quokka.backend.models.*;
 import com.quokka.backend.repository.*;
 import com.quokka.backend.request.*;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,6 +130,18 @@ public class UserManagementService {
         student.setTeachingAssistant(teachingAssistant);
         student.setStatus("Waiting for initial report"); // student.setStatus("Waiting for company evaluation form");
         return studentRepository.save(student);
+    }
+
+    @Transactional
+    public Student updateStatus(Long studentId, String status) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new IllegalStateException("Student with id " + studentId + " does not exist"));
+
+
+        System.out.println("here as stat change2");
+        student.setStatus(status);
+
+        return student;
     }
 
     public TeachingAssistant addTeachingAssistant(TeachingAssistantAddRequest request){

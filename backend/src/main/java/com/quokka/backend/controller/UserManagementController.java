@@ -48,6 +48,11 @@ public class UserManagementController {
         return userManagementService.addStudent(request);
     }
 
+    @PutMapping("student/{id}/status")
+    public Student updateStatus(@PathVariable("id") Long studentId, @RequestBody String status) {
+        System.out.println("here as stat change");
+        return userManagementService.updateStatus(studentId, status);
+    }
 
     @PostMapping("/teaching_assistant")
     public TeachingAssistant addTeachingAssistant(@RequestBody TeachingAssistantAddRequest request){

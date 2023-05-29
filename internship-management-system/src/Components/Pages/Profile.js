@@ -233,12 +233,14 @@ class Profile extends Component {
             const instructorInfo = response2.data;
             console.log("response2:",instructorInfo);
             console.log("account:",userAccount.name);
+            console.log("INFO STAT:", info.status)
             const instructorName = instructorInfo.firstName + " " + instructorInfo.lastName ;
 
             this.setState({
                 course: info.courseCode,
                 instructor: instructorName,
-                instructorMail:instructorInfo.email
+                instructorMail:instructorInfo.email,
+                status: info.status
             })
         }
 
