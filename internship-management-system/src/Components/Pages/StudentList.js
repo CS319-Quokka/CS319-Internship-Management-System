@@ -37,8 +37,19 @@ class StudentList extends Component {
         const response = await axios.get(`http://localhost:8080/get_all_users/${id}`);
 
         const info = response.data[0]
+        let response2;
 
-        const response2 = await axios.get(`http://localhost:8080/student?instructorId=${info.id}`);
+        if (info.role === "Teaching Assistant") {
+          response2 = await axios.get(`http://localhost:8080/student?teachingAssistantId=${info.id}`);
+
+        }
+
+        else{
+
+           response2 = await axios.get(`http://localhost:8080/student?instructorId=${info.id}`);
+        }
+
+       
 
         const studentInfo = response2.data;
          var name = [];
