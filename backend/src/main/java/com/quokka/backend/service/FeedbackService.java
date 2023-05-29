@@ -116,6 +116,16 @@ public class FeedbackService {
         newFeedback.setId(request.getId());
         newFeedback.setUploadDate(request.getUploadDate());
         feedbackRepository.save(newFeedback);
+
+        NotificationAddRequest notificationAddRequest = new NotificationAddRequest();
+        notificationAddRequest.setContent("New feedback is given by " + newFeedback.getSender().getUserAccount().getFirstName() +
+                " " + newFeedback.getSender().getUserAccount().getLastName() + " for your report.");
+        notificationAddRequest.setTitle("New feedback is given!");
+        notificationAddRequest.setDate(new Date());
+
+
+        notificationService.addNotification(request.getStudentId(),notificationAddRequest);
+
         return newFeedback.getId();
     }
 
@@ -242,14 +252,14 @@ public class FeedbackService {
 
             feedbackFileRepository.save(newFeedbackFile);
 
-            NotificationAddRequest notificationAddRequest = new NotificationAddRequest();
-            notificationAddRequest.setContent("New feedback is given by " + newFeedbackFile.getFeedback().getSender().getUserAccount().getFirstName() +
-                    " " + newFeedbackFile.getFeedback().getSender().getUserAccount().getLastName() + " for your report.");
-            notificationAddRequest.setTitle("New feedback is given!");
-            notificationAddRequest.setDate(new Date());
-
-
-            notificationService.addNotification(request.getStudentId(),notificationAddRequest);
+//            NotificationAddRequest notificationAddRequest = new NotificationAddRequest();
+//            notificationAddRequest.setContent("New feedback is given by " + newFeedbackFile.getFeedback().getSender().getUserAccount().getFirstName() +
+//                    " " + newFeedbackFile.getFeedback().getSender().getUserAccount().getLastName() + " for your report.");
+//            notificationAddRequest.setTitle("New feedback is given!");
+//            notificationAddRequest.setDate(new Date());
+//
+//
+//            notificationService.addNotification(request.getStudentId(),notificationAddRequest);
             return true;
         }
         catch (IOException e){
