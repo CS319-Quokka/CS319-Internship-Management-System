@@ -317,7 +317,7 @@ class InstructorNotifications extends Component {
           <br></br>
           <hr></hr>
           <div className='announcementList'>
-            <AnnouncementList link = {"/instructornotifications"} data={announcementNameList} displayFields={['sender','title', 'content']}/>
+            <AnnouncementList link = {"/instructornotifications"} data={announcementNameList} displayFields={['sender','date', 'content']}/>
           </div>
         </div>
 
@@ -329,7 +329,7 @@ class InstructorNotifications extends Component {
           <hr></hr>
           <div className='announcementList'>
           {/* // TODO REMOVE sender and add date */}
-            <NotificationList link = {"/instructornotifications"} data={notificationNameList} displayFields={['sender','title', 'content']}/>          
+            <NotificationList link = {"/instructornotifications"} data={notificationNameList} displayFields={['date','title', 'content']}/>          
           </div>
         </div>
 

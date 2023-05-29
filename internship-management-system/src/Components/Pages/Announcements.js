@@ -29,7 +29,7 @@ function AnnouncementList(props) {
           <li key={announcement.content}>
             <h2>From: {announcement.sender}</h2>
             <textarea readOnly>{announcement.content}</textarea>
-            <h2>this should be date: {announcement.title}</h2>
+            <h2>Date: {announcement.date}</h2>
             <hr></hr>
           </li>
         ))}
@@ -170,12 +170,15 @@ class Announcements extends Component {
         const response1 = await axios.get(`http://localhost:8080/get_all_users/${id}`);
     
         const senderId = response1.data[0].id
+
+        let uploadDate = new Date().toISOString();
     
         // Make the post request to your API
         try {
           await axios.post(`http://localhost:8080/announcement/made/Administrative Assistant/${senderId}/CS`, {
             title: 'Announcement post deneme 1',
             content: text,
+            date: uploadDate,
             // Add other necessary fields here...
           });
           // Refresh the list of announcements...
@@ -212,11 +215,13 @@ class Announcements extends Component {
           var senderInfo = announcementInfo[i].sender.userAccount.firstName + " " + announcementInfo[i].sender.userAccount.lastName;
           var titleInfo = announcementInfo[i].title;
           var contentInfo = announcementInfo[i].content;
+          var dateInfo = announcementInfo[i].date;
           
           announ.push({
             sender: senderInfo,
             title: titleInfo,
             content: contentInfo,
+            date: dateInfo,
           });
         }
     
@@ -237,7 +242,7 @@ class Announcements extends Component {
                     <br></br>
                     <hr></hr>
                     <div className='announcementList'>
-                        <AnnouncementList link = {"/announcements"} data={announcementNameList} displayFields={['sender','title', 'content']}/>
+                        <AnnouncementList link = {"/announcements"} data={announcementNameList} displayFields={['sender','date', 'content']}/>
                     </div>
                 </div>
 
