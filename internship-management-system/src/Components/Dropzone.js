@@ -21,7 +21,7 @@ function FileUpload(props) {
   return (
     <div>
 
-      <DragDropFiles fromStudent = {props.fromStudent} isCompanyForm = {props.isCompanyForm} id = {props.id} message={message} setMessage={setMessage} />
+      <DragDropFiles fromStudent = {props.fromStudent} isUsersSheet = {props.isUsersSheet} isCompanyForm = {props.isCompanyForm} id = {props.id} message={message} setMessage={setMessage} />
     </div>
   );
 }
@@ -197,12 +197,52 @@ const DragDropFiles = (props) => {
 
   //separate the uploads: company form or report
   const handleUpload = (event) => {
-    if (props.isCompanyForm) {
+    console.log("isUsersSheet:", props.isUsersSheet);
+    console.log("isCompanyForm:", props.isCompanyForm);
+    if(props.isUsersSheet) {
+      handleUsersSheetUpload(event);
+    }
+    else if (props.isCompanyForm) {
       handleCompanyFormUpload(event);
-    } else {
+    } 
+    else {
       handleReportUpload(event);
     }
   }
+
+  const handleUsersSheetUpload = async (event) =>{
+    event.preventDefault();
+    if (file) {
+    const formData = new FormData();
+    formData.append("file", file);
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/account/addAccounts",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        // Handle success response
+        console.log("success");
+          setUploadSubmitted(true);
+          console.log(response.data);
+      } catch (error) {
+        // Handle error
+        console.log("fail");
+        if (error.response) {
+          console.log('Error status', error.response.status);
+          console.log('Error details', error.response.data);
+      } else {
+          console.error(error);
+      }
+      }
+    }
+
+  }
+
   //administrative assistant will upload the company form for a student
   const handleCompanyFormUpload = async (event) =>{
     event.preventDefault();
@@ -316,7 +356,16 @@ const DragDropFiles = (props) => {
           </div>
       );
   }
-  if ((!props.isCompanyForm) && (uploadSubmitted || !(studentState == "Waiting to upload report"))) {
+  if( (props.isUsersSheet) && uploadSubmitted) {
+    return(
+      <div className="upload-confirm">
+          <h2>You have uploaded a file.</h2>
+      </div>
+
+    );
+  }
+
+  if ( (!props.isUsersSheet) && (!props.isCompanyForm) && (uploadSubmitted || !(studentState == "Waiting to upload report"))) {
    console.log("EX 1")
    console.log("upload sub:", uploadSubmitted)
    console.log("state:", studentState)
@@ -328,7 +377,7 @@ const DragDropFiles = (props) => {
       );
   }
 
-  if ((props.isCompanyForm) && (uploadSubmitted || (formUploaded == true))) {
+  if ((!props.isUsersSheet) && (props.isCompanyForm) && (uploadSubmitted || (formUploaded == true))) {
     console.log("EX 2")
     return(
       <div className="upload-confirm">
@@ -351,7 +400,7 @@ const DragDropFiles = (props) => {
           type="file"
           onChange={(event) => changeHandler(event)}
           hidden
-          accept="application/pdf, .doc, .docx"
+          accept="application/pdf, .doc, .docx, .xls, .xlsx"
           ref={inputRef}
         />
         <button className="button" onClick={() => inputRef.current.click()}>

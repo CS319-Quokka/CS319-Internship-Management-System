@@ -239,7 +239,7 @@ options = [
         </Popup>}
 
         {showSheetPopup && <Popup name = "Add Data Sheet" className="popup" handleClose={this.handleSheetClose} tag = "Manage Users:"
-         contents = {<Dropzone isCompanyForm = {true} className = "dropzone"/>}  >
+         contents = {<Dropzone isCompanyForm = {false} isUsersSheet = {true}/>}  >
         </Popup>}
 
         </div>
