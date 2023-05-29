@@ -13,7 +13,7 @@ function FileSubmission(props) {
           <br></br>
         </div>
        
-       <FileUpload  id = {props.userId}  />
+       <FileUpload  id = {props.userId} fromStudent = {true} />
         {/* <Dropzone afterUpload = {
              <div className="actions">
              <label className="s-text"> 🗨 Please enter your message here</label> 

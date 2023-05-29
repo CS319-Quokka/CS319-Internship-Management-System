@@ -21,7 +21,7 @@ function FileUpload(props) {
   return (
     <div>
 
-      <DragDropFiles isCompanyForm = {props.isCompanyForm} id = {props.id} message={message} setMessage={setMessage} />
+      <DragDropFiles fromStudent = {props.fromStudent} isCompanyForm = {props.isCompanyForm} id = {props.id} message={message} setMessage={setMessage} />
     </div>
   );
 }
@@ -146,48 +146,54 @@ const DragDropFiles = (props) => {
 
   useEffect(() => {
     const getInformation = async () => {
-
       try {
-
         console.log("SEARCH WITH ID:", props.id)
-        const response = await axios.get(`http://localhost:8080/${props.id}`);
-        const info = response.data;
-        // Process the received data as needed
-        setStatus(info.status)
-
+        console.log("IS IT FROM STUDENT:", props.fromStudent)
+  
+        let info; // Define 'info' outside the if-else blocks
+  
+        if(props.fromStudent){
+          const response = await axios.get(`http://localhost:8080/get_all_users/${props.id}`);
+          console.log("s:", response.data[0])
+          info = response.data[0];
+          setStatus(info.status)
+        } else {
+          const response = await axios.get(`http://localhost:8080/${props.id}`);
+          info = response.data;
+          setStatus(info.status)
+        }
         console.log("INFO PLS:", info)
-
+  
         const fullName = info.userAccount.firstName + " " + info.userAccount.lastName;
         setFullName(fullName);
-
+  
         //check if the company form is uploaded for the corresponding student
         const cefResponse = await axios.get(`http://localhost:8080/report/get_company_form_by_student/${props.id}`);
         const cefInfo = cefResponse.data;
-
-
+  
         if(cefInfo.fileData != null){
           setFormUploaded(true);
         }
-
+  
         setId(info.id)
       } catch (error) {
         console.error(error);
       }
     };
-      if (props.id) {
-          getInformation();
-      }
-
-      // Auto-hide the alerts after a few seconds
-      const timer = setTimeout(() => {
-          setShowErrorAlert(false);
-          setShowSuccessAlert(false);
-      }, 5000);
-
-      return () => clearTimeout(timer);
+  
+    if (props.id) {
+      getInformation();
+    }
+  
+    // Auto-hide the alerts after a few seconds
+    const timer = setTimeout(() => {
+      setShowErrorAlert(false);
+      setShowSuccessAlert(false);
+    }, 5000);
+  
+    return () => clearTimeout(timer);
   }, [props.id, showErrorAlert, showSuccessAlert]);
-
-
+  
 
   //separate the uploads: company form or report
   const handleUpload = (event) => {
@@ -310,19 +316,23 @@ const DragDropFiles = (props) => {
           </div>
       );
   }
-  if ((!props.isCompanyForm) && (uploadSubmitted || !(studentState == "Waiting to upload report" ||  studentState == "Waiting for initial report"))) {
+  if ((!props.isCompanyForm) && (uploadSubmitted || !(studentState == "Waiting to upload report"))) {
+   console.log("EX 1")
+   console.log("upload sub:", uploadSubmitted)
+   console.log("state:", studentState)
     return(
         <div className="upload-confirm">
-            <h2>You have already uploaded a report.</h2>
+            <h2>You have uploaded a report.</h2>
         </div>
 
       );
   }
 
   if ((props.isCompanyForm) && (uploadSubmitted || (formUploaded == true))) {
+    console.log("EX 2")
     return(
       <div className="upload-confirm">
-          <h2>You have already uploaded a report.</h2>
+          <h2>You have uploaded a report.</h2>
       </div>
 
     );

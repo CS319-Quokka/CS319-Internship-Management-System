@@ -109,6 +109,7 @@ public class FeedbackService {
         }
 
         System.out.println("FEEDBACK UPLOAD ");
+        studentRepository.findById(request.getStudentId()).get().setStatus("Feedback Given");
         newFeedback.setId(request.getId());
         newFeedback.setUploadDate(request.getUploadDate());
         feedbackRepository.save(newFeedback);
@@ -235,7 +236,7 @@ public class FeedbackService {
 
             newFeedbackFile.setId(request.getId());
             newFeedbackFile.setFeedbackDescription(request.getFeedbackDescription());
-            studentRepository.findById(request.getStudentId()).get().setStatus("Revision required");
+
             feedbackFileRepository.save(newFeedbackFile);
 
             NotificationAddRequest notificationAddRequest = new NotificationAddRequest();

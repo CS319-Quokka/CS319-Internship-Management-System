@@ -43,14 +43,19 @@ class StudentList extends Component {
           var studentId = studentInfo[i].id
           var deadline = "";
 
-          const response2 = await axios.get(`http://localhost:8080/report/file/active/${studentId}`);
-          const info2 = response2.data;
-          console.log("ACTIVE:", info2)
-
-          if(info2 == "No submission open for this student"){
-            deadline = "Not Assigned"
-
+          try {
+            const response2 = await axios.get(`http://localhost:8080/report/file/active/${studentId}`);
+            const info2 = response2.data;
+            console.log("ACTIVE:", info2)
+          
+            if(info2 == "No submission open for this student"){
+              deadline = "Not Assigned"
+            }
+          
+          } catch(error) {
+            console.error('Failed to fetch data: ', error);
           }
+          
 
 
           name.push({

@@ -314,7 +314,7 @@ public class ReportService {
             reportFile.setId(request.getId());
             reportFileRepository.save(reportFile);
             Student student = studentRepository.findById(request.getStudentId()).get();
-            student.setStatus("Report is uploaded");
+            student.setStatus("Report Uploaded");
             studentRepository.save(student);
             return true;
         } catch (IOException e) {

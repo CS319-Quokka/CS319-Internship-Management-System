@@ -52,6 +52,7 @@ const [links,setLinks] = useState([]);
 const [reportFile,setReportFile] = useState(null)
 const [reportHistory,setReportHistory] = useState([])
 const [feedbackHistory,setFeedbackHistory] = useState([])
+const [status,setStatus] = useState("");
 const userContext = useContext(UserContext);
 
 
@@ -192,6 +193,11 @@ const getAllReports = async () => {
     const info2 = response2.data;
     console.log("ACTIVE REPORT: ", info2);
 
+    const response3 = await axios.get(`http://localhost:8080/get_all_users/${studentId}`);
+    const info3 = response3.data[0];
+    console.log("CUR STUDI: ", info3.status);
+    setStatus(info3.status)
+
 
     var reportIdList = [];
 
@@ -200,13 +206,20 @@ const getAllReports = async () => {
     var allFeedbacks = [];
 
     //get every report except the last one (report history)
-    for (var i = 0; i < info.length -1 ; i++) {
+    for (var i = 0; i < info.length -1; i++) {
       console.log(i, "th report: ", info[i].id);
       reportIdList.push(info[i].id)
       getReportFile(reportIdList[i],allReports,i)
-      getFeedbackFile(reportIdList[i],allFeedbacks)
     }
 
+    console.log("STATTTTuuuus:", info3.status)
+
+    if(info3.status == "Feedback Given"){
+      var index = info.length-1;
+      reportIdList.push(info[index].id)
+      getReportFile(reportIdList[index],allReports,index)
+
+    }
     console.log("ids: ", reportIdList)
 
     console.log("ALL REPOS:", allReports)
@@ -221,6 +234,7 @@ const getAllReports = async () => {
 
 
     return (
+      
         <ul>
           {reportHistory.length == 0 &&
           <div>
@@ -229,6 +243,7 @@ const getAllReports = async () => {
             
           </div>
           }
+          {console.log("AA:", reportHistory)}
             {reportHistory.map((revision,index) => (
                 <div className="prevreport">
                     <li key={index}>
@@ -305,9 +320,11 @@ function TextareaValidator(props) {
 
   const sendFeedbackComment = async (event) => {
     event.preventDefault();
+    console.log("SENDING FC")
 
       const feedbackData = {
         senderId: props.userId,
+        studentId:props.studentId,
         reportId: props.reportId,
         feedbackDescription: props.message,
         uploadDate: new Date().toISOString(), // Set the appropriate date format
@@ -526,7 +543,7 @@ function FormDialogB(props) {
     const handleSubmitB = async() => {
 
 
-      if(!isSatisfactoryB){
+      if(isSatisfactoryB){
 
         console.log("Student id: ", props.studentId, "Deadline:", selectedDate)
         const reportData = {
@@ -583,7 +600,7 @@ function FormDialogB(props) {
         {console.log("Student id: ", props.studentId)}
     };
     const handleSatisfactoryClick = () => {
-        setIsSatisfactoryB(true);
+        setIsSatisfactoryB(false);
     };
 
     const handleCloseB = () => {
@@ -592,7 +609,7 @@ function FormDialogB(props) {
     };
 
     const handleRevisionRequiredClick = () => {
-        setIsSatisfactoryB(false);
+        setIsSatisfactoryB(true);
     };
     return (
 
@@ -605,19 +622,19 @@ function FormDialogB(props) {
                 <DialogContent>
                     <Typography sx={{fontWeight: 'bold'}}>Part B - Report</Typography>
                     <Button
-                        variant={isSatisfactoryB ? 'contained': 'outlined' }
+                        variant={isSatisfactoryB ?  'outlined':'contained' }
                         color="success"
                         onClick={handleSatisfactoryClick}
                         sx={{marginRight: '10px'}}
                     > Satisfactory </Button>
                     <Button
-                        variant={isSatisfactoryB ? 'contained':  'outlined'}
+                        variant={isSatisfactoryB ?  'contained':'outlined'}
                         color="secondary"
                         onClick={handleRevisionRequiredClick}
                     >{buttonName}</Button>
-                    {!isSatisfactoryB && (
+                    {isSatisfactoryB && (
                         <div>
-                            <Typography>Enter the due date for the resubmission.</Typography>
+                            <Typography>Enter the due date for the submission.</Typography>
                             <DateComponent selectedDate = {selectedDate} setSelectedDate = {handleDateSelection}/>
                         </div>
                     )}
@@ -957,6 +974,7 @@ return (
       event.preventDefault();
       const feedbackData = {
         senderId: this.props.userId,
+        studentId:this.state.studentId,
         reportId: this.state.reportId,
         feedbackDescription: this.state.message,
         uploadDate: new Date().toISOString(), // Set the appropriate date format
@@ -1135,7 +1153,7 @@ return (
                 <div>
 
             <div className="texteditor">
-              <TextareaValidator setMessage = {this.setMessage} message = {this.state.message} userId = {this.props.userId}  reportId = {this.state.reportId}/>
+              <TextareaValidator setMessage = {this.setMessage} message = {this.state.message} studentId = {this.state.studentId} userId = {this.props.userId}  reportId = {this.state.reportId}/>
             </div>
 
             <div className="annotatedupload">

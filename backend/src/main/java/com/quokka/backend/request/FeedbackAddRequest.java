@@ -8,6 +8,7 @@ public class FeedbackAddRequest {
 
     private Long id;
 
+    private Long studentId;
     private Long senderId;
     private Long reportId;
     private String feedbackDescription;
